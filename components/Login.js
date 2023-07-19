@@ -73,7 +73,7 @@ const useTestApiKey = (localApiKey) => {
     startedTest ? `/api/test-api-key?attempt=${attempt}` : undefined,
     startedTest
       ? {
-          method: "post",
+          method: "POST",
           headers: {
             ["authorization"]: `Bearer ${localApiKey}`,
           },

@@ -4,8 +4,8 @@ import { useSessionStorage } from "usehooks-ts"
 
 import Footer from "@components/Footer"
 import Header from "@components/Header"
-import JokeBlock from "@components/JokeBlock"
 import Login from "@components/Login"
+import Workspace from "@components/Workspace"
 
 function Index() {
   const [apiKey, setApiKey] = useSessionStorage("census-api-key", null)
@@ -17,7 +17,7 @@ function Index() {
       </Head>
 
       <Header apiKey={apiKey} setApiKey={setApiKey} />
-      <main>{apiKey ? <JokeBlock apiKey={apiKey} /> : <Login setApiKey={setApiKey} />}</main>
+      {apiKey ? <Workspace apiKey={apiKey} /> : <Login setApiKey={setApiKey} />}
       <Footer />
     </>
   )
