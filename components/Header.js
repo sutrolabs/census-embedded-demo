@@ -6,5 +6,5 @@ export default function Header({ apiKey, setApiKey }) {
         Log out
       </button>
     </header>
-  );
+  )
 }

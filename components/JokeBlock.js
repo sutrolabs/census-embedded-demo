@@ -1,15 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
 
 export default function JokeBlock() {
-  const [joke, setJoke] = useState("");
+  const [joke, setJoke] = useState("")
 
   useEffect(() => {
     fetch("/api/joke")
       .then((res) => res.json())
       .then((jokeJSON) => {
-        setJoke(jokeJSON);
-      });
-  }, []);
+        setJoke(jokeJSON)
+      })
+  }, [])
 
-  return <blockquote>{joke}</blockquote>;
+  return <blockquote>{joke}</blockquote>
 }
