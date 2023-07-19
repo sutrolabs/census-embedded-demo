@@ -1,20 +1,17 @@
 import Head from "next/head";
 import Header from "@components/Header";
 import Footer from "@components/Footer";
-import JokeBlock from "@components/JokeBlock";
+import Main from "@components/Main";
 
-export default function Home() {
+export default function Index() {
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>Powered by Census</title>
       </Head>
 
-      <main>
-        <Header title="Powered by Census" />
-        <hr />
-        <JokeBlock />
-      </main>
+      <Header />
+      <Main />
       <Footer />
     </div>
   );

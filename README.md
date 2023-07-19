@@ -14,7 +14,7 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 Want to deploy immediately? Click this button
 
-[![Deploy to Netlify Button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sutrolabs/powered-by-census)
+[![Deploy to Netlify Button](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/sutrolabs/powered-by-census-demo)
 
 Clicking this button will create a new repo for you that looks exactly like this one, and sets that repo up immediately for deployment on Netlify.
 
@@ -22,7 +22,7 @@ Clicking this button will create a new repo for you that looks exactly like this
 Click the 'Use the Template' button at the top of this repo or clone it with the `git clone` command. Then install the Netlify CLI tool and run `netlify init`. Or straight from the Netlify CLI, use the `netlify sites:create-template` command in you terminal ([learn more about this command here](https://www.netlify.com/blog/create-a-site-from-a-template-using-the-netlify-cli)) to do the entire flow for you.
 
 ```bash
-git clone https://github.com/sutrolabs/powered-by-census 
+git clone https://github.com/sutrolabs/powered-by-census-demo 
 
 npm install netlify-cli -g # to install the Netlify CLI tool globally
 
