@@ -70,7 +70,7 @@ const useTestApiKey = (localApiKey) => {
   const [startedTest, setStarted] = useState(false)
   const [attempt, setAttempt] = useState(0)
   const fetchState = useFetch(
-    startedTest ? `/api/test-api-key?attempt=${attempt}` : undefined,
+    startedTest ? `/api/test_api_key?attempt=${attempt}` : undefined,
     startedTest
       ? {
           method: "POST",

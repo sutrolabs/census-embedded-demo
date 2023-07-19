@@ -1,7 +1,7 @@
 import fetch from "node-fetch"
 import pino from "pino"
 
-const logger = pino()
+const logger = pino({ name: __filename })
 
 const censusBaseUrl = process.env["CENSUS_BASE_URL"] ?? "https://app.getcensus.com"
 
@@ -11,11 +11,11 @@ export default async function handler(req, res) {
     return
   }
 
-  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destinations`, {
+  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links`, {
     method: "GET",
     headers: { ["authorization"]: req.headers["authorization"] },
   })
   const { data } = await apiResponse.json()
-  logger.info("list-destinations", apiResponse.status, data)
+  logger.info([apiResponse.status, data])
   res.status(apiResponse.status).json(data)
 }
