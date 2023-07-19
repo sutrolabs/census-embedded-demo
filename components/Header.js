@@ -1,8 +1,10 @@
-export default function Header({ title }) {
+export default function Header({ apiKey, setApiKey }) {
   return (
-    <header>
-      <h1 className="title">{title}</h1>
-      <p>Hello 👋 Welcome to the Powered by Census demo.</p>
+    <header className="flex flex-row">
+      <h1 className="text-lg font-bold">Welcome to Census</h1>
+      {apiKey ? (
+        <button onClick={() => setApiKey(null)}>Clear API key</button>
+      ) : null}
     </header>
   );
 }
