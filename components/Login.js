@@ -23,18 +23,19 @@ export default function Login({ setApiKey }) {
   }, [data])
 
   return (
-    <main className="col-span-2 bg-slate-200 p-8">
+    <main className="col-span-2 grid place-items-center bg-slate-200 p-8">
       {!startedTest ? (
         <form
-          className="flex flex-col items-center gap-4 rounded-sm border border-sky-500 bg-sky-50 p-8 shadow-md"
+          className="flex flex-col items-center gap-2 rounded-md border border-sky-500 bg-sky-50 px-10 py-8 shadow-md"
           onSubmit={(event) => {
             event.preventDefault()
             startTest()
           }}
         >
-          <h2 className="text-center text-xl font-medium">Enter your Census API key to continue</h2>
+          <h2 className="text-center text-xl font-medium text-sky-900">Welcome to the demo!</h2>
+          <p className="text-center text-sky-800">Enter your Census API key to get started...</p>
           <input
-            className="min-w-[420px] rounded-md border border-sky-700 px-4 py-2 text-lg"
+            className="my-2 min-w-[420px] rounded-md border border-sky-500 px-4 py-2 text-lg shadow-inner"
             type="password"
             value={localApiKey}
             name="census-api-key"
@@ -43,7 +44,7 @@ export default function Login({ setApiKey }) {
             onInput={(event) => setLocalApiKey(event.target.value)}
           />
           <button
-            className="rounded-md border border-sky-700 bg-sky-600 px-6 py-2 text-xl font-bold text-sky-50 disabled:border-sky-200 disabled:bg-sky-200"
+            className="rounded-md border border-sky-700 bg-sky-600 px-6 py-2 text-xl font-bold text-sky-50 disabled:border-sky-300 disabled:bg-sky-200"
             disabled={!localApiKey}
           >
             Log in

@@ -29,7 +29,7 @@ export default function DataLink({ apiKey }) {
 
   return (
     <main className="flex w-full max-w-[800px] flex-col gap-4 justify-self-center px-12 py-8">
-      <h2 className="text-2xl font-bold text-slate-600">Data Link</h2>
+      <h2 className="text-2xl font-bold text-slate-700">Data Link</h2>
       <hr className="border-t border-slate-400" />
       <p className="text-slate-700">
         Let&apos;s make your data actionable! Here you can connect all of your personalized market data with
@@ -84,7 +84,7 @@ export default function DataLink({ apiKey }) {
 function Section({ name, description, children }) {
   return (
     <section className="mt-2 flex flex-col gap-3">
-      <h3 className="text-lg font-medium text-slate-600">{name}</h3>
+      <h3 className="text-lg font-medium text-slate-700">{name}</h3>
       <hr className="border-t border-slate-300" />
       <p className="text-slate-700">{description}</p>
       <div className="grid grid-cols-2 gap-5">{children}</div>

@@ -7,10 +7,11 @@ export default function Header({ apiKey, setApiKey }) {
         <Link href="/">Market Data Inc.</Link>
       </h1>
       <input
-        className="ml-4 grow rounded-md border border-slate-300 bg-slate-50 px-3 py-1 shadow-inner"
+        className="ml-4 grow rounded-md border border-slate-300 bg-slate-50 px-3 py-1 shadow-inner disabled:invisible"
         type="search"
         autoComplete="off"
         placeholder="Search..."
+        disabled={!apiKey}
       />
       <button
         className="rounded-md border border-sky-600 bg-slate-50 px-3 py-1 text-sky-600 shadow-sm disabled:border-slate-300 disabled:text-slate-300"
