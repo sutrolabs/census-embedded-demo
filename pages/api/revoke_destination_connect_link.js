@@ -11,13 +11,9 @@ export default async function handler(req, res) {
     return
   }
 
-  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links`, {
+  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links/${req.body.id}/revoke`, {
     method: "POST",
-    headers: { ["authorization"]: req.headers["authorization"], ["content-type"]: "application/json" },
-    body: JSON.stringify({
-      type: req.body.type,
-      redirect_uri: req.headers["referer"],
-    }),
+    headers: { ["authorization"]: req.headers["authorization"] },
   })
   const { data } = await apiResponse.json()
   logger.info([apiResponse.status, data])
