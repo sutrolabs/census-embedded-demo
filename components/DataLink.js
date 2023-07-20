@@ -7,7 +7,7 @@ import DestinationConnectLink from "@components/DestinationConnectLink"
 import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
 
-export default function Workspace({ apiKey }) {
+export default function DataLink({ apiKey }) {
   const [refresh, setRefresh] = useState(0)
   const { error: destinationsError, data: destinationsData } = useFetch(
     `/api/list_destinations?refresh=${refresh}`,
@@ -35,7 +35,7 @@ export default function Workspace({ apiKey }) {
   }
 
   return (
-    <main className="m-2 flex flex-col gap-2">
+    <main className="flex flex-col gap-2 px-6 py-5">
       <div className="flex flex-row gap-2">
         <span>You have {destinationsData.length + destinationConnectLinksData.length} destinations</span>
         <button className="self-center border border-gray-500" onClick={() => setRefresh(refresh + 1)}>

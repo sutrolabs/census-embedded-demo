@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./pages/**/*.js", "./components/**/*.js"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        inter: ['"Inter"', "sans-serif"],
+      },
+    },
   },
   plugins: [],
-};
+}

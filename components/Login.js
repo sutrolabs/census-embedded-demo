@@ -9,7 +9,7 @@ export default function Login({ setApiKey }) {
     let cancel = false
     ;(async () => {
       if (data) {
-        await new Promise((resolve) => setTimeout(resolve, 500))
+        await new Promise((resolve) => setTimeout(resolve, 200))
 
         if (!cancel) {
           setApiKey(localApiKey)
@@ -23,18 +23,18 @@ export default function Login({ setApiKey }) {
   }, [data])
 
   return (
-    <main>
+    <main className="col-span-2 bg-slate-200 p-8">
       {!startedTest ? (
         <form
-          className="flex flex-col gap-2"
+          className="flex flex-col items-center gap-4 rounded-sm border border-sky-500 bg-sky-50 p-8 shadow-md"
           onSubmit={(event) => {
             event.preventDefault()
             startTest()
           }}
         >
-          <div>Please enter your API key</div>
+          <h2 className="text-center text-xl font-medium">Enter your Census API key to continue</h2>
           <input
-            className="border border-cyan-300"
+            className="min-w-[420px] rounded-md border border-sky-700 px-4 py-2 text-lg"
             type="password"
             value={localApiKey}
             name="census-api-key"
@@ -42,7 +42,10 @@ export default function Login({ setApiKey }) {
             placeholder="secret-token:..."
             onInput={(event) => setLocalApiKey(event.target.value)}
           />
-          <button className="border border-gray-400 disabled:bg-gray-200" disabled={!localApiKey}>
+          <button
+            className="rounded-md border border-sky-700 bg-sky-600 px-6 py-2 text-xl font-bold text-sky-50 disabled:border-sky-200 disabled:bg-sky-200"
+            disabled={!localApiKey}
+          >
             Log in
           </button>
         </form>
