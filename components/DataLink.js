@@ -22,13 +22,13 @@ export default function DataLink({ apiKey }) {
   )
 
   if (destinationsError || destinationConnectLinksError) {
-    return <Error_ />
+    return <Error_ error={destinationsError ?? destinationConnectLinksError} />
   } else if (!destinations || !destinationConnectLinks) {
     return <Loading />
   }
 
   return (
-    <main className="flex w-full max-w-[800px] flex-col gap-4 justify-self-center px-12 py-8">
+    <main className="flex w-full max-w-[800px] flex-col gap-4 justify-self-center overflow-y-auto px-12 py-8">
       <h2 className="text-2xl font-bold text-slate-700">Data Link</h2>
       <hr className="border-t border-slate-400" />
       <p className="text-slate-700">

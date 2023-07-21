@@ -8,13 +8,12 @@ export default function Integration({
   destinations,
   destinationConnectLinks,
 }) {
-  const [revoked, setRevoked] = useState(null)
+  const [revoked, setRevoked] = useState(false)
 
   const destination = destinations.find((destination) => destination.type === type)
-  const destinationConnectLink = destinationConnectLinks.find(
-    (destinationConnectLink) =>
-      destinationConnectLink.linkable_type === type && destinationConnectLink.id !== revoked,
-  )
+  const destinationConnectLink = revoked
+    ? undefined
+    : destinationConnectLinks.find((destinationConnectLink) => destinationConnectLink.type === type)
 
   const buttons = destination ? (
     <>
@@ -48,7 +47,7 @@ export default function Integration({
               id: destinationConnectLink.id,
             }),
           })
-          setRevoked(destinationConnectLink.id)
+          setRevoked(true)
         }}
       >
         Cancel

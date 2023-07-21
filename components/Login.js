@@ -6,18 +6,8 @@ export default function Login({ setApiKey }) {
   const { error, data, startedTest, startTest, stopTest } = useTestApiKey(localApiKey)
 
   useEffect(() => {
-    let cancel = false
-    ;(async () => {
-      if (data) {
-        await new Promise((resolve) => setTimeout(resolve, 200))
-
-        if (!cancel) {
-          setApiKey(localApiKey)
-        }
-      }
-    })()
-    return () => {
-      cancel = true
+    if (data) {
+      setApiKey(localApiKey)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
@@ -32,10 +22,10 @@ export default function Login({ setApiKey }) {
             startTest()
           }}
         >
-          <h2 className="text-center text-xl font-medium text-sky-900">Welcome to the demo!</h2>
+          <h2 className="text-center text-xl font-medium text-slate-800">Welcome to the demo!</h2>
           <p className="text-center text-sky-800">Enter your Census API key to get started...</p>
           <input
-            className="my-2 min-w-[420px] rounded-md border border-sky-500 px-4 py-2 text-lg shadow-inner"
+            className="my-2 min-w-[420px] rounded-md border border-sky-500 px-4 py-2 shadow-inner"
             type="password"
             value={localApiKey}
             name="census-api-key"
@@ -44,7 +34,7 @@ export default function Login({ setApiKey }) {
             onInput={(event) => setLocalApiKey(event.target.value)}
           />
           <button
-            className="rounded-md border border-sky-700 bg-sky-600 px-6 py-2 text-xl font-bold text-sky-50 disabled:border-sky-300 disabled:bg-sky-200"
+            className="rounded-md border border-sky-700 bg-sky-600 px-6 py-2 text-lg font-bold text-sky-50 shadow-sm disabled:border-sky-300 disabled:bg-sky-200"
             disabled={!localApiKey}
           >
             Log in
@@ -52,19 +42,22 @@ export default function Login({ setApiKey }) {
         </form>
       ) : error ? (
         <form
+          className="flex flex-col items-center gap-4 rounded-md border border-red-500 bg-slate-100 px-10 py-8 shadow-sm"
           onSubmit={(event) => {
             event.preventDefault()
             stopTest()
             setLocalApiKey("")
           }}
         >
-          <div>{`${error}`}</div>
-          <button className="border border-gray-400 disabled:bg-gray-200" disabled={!localApiKey}>
-            Try again
+          <div className="text-lg text-red-700">{`${error}`}</div>
+          <button className="rounded-md border border-slate-900 bg-slate-50 px-6 py-2 text-slate-900 shadow-md">
+            Back
           </button>
         </form>
       ) : (
-        "DONE"
+        <form className="flex flex-col items-center gap-2 rounded-md border border-sky-500 bg-sky-50 px-10 py-8 shadow-md">
+          <div className="text-sky-600">Loading...</div>
+        </form>
       )}
     </main>
   )
