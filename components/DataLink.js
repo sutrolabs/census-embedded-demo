@@ -71,7 +71,7 @@ export default function DataLink({ apiKey }) {
         <Integration
           name="Facebook Ads"
           description="Reach people as they connect with others and find communities"
-          type="facebook_ads"
+          type="facebook"
           apiKey={apiKey}
           destinations={destinations}
           destinationConnectLinks={destinationConnectLinks}
