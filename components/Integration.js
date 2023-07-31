@@ -8,12 +8,18 @@ export default function Integration({
   destinations,
   destinationConnectLinks,
 }) {
+  const [now] = useState(() => new Date())
   const [revoked, setRevoked] = useState(false)
 
   const destination = destinations.find((destination) => destination.type === type)
   const destinationConnectLink = revoked
     ? undefined
-    : destinationConnectLinks.find((destinationConnectLink) => destinationConnectLink.type === type)
+    : destinationConnectLinks.find(
+        (destinationConnectLink) =>
+          destinationConnectLink.type === type &&
+          new Date(destinationConnectLink.expiration) > now &&
+          !destinationConnectLink.revoked,
+      )
 
   const buttons = destination ? (
     <>
