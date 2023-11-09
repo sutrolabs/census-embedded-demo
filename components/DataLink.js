@@ -4,11 +4,12 @@ import Error_ from "@components/Error_"
 import Integration from "@components/Integration"
 import Loading from "@components/Loading"
 
-export default function DataLink({ apiKey }) {
+export default function DataLink({ personalAccessToken, workspaceId }) {
   const { error: destinationsError, data: destinations } = useFetch("/api/list_destinations", {
     method: "GET",
     headers: {
-      ["authorization"]: `Bearer ${apiKey}`,
+      ["authorization"]: `Bearer ${personalAccessToken}`,
+      ["census-workspace-id"]: `${workspaceId}`,
     },
   })
   const { error: destinationConnectLinksError, data: destinationConnectLinks } = useFetch(
@@ -16,7 +17,8 @@ export default function DataLink({ apiKey }) {
     {
       method: "GET",
       headers: {
-        ["authorization"]: `Bearer ${apiKey}`,
+        ["authorization"]: `Bearer ${personalAccessToken}`,
+        ["census-workspace-id"]: `${workspaceId}`,
       },
     },
   )
@@ -43,7 +45,8 @@ export default function DataLink({ apiKey }) {
           name="Salesforce"
           description="The world's most trusted sales force automation software"
           type="salesforce"
-          apiKey={apiKey}
+          personalAccessToken={personalAccessToken}
+          workspaceId={workspaceId}
           destinations={destinations}
           destinationConnectLinks={destinationConnectLinks}
         />
@@ -51,7 +54,8 @@ export default function DataLink({ apiKey }) {
           name="HubSpot"
           description="Helping teams come together to create a single source-of-truth"
           type="hubspot"
-          apiKey={apiKey}
+          personalAccessToken={personalAccessToken}
+          workspaceId={workspaceId}
           destinations={destinations}
           destinationConnectLinks={destinationConnectLinks}
         />
@@ -64,7 +68,8 @@ export default function DataLink({ apiKey }) {
           name="Google Ads"
           description="Be seen where people are searching, browsing and watching"
           type="google_ads"
-          apiKey={apiKey}
+          personalAccessToken={personalAccessToken}
+          workspaceId={workspaceId}
           destinations={destinations}
           destinationConnectLinks={destinationConnectLinks}
         />
@@ -72,7 +77,8 @@ export default function DataLink({ apiKey }) {
           name="Facebook Ads"
           description="Reach people as they connect with others and find communities"
           type="facebook"
-          apiKey={apiKey}
+          personalAccessToken={personalAccessToken}
+          workspaceId={workspaceId}
           destinations={destinations}
           destinationConnectLinks={destinationConnectLinks}
         />

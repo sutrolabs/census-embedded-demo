@@ -5,11 +5,16 @@ import { useSessionStorage } from "usehooks-ts"
 import DataLink from "@components/DataLink"
 import Footer from "@components/Footer"
 import Header from "@components/Header"
-import Login from "@components/Login"
 import Sidebar from "@components/Sidebar"
+import TokenEntry from "@components/TokenEntry"
+import WorkspaceSelect from "@components/WorkspaceSelect"
 
 function Index() {
-  const [apiKey, setApiKey] = useSessionStorage("census-api-key", null)
+  const [personalAccessToken, setPersonalAccessToken] = useSessionStorage(
+    "census-personal-access-token",
+    null,
+  )
+  const [workspaceId, setWorkspaceId] = useSessionStorage("census-workspace-id", null)
 
   return (
     <>
@@ -17,15 +22,29 @@ function Index() {
         <title>Market Data Inc.</title>
       </Head>
 
-      <Header apiKey={apiKey} setApiKey={setApiKey} />
+      <Header
+        loggedIn={!!(personalAccessToken && workspaceId)}
+        onLogOut={() => {
+          setPersonalAccessToken(null)
+          setWorkspaceId(null)
+        }}
+      />
 
-      {apiKey ? (
+      {!personalAccessToken ? (
+        <TokenEntry setPersonalAccessToken={setPersonalAccessToken} />
+      ) : !workspaceId ? (
+        <WorkspaceSelect
+          personalAccessToken={personalAccessToken}
+          setWorkspaceId={setWorkspaceId}
+          onBack={() => {
+            setPersonalAccessToken(null)
+          }}
+        />
+      ) : (
         <>
           <Sidebar />
-          <DataLink apiKey={apiKey} />
+          <DataLink personalAccessToken={personalAccessToken} workspaceId={workspaceId} />
         </>
-      ) : (
-        <Login setApiKey={setApiKey} />
       )}
       <Footer />
     </>

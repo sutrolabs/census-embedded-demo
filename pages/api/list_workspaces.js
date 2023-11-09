@@ -1,7 +1,7 @@
 import fetch from "node-fetch"
 import pino from "pino"
 
-import { getWorkspaceApiKey } from "@utils/auth"
+import { getPersonalAccessToken } from "@utils/auth"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
@@ -13,13 +13,13 @@ export default async function handler(req, res) {
     return
   }
 
-  const workspaceApiKey = await getWorkspaceApiKey(req)
+  const personalAccessToken = getPersonalAccessToken(req)
   const allData = []
   let page = 1
   while (page) {
-    const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destinations`, {
+    const apiResponse = await fetch(`${censusBaseUrl}/api/v1/workspaces?page=${page}`, {
       method: "GET",
-      headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
+      headers: { ["authorization"]: `Bearer ${personalAccessToken}` },
     })
     await checkStatus(apiResponse, 200)
     const { pagination, data } = await apiResponse.json()
