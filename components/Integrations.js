@@ -4,7 +4,7 @@ import Error_ from "@components/Error_"
 import Integration from "@components/Integration"
 import Loading from "@components/Loading"
 
-export default function DataLink({ personalAccessToken, workspaceId }) {
+export default function Integrations({ personalAccessToken, workspaceId }) {
   const { error: destinationsError, data: destinations } = useFetch("/api/list_destinations", {
     method: "GET",
     headers: {
@@ -31,7 +31,7 @@ export default function DataLink({ personalAccessToken, workspaceId }) {
 
   return (
     <main className="flex w-full max-w-[800px] flex-col gap-4 justify-self-center overflow-y-auto px-12 py-8">
-      <h2 className="text-2xl font-bold text-slate-700">Data Link</h2>
+      <h2 className="text-2xl font-bold text-slate-700">Integrations</h2>
       <hr className="border-t border-slate-400" />
       <p className="text-slate-700">
         Let&apos;s make your data actionable! Here you can connect all of your personalized market data with

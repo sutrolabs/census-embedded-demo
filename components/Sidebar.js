@@ -5,7 +5,7 @@ export default function Sidebar() {
       <Item name="Explore" />
       <Item name="Trends" />
       <Item name="Reports" />
-      <Item name="Data Link" selected />
+      <Item name="Integrations" selected />
       <Item name="Settings" />
     </nav>
   )

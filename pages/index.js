@@ -2,9 +2,9 @@ import dynamic from "next/dynamic"
 import Head from "next/head"
 import { useSessionStorage } from "usehooks-ts"
 
-import DataLink from "@components/DataLink"
 import Footer from "@components/Footer"
 import Header from "@components/Header"
+import Integrations from "@components/Integrations"
 import Sidebar from "@components/Sidebar"
 import TokenEntry from "@components/TokenEntry"
 import WorkspaceSelect from "@components/WorkspaceSelect"
@@ -43,7 +43,7 @@ function Index() {
       ) : (
         <>
           <Sidebar />
-          <DataLink personalAccessToken={personalAccessToken} workspaceId={workspaceId} />
+          <Integrations personalAccessToken={personalAccessToken} workspaceId={workspaceId} />
         </>
       )}
       <Footer />
