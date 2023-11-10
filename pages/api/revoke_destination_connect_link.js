@@ -1,9 +1,11 @@
 import fetch from "node-fetch"
 import pino from "pino"
 
-const logger = pino({ name: __filename })
+import { getWorkspaceApiKey } from "@utils/auth"
+import { checkStatus } from "@utils/status"
+import { censusBaseUrl } from "@utils/url"
 
-const censusBaseUrl = process.env["CENSUS_BASE_URL"] ?? "https://app.getcensus.com"
+const logger = pino({ name: __filename })
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -11,11 +13,13 @@ export default async function handler(req, res) {
     return
   }
 
+  const workspaceApiKey = await getWorkspaceApiKey(req)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links/${req.body.id}/revoke`, {
     method: "POST",
-    headers: { ["authorization"]: req.headers["authorization"] },
+    headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
   })
+  await checkStatus(apiResponse, 201)
   const { data } = await apiResponse.json()
-  logger.info([apiResponse.status, data])
-  res.status(apiResponse.status).json(data)
+  logger.info([data])
+  res.status(200).json(data)
 }

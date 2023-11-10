@@ -4,7 +4,8 @@ export default function Integration({
   name,
   description,
   type,
-  apiKey,
+  personalAccessToken,
+  workspaceId,
   destinations,
   destinationConnectLinks,
 }) {
@@ -46,7 +47,8 @@ export default function Integration({
           await fetch("/api/revoke_destination_connect_link", {
             method: "POST",
             headers: {
-              ["authorization"]: `Bearer ${apiKey}`,
+              ["authorization"]: `Bearer ${personalAccessToken}`,
+              ["census-workspace-id"]: `${workspaceId}`,
               ["content-type"]: "application/json",
             },
             body: JSON.stringify({
@@ -67,7 +69,8 @@ export default function Integration({
           const response = await fetch("/api/create_destination_connect_link", {
             method: "POST",
             headers: {
-              ["authorization"]: `Bearer ${apiKey}`,
+              ["authorization"]: `Bearer ${personalAccessToken}`,
+              ["census-workspace-id"]: `${workspaceId}`,
               ["content-type"]: "application/json",
             },
             body: JSON.stringify({
