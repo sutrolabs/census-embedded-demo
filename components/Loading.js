@@ -1,15 +1,24 @@
-import Setup from "@components/Setup"
+import Head from "next/head"
 
 export default function Loading({ setup }) {
   if (setup) {
     return (
-      <Setup>
-        <div className="flex flex-col items-center gap-2 rounded-md border border-teal-500 bg-teal-50 px-10 py-8 shadow-md">
-          <div className="text-teal-600">Loading...</div>
-        </div>
-      </Setup>
+      <div className="flex flex-col items-center gap-2 rounded-md bg-stone-50 px-10 py-8 shadow-md">
+        <Head>
+          <title>Loading... - Census Embedded Demo App</title>
+        </Head>
+
+        <div className="text-teal-600">Loading...</div>
+      </div>
     )
   } else {
-    return <main className="justify-self-center px-12 py-8 text-lg text-teal-600">Loading...</main>
+    return (
+      <main className="justify-self-center px-12 py-8 text-lg text-teal-600">
+        <Head>
+          <title>Loading... - Census Embedded Demo App</title>
+        </Head>
+        Loading...
+      </main>
+    )
   }
 }
