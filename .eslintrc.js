@@ -46,6 +46,12 @@ module.exports = {
     "no-constant-condition": ["error", { checkLoops: false }],
     "no-param-reassign": ["error", { props: false }],
     "prettier/prettier": process.env.NODE_ENV === "production" ? "error" : "off",
+    "tailwindcss/no-custom-classname": [
+      "error",
+      {
+        whitelist: ["fa", "fa-.*", "svg-inline--fa"],
+      },
+    ],
   },
   settings: {
     "import/resolver": {

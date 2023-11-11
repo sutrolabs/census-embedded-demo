@@ -19,7 +19,7 @@ function Index() {
   return (
     <>
       <Head>
-        <title>Market Data Inc.</title>
+        <title>Census Embedded Demo App</title>
       </Head>
 
       <Header

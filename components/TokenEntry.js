@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react"
 import { useFetch } from "usehooks-ts"
 
+import { Anchor } from "@components/Anchor"
+import Button from "@components/Button"
 import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
 import Setup from "@components/Setup"
 
 export default function TokenEntry({ setPersonalAccessToken }) {
-  const [localPersonalAccessToken, setLocalPersonalAccessToken] = useState("")
+  const [localPersonalAccessToken, setLocalPersonalAccessToken] = useState(
+    process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_PERSONAL_ACCESS_TOKEN"] ?? "",
+  )
   const { error, data, startedTest, startTest, stopTest } =
     useTestPersonalAccessToken(localPersonalAccessToken)
 
@@ -20,16 +24,16 @@ export default function TokenEntry({ setPersonalAccessToken }) {
   if (error) {
     return (
       <Error_ setup error={error}>
-        <button
+        <Button
+          solid
           autoFocus
-          className="rounded-md border border-slate-900 bg-slate-50 px-6 py-2 text-slate-900 shadow-md"
           onClick={() => {
             stopTest()
             setLocalPersonalAccessToken("")
           }}
         >
           Back
-        </button>
+        </Button>
       </Error_>
     )
   } else if (startedTest) {
@@ -39,25 +43,22 @@ export default function TokenEntry({ setPersonalAccessToken }) {
   return (
     <Setup>
       <form
-        className="flex flex-col items-center gap-2 rounded-md border border-sky-500 bg-sky-50 px-10 py-8 shadow-md"
+        className="flex flex-col items-center gap-2 rounded-md border border-teal-500 bg-white px-10 py-8 shadow-md"
         onSubmit={(event) => {
           event.preventDefault()
           startTest()
         }}
       >
-        <h2 className="text-center text-xl font-medium text-slate-800">Welcome to the demo!</h2>
-        <p className="text-center text-sky-800">
+        <h2 className="text-center text-xl font-medium text-stone-800">Welcome to the demo!</h2>
+        <p className="text-center text-teal-800">
           Enter your Census{" "}
-          <a
-            className="text-sky-500 underline"
-            href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-organization-apis"
-          >
+          <Anchor href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-organization-apis">
             Personal Access Token
-          </a>{" "}
+          </Anchor>{" "}
           to get started...
         </p>
         <input
-          className="my-2 min-w-[420px] rounded-md border border-sky-500 px-4 py-2 font-mono shadow-inner"
+          className="my-2 min-w-[420px] rounded-md border border-teal-500 px-4 py-2 font-mono shadow-inner"
           autoFocus
           type="password"
           value={localPersonalAccessToken}
@@ -66,12 +67,9 @@ export default function TokenEntry({ setPersonalAccessToken }) {
           placeholder="csp_..."
           onInput={(event) => setLocalPersonalAccessToken(event.target.value)}
         />
-        <button
-          className="rounded-md border border-sky-700 bg-sky-600 px-6 py-2 text-lg font-bold text-sky-50 shadow-sm disabled:border-sky-300 disabled:bg-sky-200"
-          disabled={!localPersonalAccessToken}
-        >
+        <Button className="px-6 py-2 text-lg" solid disabled={!localPersonalAccessToken}>
           Continue
-        </button>
+        </Button>
       </form>
     </Setup>
   )

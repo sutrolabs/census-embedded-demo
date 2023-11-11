@@ -1,6 +1,6 @@
 export default function Sidebar() {
   return (
-    <nav className="flex flex-col gap-2 bg-slate-700 p-4">
+    <nav className="flex flex-col gap-4 border-r border-stone-300 bg-stone-50 px-6 py-8">
       <Item name="Dashboard" />
       <Item name="Explore" />
       <Item name="Trends" />
@@ -14,7 +14,7 @@ export default function Sidebar() {
 function Item({ name, selected }) {
   return (
     <div
-      className="cursor-pointer rounded-md border-indigo-100 px-2 py-1 font-medium text-slate-100 data-[selected]:border data-[selected]:bg-slate-600"
+      className="cursor-pointer border-stone-900 pl-2 font-medium text-stone-900 hover:border-teal-800 hover:text-teal-800 data-[selected]:border-l-2 data-[selected]:font-bold"
       data-selected={selected ? "" : null}
     >
       {name}
