@@ -1,106 +1,142 @@
 import Head from "next/head"
-import { useFetch } from "usehooks-ts"
+import Link from "next/link"
+import { Line } from "react-chartjs-2"
 
-import Error_ from "@components/Error_"
-import Integration from "@components/Integration"
-import Loading from "@components/Loading"
+import { Anchor } from "@components/Anchor"
+import Button from "@components/Button"
+import { Card } from "@components/Card"
 
-export default function Index({ personalAccessToken, workspaceId }) {
-  const { error: destinationsError, data: destinations } = useFetch("/api/list_destinations", {
-    method: "GET",
-    headers: {
-      ["authorization"]: `Bearer ${personalAccessToken}`,
-      ["census-workspace-id"]: `${workspaceId}`,
-    },
-  })
-  const { error: destinationConnectLinksError, data: destinationConnectLinks } = useFetch(
-    "/api/list_destination_connect_links",
-    {
-      method: "GET",
-      headers: {
-        ["authorization"]: `Bearer ${personalAccessToken}`,
-        ["census-workspace-id"]: `${workspaceId}`,
-      },
-    },
-  )
-
-  if (destinationsError || destinationConnectLinksError) {
-    return <Error_ error={destinationsError ?? destinationConnectLinksError} />
-  } else if (!destinations || !destinationConnectLinks) {
-    return <Loading />
-  }
-
+export default function Index() {
   return (
-    <main className="flex flex-col items-center overflow-y-auto">
+    <>
       <Head>
-        <title>Integrations - Census Embedded Demo App</title>
+        <title>Dashboard - Census Embedded Demo App</title>
       </Head>
-
-      <div className="flex w-full max-w-[800px] flex-col gap-4 px-12 py-8">
-        <h2 className="text-2xl font-bold text-stone-700">Integrations</h2>
-        <hr className="border-t border-stone-400" />
-        <p className="text-stone-700">
-          Let&apos;s make your data actionable! Here you can connect all of your personalized market data with
-          the tools you use every day.
-        </p>
-        <Section
-          name="CRMs"
-          description="Have key market data on hand every time you start a customer conversation:"
-        >
-          <Integration
-            name="Salesforce"
-            description="The world's most trusted sales force automation software"
-            type="salesforce"
-            personalAccessToken={personalAccessToken}
-            workspaceId={workspaceId}
-            destinations={destinations}
-            destinationConnectLinks={destinationConnectLinks}
+      <h2 className="text-2xl font-bold text-stone-700">Dashboard</h2>
+      <hr className="border-t border-stone-400" />
+      <p className="italic text-stone-500">
+        Unlock the full potential of your tea production business with comprehensive data on retailers and
+        trends.
+      </p>
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <Card className="flex flex-col gap-3">
+          <h3 className="font-medium text-teal-800">Retailer Datasets</h3>
+          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-stone-600">
+            <li>
+              <Anchor href="/retailers">US tea boutiques</Anchor> updated 1 week ago
+            </li>
+            <li>
+              <Anchor href="/retailers">Australia grocers</Anchor> updated 3 week ago
+            </li>
+            <li>
+              <Anchor href="/retailers">Canada markets</Anchor> updated 2 months ago
+            </li>
+          </ul>
+          <Link href="/retailers">
+            <Button>Explore retailers</Button>
+          </Link>
+        </Card>
+        <Card className="flex flex-col gap-3">
+          <div className="flex flex-row justify-between">
+            <h3 className="font-medium text-teal-800">Retailer Highlights</h3>
+            <span className="text-sm text-stone-500">1 / 12</span>
+          </div>
+          <ul className="ml-2 flex grow flex-col text-sm text-stone-600">
+            <ol>
+              <span className="text-teal-600">Name:</span>{" "}
+              <span className="font-medium text-stone-800">Healthways</span>
+            </ol>
+            <ol>
+              <span className="text-teal-600">Type:</span> Grocery chain
+            </ol>
+            <ol>
+              <span className="text-teal-600">Annual tea revenue:</span> $2.1M
+            </ol>
+            <ol>
+              <span className="text-teal-600">Contacts:</span> 4
+            </ol>
+          </ul>
+          <div className="flex flex-row justify-center gap-2">
+            <Button>&lt;</Button>
+            <Link href="/retailers">
+              <Button className="grow">View details</Button>
+            </Link>
+            <Button>&gt;</Button>
+          </div>
+        </Card>
+        <Card className="flex flex-col gap-3">
+          <h3 className="font-medium text-teal-800">Trend Datasets</h3>
+          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-stone-600">
+            <li>
+              <Anchor href="/trends">Global prices</Anchor> updated 1 day ago
+            </li>
+            <li>
+              <Anchor href="/trends">Global consumption</Anchor> updated 2 week ago
+            </li>
+            <li>
+              <Anchor href="/trends">Tea rankings</Anchor> updated 1 month ago
+            </li>
+          </ul>
+          <Link href="/trends">
+            <Button>Explore trends</Button>
+          </Link>
+        </Card>
+        <Card className="flex flex-col gap-3">
+          <div className="flex flex-row justify-between">
+            <h3 className="font-medium text-teal-800">Trend Highlights</h3>
+            <span className="text-sm text-stone-500">1 / 12</span>
+          </div>
+          <div className="-mb-3 text-sm text-stone-800 underline">Global price</div>
+          <Line
+            data={{
+              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+              datasets: [
+                {
+                  label: "Tea Prices",
+                  data: [2.5, 2.7, 2.8, 3.1, 3.0, 2.9],
+                  borderColor: "rgba(75, 192, 192, 1)",
+                  borderWidth: 2,
+                  fill: false,
+                },
+              ],
+            }}
+            options={{
+              responsive: true,
+              interaction: {
+                mode: "index",
+                intersect: false,
+              },
+              plugins: {
+                tooltip: {
+                  enabled: true,
+                  mode: "index",
+                },
+              },
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            }}
           />
-          <Integration
-            name="HubSpot"
-            description="Helping teams come together to create a single source-of-truth"
-            type="hubspot"
-            personalAccessToken={personalAccessToken}
-            workspaceId={workspaceId}
-            destinations={destinations}
-            destinationConnectLinks={destinationConnectLinks}
-          />
-        </Section>
-        <Section
-          name="Ad campaigns"
-          description="Use market data to build audiences that will maximize your advertising ROI:"
-        >
-          <Integration
-            name="Google Ads"
-            description="Be seen where people are searching, browsing and watching"
-            type="google_ads"
-            personalAccessToken={personalAccessToken}
-            workspaceId={workspaceId}
-            destinations={destinations}
-            destinationConnectLinks={destinationConnectLinks}
-          />
-          <Integration
-            name="Facebook Ads"
-            description="Reach people as they connect with others and find communities"
-            type="facebook"
-            personalAccessToken={personalAccessToken}
-            workspaceId={workspaceId}
-            destinations={destinations}
-            destinationConnectLinks={destinationConnectLinks}
-          />
-        </Section>
+          <div className="flex flex-row justify-center gap-2">
+            <Button>&lt;</Button>
+            <Link href="/trends">
+              <Button className="grow">View details</Button>
+            </Link>
+            <Button>&gt;</Button>
+          </div>
+        </Card>
+        <Card className="flex flex-col gap-3">
+          <h3 className="font-medium text-teal-800">Integrations</h3>
+          <p className="text-sm text-teal-500">
+            Did you know you can connect this data directly to your CRM and ad platforms?
+          </p>
+          <Link href="/integrations">
+            <Button>Get started</Button>
+          </Link>
+        </Card>
       </div>
-    </main>
-  )
-}
-
-function Section({ name, description, children }) {
-  return (
-    <section className="mt-2 flex flex-col gap-3">
-      <h3 className="text-lg font-medium text-stone-700">{name}</h3>
-      <hr className="border-t border-stone-300" />
-      <p className="text-stone-700">{description}</p>
-      <div className="grid grid-cols-2 gap-5">{children}</div>
-    </section>
+    </>
   )
 }

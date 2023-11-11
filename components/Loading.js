@@ -13,12 +13,12 @@ export default function Loading({ setup }) {
     )
   } else {
     return (
-      <main className="justify-self-center px-12 py-8 text-lg text-teal-600">
+      <>
         <Head>
           <title>Loading... - Census Embedded Demo App</title>
         </Head>
-        Loading...
-      </main>
+        <h2 className="text-2xl text-stone-300">Loading...</h2>
+      </>
     )
   }
 }
