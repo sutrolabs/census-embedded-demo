@@ -1,5 +1,8 @@
 import { useState } from "react"
 
+import Button from "@components/Button"
+import { Card } from "@components/Card"
+
 export default function Integration({
   name,
   description,
@@ -24,25 +27,21 @@ export default function Integration({
 
   const buttons = destination ? (
     <>
-      <button
-        className="rounded-md border border-sky-600 bg-sky-50 px-3 py-1 text-sky-600 shadow-sm"
-        onClick={() => {}}
-      >
+      <Button solid onClick={() => {}}>
         Configure
-      </button>
+      </Button>
     </>
   ) : destinationConnectLink ? (
     <>
-      <button
-        className="rounded-md border border-sky-600 bg-sky-50 px-3 py-1 text-sky-600 shadow-sm"
+      <Button
+        solid
         onClick={() => {
           window.location.href = destinationConnectLink.uri
         }}
       >
         Continue connecting
-      </button>
-      <button
-        className="rounded-md border border-sky-600 bg-sky-50 px-3 py-1 text-sky-600 shadow-sm"
+      </Button>
+      <Button
         onClick={async () => {
           await fetch("/api/revoke_destination_connect_link", {
             method: "POST",
@@ -59,12 +58,12 @@ export default function Integration({
         }}
       >
         Cancel
-      </button>
+      </Button>
     </>
   ) : (
     <>
-      <button
-        className="rounded-md border border-sky-600 bg-sky-50 px-3 py-1 text-sky-600 shadow-sm"
+      <Button
+        solid
         onClick={async () => {
           const response = await fetch("/api/create_destination_connect_link", {
             method: "POST",
@@ -82,35 +81,32 @@ export default function Integration({
         }}
       >
         Connect now
-      </button>
+      </Button>
     </>
   )
   return (
-    <div
-      className="flex flex-col gap-2 rounded-md border border-sky-100  bg-slate-50 px-4 py-3 shadow-sm data-[destination]:border-sky-300"
-      data-destination={destination ? "" : null}
-    >
+    <Card className="flex flex-col gap-2" disabled={!destination}>
       <div className="flex flex-row items-center justify-between">
         <span
-          className="text-slate-400 data-[destination]:text-sky-600"
+          className="font-medium text-stone-400 data-[destination]:text-teal-800"
           data-destination={destination ? "" : null}
         >
           {name}
         </span>
         <span
-          className="rounded-lg bg-slate-200 px-2 py-1 text-xs text-slate-400 data-[destination]:bg-green-200 data-[destination]:text-green-600"
+          className="rounded-lg bg-stone-200 px-2 py-1 text-xs text-stone-400 data-[destination]:bg-green-200 data-[destination]:text-green-600"
           data-destination={destination ? "" : null}
         >
           {destination ? "connected" : "not connected"}
         </span>
       </div>
       <div
-        className="mb-auto text-slate-300 data-[destination]:text-sky-800"
+        className="mb-auto text-stone-300 data-[destination]:text-teal-800"
         data-destination={destination ? "" : null}
       >
         {description}
       </div>
       <div className="mt-2 flex flex-row gap-4">{buttons}</div>
-    </div>
+    </Card>
   )
 }
