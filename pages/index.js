@@ -50,6 +50,9 @@ export default function Index() {
               <span className="text-teal-600">Type:</span> Grocery chain
             </ol>
             <ol>
+              <span className="text-teal-600">Location:</span> UK
+            </ol>
+            <ol>
               <span className="text-teal-600">Annual tea revenue:</span> $2.1M
             </ol>
             <ol>
