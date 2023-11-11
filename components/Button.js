@@ -1,4 +1,6 @@
-export default function Button({ solid, autoFocus, disabled, className, onClick, children }) {
+import { forwardRef } from "react"
+
+function Button({ solid, autoFocus, disabled, className, onClick, children }, ref) {
   return (
     <button
       className={`
@@ -16,8 +18,11 @@ export default function Button({ solid, autoFocus, disabled, className, onClick,
       autoFocus={autoFocus}
       disabled={disabled}
       onClick={onClick}
+      ref={ref}
     >
       {children}
     </button>
   )
 }
+
+export default forwardRef(Button)

@@ -13,13 +13,15 @@ export default function Error_({ setup, error, children }) {
     )
   } else {
     return (
-      <main className="justify-self-center px-12 py-8">
+      <>
         <Head>
           <title>Error - Census Embedded Demo App</title>
         </Head>
-        <div className="text-lg text-red-500">{`${error}`}</div>
+        <h2 className="text-2xl font-bold text-stone-700">Error</h2>
+        <hr className="border-t border-stone-400" />
+        <p className="text-lg text-red-500">{`${error}`}</p>
         {children}
-      </main>
+      </>
     )
   }
 }

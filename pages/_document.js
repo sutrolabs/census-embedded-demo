@@ -12,7 +12,13 @@ export default function Document() {
         />
         <script src="https://kit.fontawesome.com/8010c05861.js" crossOrigin="anonymous" async></script>
       </Head>
-      <body className="grid h-screen grid-cols-[180px_auto] grid-rows-[auto_1fr_auto] bg-stone-50 font-inter text-stone-900">
+      <body
+        className="
+          grid h-screen
+          grid-cols-[0_auto] grid-rows-[auto_1fr_auto] bg-stone-50
+          font-inter text-stone-900 sm:grid-cols-[200px_auto]
+        "
+      >
         <Main />
         <NextScript />
       </body>
