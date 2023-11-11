@@ -10,7 +10,7 @@ export default function Header({ loggedIn, onLogOut }) {
     <header className="col-span-2 flex flex-row items-center gap-4 border-b border-stone-400 bg-stone-100 px-6 py-4">
       <h1>
         <Link href="/">
-          <a className="flex flex-row items-center gap-4 text-4xl">
+          <a className="flex flex-row items-center gap-4">
             <i class="fa-solid fa-mug-tea text-4xl text-teal-600" />
             <div class="flex flex-col">
               <div className="text-2xl font-bold  text-teal-900">Tea Research International</div>
@@ -30,6 +30,7 @@ export default function Header({ loggedIn, onLogOut }) {
         autoComplete="off"
         placeholder="Search..."
       />
+      {loggedIn ? <span className="text-stone-500">owner@teaproducer.com</span> : null}
       <Button onClick={onLogOut}>Log out</Button>
     </header>
   )
