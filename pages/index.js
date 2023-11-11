@@ -33,7 +33,10 @@ export default function Index() {
             </li>
           </ul>
           <Link href="/retailers">
-            <Button>Explore retailers</Button>
+            <Button>
+              <i className="fa-solid fa-search mr-2" />
+              Explore retailers
+            </Button>
           </Link>
         </Card>
         <Card className="flex flex-col gap-3">
@@ -60,11 +63,15 @@ export default function Index() {
             </ol>
           </ul>
           <div className="flex flex-row justify-center gap-2">
-            <Button>&lt;</Button>
+            <Button>
+              <i className="fa-solid fa-chevron-left" />
+            </Button>
             <Link href="/retailers">
               <Button className="grow">View details</Button>
             </Link>
-            <Button>&gt;</Button>
+            <Button>
+              <i className="fa-solid fa-chevron-right" />
+            </Button>
           </div>
         </Card>
         <Card className="flex flex-col gap-3">
@@ -81,7 +88,10 @@ export default function Index() {
             </li>
           </ul>
           <Link href="/trends">
-            <Button>Explore trends</Button>
+            <Button>
+              <i className="fa-solid fa-search mr-2" />
+              Explore trends
+            </Button>
           </Link>
         </Card>
         <Card className="flex flex-col gap-3">
@@ -123,11 +133,15 @@ export default function Index() {
             }}
           />
           <div className="flex flex-row justify-center gap-2">
-            <Button>&lt;</Button>
+            <Button>
+              <i className="fa-solid fa-chevron-left" />
+            </Button>
             <Link href="/trends">
               <Button className="grow">View details</Button>
             </Link>
-            <Button>&gt;</Button>
+            <Button>
+              <i className="fa-solid fa-chevron-right" />
+            </Button>
           </div>
         </Card>
         <Card className="flex flex-col gap-3">
@@ -136,7 +150,10 @@ export default function Index() {
             Did you know you can connect this data directly to your CRM and ad platforms?
           </p>
           <Link href="/integrations">
-            <Button>Get started</Button>
+            <Button>
+              <i className="fa-solid fa-rocket-launch mr-2" />
+              Get started
+            </Button>
           </Link>
         </Card>
       </div>

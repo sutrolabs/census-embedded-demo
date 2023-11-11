@@ -31,7 +31,10 @@ export default function Header({ loggedIn, onLogOut }) {
         placeholder="Search..."
       />
       {loggedIn ? <span className="hidden text-stone-500 md:inline">owner@teaproducer.com</span> : null}
-      <Button onClick={onLogOut}>Log out</Button>
+      <Button onClick={onLogOut}>
+        Log out
+        <i className="fa-solid fa-right-from-bracket ml-2" />
+      </Button>
     </header>
   )
 }
