@@ -19,11 +19,13 @@ export default function Index() {
       <Link href="/integrations/crm">
         <Button className="min-w-[300px] self-center" solid>
           Connect your CRM
+          <i className="fa-solid fa-chevron-right ml-2" />
         </Button>
       </Link>
       <Link href="/integrations/ads">
         <Button className="min-w-[300px] self-center" solid>
           Connect your ad platforms
+          <i className="fa-solid fa-chevron-right ml-2" />
         </Button>
       </Link>
     </>
