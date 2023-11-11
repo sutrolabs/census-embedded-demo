@@ -7,6 +7,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.17",
     "chart.js": "^4.4.0",
     "lodash": "^4.17.21",
     "next": "^12.1.4",
