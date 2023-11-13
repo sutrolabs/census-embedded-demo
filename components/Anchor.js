@@ -2,9 +2,10 @@ export function Anchor({ className, href, children }) {
   return (
     <a
       className={`
-        text-teal-600
+        text-indigo-700
         underline
-        hover:text-teal-500
+        transition
+        hover:text-indigo-600
         ${className}`}
       href={href}
     >

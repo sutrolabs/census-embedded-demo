@@ -16,11 +16,11 @@ export default function LogIn({ onLogIn }) {
           <i class="fa-solid fa-mug-tea text-4xl text-teal-600" />
           <div className="text-3xl font-bold  text-teal-700">Tea Research International</div>
         </h1>
-        <div className="mt-2 text-center text-lg text-teal-700">
+        <div className="mt-2 text-center text-lg text-stone-700">
           Log in to access your personalized tea distribution market intelligence workspace
         </div>
         <input
-          className="mx-8 my-2 min-w-[420px] rounded-md border border-teal-500 px-4 py-2 text-lg shadow-inner"
+          className="mx-8 my-2 min-w-[420px] rounded-md border border-indigo-500 px-4 py-2 text-lg shadow-inner"
           defaultValue="owner@teaproducer.com"
         />
         <Button className="mx-8 px-6 py-2 text-xl" solid onClick={onLogIn}>

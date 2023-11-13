@@ -75,7 +75,7 @@ function Segment() {
               className="bg-emerald-200 text-xs font-medium text-emerald-700"
               text="Up to date (1 hour ago)"
             />
-            <Button solid>
+            <Button>
               <i className="fa-solid fa-gear mr-2" />
               Configure
             </Button>
