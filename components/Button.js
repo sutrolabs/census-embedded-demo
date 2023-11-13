@@ -5,13 +5,14 @@ function Button({ solid, autoFocus, disabled, className, onClick, children }, re
     <button
       className={`
         rounded-md border
-        border-teal-500 bg-teal-50/50
+        border-indigo-500 bg-indigo-50/50
         px-3 py-1
-        text-teal-500 shadow-sm
-        hover:bg-teal-100/50 hover:text-teal-600
+        text-indigo-700 shadow-sm
+        transition
+        hover:bg-indigo-100/50 hover:text-indigo-600
         disabled:border-stone-300 disabled:text-stone-300
-        data-[solid]:bg-teal-500 data-[solid]:text-stone-50
-        data-[solid]:hover:border-teal-400 data-[solid]:hover:bg-teal-400
+        data-[solid]:border-indigo-700 data-[solid]:bg-indigo-700 data-[solid]:text-stone-50
+        data-[solid]:hover:border-indigo-600 data-[solid]:hover:bg-indigo-600
         ${className}
       `}
       data-solid={solid ? "" : null}

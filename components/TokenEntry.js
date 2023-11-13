@@ -60,7 +60,7 @@ export default function TokenEntry({ setPersonalAccessToken }) {
       </Head>
 
       <h2 className="text-center text-xl font-medium text-stone-800">Welcome to the demo!</h2>
-      <p className="text-center text-teal-800">
+      <p className="text-center text-stone-800">
         Enter your Census{" "}
         <Anchor href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-organization-apis">
           Personal Access Token
@@ -68,7 +68,7 @@ export default function TokenEntry({ setPersonalAccessToken }) {
         to get started...
       </p>
       <input
-        className="my-2 min-w-[420px] rounded-md border border-teal-500 px-4 py-2 font-mono shadow-inner"
+        className="my-2 min-w-[420px] rounded-md border border-indigo-500 px-4 py-2 font-mono shadow-inner"
         autoFocus
         type="password"
         value={localPersonalAccessToken}
