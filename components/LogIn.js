@@ -13,7 +13,7 @@ export default function LogIn({ onLogIn }) {
 
       <div className="flex max-w-xl flex-col items-stretch gap-4 rounded-md bg-stone-50 px-12 py-10 shadow-lg">
         <h1 className="flex flex-row items-center justify-center gap-3">
-          <i class="fa-solid fa-mug-tea text-4xl text-teal-600" />
+          <i className="fa-solid fa-mug-tea text-4xl text-teal-600" />
           <div className="text-3xl font-bold  text-teal-700">Tea Research International</div>
         </h1>
         <div className="mt-2 text-center text-lg text-stone-700">
