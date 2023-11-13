@@ -15,7 +15,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const { workspaceId, destinationId, destinationObjectFullName, sourceModelName } = req.body
+  const { workspaceId, destinationId, destinationObjectFullName, sourceModelName, primaryIdentifier } =
+    req.body
   const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
   const source = await getSource(workspaceApiKey)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/syncs`, {
@@ -43,11 +44,11 @@ export default async function handler(req, res) {
       mappings: [
         {
           from: {
-            data: "name",
+            data: primaryIdentifier.from,
             type: "column",
           },
           is_primary_identifier: true,
-          to: "Name",
+          to: primaryIdentifier.to,
         },
       ],
     }),

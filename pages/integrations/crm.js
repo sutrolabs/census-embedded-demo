@@ -7,6 +7,66 @@ import Destination from "@components/Destination"
 import { Tag } from "@components/Tag"
 import Toggle from "@components/Toggle"
 
+const accountDisplayMappings = ["Retailer type", "Annual tea revenue", "Local tea market YoY growth"]
+const contactDisplayMappings = ["Job title", "Years of experience", "Personal tea preference"]
+
+const config = [
+  {
+    label: "Salesforce",
+    type: "salesforce",
+    iconClassName: "fa-brands fa-salesforce",
+    objects: [
+      {
+        label: "Account",
+        fullName: "Account",
+        sourceModelName: "retailers",
+        primaryIdentifier: {
+          from: "domain",
+          to: "Domain__c",
+        },
+        displayMappings: accountDisplayMappings,
+      },
+      {
+        label: "Contact",
+        fullName: "Contact",
+        sourceModelName: "retailer_contacts",
+        primaryIdentifier: {
+          from: "email",
+          to: "Email",
+        },
+        displayMappings: contactDisplayMappings,
+      },
+    ],
+  },
+  {
+    label: "HubSpot",
+    type: "hubspot",
+    iconClassName: "fa-brands fa-hubspot",
+    objects: [
+      {
+        label: "Company",
+        fullName: "company",
+        sourceModelName: "retailers",
+        primaryIdentifier: {
+          from: "domain",
+          to: "domain",
+        },
+        displayMappings: accountDisplayMappings,
+      },
+      {
+        label: "Contact",
+        fullName: "contact",
+        sourceModelName: "retailer_contacts",
+        primaryIdentifier: {
+          from: "email",
+          to: "email",
+        },
+        displayMappings: contactDisplayMappings,
+      },
+    ],
+  },
+]
+
 export default function Index({
   personalAccessToken,
   workspaceId,
@@ -27,69 +87,40 @@ export default function Index({
         Get access to relevant tea retailer and trend data right within your everyday sales tools.
       </p>
       <p className="text-teal-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
-      <DestinationWithObjects
-        label="Salesforce"
-        type="salesforce"
-        iconClassName="fa-brands fa-salesforce"
-        personalAccessToken={personalAccessToken}
-        workspaceId={workspaceId}
-        destinations={destinations}
-        destinationConnectLinks={destinationConnectLinks}
-        setDestinationConnectLinks={setDestinationConnectLinks}
-        syncs={syncs}
-        setSyncs={setSyncs}
-        objects={[
-          {
-            label: "Account",
-            fullName: "Account",
-            sourceModelName: "retailers",
-            mappings: ["Retailer type", "Annual tea revenue", "Local tea market YoY growth"],
-          },
-          {
-            label: "Contact",
-            fullName: "Contact",
-            sourceModelName: "retailer_contacts",
-            mappings: ["Job title", "Years of experience", "Personal tea preference"],
-          },
-        ]}
-      />
-      <DestinationWithObjects
-        label="HubSpot"
-        type="hubspot"
-        iconClassName="fa-brands fa-hubspot"
-        personalAccessToken={personalAccessToken}
-        workspaceId={workspaceId}
-        destinations={destinations}
-        destinationConnectLinks={destinationConnectLinks}
-        setDestinationConnectLinks={setDestinationConnectLinks}
-        syncs={syncs}
-        setSyncs={setSyncs}
-        objects={[]}
-      />
+      {config.map((destination) => (
+        <Destination
+          key={destination.type}
+          label={destination.label}
+          type={destination.type}
+          iconClassName={destination.iconClassName}
+          personalAccessToken={personalAccessToken}
+          workspaceId={workspaceId}
+          destinations={destinations}
+          destinationConnectLinks={destinationConnectLinks}
+          setDestinationConnectLinks={setDestinationConnectLinks}
+        >
+          <p className="text-teal-400">Step 2: Choose which the destinations objects to sync.</p>
+          <div className="flex flex-col gap-5">
+            {destination.objects.map((object) => (
+              <Object
+                key={object.fullName}
+                label={object.label}
+                fullName={object.fullName}
+                sourceModelName={object.sourceModelName}
+                primaryIdentifier={object.primaryIdentifier}
+                displayMappings={object.displayMappings}
+                destinationType={destination.type}
+                personalAccessToken={personalAccessToken}
+                workspaceId={workspaceId}
+                destinations={destinations}
+                syncs={syncs}
+                setSyncs={setSyncs}
+              />
+            ))}
+          </div>
+        </Destination>
+      ))}
     </>
-  )
-}
-
-function DestinationWithObjects({ objects, syncs, setSyncs, ...props }) {
-  const { type, personalAccessToken, workspaceId, destinations } = props
-  return (
-    <Destination {...props}>
-      <p className="text-teal-400">Step 2: Choose which the destinations objects to sync.</p>
-      <div className="flex flex-col gap-5">
-        {objects.map((object) => (
-          <Object
-            key={object.fullName}
-            {...object}
-            destinationType={type}
-            personalAccessToken={personalAccessToken}
-            workspaceId={workspaceId}
-            destinations={destinations}
-            syncs={syncs}
-            setSyncs={setSyncs}
-          />
-        ))}
-      </div>
-    </Destination>
   )
 }
 
@@ -97,7 +128,8 @@ function Object({
   label,
   fullName,
   sourceModelName,
-  mappings,
+  primaryIdentifier,
+  displayMappings,
   destinationType,
   personalAccessToken,
   workspaceId,
@@ -137,6 +169,7 @@ function Object({
                     destinationId: destination.id,
                     destinationObjectFullName: fullName,
                     sourceModelName,
+                    primaryIdentifier,
                   }),
                 })
                 const data = await response.json()
@@ -167,7 +200,7 @@ function Object({
       </h4>
       <p className="-mb-2 text-sm">These attributes will get synced...</p>
       <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-        {mappings.map((mapping) => (
+        {displayMappings.map((mapping) => (
           <li key={mapping}>{mapping}</li>
         ))}
       </ul>
