@@ -51,10 +51,10 @@ export default function Destination({
                   method: "POST",
                   headers: {
                     ["authorization"]: `Bearer ${personalAccessToken}`,
-                    ["census-workspace-id"]: `${workspaceId}`,
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
+                    workspaceId,
                     id: destinationConnectLink.id,
                   }),
                 })
@@ -80,10 +80,10 @@ export default function Destination({
                 method: "POST",
                 headers: {
                   ["authorization"]: `Bearer ${personalAccessToken}`,
-                  ["census-workspace-id"]: `${workspaceId}`,
                   ["content-type"]: "application/json",
                 },
                 body: JSON.stringify({
+                  workspaceId,
                   type,
                 }),
               })

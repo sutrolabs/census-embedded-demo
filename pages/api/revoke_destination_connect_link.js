@@ -13,8 +13,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const { id } = req.body
-  const workspaceApiKey = await getWorkspaceApiKey(req)
+  const { workspaceId, id } = req.body
+  const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links/${id}/revoke`, {
     method: "POST",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },

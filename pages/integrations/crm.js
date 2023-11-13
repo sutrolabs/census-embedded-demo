@@ -112,10 +112,10 @@ function Object({
               method: "POST",
               headers: {
                 ["authorization"]: `Bearer ${personalAccessToken}`,
-                ["census-workspace-id"]: `${workspaceId}`,
                 ["content-type"]: "application/json",
               },
               body: JSON.stringify({
+                workspaceId,
                 destinationId: destination.id,
                 destinationObjectFullName: fullName,
                 sourceModelName,

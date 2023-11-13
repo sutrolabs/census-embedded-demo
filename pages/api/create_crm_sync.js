@@ -15,8 +15,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const { destinationId, destinationObjectFullName, sourceModelName } = req.body
-  const workspaceApiKey = await getWorkspaceApiKey(req)
+  const { workspaceId, destinationId, destinationObjectFullName, sourceModelName } = req.body
+  const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
   const source = await getSource(workspaceApiKey)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/syncs`, {
     method: "POST",
