@@ -1,6 +1,7 @@
 import "@styles/globals.css"
-import { PointElement, Tooltip, registry } from "chart.js"
+
 import { LinearScale, CategoryScale, LineElement } from "chart.js"
+import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 import { useSessionStorage } from "usehooks-ts"
 
@@ -77,12 +78,7 @@ export default dynamic(() => Promise.resolve(Application), {
 })
 
 function MainApplication({ Component, pageProps, personalAccessToken, workspaceId }) {
-  const {
-    error: destinationsError,
-    data: destinations,
-    setData: setDestinations,
-    refetch: refetchDestinations,
-  } = useBasicFetch(
+  const { error: destinationsError, data: destinations } = useBasicFetch(
     () =>
       new Request("/api/list_destinations", {
         method: "GET",
@@ -96,7 +92,6 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     error: destinationConnectLinksError,
     data: destinationConnectLinks,
     setData: setDestinationConnectLinks,
-    refetch: refetchDestinationConnectLinks,
   } = useBasicFetch(
     () =>
       new Request("/api/list_destination_connect_links", {
@@ -119,11 +114,8 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         personalAccessToken={personalAccessToken}
         workspaceId={workspaceId}
         destinations={destinations}
-        setDestinations={setDestinations}
-        refetchDestinations={refetchDestinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
-        refetchDestinationConnectLinks={refetchDestinationConnectLinks}
         {...pageProps}
       />
     )

@@ -13,6 +13,7 @@ export default async function handler(req, res) {
     return
   }
 
+  const { type } = req.body
   const workspaceApiKey = await getWorkspaceApiKey(req)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links`, {
     method: "POST",
@@ -21,7 +22,7 @@ export default async function handler(req, res) {
       ["content-type"]: "application/json",
     },
     body: JSON.stringify({
-      type: req.body.type,
+      type,
       redirect_uri: req.headers["referer"],
     }),
   })

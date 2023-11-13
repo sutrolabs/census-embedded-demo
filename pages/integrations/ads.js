@@ -26,7 +26,7 @@ export default function Index({
       </p>
       <p className="text-teal-400">Step 1: Choose your ad platforms.</p>
       <Destination
-        name="Google Ads"
+        label="Google Ads"
         type="google_ads"
         iconClassName="fa-brands fa-google"
         personalAccessToken={personalAccessToken}
@@ -36,7 +36,7 @@ export default function Index({
         setDestinationConnectLinks={setDestinationConnectLinks}
       />
       <Destination
-        name="Facebook Ads"
+        label="Facebook Ads"
         type="facebook"
         iconClassName="fa-brands fa-facebook"
         personalAccessToken={personalAccessToken}
