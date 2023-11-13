@@ -1,18 +1,21 @@
 import Head from "next/head"
-import { useFetch } from "usehooks-ts"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
+import { useBasicFetch } from "@utils/fetch"
 
 export default function WorkspaceSelect({ personalAccessToken, setWorkspaceId, onBack }) {
-  const { error: workspacesError, data: workspaces } = useFetch("/api/list_workspaces", {
-    method: "GET",
-    headers: {
-      ["authorization"]: `Bearer ${personalAccessToken}`,
-    },
-  })
+  const { error: workspacesError, data: workspaces } = useBasicFetch(
+    () =>
+      new Request("/api/list_workspaces", {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${personalAccessToken}`,
+        },
+      }),
+  )
 
   if (workspacesError) {
     return <Error_ setup error={workspacesError} />

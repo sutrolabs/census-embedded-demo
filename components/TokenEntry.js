@@ -1,25 +1,32 @@
 import Head from "next/head"
 import { useEffect, useState } from "react"
-import { useFetch } from "usehooks-ts"
 
 import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
+import { useBasicFetch } from "@utils/fetch"
 
 export default function TokenEntry({ setPersonalAccessToken }) {
   const [localPersonalAccessToken, setLocalPersonalAccessToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_PERSONAL_ACCESS_TOKEN"] ?? "",
   )
-  const { error, data, startedTest, startTest, stopTest } =
-    useTestPersonalAccessToken(localPersonalAccessToken)
+  const { loading, error, setError, data, refetch } = useBasicFetch(
+    () =>
+      new Request("/api/test_personal_access_token", {
+        method: "POST",
+        headers: {
+          ["authorization"]: `Bearer ${localPersonalAccessToken}`,
+        },
+      }),
+    { initial: false },
+  )
 
   useEffect(() => {
     if (data) {
       setPersonalAccessToken(localPersonalAccessToken)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [data, setPersonalAccessToken, localPersonalAccessToken])
 
   if (error) {
     return (
@@ -28,7 +35,7 @@ export default function TokenEntry({ setPersonalAccessToken }) {
           solid
           autoFocus
           onClick={() => {
-            stopTest()
+            setError()
             setLocalPersonalAccessToken("")
           }}
         >
@@ -36,7 +43,7 @@ export default function TokenEntry({ setPersonalAccessToken }) {
         </Button>
       </Error_>
     )
-  } else if (startedTest) {
+  } else if (loading) {
     return <Loading setup />
   }
 
@@ -45,7 +52,7 @@ export default function TokenEntry({ setPersonalAccessToken }) {
       className="flex flex-col items-center gap-2 rounded-md border-2 border-indigo-500 bg-white px-10 py-8 shadow-md"
       onSubmit={(event) => {
         event.preventDefault()
-        startTest()
+        refetch()
       }}
     >
       <Head>
@@ -75,29 +82,4 @@ export default function TokenEntry({ setPersonalAccessToken }) {
       </Button>
     </form>
   )
-}
-
-const useTestPersonalAccessToken = (localPersonalAccessToken) => {
-  const [startedTest, setStarted] = useState(false)
-  const [attempt, setAttempt] = useState(0)
-  const { error: fetchError, ...fetchState } = useFetch(
-    startedTest ? `/api/test_personal_access_token?attempt=${attempt}` : undefined,
-    startedTest
-      ? {
-          method: "POST",
-          headers: {
-            ["authorization"]: `Bearer ${localPersonalAccessToken}`,
-          },
-        }
-      : undefined,
-  )
-  const startTest = () => {
-    setStarted(true)
-  }
-  const stopTest = () => {
-    setStarted(false)
-    setAttempt(attempt + 1)
-  }
-  const error = startedTest ? fetchError : null
-  return { ...fetchState, error, startedTest, startTest, stopTest }
 }
