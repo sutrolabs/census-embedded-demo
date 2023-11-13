@@ -25,8 +25,8 @@ export default function Index({
         Get access to relevant tea retailer and trend data right within your everyday sales tools.
       </p>
       <p className="text-teal-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
-      <DestinationWithSyncs
-        name="Salesforce"
+      <DestinationWithObjects
+        label="Salesforce"
         type="salesforce"
         iconClassName="fa-brands fa-salesforce"
         personalAccessToken={personalAccessToken}
@@ -34,9 +34,23 @@ export default function Index({
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        objects={[
+          {
+            label: "Account",
+            fullName: "Account",
+            sourceModelName: "retailers",
+            mappings: ["Retailer type", "Annual tea revenue", "Local tea market YoY growth"],
+          },
+          {
+            label: "Contact",
+            fullName: "Contact",
+            sourceModelName: "retailer_contacts",
+            mappings: ["Job title", "Years of experience", "Personal tea preference"],
+          },
+        ]}
       />
-      <DestinationWithSyncs
-        name="HubSpot"
+      <DestinationWithObjects
+        label="HubSpot"
         type="hubspot"
         iconClassName="fa-brands fa-hubspot"
         personalAccessToken={personalAccessToken}
@@ -44,51 +58,80 @@ export default function Index({
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        objects={[]}
       />
     </>
   )
 }
 
-function DestinationWithSyncs({ ...props }) {
+function DestinationWithObjects({ objects, ...props }) {
+  const { type, personalAccessToken, workspaceId, destinations } = props
   return (
     <Destination {...props}>
       <p className="text-teal-400">Step 2: Choose which the destinations objects to sync.</p>
       <div className="flex flex-col gap-5">
-        <Sync name="Accounts">
-          <p className="-mb-2 text-sm">These attributes will get synced...</p>
-          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-            <li>Retailer type</li>
-            <li>Annual tea revenue</li>
-            <li>Local tea market YoY growth</li>
-          </ul>
-        </Sync>
-        <Sync name="Contacts">
-          <p className="-mb-2 text-sm">These attributes will get synced...</p>
-          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-            <li>Job title</li>
-            <li>Years of experience</li>
-            <li>Personal tea preference</li>
-          </ul>
-        </Sync>
+        {objects.map((object) => (
+          <Object
+            key={object.fullName}
+            {...object}
+            destinationType={type}
+            personalAccessToken={personalAccessToken}
+            workspaceId={workspaceId}
+            destinations={destinations}
+          />
+        ))}
       </div>
     </Destination>
   )
 }
 
-function Sync({ name, children }) {
+function Object({
+  label,
+  fullName,
+  sourceModelName,
+  mappings,
+  destinationType,
+  personalAccessToken,
+  workspaceId,
+  destinations,
+}) {
+  const destination = destinations.find((destination) => destination.type === destinationType)
+
   const [sync, setSync] = useState()
   return (
     <Card className="flex flex-col gap-4" disabled={!sync}>
       <h4 className="flex flex-row justify-between">
-        <span className="font-medium">{name}</span>
+        <span className="font-medium">{label}</span>
         <Toggle
           checked={!!sync}
-          onChange={(checked) => {
-            setSync(checked ? {} : undefined)
+          onChange={async (checked) => {
+            if (!checked) {
+              return
+            }
+            const response = await fetch("/api/create_crm_sync", {
+              method: "POST",
+              headers: {
+                ["authorization"]: `Bearer ${personalAccessToken}`,
+                ["census-workspace-id"]: `${workspaceId}`,
+                ["content-type"]: "application/json",
+              },
+              body: JSON.stringify({
+                destinationId: destination.id,
+                destinationObjectFullName: fullName,
+                sourceModelName,
+              }),
+            })
+            const data = await response.json()
+            setSync(checked ? data : undefined)
           }}
         />
       </h4>
-      {children}
+      <p className="-mb-2 text-sm">These attributes will get synced...</p>
+      <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
+        {mappings.map((mapping) => (
+          <li key={mapping}>{mapping}</li>
+        ))}
+      </ul>
       {sync ? (
         <div className="flex flex-row items-center justify-between">
           <Tag

@@ -5,7 +5,7 @@ import { Card } from "@components/Card"
 import Toggle from "@components/Toggle"
 
 export default function Destination({
-  name,
+  label,
   type,
   iconClassName,
   personalAccessToken,
@@ -33,7 +33,7 @@ export default function Destination({
           data-enabled={destination ? "" : null}
         >
           <i className={iconClassName} />
-          {name}
+          {label}
         </span>
         {!destination && destinationConnectLink ? (
           <span className="flex flex-row gap-2 text-sm">
@@ -60,8 +60,8 @@ export default function Destination({
                 })
                 const data = await response.json()
                 setDestinationConnectLinks(
-                  destinationConnectLinks.map((link) =>
-                    link.id === destinationConnectLink.id ? data : link,
+                  destinationConnectLinks.map((item) =>
+                    item.id === destinationConnectLink.id ? data : item,
                   ),
                 )
               }}
