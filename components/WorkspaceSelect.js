@@ -1,12 +1,18 @@
-import Head from "next/head"
-
 import Button from "@components/Button"
 import { Card } from "@components/Card"
-import Error_ from "@components/Error_"
-import Loading from "@components/Loading"
 import { useBasicFetch } from "@utils/fetch"
 
 export default function WorkspaceSelect({ personalAccessToken, setWorkspaceId, onBack }) {
+  if (!personalAccessToken) {
+    return (
+      <p className="opacity-20">Select a Census workspace to use for sources, destinations, and syncs.</p>
+    )
+  } else {
+    return <Ready personalAccessToken={personalAccessToken} setWorkspaceId={setWorkspaceId} onBack={onBack} />
+  }
+}
+
+function Ready({ personalAccessToken, setWorkspaceId, onBack }) {
   const { error: workspacesError, data: workspaces } = useBasicFetch(
     () =>
       new Request("/api/list_workspaces", {
@@ -18,22 +24,26 @@ export default function WorkspaceSelect({ personalAccessToken, setWorkspaceId, o
   )
 
   if (workspacesError) {
-    return <Error_ setup error={workspacesError} />
+    return <p className="text-red-700">(Workspaces) {`${workspacesError}`}</p>
   } else if (!workspaces) {
-    return <Loading setup />
+    return <p className="opacity-20">Loading workspaces...</p>
   }
 
   const sortedWorkspaces = [...workspaces].sort((a, b) => a.name.localeCompare(b.name))
 
   return (
-    <div className="flex flex-col gap-4 rounded-md border-2 border-indigo-500 bg-stone-50 px-10 py-8 shadow-md">
-      <Head>
-        <title>Workspace Select - Census Embedded Demo App</title>
-      </Head>
-      Pick a workspace:
-      <div className="grid grid-cols-2 content-center gap-4 ">
+    <div className="flex flex-col gap-4">
+      <Button className="self-center" onClick={onBack}>
+        Go back
+      </Button>
+      <p>Great! You’ve entered a valid personal access token.</p>
+      <p>Next pick the Census workspace you’d like to use for sources, destinations, and syncs:</p>
+      <div className="flex flex-col items-center gap-4">
         {sortedWorkspaces.map((workspace) => (
-          <Card key={workspace.id} className="flex flex-col gap-2">
+          <Card
+            key={workspace.id}
+            className="flex w-full max-w-sm flex-row items-center justify-between gap-2"
+          >
             <div className="font-medium">{workspace.name}</div>
             <Button solid onClick={() => setWorkspaceId(workspace.id)}>
               Select
@@ -42,7 +52,6 @@ export default function WorkspaceSelect({ personalAccessToken, setWorkspaceId, o
         ))}
       </div>
       <hr className="border-t border-stone-300" />
-      <Button onClick={onBack}>Back</Button>
     </div>
   )
 }

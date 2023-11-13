@@ -13,6 +13,7 @@ function Button({ solid, autoFocus, disabled, className, onClick, children }, re
         disabled:border-stone-300 disabled:text-stone-300
         data-[solid]:border-indigo-700 data-[solid]:bg-indigo-700 data-[solid]:text-stone-50
         data-[solid]:hover:border-indigo-600 data-[solid]:hover:bg-indigo-600
+        data-[solid]:disabled:border-stone-400 data-[solid]:disabled:bg-stone-400
         ${className}
       `}
       data-solid={solid ? "" : null}

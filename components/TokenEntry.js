@@ -1,13 +1,10 @@
-import Head from "next/head"
 import { useEffect, useState } from "react"
 
 import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
-import Error_ from "@components/Error_"
-import Loading from "@components/Loading"
 import { useBasicFetch } from "@utils/fetch"
 
-export default function TokenEntry({ setPersonalAccessToken }) {
+export default function TokenEntry({ personalAccessToken, setPersonalAccessToken }) {
   const [localPersonalAccessToken, setLocalPersonalAccessToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_PERSONAL_ACCESS_TOKEN"] ?? "",
   )
@@ -28,47 +25,32 @@ export default function TokenEntry({ setPersonalAccessToken }) {
     }
   }, [data, setPersonalAccessToken, localPersonalAccessToken])
 
-  if (error) {
-    return (
-      <Error_ setup error={error}>
-        <Button
-          solid
-          autoFocus
-          onClick={() => {
-            setError()
-            setLocalPersonalAccessToken("")
-          }}
-        >
-          Back
-        </Button>
-      </Error_>
-    )
-  } else if (loading) {
-    return <Loading setup />
-  }
+  useEffect(() => {
+    setError()
+  }, [localPersonalAccessToken, setError])
 
   return (
     <form
-      className="flex flex-col items-center gap-2 rounded-md border-2 border-indigo-500 bg-white px-10 py-8 shadow-md"
+      className="flex flex-col gap-4 data-[disabled]:opacity-20"
       onSubmit={(event) => {
         event.preventDefault()
         refetch()
       }}
+      data-disabled={!!personalAccessToken ? "" : null}
     >
-      <Head>
-        <title>Token Entry - Census Embedded Demo App</title>
-      </Head>
-
-      <h2 className="text-center text-xl font-medium text-stone-800">Welcome to the demo!</h2>
-      <p className="text-center text-stone-800">
-        Enter your Census{" "}
+      <p>
+        Welcome! This demo app shows how to activate data in a customer&apos;s CRM and ad tools using Census
+        Embedded.
+      </p>
+      <p>
+        When you use the API, you&apos;ll need a{" "}
         <Anchor href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-organization-apis">
           Personal Access Token
         </Anchor>{" "}
-        to get started...
+        for authentication, so that&apos;s how we&apos;ll start here:
       </p>
       <input
-        className="my-2 min-w-[420px] rounded-md border border-indigo-500 px-4 py-2 font-mono shadow-inner"
+        className="my-2 w-full max-w-sm self-center rounded-md border border-indigo-500 px-4 py-2 font-mono shadow-inner"
         autoFocus
         type="password"
         value={localPersonalAccessToken}
@@ -76,10 +58,18 @@ export default function TokenEntry({ setPersonalAccessToken }) {
         autoComplete="off"
         placeholder="csp_..."
         onInput={(event) => setLocalPersonalAccessToken(event.target.value)}
+        disabled={!!personalAccessToken}
       />
-      <Button className="px-6 py-2 text-lg" solid disabled={!localPersonalAccessToken}>
-        Continue
-      </Button>
+      {!!error && <p className="-mt-5 text-center text-red-700">{`${error}`}</p>}
+      {!personalAccessToken && (
+        <Button
+          className="self-center px-6 py-2"
+          solid
+          disabled={!localPersonalAccessToken || !!error || loading}
+        >
+          Continue
+        </Button>
+      )}
     </form>
   )
 }
