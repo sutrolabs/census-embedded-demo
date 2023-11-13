@@ -100,11 +100,26 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         },
       }),
   )
+  const {
+    error: syncsError,
+    data: syncs,
+    setData: setSyncs,
+  } = useBasicFetch(
+    () =>
+      new Request(`/api/list_syncs?workspaceId=${workspaceId}`, {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${personalAccessToken}`,
+        },
+      }),
+  )
 
+  const anyError = destinationsError ?? destinationConnectLinksError ?? syncsError
+  const anyLoading = !destinations || !destinationConnectLinks || !syncs
   let component
-  if (destinationsError || destinationConnectLinksError) {
-    component = <Error_ error={destinationsError ?? destinationConnectLinksError} />
-  } else if (!destinations || !destinationConnectLinks) {
+  if (anyError) {
+    component = <Error_ error={anyError} />
+  } else if (anyLoading) {
     component = <Loading />
   } else {
     component = (
@@ -114,6 +129,8 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
         {...pageProps}
       />
     )
@@ -121,7 +138,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
 
   return (
     <>
-      <Sidebar destinations={destinations} destinationConnectLinks={destinationConnectLinks} />
+      <Sidebar syncs={syncs} />
       <MainLayout>{component}</MainLayout>
     </>
   )

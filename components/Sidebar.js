@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 
 import { Tag } from "@components/Tag"
 
-export default function Sidebar() {
+export default function Sidebar({ syncs }) {
   return (
     <div className="invisible flex flex-col justify-between gap-4 border-r border-stone-300 bg-stone-50 sm:visible">
       <nav className="flex flex-col gap-4 px-6 py-8">
@@ -16,10 +16,16 @@ export default function Sidebar() {
         <Item name="Alerts" href="/alerts" />
         <Item name="Settings" href="/settings" />
       </nav>
-      <div className="flex flex-col items-center gap-2 border-t  border-stone-300 p-4">
-        <div className="text-sm font-medium">Sync Status</div>
-        <Tag className="bg-emerald-200 text-xs font-medium text-emerald-700" text="Up to date" />
-      </div>
+      {syncs && (
+        <div className="flex flex-col items-center gap-2 border-t  border-stone-300 p-4">
+          <div className="text-sm font-medium">Sync Status</div>
+          {syncs.find((item) => !item.paused) ? (
+            <Tag className="bg-emerald-200 text-xs font-medium text-emerald-700" text="Up to date" />
+          ) : (
+            <Tag className="bg-stone-200 text-xs font-medium text-stone-400" text="Not connected" />
+          )}
+        </div>
+      )}
     </div>
   )
 }
