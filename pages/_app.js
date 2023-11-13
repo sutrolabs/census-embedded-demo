@@ -4,14 +4,17 @@ import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import dynamic from "next/dynamic"
 import { useSessionStorage } from "usehooks-ts"
 
+import Error_ from "@components/Error_"
 import Footer from "@components/Footer"
 import Header from "@components/Header"
+import Loading from "@components/Loading"
 import LogIn from "@components/LogIn"
 import MainLayout from "@components/MainLayout"
 import SetupLayout from "@components/SetupLayout"
 import Sidebar from "@components/Sidebar"
 import TokenEntry from "@components/TokenEntry"
 import WorkspaceSelect from "@components/WorkspaceSelect"
+import { useBasicFetch } from "@utils/fetch"
 
 registry.add(LineElement)
 registry.add(PointElement)
@@ -57,12 +60,12 @@ function Application({ Component, pageProps }) {
           <LogIn onLogIn={() => setLoggedIn(true)} />
         </SetupLayout>
       ) : (
-        <>
-          <Sidebar />
-          <MainLayout>
-            <Component personalAccessToken={personalAccessToken} workspaceId={workspaceId} {...pageProps} />
-          </MainLayout>
-        </>
+        <MainApplication
+          Component={Component}
+          pageProps={pageProps}
+          personalAccessToken={personalAccessToken}
+          workspaceId={workspaceId}
+        />
       )}
       <Footer />
     </>
@@ -72,3 +75,64 @@ function Application({ Component, pageProps }) {
 export default dynamic(() => Promise.resolve(Application), {
   ssr: false,
 })
+
+function MainApplication({ Component, pageProps, personalAccessToken, workspaceId }) {
+  const {
+    error: destinationsError,
+    data: destinations,
+    setData: setDestinations,
+    refetch: refetchDestinations,
+  } = useBasicFetch(
+    () =>
+      new Request("/api/list_destinations", {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["census-workspace-id"]: `${workspaceId}`,
+        },
+      }),
+  )
+  const {
+    error: destinationConnectLinksError,
+    data: destinationConnectLinks,
+    setData: setDestinationConnectLinks,
+    refetch: refetchDestinationConnectLinks,
+  } = useBasicFetch(
+    () =>
+      new Request("/api/list_destination_connect_links", {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["census-workspace-id"]: `${workspaceId}`,
+        },
+      }),
+  )
+
+  let component
+  if (destinationsError || destinationConnectLinksError) {
+    component = <Error_ error={destinationsError ?? destinationConnectLinksError} />
+  } else if (!destinations || !destinationConnectLinks) {
+    component = <Loading />
+  } else {
+    component = (
+      <Component
+        personalAccessToken={personalAccessToken}
+        workspaceId={workspaceId}
+        destinations={destinations}
+        setDestinations={setDestinations}
+        refetchDestinations={refetchDestinations}
+        destinationConnectLinks={destinationConnectLinks}
+        setDestinationConnectLinks={setDestinationConnectLinks}
+        refetchDestinationConnectLinks={refetchDestinationConnectLinks}
+        {...pageProps}
+      />
+    )
+  }
+
+  return (
+    <>
+      <Sidebar destinations={destinations} destinationConnectLinks={destinationConnectLinks} />
+      <MainLayout>{component}</MainLayout>
+    </>
+  )
+}

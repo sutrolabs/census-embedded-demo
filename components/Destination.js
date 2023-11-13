@@ -12,20 +12,18 @@ export default function Destination({
   workspaceId,
   destinations,
   destinationConnectLinks,
+  setDestinationConnectLinks,
   children,
 }) {
   const [now] = useState(() => new Date())
-  const [revoked, setRevoked] = useState(false)
 
   const destination = destinations.find((destination) => destination.type === type)
-  const destinationConnectLink = revoked
-    ? undefined
-    : destinationConnectLinks.find(
-        (destinationConnectLink) =>
-          destinationConnectLink.type === type &&
-          new Date(destinationConnectLink.expiration) > now &&
-          !destinationConnectLink.revoked,
-      )
+  const destinationConnectLink = destinationConnectLinks.find(
+    (destinationConnectLink) =>
+      destinationConnectLink.type === type &&
+      new Date(destinationConnectLink.expiration) > now &&
+      !destinationConnectLink.revoked,
+  )
 
   return (
     <Card className="flex flex-col gap-4" disabled={!destination}>
@@ -49,7 +47,7 @@ export default function Destination({
             </Button>
             <Button
               onClick={async () => {
-                await fetch("/api/revoke_destination_connect_link", {
+                const response = await fetch("/api/revoke_destination_connect_link", {
                   method: "POST",
                   headers: {
                     ["authorization"]: `Bearer ${personalAccessToken}`,
@@ -60,7 +58,12 @@ export default function Destination({
                     id: destinationConnectLink.id,
                   }),
                 })
-                setRevoked(true)
+                const data = await response.json()
+                setDestinationConnectLinks(
+                  destinationConnectLinks.map((link) =>
+                    link.id === destinationConnectLink.id ? data : link,
+                  ),
+                )
               }}
             >
               Cancel

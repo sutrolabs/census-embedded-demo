@@ -1,40 +1,19 @@
 import Head from "next/head"
 import { useState } from "react"
-import { useFetch } from "usehooks-ts"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
-import Error_ from "@components/Error_"
-import Loading from "@components/Loading"
 import { Tag } from "@components/Tag"
 import Toggle from "@components/Toggle"
 
-export default function Index({ personalAccessToken, workspaceId }) {
-  const { error: destinationsError, data: destinations } = useFetch("/api/list_destinations", {
-    method: "GET",
-    headers: {
-      ["authorization"]: `Bearer ${personalAccessToken}`,
-      ["census-workspace-id"]: `${workspaceId}`,
-    },
-  })
-  const { error: destinationConnectLinksError, data: destinationConnectLinks } = useFetch(
-    "/api/list_destination_connect_links",
-    {
-      method: "GET",
-      headers: {
-        ["authorization"]: `Bearer ${personalAccessToken}`,
-        ["census-workspace-id"]: `${workspaceId}`,
-      },
-    },
-  )
-
-  if (destinationsError || destinationConnectLinksError) {
-    return <Error_ error={destinationsError ?? destinationConnectLinksError} />
-  } else if (!destinations || !destinationConnectLinks) {
-    return <Loading />
-  }
-
+export default function Index({
+  personalAccessToken,
+  workspaceId,
+  destinations,
+  destinationConnectLinks,
+  setDestinationConnectLinks,
+}) {
   return (
     <>
       <Head>
@@ -54,6 +33,7 @@ export default function Index({ personalAccessToken, workspaceId }) {
         workspaceId={workspaceId}
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
+        setDestinationConnectLinks={setDestinationConnectLinks}
       />
       <DestinationWithSyncs
         name="HubSpot"
@@ -63,6 +43,7 @@ export default function Index({ personalAccessToken, workspaceId }) {
         workspaceId={workspaceId}
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
+        setDestinationConnectLinks={setDestinationConnectLinks}
       />
     </>
   )
