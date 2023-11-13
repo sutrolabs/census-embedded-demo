@@ -8,7 +8,7 @@ export default function Toggle({ checked, disabled, onChange }) {
       onChange={onChange}
       className="
         relative inline-flex h-6 w-11 items-center rounded-full
-        bg-stone-300 disabled:opacity-20
+        bg-stone-300 disabled:opacity-50
         aria-checked:bg-teal-500
       "
       data-checked={checked ? "" : null}
@@ -16,7 +16,7 @@ export default function Toggle({ checked, disabled, onChange }) {
       <span className="sr-only">Enable</span>
       <span
         className="
-          inline-block h-4 w-4 translate-x-1 rounded-full bg-white transition-transform
+          inline-block h-4 w-4 translate-x-1 rounded-full bg-white transition-[transform,opacity]
           data-[checked]:translate-x-6
         "
         data-checked={checked ? "" : null}

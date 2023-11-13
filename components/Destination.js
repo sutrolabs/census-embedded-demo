@@ -17,12 +17,9 @@ export default function Destination({
 }) {
   const [now] = useState(() => new Date())
 
-  const destination = destinations.find((destination) => destination.type === type)
+  const destination = destinations.find((item) => item.type === type)
   const destinationConnectLink = destinationConnectLinks.find(
-    (destinationConnectLink) =>
-      destinationConnectLink.type === type &&
-      new Date(destinationConnectLink.expiration) > now &&
-      !destinationConnectLink.revoked,
+    (item) => item.type === type && new Date(item.expiration) > now && !item.revoked,
   )
 
   return (

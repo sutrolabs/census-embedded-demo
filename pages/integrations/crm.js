@@ -13,6 +13,8 @@ export default function Index({
   destinations,
   destinationConnectLinks,
   setDestinationConnectLinks,
+  syncs,
+  setSyncs,
 }) {
   return (
     <>
@@ -34,6 +36,8 @@ export default function Index({
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
         objects={[
           {
             label: "Account",
@@ -58,13 +62,15 @@ export default function Index({
         destinations={destinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
         objects={[]}
       />
     </>
   )
 }
 
-function DestinationWithObjects({ objects, ...props }) {
+function DestinationWithObjects({ objects, syncs, setSyncs, ...props }) {
   const { type, personalAccessToken, workspaceId, destinations } = props
   return (
     <Destination {...props}>
@@ -78,6 +84,8 @@ function DestinationWithObjects({ objects, ...props }) {
             personalAccessToken={personalAccessToken}
             workspaceId={workspaceId}
             destinations={destinations}
+            syncs={syncs}
+            setSyncs={setSyncs}
           />
         ))}
       </div>
@@ -94,35 +102,66 @@ function Object({
   personalAccessToken,
   workspaceId,
   destinations,
+  syncs,
+  setSyncs,
 }) {
-  const destination = destinations.find((destination) => destination.type === destinationType)
-
-  const [sync, setSync] = useState()
+  const [loading, setLoading] = useState(false)
+  const [disabledOverride, setDisabledOverride] = useState()
+  const destination = destinations.find((item) => item.type === destinationType)
+  const sync = syncs.find(
+    (item) =>
+      item.destination_attributes.connection_id === destination.id &&
+      item.destination_attributes.object === fullName,
+  )
+  const disabled = disabledOverride ?? sync?.paused ?? true
   return (
-    <Card className="flex flex-col gap-4" disabled={!sync}>
+    <Card className="flex flex-col gap-4" disabled={disabled}>
       <h4 className="flex flex-row justify-between">
         <span className="font-medium">{label}</span>
         <Toggle
-          checked={!!sync}
-          onChange={async (checked) => {
-            if (!checked) {
-              return
+          checked={!disabled}
+          disabled={loading}
+          onChange={async () => {
+            try {
+              setLoading(true)
+              if (!sync) {
+                setDisabledOverride(false)
+                const response = await fetch("/api/create_crm_sync", {
+                  method: "POST",
+                  headers: {
+                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["content-type"]: "application/json",
+                  },
+                  body: JSON.stringify({
+                    workspaceId,
+                    destinationId: destination.id,
+                    destinationObjectFullName: fullName,
+                    sourceModelName,
+                  }),
+                })
+                const data = await response.json()
+                setSyncs([...syncs, data])
+              } else {
+                setDisabledOverride(!sync.paused)
+                const response = await fetch("/api/set_sync_paused", {
+                  method: "POST",
+                  headers: {
+                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["content-type"]: "application/json",
+                  },
+                  body: JSON.stringify({
+                    workspaceId,
+                    id: sync.id,
+                    paused: !sync.paused,
+                  }),
+                })
+                const data = await response.json()
+                setSyncs(syncs.map((item) => (item.id === sync.id ? data : item)))
+              }
+            } finally {
+              setLoading(false)
+              setDisabledOverride()
             }
-            const response = await fetch("/api/create_crm_sync", {
-              method: "POST",
-              headers: {
-                ["authorization"]: `Bearer ${personalAccessToken}`,
-                ["content-type"]: "application/json",
-              },
-              body: JSON.stringify({
-                workspaceId,
-                destinationId: destination.id,
-                destinationObjectFullName: fullName,
-                sourceModelName,
-              }),
-            })
-            const data = await response.json()
-            setSync(checked ? data : undefined)
           }}
         />
       </h4>
@@ -132,7 +171,7 @@ function Object({
           <li key={mapping}>{mapping}</li>
         ))}
       </ul>
-      {sync ? (
+      {!disabled && (
         <div className="flex flex-row items-center justify-between">
           <Tag
             className="bg-emerald-200 text-xs font-medium text-emerald-700"
@@ -143,7 +182,7 @@ function Object({
             Configure
           </Button>
         </div>
-      ) : null}
+      )}
     </Card>
   )
 }
