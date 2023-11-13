@@ -13,8 +13,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const { type } = req.body
-  const workspaceApiKey = await getWorkspaceApiKey(req)
+  const { workspaceId, type } = req.body
+  const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links`, {
     method: "POST",
     headers: {

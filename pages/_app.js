@@ -80,11 +80,10 @@ export default dynamic(() => Promise.resolve(Application), {
 function MainApplication({ Component, pageProps, personalAccessToken, workspaceId }) {
   const { error: destinationsError, data: destinations } = useBasicFetch(
     () =>
-      new Request("/api/list_destinations", {
+      new Request(`/api/list_destinations?workspaceId=${workspaceId}`, {
         method: "GET",
         headers: {
           ["authorization"]: `Bearer ${personalAccessToken}`,
-          ["census-workspace-id"]: `${workspaceId}`,
         },
       }),
   )
@@ -94,11 +93,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setDestinationConnectLinks,
   } = useBasicFetch(
     () =>
-      new Request("/api/list_destination_connect_links", {
+      new Request(`/api/list_destination_connect_links?workspaceId=${workspaceId}`, {
         method: "GET",
         headers: {
           ["authorization"]: `Bearer ${personalAccessToken}`,
-          ["census-workspace-id"]: `${workspaceId}`,
         },
       }),
   )

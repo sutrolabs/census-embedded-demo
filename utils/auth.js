@@ -5,12 +5,11 @@ export function getPersonalAccessToken(req) {
   return req.headers["authorization"].match(/Bearer (.+)/)[1]
 }
 
-export async function getWorkspaceApiKey(req) {
-  const personalAccessToken = getPersonalAccessToken(req)
-  const workspaceId = req.headers["census-workspace-id"]
+export async function getWorkspaceApiKey(req, workspaceId) {
   if (!workspaceId) {
-    throw new Error("Missing workspace ID header")
+    throw new Error("Missing workspace ID")
   }
+  const personalAccessToken = getPersonalAccessToken(req)
   const apiResponse = await fetch(
     `${censusBaseUrl}/api/v1/workspaces/${workspaceId}?return_workspace_api_key=true`,
     {
