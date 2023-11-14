@@ -1,3 +1,4 @@
+import humanizeDuration from "humanize-duration"
 import { useMemo } from "react"
 
 import { Tag } from "@components/Tag"
@@ -35,29 +36,42 @@ const modes = [
   },
 ]
 
-export function SyncStatus({ className, syncsLoading, syncs, runsLoading, runs }) {
-  const mode = useMemo(() => {
+export function SyncStatus({ className, syncsLoading, syncs, runsLoading, runs, showAge }) {
+  const [mode, age] = useMemo(() => {
     if (syncsLoading || runsLoading) {
-      return loadingMode
+      return [loadingMode, undefined]
     }
 
     const activeSyncs = syncs.filter((item) => !item.paused)
     if (!activeSyncs.length) {
-      return notConnectedMode
+      return [notConnectedMode, undefined]
     }
 
     let index = undefined
     let mode = undefined
+    let completedAt = undefined
     for (const sync of activeSyncs) {
       const run = runs.find((item) => item.sync_id === sync.id)
       const status = !run ? "pending" : run.completed_at ? "done" : "running"
       const newIndex = modes.findIndex((mode) => mode.status === status)
-      if (newIndex >= 0 && (index === undefined || newIndex < index)) {
+      const newCompletedAt = run?.completed_at
+      if (
+        newIndex >= 0 &&
+        (index === undefined || newIndex < index || (newIndex === index && newCompletedAt < completedAt))
+      ) {
         index = newIndex
         mode = modes[newIndex]
+        completedAt = newCompletedAt
       }
     }
-    return mode ?? unknownMode
+    return [mode ?? unknownMode, completedAt ? Date.now() - new Date(completedAt).getTime() : undefined]
   }, [syncsLoading, syncs, runsLoading, runs])
-  return <Tag className={`${mode.className} ${className}`} text={mode.text} />
+  return (
+    <Tag
+      className={`${mode.className} ${className}`}
+      text={`${mode.text}${
+        showAge && age ? ` (${humanizeDuration(age, { units: ["h", "m"], round: true })} ago)` : ""
+      }`}
+    />
+  )
 }

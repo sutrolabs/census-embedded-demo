@@ -216,6 +216,7 @@ function Object({
           syncs={[sync].filter(Boolean)}
           runsLoading={runsLoading}
           runs={runs}
+          showAge
         />
         <Button className="text-sm" disabled={disabled}>
           <i className="fa-solid fa-gear mr-2" />
