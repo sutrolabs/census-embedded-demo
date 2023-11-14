@@ -14,7 +14,7 @@ import MainLayout from "@components/MainLayout"
 import { Setup } from "@components/Setup"
 import SetupLayout from "@components/SetupLayout"
 import Sidebar from "@components/Sidebar"
-import { useBasicFetch } from "@utils/fetch"
+import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
 registry.add(LineElement)
 registry.add(PointElement)
@@ -71,7 +71,11 @@ export default dynamic(() => Promise.resolve(Application), {
 })
 
 function MainApplication({ Component, pageProps, personalAccessToken, workspaceId }) {
-  const { error: destinationsError, data: destinations } = useBasicFetch(
+  const {
+    loading: destinationsLoading,
+    error: destinationsError,
+    data: destinations,
+  } = useBasicFetch(
     () =>
       new Request(`/api/list_destinations?workspaceId=${workspaceId}`, {
         method: "GET",
@@ -81,6 +85,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
       }),
   )
   const {
+    loading: destinationConnectLinksLoading,
     error: destinationConnectLinksError,
     data: destinationConnectLinks,
     setData: setDestinationConnectLinks,
@@ -94,6 +99,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
       }),
   )
   const {
+    loading: syncsLoading,
     error: syncsError,
     data: syncs,
     setData: setSyncs,
@@ -106,13 +112,15 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         },
       }),
   )
+  const { runsLoading, runsError, runs } = useFetchRuns(personalAccessToken, workspaceId, syncs)
 
-  const anyError = destinationsError ?? destinationConnectLinksError ?? syncsError
-  const anyLoading = !destinations || !destinationConnectLinks || !syncs
+  const anyError = destinationsError ?? destinationConnectLinksError ?? syncsError ?? runsError
+  const anyLoading = destinationsLoading || destinationConnectLinksLoading || syncsLoading
   let component
   if (anyError) {
     component = <Error_ error={anyError} />
   } else if (anyLoading) {
+    // Runs aren't critical, so it's OK to show the UI without them
     component = <Loading />
   } else {
     component = (
@@ -124,6 +132,8 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         setDestinationConnectLinks={setDestinationConnectLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        runsLoading={runsLoading}
+        runs={runs}
         {...pageProps}
       />
     )
@@ -131,7 +141,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
 
   return (
     <>
-      <Sidebar syncs={syncs} />
+      <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       <MainLayout>{component}</MainLayout>
     </>
   )

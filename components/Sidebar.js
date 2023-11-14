@@ -1,9 +1,9 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import { Tag } from "@components/Tag"
+import { SyncStatus } from "@components/SyncStatus"
 
-export default function Sidebar({ syncs }) {
+export default function Sidebar({ syncsLoading, syncs, runsLoading, runs }) {
   return (
     <div className="invisible flex flex-col justify-between gap-4 border-r border-stone-300 bg-stone-50 sm:visible">
       <nav className="flex flex-col gap-4 px-6 py-8">
@@ -16,16 +16,10 @@ export default function Sidebar({ syncs }) {
         <Item name="Alerts" href="/alerts" />
         <Item name="Settings" href="/settings" />
       </nav>
-      {syncs && (
-        <div className="flex flex-col items-center gap-2 border-t  border-stone-300 p-4">
-          <div className="text-sm font-medium">Sync Status</div>
-          {syncs.find((item) => !item.paused) ? (
-            <Tag className="bg-emerald-200 text-xs font-medium text-emerald-700" text="Up to date" />
-          ) : (
-            <Tag className="bg-stone-200 text-xs font-medium text-stone-400" text="Not connected" />
-          )}
-        </div>
-      )}
+      <div className="flex flex-col items-center gap-2 border-t  border-stone-300 p-4">
+        <div className="text-sm font-medium">Sync Status</div>
+        <SyncStatus syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
+      </div>
     </div>
   )
 }

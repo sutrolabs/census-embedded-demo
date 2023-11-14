@@ -4,7 +4,7 @@ import { useState } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
-import { Tag } from "@components/Tag"
+import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 
 const accountDisplayMappings = ["Retailer type", "Annual tea revenue", "Local tea market YoY growth"]
@@ -75,6 +75,8 @@ export default function Index({
   setDestinationConnectLinks,
   syncs,
   setSyncs,
+  runsLoading,
+  runs,
 }) {
   return (
     <>
@@ -115,6 +117,8 @@ export default function Index({
                 destinations={destinations}
                 syncs={syncs}
                 setSyncs={setSyncs}
+                runsLoading={runsLoading}
+                runs={runs}
               />
             ))}
           </div>
@@ -136,6 +140,8 @@ function Object({
   destinations,
   syncs,
   setSyncs,
+  runsLoading,
+  runs,
 }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
@@ -204,18 +210,18 @@ function Object({
           <li key={mapping}>{mapping}</li>
         ))}
       </ul>
-      {!disabled && (
-        <div className="flex flex-row items-center justify-between">
-          <Tag
-            className="bg-emerald-200 text-xs font-medium text-emerald-700"
-            text="Up to date (1 hour ago)"
-          />
-          <Button className="text-sm">
-            <i className="fa-solid fa-gear mr-2" />
-            Configure
-          </Button>
-        </div>
-      )}
+      <div className="flex flex-row items-center justify-between">
+        <SyncStatus
+          syncsLoading={false}
+          syncs={[sync].filter(Boolean)}
+          runsLoading={runsLoading}
+          runs={runs}
+        />
+        <Button className="text-sm" disabled={disabled}>
+          <i className="fa-solid fa-gear mr-2" />
+          Configure
+        </Button>
+      </div>
     </Card>
   )
 }
