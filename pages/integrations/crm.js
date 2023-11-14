@@ -71,6 +71,7 @@ export default function Index({
   personalAccessToken,
   workspaceId,
   destinations,
+  setDestinations,
   destinationConnectLinks,
   setDestinationConnectLinks,
   syncs,
@@ -98,8 +99,10 @@ export default function Index({
           personalAccessToken={personalAccessToken}
           workspaceId={workspaceId}
           destinations={destinations}
+          setDestinations={setDestinations}
           destinationConnectLinks={destinationConnectLinks}
           setDestinationConnectLinks={setDestinationConnectLinks}
+          syncs={syncs}
         >
           <p className="text-teal-400">Step 2: Choose which the destinations objects to sync.</p>
           <div className="flex flex-col gap-5">
@@ -180,6 +183,9 @@ function Object({
                     primaryIdentifier,
                   }),
                 })
+                if (!response.ok) {
+                  throw new Error(response.statusText)
+                }
                 const data = await response.json()
                 setSyncs([...syncs, data])
               } else {
@@ -196,6 +202,9 @@ function Object({
                     paused: !sync.paused,
                   }),
                 })
+                if (!response.ok) {
+                  throw new Error(response.statusText)
+                }
                 const data = await response.json()
                 setSyncs(syncs.map((item) => (item.id === sync.id ? data : item)))
               }
@@ -227,7 +236,7 @@ function Object({
             onClick={async () => {
               try {
                 setLoading(true)
-                await fetch("/api/trigger_sync_run", {
+                const response = await fetch("/api/trigger_sync_run", {
                   method: "POST",
                   headers: {
                     ["authorization"]: `Bearer ${personalAccessToken}`,
@@ -238,6 +247,9 @@ function Object({
                     syncId: sync.id,
                   }),
                 })
+                if (!response.ok) {
+                  throw new Error(response.statusText)
+                }
                 setSyncs(
                   syncs.map((item) =>
                     item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item,

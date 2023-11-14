@@ -10,8 +10,10 @@ export default function Index({
   personalAccessToken,
   workspaceId,
   destinations,
+  setDestinations,
   destinationConnectLinks,
   setDestinationConnectLinks,
+  syncs,
 }) {
   return (
     <>
@@ -31,8 +33,10 @@ export default function Index({
         personalAccessToken={personalAccessToken}
         workspaceId={workspaceId}
         destinations={destinations}
+        setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        syncs={syncs}
       />
       <Destination
         label="Facebook Ads"
@@ -41,8 +45,10 @@ export default function Index({
         personalAccessToken={personalAccessToken}
         workspaceId={workspaceId}
         destinations={destinations}
+        setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        syncs={syncs}
       />
       <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
       <Segment />
