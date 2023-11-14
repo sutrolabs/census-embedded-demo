@@ -56,6 +56,7 @@ export default async function handler(req, res) {
   await checkStatus(apiResponse, 200)
   const { data } = await apiResponse.json()
   logger.info([data])
+  await triggerSyncRun(workspaceApiKey, data.sync_id)
   const sync = await getSync(workspaceApiKey, data.sync_id)
   res.status(201).json(sync)
 }
@@ -77,6 +78,16 @@ async function getSource(workspaceApiKey) {
     page = pagination.next_page
   }
   throw new Error("Source not found")
+}
+
+async function triggerSyncRun(workspaceApiKey, syncId) {
+  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/syncs/${syncId}/trigger`, {
+    method: "POST",
+    headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
+  })
+  await checkStatus(apiResponse, 200)
+  const { data } = await apiResponse.json()
+  logger.info([data])
 }
 
 async function getSync(workspaceApiKey, syncId) {

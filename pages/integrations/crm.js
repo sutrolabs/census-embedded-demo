@@ -151,6 +151,8 @@ function Object({
       item.destination_attributes.connection_id === destination.id &&
       item.destination_attributes.object === fullName,
   )
+  const run = runs.find((item) => item.sync_id === sync?.id)
+  const running = run ? !run.completed_at : false
   const disabled = disabledOverride ?? sync?.paused ?? true
   return (
     <Card className="flex flex-col gap-4" disabled={disabled}>
@@ -158,7 +160,7 @@ function Object({
         <span className="font-medium">{label}</span>
         <Toggle
           checked={!disabled}
-          disabled={loading}
+          disabled={loading || running}
           onChange={async () => {
             try {
               setLoading(true)
@@ -210,7 +212,7 @@ function Object({
           <li key={mapping}>{mapping}</li>
         ))}
       </ul>
-      <div className="flex flex-row items-center justify-between">
+      <div className="flex flex-row items-center justify-between gap-2">
         <SyncStatus
           syncsLoading={false}
           syncs={[sync].filter(Boolean)}
@@ -218,10 +220,45 @@ function Object({
           runs={runs}
           showAge
         />
-        <Button className="text-sm" disabled={disabled}>
-          <i className="fa-solid fa-gear mr-2" />
-          Configure
-        </Button>
+        <div className="flex flex-row gap-3">
+          <Button
+            className="text-sm"
+            disabled={disabled || loading || running}
+            onClick={async () => {
+              try {
+                setLoading(true)
+                await fetch("/api/trigger_sync_run", {
+                  method: "POST",
+                  headers: {
+                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["content-type"]: "application/json",
+                  },
+                  body: JSON.stringify({
+                    workspaceId,
+                    syncId: sync.id,
+                  }),
+                })
+                setSyncs(
+                  syncs.map((item) =>
+                    item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item,
+                  ),
+                )
+
+                // Wait for the run fetch loop to start before enabling the UI
+                await new Promise((resolve) => setTimeout(resolve, 5000))
+              } finally {
+                setLoading(false)
+              }
+            }}
+          >
+            <i className="fa-solid fa-play mr-2" />
+            Run now
+          </Button>
+          <Button className="text-sm" disabled={disabled || loading || running}>
+            <i className="fa-solid fa-gear mr-2" />
+            Configure
+          </Button>
+        </div>
       </div>
     </Card>
   )
