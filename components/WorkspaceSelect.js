@@ -24,7 +24,14 @@ function Ready({ personalAccessToken, setWorkspaceId, onBack }) {
   )
 
   if (workspacesError) {
-    return <p className="text-red-700">(Workspaces) {`${workspacesError}`}</p>
+    return (
+      <div className="flex flex-col gap-4">
+        <p className="text-red-700">(Workspaces) {`${workspacesError}`}</p>
+        <Button className="self-center" onClick={onBack}>
+          Go back
+        </Button>
+      </div>
+    )
   } else if (!workspaces) {
     return <p className="opacity-20">Loading workspaces...</p>
   }

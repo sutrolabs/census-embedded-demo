@@ -48,7 +48,7 @@ export default function Destination({
           <Dialog.Panel className="flex w-full max-w-md flex-col gap-4 rounded bg-stone-100 px-8 py-6">
             <Dialog.Title className="text-xl font-bold text-stone-700">Delete destination</Dialog.Title>
             <Dialog.Description className="text-stone-600">
-              This will permanently your connection to {label}
+              This will permanently remove your connection to {label}
               {syncsCount ? ` and all ${syncsCount} associated syncs` : ""}.
             </Dialog.Description>
 
@@ -107,86 +107,45 @@ export default function Destination({
           <i className={iconClassName} />
           {label}
         </span>
-        {!destination && destinationConnectLink ? (
-          <span className="flex flex-row gap-2 text-sm">
-            <Button
-              solid
-              onClick={() => {
-                window.location.href = destinationConnectLink.uri
-              }}
-            >
-              Continue connecting
-            </Button>
-            <Button
-              disabled={loading}
-              onClick={async () => {
-                try {
-                  setLoading(true)
-                  const response = await fetch("/api/revoke_destination_connect_link", {
-                    method: "POST",
-                    headers: {
-                      ["authorization"]: `Bearer ${personalAccessToken}`,
-                      ["content-type"]: "application/json",
-                    },
-                    body: JSON.stringify({
-                      workspaceId,
-                      id: destinationConnectLink.id,
-                    }),
-                  })
-                  if (!response.ok) {
-                    throw new Error(response.statusText)
-                  }
-                  const data = await response.json()
-                  setDestinationConnectLinks(
-                    destinationConnectLinks.map((item) =>
-                      item.id === destinationConnectLink.id ? data : item,
-                    ),
-                  )
-                } finally {
-                  setLoading(false)
+        <Toggle
+          checked={!disabled}
+          disabled={loading || isDeleteConfirmOpen}
+          onChange={async () => {
+            if (destination) {
+              setDisabledOverride(true)
+              setIsDeleteConfirmOpen(true)
+            } else if (destinationConnectLink) {
+              setLoading(true)
+              setDisabledOverride(false)
+              window.location.href = destinationConnectLink.uri
+            } else {
+              try {
+                setLoading(true)
+                setDisabledOverride(false)
+                const response = await fetch("/api/create_destination_connect_link", {
+                  method: "POST",
+                  headers: {
+                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["content-type"]: "application/json",
+                  },
+                  body: JSON.stringify({
+                    workspaceId,
+                    type,
+                  }),
+                })
+                if (!response.ok) {
+                  throw new Error(response.statusText)
                 }
-              }}
-            >
-              Cancel
-            </Button>
-          </span>
-        ) : (
-          <Toggle
-            checked={!disabled}
-            disabled={loading || isDeleteConfirmOpen}
-            onChange={async () => {
-              if (destination) {
-                setDisabledOverride(true)
-                setIsDeleteConfirmOpen(true)
-              } else {
-                try {
-                  setLoading(true)
-                  setDisabledOverride(false)
-                  const response = await fetch("/api/create_destination_connect_link", {
-                    method: "POST",
-                    headers: {
-                      ["authorization"]: `Bearer ${personalAccessToken}`,
-                      ["content-type"]: "application/json",
-                    },
-                    body: JSON.stringify({
-                      workspaceId,
-                      type,
-                    }),
-                  })
-                  if (!response.ok) {
-                    throw new Error(response.statusText)
-                  }
-                  const data = await response.json()
-                  window.location.href = data.uri
-                } catch (error) {
-                  setLoading(false)
-                  setDisabledOverride()
-                  throw error
-                }
+                const data = await response.json()
+                window.location.href = data.uri
+              } catch (error) {
+                setLoading(false)
+                setDisabledOverride()
+                throw error
               }
-            }}
-          />
-        )}
+            }
+          }}
+        />
       </h3>
       {destination ? children : null}
     </Card>

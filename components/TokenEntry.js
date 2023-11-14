@@ -8,7 +8,7 @@ export default function TokenEntry({ personalAccessToken, setPersonalAccessToken
   const [localPersonalAccessToken, setLocalPersonalAccessToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_PERSONAL_ACCESS_TOKEN"] ?? "",
   )
-  const { loading, error, setError, data, refetch } = useBasicFetch(
+  const { loading, error, setError, data, setData, refetch } = useBasicFetch(
     () =>
       new Request("/api/test_personal_access_token", {
         method: "POST",
@@ -22,8 +22,9 @@ export default function TokenEntry({ personalAccessToken, setPersonalAccessToken
   useEffect(() => {
     if (data) {
       setPersonalAccessToken(localPersonalAccessToken)
+      setData()
     }
-  }, [data, setPersonalAccessToken, localPersonalAccessToken])
+  }, [data, setData, setPersonalAccessToken, localPersonalAccessToken])
 
   useEffect(() => {
     setError()
