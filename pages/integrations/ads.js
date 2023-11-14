@@ -1,10 +1,9 @@
 import Head from "next/head"
-import { useState } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
-import { Tag } from "@components/Tag"
+import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 
 export default function Index({
@@ -56,32 +55,23 @@ export default function Index({
 }
 
 function Segment() {
-  const [enabled, setEnabled] = useState(true)
-
   return (
-    <Card className="flex flex-col gap-4" disabled={!enabled}>
+    <Card className="flex flex-col gap-4" disabled>
       <h3 className="flex flex-row justify-between text-lg font-medium">
-        <span className="text-stone-500 data-[enabled]:text-teal-900" data-enabled={enabled ? "" : null}>
+        <span className="text-stone-500 data-[enabled]:text-teal-900" data-enabled={null}>
           High growth cities
         </span>
-        <Toggle checked={enabled} onChange={setEnabled} />
+        <Toggle disabled />
       </h3>
       <p className="text-sm">All types of retailers in cities where tea growth YoY &gt; 10%</p>
       <p className="text-sm">82,991 contacts</p>
-      {enabled ? (
-        <>
-          <div className="flex flex-row items-center justify-between">
-            <Tag
-              className="bg-emerald-200 text-xs font-medium text-emerald-700"
-              text="Up to date (1 hour ago)"
-            />
-            <Button>
-              <i className="fa-solid fa-gear mr-2" />
-              Configure
-            </Button>
-          </div>
-        </>
-      ) : null}
+      <div className="flex flex-row items-center justify-between">
+        <SyncStatus syncsLoading={false} syncs={[]} runsLoading={false} runs={[]} />
+        <Button className="text-sm" disabled>
+          <i className="fa-solid fa-gear mr-2" />
+          Configure
+        </Button>
+      </div>
     </Card>
   )
 }
