@@ -9,6 +9,7 @@
   "dependencies": {
     "@headlessui/react": "^1.7.17",
     "chart.js": "^4.4.0",
+    "humanize-duration": "^3.31.0",
     "lodash": "^4.17.21",
     "next": "^12.1.4",
     "node-fetch": "^3.3.1",
