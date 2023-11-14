@@ -112,7 +112,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         },
       }),
   )
-  const { runsLoading, runsError, runs } = useFetchRuns(personalAccessToken, workspaceId, syncs)
+  const { runsLoading, runsError, runs } = useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs)
 
   const anyError = destinationsError ?? destinationConnectLinksError ?? syncsError ?? runsError
   const anyLoading = destinationsLoading || destinationConnectLinksLoading || syncsLoading

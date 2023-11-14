@@ -67,10 +67,16 @@ function Segment() {
       <p className="text-sm">82,991 contacts</p>
       <div className="flex flex-row items-center justify-between">
         <SyncStatus syncsLoading={false} syncs={[]} runsLoading={false} runs={[]} />
-        <Button className="text-sm" disabled>
-          <i className="fa-solid fa-gear mr-2" />
-          Configure
-        </Button>
+        <div className="flex flex-row gap-3">
+          <Button className="text-sm" disabled>
+            <i className="fa-solid fa-play mr-2" />
+            Run now
+          </Button>
+          <Button className="text-sm" disabled>
+            <i className="fa-solid fa-gear mr-2" />
+            Configure
+          </Button>
+        </div>
       </div>
     </Card>
   )

@@ -33,7 +33,7 @@ export function useBasicFetch(request, options) {
   return { loading, error, setError, data, setData, refetch }
 }
 
-export function useFetchRuns(personalAccessToken, workspaceId, syncs) {
+export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs) {
   const [runsError, setRunsError] = useState()
   const [runsLoading, setRunsLoading] = useState(true)
   const [runs, setRuns] = useState([])
@@ -43,7 +43,13 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncs) {
   }
 
   useEffect(() => {
-    for (const sync of syncs ?? []) {
+    if (syncsLoading) {
+      return
+    } else if (!syncs.length) {
+      setRunsLoading(false)
+      return
+    }
+    for (const sync of syncs) {
       const { updatedAt } = fetches.current.get(sync.id) ?? {}
       if (!updatedAt || updatedAt < sync.updated_at) {
         setRunsLoading(true)
@@ -84,7 +90,7 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncs) {
         })(sync)
       }
     }
-  }, [personalAccessToken, workspaceId, syncs])
+  }, [personalAccessToken, workspaceId, syncsLoading, syncs])
 
-  return { runsLoading, runs }
+  return { runsError, runsLoading, runs }
 }

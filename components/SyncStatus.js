@@ -22,7 +22,7 @@ const modes = [
   {
     status: "running",
     className: "bg-emerald-500 text-emerald-50",
-    text: "Running",
+    text: "Running...",
   },
   {
     status: "pending",
