@@ -48,7 +48,7 @@ export default function Destination({
           <Dialog.Panel className="flex w-full max-w-md flex-col gap-4 rounded bg-stone-100 px-8 py-6">
             <Dialog.Title className="text-xl font-bold text-stone-700">Delete destination</Dialog.Title>
             <Dialog.Description className="text-stone-600">
-              This will permanently your connection to {label}
+              This will permanently remove your connection to {label}
               {syncsCount ? ` and all ${syncsCount} associated syncs` : ""}.
             </Dialog.Description>
 
