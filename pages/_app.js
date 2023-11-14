@@ -75,6 +75,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     loading: destinationsLoading,
     error: destinationsError,
     data: destinations,
+    setData: setDestinations,
   } = useBasicFetch(
     () =>
       new Request(`/api/list_destinations?workspaceId=${workspaceId}`, {
@@ -128,6 +129,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         personalAccessToken={personalAccessToken}
         workspaceId={workspaceId}
         destinations={destinations}
+        setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
         syncs={syncs}

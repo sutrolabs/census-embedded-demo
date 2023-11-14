@@ -52,7 +52,6 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syn
     for (const sync of syncs) {
       const { updatedAt } = fetches.current.get(sync.id) ?? {}
       if (!updatedAt || updatedAt < sync.updated_at) {
-        setRunsLoading(true)
         fetches.current.set(sync.id, { updatedAt: sync.updated_at, done: false })
         ;(async (sync) => {
           try {
