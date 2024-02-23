@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   const allData = []
   let page = 1
   while (page) {
-    const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links`, {
+    const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links?page=${page}`, {
       method: "GET",
       headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
     })
