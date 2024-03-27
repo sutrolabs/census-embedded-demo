@@ -1,11 +1,11 @@
 import { useEffect } from "react"
 
-import { censusBaseUrl } from "@utils/url"
+import { censusFrontendBaseUrl } from "@utils/url"
 
 export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlow }) {
   useEffect(() => {
     const handleMessage = (event) => {
-      if (event.origin != censusBaseUrl) {
+      if (event.origin != censusFrontendBaseUrl) {
         return
       }
       if (event.data.message === "EXITED_CONNECT_FLOW") exitedConnectionFlow()
