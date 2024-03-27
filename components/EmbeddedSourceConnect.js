@@ -1,12 +1,12 @@
 import { useEffect } from "react"
 
-export default function EmbeddedSourceConnect({ connectLink, completedConnectionFlow }) {
+export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlow }) {
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.origin != "http://localhost:8080") {
         return
       }
-      if (event.data === "EXITED_CONNECT_FLOW") completedConnectionFlow()
+      if (event.data.message === "EXITED_CONNECT_FLOW") exitedConnectionFlow()
     }
 
     window.addEventListener("message", handleMessage, false)
@@ -14,7 +14,7 @@ export default function EmbeddedSourceConnect({ connectLink, completedConnection
     return () => {
       window.removeEventListener("message", handleMessage)
     }
-  }, [completedConnectionFlow])
+  }, [exitedConnectionFlow])
 
   return (
     <>

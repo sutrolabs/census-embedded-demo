@@ -31,7 +31,7 @@ export default function Source({
   const source = sources.find((item) => item.type === type)
   const disabled = disabledOverride ?? !source
 
-  const completedConnectionFlow = () => setShowEmbeddedConnectLink(false)
+  const exitedConnectionFlow = () => setShowEmbeddedConnectLink(false)
 
   return (
     <Card className="flex flex-col gap-4" disabled={disabled}>
@@ -151,7 +151,7 @@ export default function Source({
       {showEmbeddedConnectLink && (
         <EmbeddedSourceConnect
           connectLink={sourceConnectLink.uri.replace("https://", "http://")}
-          completedConnectionFlow={completedConnectionFlow}
+          exitedConnectionFlow={exitedConnectionFlow}
         />
       )}
     </Card>
