@@ -15,6 +15,7 @@ export default function Sidebar({ syncsLoading, syncs, runsLoading, runs }) {
         <Item nested name="Ad Platforms" href="/integrations/ads" />
         <Item name="Alerts" href="/alerts" />
         <Item name="Settings" href="/settings" />
+        <Item name="Sources" href="/sources" />
       </nav>
       <div className="flex flex-col items-center gap-2 border-t  border-stone-300 p-4">
         <div className="text-sm font-medium">Sync Status</div>

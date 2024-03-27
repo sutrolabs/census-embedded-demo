@@ -100,6 +100,34 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
       }),
   )
   const {
+    loading: sourcesLoading,
+    error: sourcesError,
+    data: sources,
+    setData: setSources,
+  } = useBasicFetch(
+    () =>
+      new Request(`/api/list_sources?workspaceId=${workspaceId}`, {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${personalAccessToken}`,
+        },
+      }),
+  )
+  const {
+    loading: sourceConnectLinksLoading,
+    error: sourceConnectLinksError,
+    data: sourceConnectLinks,
+    setData: setSourceConnectLinks,
+  } = useBasicFetch(
+    () =>
+      new Request(`/api/list_source_connect_links?workspaceId=${workspaceId}`, {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${personalAccessToken}`,
+        },
+      }),
+  )
+  const {
     loading: syncsLoading,
     error: syncsError,
     data: syncs,
@@ -115,8 +143,19 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
   )
   const { runsLoading, runsError, runs } = useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs)
 
-  const anyError = destinationsError ?? destinationConnectLinksError ?? syncsError ?? runsError
-  const anyLoading = destinationsLoading || destinationConnectLinksLoading || syncsLoading
+  const anyError =
+    destinationsError ??
+    destinationConnectLinksError ??
+    sourcesError ??
+    sourceConnectLinksError ??
+    syncsError ??
+    runsError
+  const anyLoading =
+    destinationsLoading ||
+    destinationConnectLinksLoading ||
+    sourcesLoading ||
+    sourceConnectLinksLoading ||
+    syncsLoading
   let component
   if (anyError) {
     component = <Error_ error={anyError} />
@@ -132,6 +171,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
+        sources={sources}
+        setSources={setSources}
+        sourceConnectLinks={sourceConnectLinks}
+        setSourceConnectLinks={setSourceConnectLinks}
         syncs={syncs}
         setSyncs={setSyncs}
         runsLoading={runsLoading}
