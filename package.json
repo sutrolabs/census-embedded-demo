@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "next dev --port 3010",
     "build": "next build",
     "export": "next export",
     "lint": "next lint",
