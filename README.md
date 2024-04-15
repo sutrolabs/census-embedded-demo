@@ -24,6 +24,8 @@ Initialize the project dependencies with...
 npm install
 ```
 
+By default this is pointed at Census production, but you can alter the CENSUS_BASE_URL env variable to point to another Census environment. See .env.local.example if you want to use a .env.local.
+
 ...and then you can start up the web service with...
 
 ```bash
