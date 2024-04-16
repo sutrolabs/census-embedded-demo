@@ -8,7 +8,7 @@ export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlo
       if (event.origin != censusFrontendBaseUrl) {
         return
       }
-      if (event.data.message === "EXITED_CONNECT_FLOW") exitedConnectionFlow()
+      if (event.data.message === "EXITED_CONNECT_FLOW") exitedConnectionFlow(event.data.data)
     }
 
     window.addEventListener("message", handleMessage, false)

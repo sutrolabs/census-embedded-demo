@@ -31,7 +31,16 @@ export default function Source({
   const source = sources.find((item) => item.type === type)
   const disabled = disabledOverride ?? !source
 
-  const exitedConnectionFlow = () => setShowEmbeddedConnectLink(false)
+  const exitedConnectionFlow = async (connectionDetails) => {
+    setShowEmbeddedConnectLink(false)
+    setLoading(false)
+    if (connectionDetails.status === "created") {
+      setDisabledOverride(false)
+    } else {
+      // Status is "not_created"
+      setDisabledOverride()
+    }
+  }
 
   return (
     <Card className="flex flex-col gap-4" disabled={disabled}>
