@@ -1,13 +1,18 @@
-import { useEffect } from "react"
+import { useState, useEffect } from "react"
 
 import { censusFrontendBaseUrl } from "@utils/url"
 
 export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlow }) {
+  const [loaded, setLoaded] = useState(false)
+
   useEffect(() => {
     const handleMessage = (event) => {
       if (event.origin != censusFrontendBaseUrl) {
         return
       }
+
+      if (event.data.message === "LOADED") setLoaded(true)
+
       if (event.data.message === "EXITED_CONNECT_FLOW") exitedConnectionFlow(event.data.data)
     }
 
@@ -18,9 +23,11 @@ export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlo
     }
   }, [exitedConnectionFlow])
 
+  const iframeClass = loaded ? "" : "hidden"
+
   return (
     <>
-      <iframe width="100%" height="800px" src={connectLink} />
+      <iframe className={iframeClass} width="100%" height="800px" src={connectLink} />
     </>
   )
 }
