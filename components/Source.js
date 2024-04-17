@@ -168,7 +168,7 @@ export default function Source({
       </h3>
       {showEmbeddedConnectLink && (
         <EmbeddedSourceConnect
-          connectLink={sourceConnectLink.uri.replace("https://", "http://")}
+          connectLink={sourceConnectLink.uri}
           exitedConnectionFlow={exitedConnectionFlow}
         />
       )}
