@@ -15,6 +15,7 @@ export default function Source({
   sources,
   setSources,
   sourceConnectLinks,
+  embedSourceFlow,
 }) {
   const [now] = useState(() => new Date())
   const [loading, setLoading] = useState(false)
@@ -27,6 +28,14 @@ export default function Source({
     ),
   )
   const [showEmbeddedConnectLink, setShowEmbeddedConnectLink] = useState(false)
+
+  const initiateSourceConnectFlow = (sourceConnectLinkData) => {
+    if (embedSourceFlow) {
+      setShowEmbeddedConnectLink(true)
+    } else {
+      window.location.href = sourceConnectLinkData.uri
+    }
+  }
 
   const source = sources.find((item) => item.type === type)
   const disabled = disabledOverride ?? !source
@@ -126,7 +135,7 @@ export default function Source({
             } else if (sourceConnectLink) {
               setLoading(true)
               setDisabledOverride(false)
-              setShowEmbeddedConnectLink(true)
+              initiateSourceConnectFlow(sourceConnectLink)
             } else {
               try {
                 setLoading(true)
@@ -147,7 +156,7 @@ export default function Source({
                 }
                 const data = await response.json()
                 setSourceConnectLink(data)
-                setShowEmbeddedConnectLink(true)
+                initiateSourceConnectFlow(data)
               } catch (error) {
                 setLoading(false)
                 setDisabledOverride()
