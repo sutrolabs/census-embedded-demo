@@ -19,7 +19,7 @@ export default function Sources({
         <title>Data Sources - Integrations - Census Embedded Demo App</title>
       </Head>
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-stone-700">Integrations / Data Sources</h2>
+        <h2 className="text-2xl font-bold text-stone-700">Integrations / Import</h2>
         <div className="flex items-center">
           <Toggle
             checked={embedSourceFlow}
