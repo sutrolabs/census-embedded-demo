@@ -31,8 +31,9 @@ export default function Index() {
       </Link>
       <h3 className="text-xl font-bold text-stone-700">Import</h3>
       <p className="italic text-stone-500">
-        Enrich your data in Tea Research International by <Anchor href="https://www.getcensus.com">syncing</Anchor> it 
-        from your data warehouse. Enhance your Tea Research today!
+        Enrich your data in Tea Research International by{" "}
+        <Anchor href="https://www.getcensus.com">syncing</Anchor> it from your data warehouse. Enhance your
+        Tea Research today!
       </p>
       <Link href="/integrations/crm">
         <Button className="min-w-[300px] self-center" solid>
