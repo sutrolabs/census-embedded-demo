@@ -13,6 +13,10 @@ export default function ExportDataset({
   sourceConnectLinks,
   sourceEmbedLinks,
   syncManagementLinks,
+  syncs,
+  setSyncs,
+  runsLoading,
+  runs,
 }) {
   const [embedSourceFlow, setEmbedSourceFlow] = useState(true)
 
@@ -51,6 +55,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
+        runsLoading={runsLoading}
+        runs={runs}
       />
       <Source
         label="BigQuery"
@@ -65,6 +73,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
+        runsLoading={runsLoading}
+        runs={runs}
       />
       <Source
         label="GoogleSheets"
@@ -79,6 +91,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
+        runsLoading={runsLoading}
+        runs={runs}
       />
       <Source
         label="Snowflake"
@@ -93,6 +109,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        syncs={syncs}
+        setSyncs={setSyncs}
+        runsLoading={runsLoading}
+        runs={runs}
       />
     </>
   )

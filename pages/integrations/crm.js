@@ -69,7 +69,6 @@ const config = [
 
 export default function Index({
   workspaceAccessToken,
-  workspaceId,
   destinations,
   setDestinations,
   destinationConnectLinks,
@@ -97,7 +96,6 @@ export default function Index({
           type={destination.type}
           iconClassName={destination.iconClassName}
           workspaceAccessToken={workspaceAccessToken}
-          workspaceId={workspaceId}
           destinations={destinations}
           setDestinations={setDestinations}
           destinationConnectLinks={destinationConnectLinks}
@@ -116,7 +114,6 @@ export default function Index({
                 displayMappings={object.displayMappings}
                 destinationType={destination.type}
                 workspaceAccessToken={workspaceAccessToken}
-                workspaceId={workspaceId}
                 destinations={destinations}
                 syncs={syncs}
                 setSyncs={setSyncs}
@@ -139,7 +136,6 @@ function Object({
   displayMappings,
   destinationType,
   workspaceAccessToken,
-  workspaceId,
   destinations,
   syncs,
   setSyncs,
@@ -176,7 +172,6 @@ function Object({
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
-                    workspaceId,
                     destinationId: destination.id,
                     destinationObjectFullName: fullName,
                     sourceModelName,
@@ -197,7 +192,6 @@ function Object({
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
-                    workspaceId,
                     id: sync.id,
                     paused: !sync.paused,
                   }),
@@ -243,7 +237,6 @@ function Object({
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
-                    workspaceId,
                     syncId: sync.id,
                   }),
                 })

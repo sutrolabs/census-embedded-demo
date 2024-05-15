@@ -4,7 +4,9 @@ export function useSyncManagementLink(syncManagementLinks, workspaceAccessToken)
   const [now] = useState(() => new Date())
   const [isLoading, setIsLoading] = useState(false)
   const [syncManagementLink, setSyncManagementLink] = useState(
-    syncManagementLinks.find((item) => new Date(item.expiration) > now && !item.revoked && !item.expired),
+    syncManagementLinks.find(
+      (item) => new Date(item.expiration) > now && !item.revoked && !item.expired && !item.sync_id,
+    ),
   )
 
   useEffect(() => {

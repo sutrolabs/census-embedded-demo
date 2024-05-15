@@ -4,9 +4,9 @@ import { useState } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
+import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
-import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 
 export default function Source({
   label,
@@ -14,10 +14,15 @@ export default function Source({
   iconClassName,
   workspaceAccessToken,
   sources,
+  setSources,
   refetchSources,
   sourceConnectLinks,
   embedSourceFlow,
   syncManagementLinks,
+  syncs,
+  setSyncs,
+  runsLoading,
+  runs,
 }) {
   const [loading, setLoading] = useState(false)
   const [isCheckedOverride, setIsCheckedOverride] = useState()
@@ -25,13 +30,9 @@ export default function Source({
   const source = sources.find((item) => item.type === type)
   const isChecked = isCheckedOverride ?? !!source
 
-  const [sourceConnectLink, getNewSourceConnectLink, isSourceConnectLinkLoading] = useSourceConnectLink(
+  const [sourceConnectLink, getNewSourceConnectLink] = useSourceConnectLink(
     sourceConnectLinks,
     type,
-    workspaceAccessToken,
-  )
-  const [syncManagementLink, resetSyncManagementLink, isSyncManagementLinkLoading] = useSyncManagementLink(
-    syncManagementLinks,
     workspaceAccessToken,
   )
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
@@ -45,13 +46,12 @@ export default function Source({
   }
 
   const onExitedConnectionFlow = async (connectionDetails) => {
-    setShowEmbeddedFrame(false)
     setLoading(false)
-    console.log("onExitedConnectionFlow", connectionDetails)
     if (connectionDetails.status === "created") {
       setIsCheckedOverride(null)
-      await refetchSources()
-      await getNewSourceConnectLink()
+      setSources([...sources, { id: connectionDetails.details.id, type: type }])
+      refetchSources()
+      // await getNewSourceConnectLink()
     } else {
       // Status is "not_created"
       setIsCheckedOverride(false)
@@ -74,22 +74,20 @@ export default function Source({
     }
   }
 
-  const isLinkGenerationLoading = isSourceConnectLinkLoading || isSyncManagementLinkLoading
   const SyncCreationStep = () => {
-    if ((!showEmbeddedFrame && !source) || (source && !syncManagementLink)) return null
-
     return !source ? (
       <EmbeddedFrame connectLink={sourceConnectLink.uri} onExit={onExitedConnectionFlow} />
     ) : (
-      <>
-        <p className="mb-4 text-teal-400">Step 2: Choose which source objects to sync</p>
-        <EmbeddedFrame
-          connectLink={
-            syncManagementLink.uri + "&form_connection_id=" + source.id + "&form_source_type=warehouse"
-          }
-          onExit={() => null}
-        />
-      </>
+      <SyncManagement
+        sourceId={source.id}
+        type={type}
+        syncManagementLinks={syncManagementLinks}
+        workspaceAccessToken={workspaceAccessToken}
+        syncs={syncs}
+        setSyncs={setSyncs}
+        runsLoading={runsLoading}
+        runs={runs}
+      />
     )
   }
 
@@ -113,7 +111,6 @@ export default function Source({
             </Dialog.Description>
 
             <p className="text-stone-600">Are you sure you want to continue?</p>
-
             <div className="flex flex-row justify-end gap-3">
               <Button
                 solid
@@ -122,8 +119,8 @@ export default function Source({
                   try {
                     setLoading(true)
                     await deleteSource(source)
-                    await refetchSources()
-                    await resetSyncManagementLink()
+                    setSources(sources.filter((item) => item.id !== source.id))
+                    refetchSources()
                     setShowEmbeddedFrame(false)
                   } finally {
                     setLoading(false)
@@ -170,7 +167,7 @@ export default function Source({
               setIsCheckedOverride(true)
               initiateSourceConnectFlow(sourceConnectLink)
             } else {
-              // Create a source:We need to create a source connect link
+              // Create a source: We need to create a source connect link
               try {
                 setLoading(true)
                 setIsCheckedOverride(true)
@@ -185,7 +182,7 @@ export default function Source({
           }}
         />
       </h3>
-      {!isLinkGenerationLoading && <SyncCreationStep />}
+      {showEmbeddedFrame && <SyncCreationStep />}
     </Card>
   )
 }

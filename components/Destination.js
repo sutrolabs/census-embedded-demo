@@ -10,7 +10,6 @@ export default function Destination({
   type,
   iconClassName,
   workspaceAccessToken,
-  workspaceId,
   destinations,
   setDestinations,
   destinationConnectLinks,
@@ -68,7 +67,6 @@ export default function Destination({
                         ["content-type"]: "application/json",
                       },
                       body: JSON.stringify({
-                        workspaceId,
                         id: destination.id,
                       }),
                     })
@@ -129,7 +127,6 @@ export default function Destination({
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
-                    workspaceId,
                     type,
                   }),
                 })
