@@ -23,10 +23,7 @@ registry.add(CategoryScale)
 registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
-  const [personalAccessToken, setPersonalAccessToken] = useSessionStorage(
-    "census-personal-access-token",
-    null,
-  )
+  const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
   const [workspaceId, setWorkspaceId] = useSessionStorage("census-workspace-id", null)
   const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
 
@@ -35,17 +32,17 @@ function Application({ Component, pageProps }) {
       <Header
         loggedIn={loggedIn}
         onLogOut={() => {
-          setPersonalAccessToken(null)
+          setWorkspaceAccessToken(null)
           setWorkspaceId(null)
           setLoggedIn(false)
         }}
       />
 
-      {!personalAccessToken || !workspaceId ? (
+      {!workspaceId ?? !workspaceAccessToken ? (
         <SetupLayout>
           <Setup
-            personalAccessToken={personalAccessToken}
-            setPersonalAccessToken={setPersonalAccessToken}
+            workspaceAccessToken={workspaceAccessToken}
+            setWorkspaceAccessToken={setWorkspaceAccessToken}
             setWorkspaceId={setWorkspaceId}
           />
         </SetupLayout>
@@ -57,7 +54,7 @@ function Application({ Component, pageProps }) {
         <MainApplication
           Component={Component}
           pageProps={pageProps}
-          personalAccessToken={personalAccessToken}
+          workspaceAccessToken={workspaceAccessToken}
           workspaceId={workspaceId}
         />
       )}
@@ -70,7 +67,7 @@ export default dynamic(() => Promise.resolve(Application), {
   ssr: false,
 })
 
-function MainApplication({ Component, pageProps, personalAccessToken, workspaceId }) {
+function MainApplication({ Component, pageProps, workspaceAccessToken, workspaceId }) {
   const {
     loading: destinationsLoading,
     error: destinationsError,
@@ -78,10 +75,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setDestinations,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_destinations?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_destinations`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -92,10 +89,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setDestinationConnectLinks,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_destination_connect_links?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_destination_connect_links`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -106,10 +103,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setSources,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_sources?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_sources`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -120,10 +117,24 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setSourceConnectLinks,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_source_connect_links?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_source_connect_links`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+        },
+      }),
+  )
+  const {
+    loading: syncManagementLinksLoading,
+    error: syncManagementLinksError,
+    data: syncManagementLinks,
+    setData: setSyncManagementLinks,
+  } = useBasicFetch(
+    () =>
+      new Request(`/api/list_sync_management_links`, {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -134,20 +145,26 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setSyncs,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_syncs?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_syncs`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
-  const { runsLoading, runsError, runs } = useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs)
+  const { runsLoading, runsError, runs } = useFetchRuns(
+    workspaceAccessToken,
+    workspaceId,
+    syncsLoading,
+    syncs,
+  )
 
   const anyError =
     destinationsError ??
     destinationConnectLinksError ??
     sourcesError ??
     sourceConnectLinksError ??
+    syncManagementLinksError ??
     syncsError ??
     runsError
   const anyLoading =
@@ -155,6 +172,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     destinationConnectLinksLoading ||
     sourcesLoading ||
     sourceConnectLinksLoading ||
+    syncManagementLinksLoading ||
     syncsLoading
   let component
   if (anyError) {
@@ -165,7 +183,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
   } else {
     component = (
       <Component
-        personalAccessToken={personalAccessToken}
+        workspaceAccessToken={workspaceAccessToken}
         workspaceId={workspaceId}
         destinations={destinations}
         setDestinations={setDestinations}
@@ -175,6 +193,8 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
         setSources={setSources}
         sourceConnectLinks={sourceConnectLinks}
         setSourceConnectLinks={setSourceConnectLinks}
+        syncManagementLinks={syncManagementLinks}
+        setSyncManagementLinks={setSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
         runsLoading={runsLoading}

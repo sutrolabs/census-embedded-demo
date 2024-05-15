@@ -68,7 +68,7 @@ const config = [
 ]
 
 export default function Index({
-  personalAccessToken,
+  workspaceAccessToken,
   workspaceId,
   destinations,
   setDestinations,
@@ -96,7 +96,7 @@ export default function Index({
           label={destination.label}
           type={destination.type}
           iconClassName={destination.iconClassName}
-          personalAccessToken={personalAccessToken}
+          workspaceAccessToken={workspaceAccessToken}
           workspaceId={workspaceId}
           destinations={destinations}
           setDestinations={setDestinations}
@@ -104,7 +104,7 @@ export default function Index({
           setDestinationConnectLinks={setDestinationConnectLinks}
           syncs={syncs}
         >
-          <p className="text-teal-400">Step 2: Choose which the destinations objects to sync.</p>
+          <p className="text-teal-400">Step 2: Choose which destinations objects to sync.</p>
           <div className="flex flex-col gap-5">
             {destination.objects.map((object) => (
               <Object
@@ -115,7 +115,7 @@ export default function Index({
                 primaryIdentifier={object.primaryIdentifier}
                 displayMappings={object.displayMappings}
                 destinationType={destination.type}
-                personalAccessToken={personalAccessToken}
+                workspaceAccessToken={workspaceAccessToken}
                 workspaceId={workspaceId}
                 destinations={destinations}
                 syncs={syncs}
@@ -138,7 +138,7 @@ function Object({
   primaryIdentifier,
   displayMappings,
   destinationType,
-  personalAccessToken,
+  workspaceAccessToken,
   workspaceId,
   destinations,
   syncs,
@@ -172,7 +172,7 @@ function Object({
                 const response = await fetch("/api/create_crm_sync", {
                   method: "POST",
                   headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["authorization"]: `Bearer ${workspaceAccessToken}`,
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
@@ -193,7 +193,7 @@ function Object({
                 const response = await fetch("/api/set_sync_paused", {
                   method: "POST",
                   headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["authorization"]: `Bearer ${workspaceAccessToken}`,
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
@@ -239,7 +239,7 @@ function Object({
                 const response = await fetch("/api/trigger_sync_run", {
                   method: "POST",
                   headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["authorization"]: `Bearer ${workspaceAccessToken}`,
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({

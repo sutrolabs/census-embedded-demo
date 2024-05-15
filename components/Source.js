@@ -3,45 +3,49 @@ import { useState } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
-import EmbeddedSourceConnect from "@components/EmbeddedSourceConnect"
+import EmbeddedFrame from "@components/EmbeddedFrame"
 import Toggle from "@components/Toggle"
+import { useSourceConnectLink } from "@hooks/use-source-connect-link"
+import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 
 export default function Source({
   label,
   type,
   iconClassName,
-  personalAccessToken,
-  workspaceId,
+  workspaceAccessToken,
   sources,
   setSources,
   sourceConnectLinks,
   embedSourceFlow,
+  syncManagementLinks,
 }) {
-  const [now] = useState(() => new Date())
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const source = sources.find((item) => item.type === type)
+  const disabled = disabledOverride ?? !source
 
-  const [sourceConnectLink, setSourceConnectLink] = useState(
-    sourceConnectLinks.find(
-      (item) => item.type === type && new Date(item.expiration) > now && !item.revoked && !item.source_id,
-    ),
+  const [sourceConnectLink, getNewSourceConnectLink, isSourceConnectLinkLoading] = useSourceConnectLink(
+    sourceConnectLinks,
+    type,
+    workspaceAccessToken,
   )
-  const [showEmbeddedConnectLink, setShowEmbeddedConnectLink] = useState(false)
+  const [syncManagementLink, resetSyncManagementLink, isSyncManagementLinkLoading] = useSyncManagementLink(
+    syncManagementLinks,
+    workspaceAccessToken,
+  )
+  const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
     if (embedSourceFlow) {
-      setShowEmbeddedConnectLink(true)
+      setShowEmbeddedFrame(true)
     } else {
       window.location.href = sourceConnectLinkData.uri
     }
   }
 
-  const source = sources.find((item) => item.type === type)
-  const disabled = disabledOverride ?? !source
-
-  const exitedConnectionFlow = async (connectionDetails) => {
-    setShowEmbeddedConnectLink(false)
+  const onExitedConnectionFlow = async (connectionDetails) => {
+    setShowEmbeddedFrame(false)
     setLoading(false)
     if (connectionDetails.status === "created") {
       setDisabledOverride(false)
@@ -49,6 +53,41 @@ export default function Source({
       // Status is "not_created"
       setDisabledOverride()
     }
+  }
+
+  const deleteSource = async (source) => {
+    const response = await fetch("/api/delete_source", {
+      method: "DELETE",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+        ["content-type"]: "application/json",
+      },
+      body: JSON.stringify({
+        id: source.id,
+      }),
+    })
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+  }
+
+  const isLoading = isSourceConnectLinkLoading || isSyncManagementLinkLoading
+  const SyncCreationStep = () => {
+    if (!showEmbeddedFrame) return null
+
+    return !source ? (
+      <EmbeddedFrame connectLink={sourceConnectLink.uri} onExit={onExitedConnectionFlow} />
+    ) : (
+      <>
+        <p className="mb-4 text-teal-400">Step 2: Choose which source objects to sync</p>
+        <EmbeddedFrame
+          connectLink={
+            syncManagementLink.uri + "&form_connection_id=" + source.id + "&form_source_type=warehouse"
+          }
+          onExit={() => null}
+        />
+      </>
+    )
   }
 
   return (
@@ -79,20 +118,9 @@ export default function Source({
                 onClick={async () => {
                   try {
                     setLoading(true)
-                    const response = await fetch("/api/delete_source", {
-                      method: "DELETE",
-                      headers: {
-                        ["authorization"]: `Bearer ${personalAccessToken}`,
-                        ["content-type"]: "application/json",
-                      },
-                      body: JSON.stringify({
-                        workspaceId,
-                        id: source.id,
-                      }),
-                    })
-                    if (!response.ok) {
-                      throw new Error(response.statusText)
-                    }
+                    await deleteSource(source)
+                    setShowEmbeddedFrame(false)
+                    resetSyncManagementLink()
                     setSources(sources.filter((item) => item.id !== source.id))
                   } finally {
                     setLoading(false)
@@ -130,33 +158,21 @@ export default function Source({
           disabled={loading || isDeleteConfirmOpen}
           onChange={async () => {
             if (source) {
+              // Delete the source
               setDisabledOverride(true)
               setIsDeleteConfirmOpen(true)
             } else if (sourceConnectLink) {
+              // Create a source: We already have a source connect link
               setLoading(true)
               setDisabledOverride(false)
               initiateSourceConnectFlow(sourceConnectLink)
             } else {
+              // Create a source:We need to create a source connect link
               try {
                 setLoading(true)
                 setDisabledOverride(false)
-                const response = await fetch("/api/create_source_connect_link", {
-                  method: "POST",
-                  headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
-                    ["content-type"]: "application/json",
-                  },
-                  body: JSON.stringify({
-                    workspaceId,
-                    type,
-                  }),
-                })
-                if (!response.ok) {
-                  throw new Error(response.statusText)
-                }
-                const data = await response.json()
-                setSourceConnectLink(data)
-                initiateSourceConnectFlow(data)
+                const newLink = await getNewSourceConnectLink()
+                initiateSourceConnectFlow(newLink)
               } catch (error) {
                 setLoading(false)
                 setDisabledOverride()
@@ -166,12 +182,7 @@ export default function Source({
           }}
         />
       </h3>
-      {showEmbeddedConnectLink && (
-        <EmbeddedSourceConnect
-          connectLink={sourceConnectLink.uri}
-          exitedConnectionFlow={exitedConnectionFlow}
-        />
-      )}
+      {!isLoading && <SyncCreationStep />}
     </Card>
   )
 }

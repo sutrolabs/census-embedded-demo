@@ -5,11 +5,13 @@ import Source from "@components/Source"
 import Toggle from "@components/Toggle"
 
 export default function Sources({
-  personalAccessToken,
+  workspaceAccessToken,
   workspaceId,
   sources,
   setSources,
   sourceConnectLinks,
+  sourceEmbedLinks,
+  syncManagementLinks,
 }) {
   const [embedSourceFlow, setEmbedSourceFlow] = useState(true)
 
@@ -35,34 +37,40 @@ export default function Sources({
         label="Redshift"
         type="redshift"
         iconClassName="fa-brands fa-amazon"
-        personalAccessToken={personalAccessToken}
+        workspaceAccessToken={workspaceAccessToken}
         workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         sourceConnectLinks={sourceConnectLinks}
+        sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
+        syncManagementLinks={syncManagementLinks}
       />
       <Source
         label="BigQuery"
         type="big_query"
         iconClassName="fa-brands fa-google"
-        personalAccessToken={personalAccessToken}
+        workspaceAccessToken={workspaceAccessToken}
         workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         sourceConnectLinks={sourceConnectLinks}
+        sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
+        syncManagementLinks={syncManagementLinks}
       />
       <Source
         label="Snowflake"
         type="snowflake"
         iconClassName="fa-solid fa-snowflake"
-        personalAccessToken={personalAccessToken}
+        workspaceAccessToken={workspaceAccessToken}
         workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         sourceConnectLinks={sourceConnectLinks}
+        sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
+        syncManagementLinks={syncManagementLinks}
       />
     </>
   )

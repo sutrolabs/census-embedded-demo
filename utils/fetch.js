@@ -13,7 +13,8 @@ export function useBasicFetch(request, options) {
         throw new Error(response.statusText)
       }
 
-      setData(await response.json())
+      const data = await response.json()
+      setData(data)
       setError()
       setLoading(false)
     } catch (error) {
@@ -33,7 +34,7 @@ export function useBasicFetch(request, options) {
   return { loading, error, setError, data, setData, refetch }
 }
 
-export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs) {
+export function useFetchRuns(workspaceAccessToken, workspaceId, syncsLoading, syncs) {
   const [runsError, setRunsError] = useState()
   const [runsLoading, setRunsLoading] = useState(true)
   const [runs, setRuns] = useState([])
@@ -57,11 +58,11 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syn
           try {
             while (true) {
               const response = await fetch(
-                `/api/get_latest_sync_run?workspaceId=${workspaceId}&syncId=${sync.id}`,
+                `/api/get_latest_sync_run?syncId=${sync.id}`,
                 {
                   method: "GET",
                   headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["authorization"]: `Bearer ${workspaceAccessToken}`,
                   },
                 },
               )
@@ -89,7 +90,7 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syn
         })(sync)
       }
     }
-  }, [personalAccessToken, workspaceId, syncsLoading, syncs])
+  }, [workspaceAccessToken, workspaceId, syncsLoading, syncs])
 
   return { runsError, runsLoading, runs }
 }

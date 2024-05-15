@@ -2,23 +2,23 @@ import Button from "@components/Button"
 import { Card } from "@components/Card"
 import { useBasicFetch } from "@utils/fetch"
 
-export default function WorkspaceSelect({ personalAccessToken, setWorkspaceId, onBack }) {
-  if (!personalAccessToken) {
+export default function WorkspaceSelect({ workspaceAccessToken, setWorkspaceId, onBack }) {
+  if (!workspaceAccessToken) {
     return (
       <p className="opacity-20">Select a Census workspace to use for sources, destinations, and syncs.</p>
     )
   } else {
-    return <Ready personalAccessToken={personalAccessToken} setWorkspaceId={setWorkspaceId} onBack={onBack} />
+    return <Ready workspaceAccessToken={workspaceAccessToken} setWorkspaceId={setWorkspaceId} onBack={onBack} />
   }
 }
 
-function Ready({ personalAccessToken, setWorkspaceId, onBack }) {
+function Ready({ workspaceAccessToken, setWorkspaceId, onBack }) {
   const { error: workspacesError, data: workspaces } = useBasicFetch(
     () =>
       new Request("/api/list_workspaces", {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
