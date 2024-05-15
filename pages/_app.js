@@ -15,6 +15,7 @@ import { Setup } from "@components/Setup"
 import SetupLayout from "@components/SetupLayout"
 import Sidebar from "@components/Sidebar"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
+import { sleep } from "@utils/sleep"
 
 registry.add(LineElement)
 registry.add(PointElement)
@@ -159,6 +160,18 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     syncs,
   )
 
+  const refetchSources = async () => {
+    await sleep(500) // Allow time for sources to sync to census
+    const response = await fetch("/api/list_sources", {
+      method: "GET",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+      },
+    })
+    const data = await response.json()
+    setSources(data)
+  }
+
   const anyError =
     destinationsError ??
     destinationConnectLinksError ??
@@ -191,6 +204,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
         setDestinationConnectLinks={setDestinationConnectLinks}
         sources={sources}
         setSources={setSources}
+        refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
         setSourceConnectLinks={setSourceConnectLinks}
         syncManagementLinks={syncManagementLinks}

@@ -18,7 +18,7 @@ export default async function handler(req, res) {
     method: "POST",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}`, ["content-type"]: "application/json" },
   })
-  await checkStatus(apiResponse, 200)
+  await checkStatus(apiResponse, 201)
   const { data } = await apiResponse.json()
   res.status(200).json(data)
 }

@@ -13,7 +13,7 @@ export default function Sidebar({ syncsLoading, syncs, runsLoading, runs }) {
         <Item name="Integrations" href="/integrations" />
         <Item nested name="CRM" href="/integrations/crm" />
         <Item nested name="Ad Platforms" href="/integrations/ads" />
-        <Item nested name="Import" href="/integrations/import" />
+        <Item nested name="Export Dataset" href="/integrations/export-dataset" />
         <Item name="Alerts" href="/alerts" />
         <Item name="Settings" href="/settings" />
       </nav>

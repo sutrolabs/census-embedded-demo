@@ -14,16 +14,16 @@ export default function Source({
   iconClassName,
   workspaceAccessToken,
   sources,
-  setSources,
+  refetchSources,
   sourceConnectLinks,
   embedSourceFlow,
   syncManagementLinks,
 }) {
   const [loading, setLoading] = useState(false)
-  const [disabledOverride, setDisabledOverride] = useState()
+  const [isCheckedOverride, setIsCheckedOverride] = useState()
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const source = sources.find((item) => item.type === type)
-  const disabled = disabledOverride ?? !source
+  const isChecked = isCheckedOverride ?? !!source
 
   const [sourceConnectLink, getNewSourceConnectLink, isSourceConnectLinkLoading] = useSourceConnectLink(
     sourceConnectLinks,
@@ -47,11 +47,14 @@ export default function Source({
   const onExitedConnectionFlow = async (connectionDetails) => {
     setShowEmbeddedFrame(false)
     setLoading(false)
+    console.log("onExitedConnectionFlow", connectionDetails)
     if (connectionDetails.status === "created") {
-      setDisabledOverride(false)
+      setIsCheckedOverride(null)
+      await refetchSources()
+      await getNewSourceConnectLink()
     } else {
       // Status is "not_created"
-      setDisabledOverride()
+      setIsCheckedOverride(false)
     }
   }
 
@@ -71,9 +74,9 @@ export default function Source({
     }
   }
 
-  const isLoading = isSourceConnectLinkLoading || isSyncManagementLinkLoading
+  const isLinkGenerationLoading = isSourceConnectLinkLoading || isSyncManagementLinkLoading
   const SyncCreationStep = () => {
-    if (!showEmbeddedFrame) return null
+    if ((!showEmbeddedFrame && !source) || (source && !syncManagementLink)) return null
 
     return !source ? (
       <EmbeddedFrame connectLink={sourceConnectLink.uri} onExit={onExitedConnectionFlow} />
@@ -91,12 +94,12 @@ export default function Source({
   }
 
   return (
-    <Card className="flex flex-col gap-4" disabled={disabled}>
+    <Card className="flex flex-col gap-4" disabled={!isChecked}>
       <Dialog
         open={isDeleteConfirmOpen}
         onClose={() => {
           setLoading(false)
-          setDisabledOverride()
+          setIsCheckedOverride(null)
           setIsDeleteConfirmOpen(false)
         }}
         className="relative z-50"
@@ -119,12 +122,12 @@ export default function Source({
                   try {
                     setLoading(true)
                     await deleteSource(source)
+                    await refetchSources()
+                    await resetSyncManagementLink()
                     setShowEmbeddedFrame(false)
-                    resetSyncManagementLink()
-                    setSources(sources.filter((item) => item.id !== source.id))
                   } finally {
                     setLoading(false)
-                    setDisabledOverride()
+                    setIsCheckedOverride(null)
                     setIsDeleteConfirmOpen(false)
                   }
                 }}
@@ -135,7 +138,7 @@ export default function Source({
                 disabled={loading}
                 onClick={() => {
                   setLoading(false)
-                  setDisabledOverride()
+                  setIsCheckedOverride(null)
                   setIsDeleteConfirmOpen(false)
                 }}
               >
@@ -154,35 +157,35 @@ export default function Source({
           {label}
         </span>
         <Toggle
-          checked={!disabled}
+          checked={isChecked}
           disabled={loading || isDeleteConfirmOpen}
           onChange={async () => {
             if (source) {
               // Delete the source
-              setDisabledOverride(true)
+              setIsCheckedOverride(false)
               setIsDeleteConfirmOpen(true)
             } else if (sourceConnectLink) {
               // Create a source: We already have a source connect link
               setLoading(true)
-              setDisabledOverride(false)
+              setIsCheckedOverride(true)
               initiateSourceConnectFlow(sourceConnectLink)
             } else {
               // Create a source:We need to create a source connect link
               try {
                 setLoading(true)
-                setDisabledOverride(false)
+                setIsCheckedOverride(true)
                 const newLink = await getNewSourceConnectLink()
                 initiateSourceConnectFlow(newLink)
               } catch (error) {
                 setLoading(false)
-                setDisabledOverride()
+                setIsCheckedOverride(null)
                 throw error
               }
             }
           }}
         />
       </h3>
-      {!isLoading && <SyncCreationStep />}
+      {!isLinkGenerationLoading && <SyncCreationStep />}
     </Card>
   )
 }

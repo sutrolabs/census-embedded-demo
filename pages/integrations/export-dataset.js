@@ -4,11 +4,12 @@ import { useState } from "react"
 import Source from "@components/Source"
 import Toggle from "@components/Toggle"
 
-export default function Sources({
+export default function ExportDataset({
   workspaceAccessToken,
   workspaceId,
   sources,
   setSources,
+  refetchSources,
   sourceConnectLinks,
   sourceEmbedLinks,
   syncManagementLinks,
@@ -21,7 +22,7 @@ export default function Sources({
         <title>Data Sources - Integrations - Census Embedded Demo App</title>
       </Head>
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-stone-700">Integrations / Import</h2>
+        <h2 className="text-2xl font-bold text-stone-700">Integrations / Export Dataset</h2>
         <div className="flex items-center">
           <Toggle
             checked={embedSourceFlow}
@@ -31,7 +32,11 @@ export default function Sources({
         </div>
       </div>
       <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">Define the datasets that matter to you</p>
+      <p className="italic text-stone-500">
+        <b>Note to customer:</b> On this page, the end user (your customer) can connect their source to your
+        destination. Flip the &quot;Embed&quot; toggle above to swap between the embedded flow and redirect
+        flow the end user can use to connect their source.
+      </p>
       <p className="text-teal-400">Step 1: Connect your data source</p>
       <Source
         label="Redshift"
@@ -41,6 +46,7 @@ export default function Sources({
         workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
+        refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
@@ -54,6 +60,21 @@ export default function Sources({
         workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
+        refetchSources={refetchSources}
+        sourceConnectLinks={sourceConnectLinks}
+        sourceEmbedLinks={sourceEmbedLinks}
+        embedSourceFlow={embedSourceFlow}
+        syncManagementLinks={syncManagementLinks}
+      />
+      <Source
+        label="GoogleSheets"
+        type="google_sheets"
+        iconClassName="fa-brands fa-google"
+        workspaceAccessToken={workspaceAccessToken}
+        workspaceId={workspaceId}
+        sources={sources}
+        setSources={setSources}
+        refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
@@ -67,6 +88,7 @@ export default function Sources({
         workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
+        refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
