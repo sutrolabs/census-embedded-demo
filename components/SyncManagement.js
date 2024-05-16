@@ -8,15 +8,18 @@ import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 export default function SyncManagement({
   sourceId,
   syncManagementLinks,
+  refetchSyncManagementLinks,
   workspaceAccessToken,
   syncs,
   setSyncs,
+  refetchSyncs,
   runsLoading,
   runs,
 }) {
   const [showCreateSyncWizard, setCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
+    refetchSyncManagementLinks,
     workspaceAccessToken,
   )
 
@@ -26,8 +29,22 @@ export default function SyncManagement({
         connectLink={
           syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
         }
-        onExit={(data) => {
-          setCreateSyncWizard(false)
+        onExit={(connectionDetails) => {
+          if (connectionDetails.status === "created") {
+            setSyncs((syncs) => [
+              ...syncs,
+              {
+                id: connectionDetails.details.id,
+                paused: true,
+                labe: "Loading Sync",
+                source_attributes: { connection_id: sourceId },
+                mappings: [],
+              },
+            ])
+            refetchSyncs()
+            // prepares a new link for the next sync creation
+            resetSyncManagementLink()
+          }
         }}
       />
     )
@@ -43,6 +60,7 @@ export default function SyncManagement({
             <SyncObject
               key={sync.id}
               sync={sync}
+              refetchSyncs={refetchSyncs}
               workspaceAccessToken={workspaceAccessToken}
               setSyncs={setSyncs}
               runsLoading={runsLoading}
@@ -58,7 +76,7 @@ export default function SyncManagement({
             onClick={() => setCreateSyncWizard(true)}
           >
             <i className="fa-solid fa-plus mr-4" />
-            Create a new sync
+            Configure data to export
           </Button>
         )}
       </div>

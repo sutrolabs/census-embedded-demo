@@ -18,7 +18,9 @@ export default function Source({
   refetchSources,
   sourceConnectLinks,
   embedSourceFlow,
+  refetchSyncs,
   syncManagementLinks,
+  refetchSyncManagementLinks,
   syncs,
   setSyncs,
   runsLoading,
@@ -81,7 +83,9 @@ export default function Source({
       <SyncManagement
         sourceId={source.id}
         type={type}
+        refetchSyncs={refetchSyncs}
         syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
         workspaceAccessToken={workspaceAccessToken}
         syncs={syncs}
         setSyncs={setSyncs}
@@ -120,6 +124,7 @@ export default function Source({
                     setLoading(true)
                     await deleteSource(source)
                     setSources(sources.filter((item) => item.id !== source.id))
+                    getNewSourceConnectLink()
                     refetchSources()
                     setShowEmbeddedFrame(false)
                   } finally {

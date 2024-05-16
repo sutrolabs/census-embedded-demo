@@ -170,6 +170,28 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     setSources(data)
   }
 
+  const refetchSyncs = async () => {
+    const response = await fetch("/api/list_syncs", {
+      method: "GET",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+      },
+    })
+    const data = await response.json()
+    setSyncs(data)
+  }
+
+  const refetchSyncManagementLinks = async () => {
+    const response = await fetch("/api/list_sync_management_links", {
+      method: "GET",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+      },
+    })
+    const data = await response.json()
+    setSyncManagementLinks(data)
+  }
+
   const anyError =
     destinationsError ??
     destinationConnectLinksError ??
@@ -206,9 +228,11 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
         sourceConnectLinks={sourceConnectLinks}
         setSourceConnectLinks={setSourceConnectLinks}
         syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
         setSyncManagementLinks={setSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
         {...pageProps}

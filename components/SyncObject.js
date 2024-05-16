@@ -5,7 +5,7 @@ import { Card } from "@components/Card"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 
-export function SyncObject({ workspaceAccessToken, sync, setSyncs, runsLoading, runs }) {
+export function SyncObject({ workspaceAccessToken, sync, setSyncs, refetchSyncs, runsLoading, runs }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const run = runs.find((item) => item.sync_id === sync?.id)
@@ -39,6 +39,7 @@ export function SyncObject({ workspaceAccessToken, sync, setSyncs, runsLoading, 
                 }
                 const data = await response.json()
                 setSyncs((syncs) => syncs.map((item) => (item.id === sync.id ? data : item)))
+                refetchSyncs()
               } finally {
                 setLoading(false)
                 setDisabledOverride()
@@ -63,6 +64,7 @@ export function SyncObject({ workspaceAccessToken, sync, setSyncs, runsLoading, 
                   throw new Error(response.statusText)
                 }
                 setSyncs((syncs) => syncs.filter((item) => item.id !== sync.id))
+                refetchSyncs()
               } finally {
                 setLoading(false)
                 setDisabledOverride()

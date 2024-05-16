@@ -9,10 +9,12 @@ export default function ExportDataset({
   workspaceId,
   sources,
   setSources,
+  refetchSyncs,
   refetchSources,
   sourceConnectLinks,
   sourceEmbedLinks,
   syncManagementLinks,
+  refetchSyncManagementLinks,
   syncs,
   setSyncs,
   runsLoading,
@@ -55,8 +57,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
       />
@@ -73,8 +77,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
       />
@@ -91,8 +97,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
       />
@@ -109,8 +117,10 @@ export default function ExportDataset({
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
       />
