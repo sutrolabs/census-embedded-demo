@@ -1,6 +1,6 @@
 import fetch from "node-fetch"
 
-import { getWorkspaceAccessToken} from "@utils/auth"
+import { getWorkspaceAccessToken } from "@utils/auth"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 

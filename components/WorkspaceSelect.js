@@ -8,7 +8,9 @@ export default function WorkspaceSelect({ workspaceAccessToken, setWorkspaceId, 
       <p className="opacity-20">Select a Census workspace to use for sources, destinations, and syncs.</p>
     )
   } else {
-    return <Ready workspaceAccessToken={workspaceAccessToken} setWorkspaceId={setWorkspaceId} onBack={onBack} />
+    return (
+      <Ready workspaceAccessToken={workspaceAccessToken} setWorkspaceId={setWorkspaceId} onBack={onBack} />
+    )
   }
 }
 
