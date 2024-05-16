@@ -16,7 +16,7 @@ export default function SyncManagement({
   runsLoading,
   runs,
 }) {
-  const [showCreateSyncWizard, setCreateSyncWizard] = useState(false)
+  const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
     refetchSyncManagementLinks,
@@ -45,6 +45,7 @@ export default function SyncManagement({
             // prepares a new link for the next sync creation
             resetSyncManagementLink()
           }
+          setShowCreateSyncWizard(false)
         }}
       />
     )
@@ -73,7 +74,7 @@ export default function SyncManagement({
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
       shadow-sm"
-            onClick={() => setCreateSyncWizard(true)}
+            onClick={() => setShowCreateSyncWizard(true)}
           >
             <i className="fa-solid fa-plus mr-4" />
             Configure data to export

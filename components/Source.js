@@ -57,6 +57,7 @@ export default function Source({
     } else {
       // Status is "not_created"
       setIsCheckedOverride(false)
+      setShowEmbeddedFrame(false)
     }
   }
 
