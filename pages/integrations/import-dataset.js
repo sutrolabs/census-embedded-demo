@@ -6,12 +6,13 @@ import Toggle from "@components/Toggle"
 
 export default function ImportDataset({
   workspaceAccessToken,
-  workspaceId,
+  dd,
   sources,
   setSources,
   refetchSyncs,
   refetchSources,
   sourceConnectLinks,
+  refetchSourceConnectLinks,
   sourceEmbedLinks,
   syncManagementLinks,
   refetchSyncManagementLinks,
@@ -49,7 +50,6 @@ export default function ImportDataset({
         type="redshift"
         iconClassName="fa-brands fa-amazon"
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         refetchSources={refetchSources}
@@ -69,11 +69,11 @@ export default function ImportDataset({
         type="big_query"
         iconClassName="fa-brands fa-google"
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
+        refetchSourceConnectLinks={refetchSourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
@@ -89,11 +89,11 @@ export default function ImportDataset({
         type="google_sheets"
         iconClassName="fa-brands fa-google"
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
+        refetchSourceConnectLinks={refetchSourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}
@@ -109,11 +109,11 @@ export default function ImportDataset({
         type="snowflake"
         iconClassName="fa-solid fa-snowflake"
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         sources={sources}
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
+        refetchSourceConnectLinks={refetchSourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
         syncManagementLinks={syncManagementLinks}

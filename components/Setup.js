@@ -1,9 +1,8 @@
 import Head from "next/head"
 
 import TokenEntry from "@components/TokenEntry"
-// import WorkspaceSelect from "@components/WorkspaceSelect"
 
-export function Setup({ workspaceAccessToken, setWorkspaceAccessToken, setWorkspaceId }) {
+export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
   return (
     <div className="flex max-w-xl flex-col gap-6 rounded-md border-2 border-indigo-500 bg-white px-10 py-8 shadow-md">
       <Head>
@@ -14,7 +13,6 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken, setWorksp
       <TokenEntry
         workspaceAccessToken={workspaceAccessToken}
         setWorkspaceAccessToken={setWorkspaceAccessToken}
-        setWorkspaceId={setWorkspaceId}
       />
       <hr className="border-t border-stone-400" />
     </div>

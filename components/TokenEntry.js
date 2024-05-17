@@ -4,7 +4,7 @@ import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import { useBasicFetch } from "@utils/fetch"
 
-export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessToken, setWorkspaceId }) {
+export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessToken }) {
   const [localCensusWorkspaceToken, setLocalCensusWorkspaceToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_WORKSPACE_ACCESS_TOKEN"] ?? "",
   )
@@ -21,10 +21,9 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
   useEffect(() => {
     if (data?.data?.id) {
       setWorkspaceAccessToken(localCensusWorkspaceToken)
-      setWorkspaceId(data.data.id)
       setData()
     }
-  }, [data, setData, setWorkspaceAccessToken, setWorkspaceId, localCensusWorkspaceToken])
+  }, [data, setData, setWorkspaceAccessToken, localCensusWorkspaceToken])
 
   useEffect(() => {
     setError()
@@ -40,8 +39,8 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
       data-disabled={!!workspaceAccessToken ? "" : null}
     >
       <p>
-        Welcome! This demo app shows how to activate data in a customer&apos;s CRM and ad tools using Census
-        Embedded.
+        Welcome! This demo app shows how your customer can use Census Embedded to import data from their
+        source to your desination and export data from your destination to their CRM and ad tools.
       </p>
       <p>
         When you use the API, you&apos;ll need a{" "}

@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   const { syncId } = req.body
-  const workspaceApiKey = await getWorkspaceAccessToken(req)
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/syncs/${syncId}/trigger`, {
     method: "POST",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },

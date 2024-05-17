@@ -13,7 +13,7 @@ export default async function handler(req, res) {
     return
   }
 
-  const workspaceApiKey = await getWorkspaceAccessToken(req)
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const allData = []
   let page = 1
   while (page) {

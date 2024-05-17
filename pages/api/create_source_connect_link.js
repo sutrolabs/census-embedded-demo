@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   const { type } = req.body
-  const workspaceApiKey = await getWorkspaceAccessToken(req)
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/source_connect_links`, {
     method: "POST",
     headers: {

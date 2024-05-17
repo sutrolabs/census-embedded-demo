@@ -17,6 +17,7 @@ export default function Source({
   setSources,
   refetchSources,
   sourceConnectLinks,
+  refetchSourceConnectLinks,
   embedSourceFlow,
   refetchSyncs,
   syncManagementLinks,
@@ -32,7 +33,7 @@ export default function Source({
   const source = sources.find((item) => item.type === type)
   const isChecked = isCheckedOverride ?? !!source
 
-  const [sourceConnectLink, getNewSourceConnectLink] = useSourceConnectLink(
+  const [sourceConnectLink, getNewSourceConnectLink, sourceConnectLinkLoading] = useSourceConnectLink(
     sourceConnectLinks,
     type,
     workspaceAccessToken,
@@ -52,8 +53,8 @@ export default function Source({
     if (connectionDetails.status === "created") {
       setIsCheckedOverride(null)
       setSources([...sources, { id: connectionDetails.details.id, type: type }])
-      refetchSources()
-      // await getNewSourceConnectLink()
+      await refetchSources()
+      await refetchSourceConnectLinks() // Current sourceConnectLink becomes invalid. Refetch to get a new one.
     } else {
       // Status is "not_created"
       setIsCheckedOverride(false)
@@ -75,25 +76,6 @@ export default function Source({
     if (!response.ok) {
       throw new Error(response.statusText)
     }
-  }
-
-  const SyncCreationStep = () => {
-    return !source ? (
-      <EmbeddedFrame connectLink={sourceConnectLink.uri} onExit={onExitedConnectionFlow} />
-    ) : (
-      <SyncManagement
-        sourceId={source.id}
-        type={type}
-        refetchSyncs={refetchSyncs}
-        syncManagementLinks={syncManagementLinks}
-        refetchSyncManagementLinks={refetchSyncManagementLinks}
-        workspaceAccessToken={workspaceAccessToken}
-        syncs={syncs}
-        setSyncs={setSyncs}
-        runsLoading={runsLoading}
-        runs={runs}
-      />
-    )
   }
 
   return (
@@ -125,8 +107,7 @@ export default function Source({
                     setLoading(true)
                     await deleteSource(source)
                     setSources(sources.filter((item) => item.id !== source.id))
-                    getNewSourceConnectLink()
-                    refetchSources()
+                    await refetchSources()
                     setShowEmbeddedFrame(false)
                   } finally {
                     setLoading(false)
@@ -188,7 +169,23 @@ export default function Source({
           }}
         />
       </h3>
-      {showEmbeddedFrame && <SyncCreationStep />}
+      {showEmbeddedFrame &&
+        (!source ? (
+          <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
+        ) : (
+          <SyncManagement
+            sourceId={source.id}
+            type={type}
+            refetchSyncs={refetchSyncs}
+            syncManagementLinks={syncManagementLinks}
+            refetchSyncManagementLinks={refetchSyncManagementLinks}
+            workspaceAccessToken={workspaceAccessToken}
+            syncs={syncs}
+            setSyncs={setSyncs}
+            runsLoading={runsLoading}
+            runs={runs}
+          />
+        ))}
     </Card>
   )
 }

@@ -24,7 +24,6 @@ registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
   const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
-  const [workspaceId, setWorkspaceId] = useSessionStorage("census-workspace-id", null)
   const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
 
   return (
@@ -33,17 +32,15 @@ function Application({ Component, pageProps }) {
         loggedIn={loggedIn}
         onLogOut={() => {
           setWorkspaceAccessToken(null)
-          setWorkspaceId(null)
           setLoggedIn(false)
         }}
       />
 
-      {!workspaceId ?? !workspaceAccessToken ? (
+      {!workspaceAccessToken ? (
         <SetupLayout>
           <Setup
             workspaceAccessToken={workspaceAccessToken}
             setWorkspaceAccessToken={setWorkspaceAccessToken}
-            setWorkspaceId={setWorkspaceId}
           />
         </SetupLayout>
       ) : !loggedIn ? (
@@ -55,7 +52,6 @@ function Application({ Component, pageProps }) {
           Component={Component}
           pageProps={pageProps}
           workspaceAccessToken={workspaceAccessToken}
-          workspaceId={workspaceId}
         />
       )}
       <Footer />
@@ -67,7 +63,7 @@ export default dynamic(() => Promise.resolve(Application), {
   ssr: false,
 })
 
-function MainApplication({ Component, pageProps, workspaceAccessToken, workspaceId }) {
+function MainApplication({ Component, pageProps, workspaceAccessToken }) {
   const {
     loading: destinationsLoading,
     error: destinationsError,
@@ -101,6 +97,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     error: sourcesError,
     data: sources,
     setData: setSources,
+    refetchInBackground: refetchSources,
   } = useBasicFetch(
     () =>
       new Request(`/api/list_sources`, {
@@ -115,6 +112,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     error: sourceConnectLinksError,
     data: sourceConnectLinks,
     setData: setSourceConnectLinks,
+    refetchInBackground: refetchSourceConnectLinks,
   } = useBasicFetch(
     () =>
       new Request(`/api/list_source_connect_links`, {
@@ -129,6 +127,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     error: syncManagementLinksError,
     data: syncManagementLinks,
     setData: setSyncManagementLinks,
+    refetchInBackground: refetchSyncManagementLinks,
   } = useBasicFetch(
     () =>
       new Request(`/api/list_sync_management_links`, {
@@ -143,6 +142,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     error: syncsError,
     data: syncs,
     setData: setSyncs,
+    refetchInBackground: refetchSyncs,
   } = useBasicFetch(
     () =>
       new Request(`/api/list_syncs`, {
@@ -152,45 +152,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
         },
       }),
   )
-  const { runsLoading, runsError, runs } = useFetchRuns(
-    workspaceAccessToken,
-    workspaceId,
-    syncsLoading,
-    syncs,
-  )
-
-  const refetchSources = async () => {
-    const response = await fetch("/api/list_sources", {
-      method: "GET",
-      headers: {
-        ["authorization"]: `Bearer ${workspaceAccessToken}`,
-      },
-    })
-    const data = await response.json()
-    setSources(data)
-  }
-
-  const refetchSyncs = async () => {
-    const response = await fetch("/api/list_syncs", {
-      method: "GET",
-      headers: {
-        ["authorization"]: `Bearer ${workspaceAccessToken}`,
-      },
-    })
-    const data = await response.json()
-    setSyncs(data)
-  }
-
-  const refetchSyncManagementLinks = async () => {
-    const response = await fetch("/api/list_sync_management_links", {
-      method: "GET",
-      headers: {
-        ["authorization"]: `Bearer ${workspaceAccessToken}`,
-      },
-    })
-    const data = await response.json()
-    setSyncManagementLinks(data)
-  }
+  const { runsLoading, runsError, runs } = useFetchRuns(workspaceAccessToken, syncsLoading, syncs)
 
   const anyError =
     destinationsError ??
@@ -217,7 +179,6 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
     component = (
       <Component
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         destinations={destinations}
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
@@ -226,6 +187,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, workspace
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
+        refetchSourceConnectLinks={refetchSourceConnectLinks}
         setSourceConnectLinks={setSourceConnectLinks}
         syncManagementLinks={syncManagementLinks}
         refetchSyncManagementLinks={refetchSyncManagementLinks}

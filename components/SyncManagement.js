@@ -36,7 +36,7 @@ export default function SyncManagement({
               {
                 id: connectionDetails.details.id,
                 paused: true,
-                labe: "Loading Sync",
+                label: "Loading Sync",
                 source_attributes: { connection_id: sourceId },
                 mappings: [],
               },
@@ -77,7 +77,7 @@ export default function SyncManagement({
             onClick={() => setShowCreateSyncWizard(true)}
           >
             <i className="fa-solid fa-plus mr-4" />
-            Configure data to export
+            Configure data to import
           </Button>
         )}
       </div>

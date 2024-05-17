@@ -8,7 +8,6 @@ import Toggle from "@components/Toggle"
 
 export default function Index({
   workspaceAccessToken,
-  workspaceId,
   destinations,
   setDestinations,
   destinationConnectLinks,
@@ -31,7 +30,6 @@ export default function Index({
         type="google_ads"
         iconClassName="fa-brands fa-google"
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         destinations={destinations}
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
@@ -43,7 +41,6 @@ export default function Index({
         type="facebook"
         iconClassName="fa-brands fa-facebook"
         workspaceAccessToken={workspaceAccessToken}
-        workspaceId={workspaceId}
         destinations={destinations}
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}

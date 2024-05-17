@@ -1,12 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 export function useSourceConnectLink(sourceConnectLinks, type, workspaceAccessToken) {
-  const [now] = useState(() => new Date())
   const [isLoading, setIsLoading] = useState(false)
   const [sourceConnectLink, setSourceConnectLink] = useState(
-    sourceConnectLinks.find(
-      (item) => item.type === type && new Date(item.expiration) > now && !item.revoked && !item.source_id,
-    ),
+    sourceConnectLinks.find((item) => item.type === type && !item.expired && !item.source_id),
   )
 
   const getNewSourceConnectLink = async () => {
@@ -29,6 +26,11 @@ export function useSourceConnectLink(sourceConnectLinks, type, workspaceAccessTo
     setIsLoading(false)
     return newLink
   }
+
+  // Automatically upset sourceConnectLink when the sourceConnectLinks change (possibly from a refetch)
+  useEffect(() => {
+    setSourceConnectLink(sourceConnectLinks.find((item) => item.type === type && !item.expired && !item.source_id))
+  }, [sourceConnectLinks, type])
 
   return [sourceConnectLink, getNewSourceConnectLink, isLoading]
 }

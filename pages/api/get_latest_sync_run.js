@@ -15,7 +15,7 @@ export default async function handler(req, res) {
   }
 
   const { syncId } = getSearchParams(req)
-  const workspaceApiKey = await getWorkspaceAccessToken(req)
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/syncs/${syncId}/sync_runs?per_page=1`, {
     method: "GET",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
