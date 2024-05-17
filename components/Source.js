@@ -66,7 +66,7 @@ export default function Source({
     }
   }
 
-  const deleteSource = async (source) => {
+  const deleteSource = async () => {
     try {
       setLoading(true)
       const response = await fetch("/api/delete_source", {
@@ -83,8 +83,8 @@ export default function Source({
         throw new Error(response.statusText)
       }
       setSources(sources.filter((item) => item.id !== source.id))
-      getNewSourceConnectLink()
-      refetchSources()
+      await refetchSources()
+      await refetchSourceConnectLinks()
       setShowEmbeddedFrame(false)
     } finally {
       setLoading(false)
@@ -133,6 +133,25 @@ export default function Source({
               </div>
             </Dialog.Panel>
           </div>
+          {source && (
+            <RequestTooltip
+              anchorSelect={`#delete-source-${source.id}`}
+              url={`${censusBaseUrl}/api/v1/sources/${source.id}`}
+              method="DELETE"
+              devMode={devMode}
+              headers={
+                <pre>
+                  {JSON.stringify(
+                    {
+                      ["authorization"]: "Bearer <workspaceAccessToken>",
+                    },
+                    null,
+                    2,
+                  )}
+                </pre>
+              }
+            />
+          )}
         </Dialog>
         <h3 className="flex flex-row justify-between">
           <span
@@ -206,25 +225,6 @@ export default function Source({
             </div>
           )}
         </Tooltip>
-      )}
-      {source && (
-        <RequestTooltip
-          anchorSelect={`#delete-source-${source.id}`}
-          url={`${censusBaseUrl}/api/v1/sources/${source.id}`}
-          method="DELETE"
-          devMode={devMode}
-          headers={
-            <pre>
-              {JSON.stringify(
-                {
-                  ["authorization"]: "Bearer <workspaceAccessToken>",
-                },
-                null,
-                2,
-              )}
-            </pre>
-          }
-        />
       )}
     </>
   )
