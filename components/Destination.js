@@ -9,8 +9,7 @@ export default function Destination({
   label,
   type,
   iconClassName,
-  personalAccessToken,
-  workspaceId,
+  workspaceAccessToken,
   destinations,
   setDestinations,
   destinationConnectLinks,
@@ -64,11 +63,10 @@ export default function Destination({
                     const response = await fetch("/api/delete_destination", {
                       method: "DELETE",
                       headers: {
-                        ["authorization"]: `Bearer ${personalAccessToken}`,
+                        ["authorization"]: `Bearer ${workspaceAccessToken}`,
                         ["content-type"]: "application/json",
                       },
                       body: JSON.stringify({
-                        workspaceId,
                         id: destination.id,
                       }),
                     })
@@ -125,11 +123,10 @@ export default function Destination({
                 const response = await fetch("/api/create_destination_connect_link", {
                   method: "POST",
                   headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
+                    ["authorization"]: `Bearer ${workspaceAccessToken}`,
                     ["content-type"]: "application/json",
                   },
                   body: JSON.stringify({
-                    workspaceId,
                     type,
                   }),
                 })

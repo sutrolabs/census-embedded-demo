@@ -13,7 +13,8 @@ export function useBasicFetch(request, options) {
         throw new Error(response.statusText)
       }
 
-      setData(await response.json())
+      const data = await response.json()
+      setData(data)
       setError()
       setLoading(false)
     } catch (error) {
@@ -24,16 +25,27 @@ export function useBasicFetch(request, options) {
   }, [])
   const refetch = useCallback(() => run(request()), [run, request])
 
+  // This function doesn't make changes to loading and error
+  const refetchInBackground = useCallback(async () => {
+    const response = await fetch(request())
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+
+    const data = await response.json()
+    setData(data)
+  }, [request])
+
   useEffect(() => {
     if (initialRequest) {
       run(initialRequest)
     }
   }, [run, initialRequest])
 
-  return { loading, error, setError, data, setData, refetch }
+  return { loading, error, setError, data, setData, refetch, refetchInBackground }
 }
 
-export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs) {
+export function useFetchRuns(workspaceAccessToken, syncsLoading, syncs) {
   const [runsError, setRunsError] = useState()
   const [runsLoading, setRunsLoading] = useState(true)
   const [runs, setRuns] = useState([])
@@ -56,15 +68,12 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syn
         ;(async (sync) => {
           try {
             while (true) {
-              const response = await fetch(
-                `/api/get_latest_sync_run?workspaceId=${workspaceId}&syncId=${sync.id}`,
-                {
-                  method: "GET",
-                  headers: {
-                    ["authorization"]: `Bearer ${personalAccessToken}`,
-                  },
+              const response = await fetch(`/api/get_latest_sync_run?syncId=${sync.id}`, {
+                method: "GET",
+                headers: {
+                  ["authorization"]: `Bearer ${workspaceAccessToken}`,
                 },
-              )
+              })
               if (!response.ok) {
                 throw new Error(response.statusText)
               }
@@ -89,7 +98,7 @@ export function useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syn
         })(sync)
       }
     }
-  }, [personalAccessToken, workspaceId, syncsLoading, syncs])
+  }, [workspaceAccessToken, syncsLoading, syncs])
 
   return { runsError, runsLoading, runs }
 }

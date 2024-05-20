@@ -7,8 +7,7 @@ import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 
 export default function Index({
-  personalAccessToken,
-  workspaceId,
+  workspaceAccessToken,
   destinations,
   setDestinations,
   destinationConnectLinks,
@@ -30,8 +29,7 @@ export default function Index({
         label="Google Ads"
         type="google_ads"
         iconClassName="fa-brands fa-google"
-        personalAccessToken={personalAccessToken}
-        workspaceId={workspaceId}
+        workspaceAccessToken={workspaceAccessToken}
         destinations={destinations}
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
@@ -42,8 +40,7 @@ export default function Index({
         label="Facebook Ads"
         type="facebook"
         iconClassName="fa-brands fa-facebook"
-        personalAccessToken={personalAccessToken}
-        workspaceId={workspaceId}
+        workspaceAccessToken={workspaceAccessToken}
         destinations={destinations}
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}

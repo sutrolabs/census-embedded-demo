@@ -23,11 +23,7 @@ registry.add(CategoryScale)
 registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
-  const [personalAccessToken, setPersonalAccessToken] = useSessionStorage(
-    "census-personal-access-token",
-    null,
-  )
-  const [workspaceId, setWorkspaceId] = useSessionStorage("census-workspace-id", null)
+  const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
   const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
 
   return (
@@ -35,18 +31,16 @@ function Application({ Component, pageProps }) {
       <Header
         loggedIn={loggedIn}
         onLogOut={() => {
-          setPersonalAccessToken(null)
-          setWorkspaceId(null)
+          setWorkspaceAccessToken(null)
           setLoggedIn(false)
         }}
       />
 
-      {!personalAccessToken || !workspaceId ? (
+      {!workspaceAccessToken ? (
         <SetupLayout>
           <Setup
-            personalAccessToken={personalAccessToken}
-            setPersonalAccessToken={setPersonalAccessToken}
-            setWorkspaceId={setWorkspaceId}
+            workspaceAccessToken={workspaceAccessToken}
+            setWorkspaceAccessToken={setWorkspaceAccessToken}
           />
         </SetupLayout>
       ) : !loggedIn ? (
@@ -57,8 +51,7 @@ function Application({ Component, pageProps }) {
         <MainApplication
           Component={Component}
           pageProps={pageProps}
-          personalAccessToken={personalAccessToken}
-          workspaceId={workspaceId}
+          workspaceAccessToken={workspaceAccessToken}
         />
       )}
       <Footer />
@@ -70,7 +63,7 @@ export default dynamic(() => Promise.resolve(Application), {
   ssr: false,
 })
 
-function MainApplication({ Component, pageProps, personalAccessToken, workspaceId }) {
+function MainApplication({ Component, pageProps, workspaceAccessToken }) {
   const {
     loading: destinationsLoading,
     error: destinationsError,
@@ -78,10 +71,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setDestinations,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_destinations?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_destinations`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -92,10 +85,10 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     setData: setDestinationConnectLinks,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_destination_connect_links?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_destination_connect_links`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -104,12 +97,13 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     error: sourcesError,
     data: sources,
     setData: setSources,
+    refetchInBackground: refetchSources,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_sources?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_sources`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -118,12 +112,28 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     error: sourceConnectLinksError,
     data: sourceConnectLinks,
     setData: setSourceConnectLinks,
+    refetchInBackground: refetchSourceConnectLinks,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_source_connect_links?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_source_connect_links`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+        },
+      }),
+  )
+  const {
+    loading: syncManagementLinksLoading,
+    error: syncManagementLinksError,
+    data: syncManagementLinks,
+    setData: setSyncManagementLinks,
+    refetchInBackground: refetchSyncManagementLinks,
+  } = useBasicFetch(
+    () =>
+      new Request(`/api/list_sync_management_links`, {
+        method: "GET",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
@@ -132,22 +142,24 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     error: syncsError,
     data: syncs,
     setData: setSyncs,
+    refetchInBackground: refetchSyncs,
   } = useBasicFetch(
     () =>
-      new Request(`/api/list_syncs?workspaceId=${workspaceId}`, {
+      new Request(`/api/list_syncs`, {
         method: "GET",
         headers: {
-          ["authorization"]: `Bearer ${personalAccessToken}`,
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
         },
       }),
   )
-  const { runsLoading, runsError, runs } = useFetchRuns(personalAccessToken, workspaceId, syncsLoading, syncs)
+  const { runsLoading, runsError, runs } = useFetchRuns(workspaceAccessToken, syncsLoading, syncs)
 
   const anyError =
     destinationsError ??
     destinationConnectLinksError ??
     sourcesError ??
     sourceConnectLinksError ??
+    syncManagementLinksError ??
     syncsError ??
     runsError
   const anyLoading =
@@ -155,6 +167,7 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
     destinationConnectLinksLoading ||
     sourcesLoading ||
     sourceConnectLinksLoading ||
+    syncManagementLinksLoading ||
     syncsLoading
   let component
   if (anyError) {
@@ -165,18 +178,23 @@ function MainApplication({ Component, pageProps, personalAccessToken, workspaceI
   } else {
     component = (
       <Component
-        personalAccessToken={personalAccessToken}
-        workspaceId={workspaceId}
+        workspaceAccessToken={workspaceAccessToken}
         destinations={destinations}
         setDestinations={setDestinations}
         destinationConnectLinks={destinationConnectLinks}
         setDestinationConnectLinks={setDestinationConnectLinks}
         sources={sources}
         setSources={setSources}
+        refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
+        refetchSourceConnectLinks={refetchSourceConnectLinks}
         setSourceConnectLinks={setSourceConnectLinks}
+        syncManagementLinks={syncManagementLinks}
+        refetchSyncManagementLinks={refetchSyncManagementLinks}
+        setSyncManagementLinks={setSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
+        refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
         {...pageProps}

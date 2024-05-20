@@ -1,8 +1,7 @@
 import fetch from "node-fetch"
 import pino from "pino"
 
-import { getWorkspaceApiKey } from "@utils/auth"
-import { getSearchParams } from "@utils/request"
+import { getWorkspaceAccessToken } from "@utils/auth"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
@@ -14,8 +13,7 @@ export default async function handler(req, res) {
     return
   }
 
-  const { workspaceId } = getSearchParams(req)
-  const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const allData = []
   let page = 1
   while (page) {

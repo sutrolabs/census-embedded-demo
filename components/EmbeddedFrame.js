@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 import { censusFrontendBaseUrl } from "@utils/url"
 
-export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlow }) {
+export default function EmbeddedFrame({ connectLink, onExit }) {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -13,7 +13,8 @@ export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlo
 
       if (event.data.message === "LOADED") setLoaded(true)
 
-      if (event.data.message === "EXITED_CONNECT_FLOW") exitedConnectionFlow(event.data.data)
+      if (event.data.message === "EXITED_CONNECT_FLOW" || event.data.message === "EXITED_SYNC_FLOW")
+        onExit(event.data.data)
     }
 
     window.addEventListener("message", handleMessage, false)
@@ -21,7 +22,7 @@ export default function EmbeddedSourceConnect({ connectLink, exitedConnectionFlo
     return () => {
       window.removeEventListener("message", handleMessage)
     }
-  }, [exitedConnectionFlow])
+  }, [onExit])
 
   const iframeClass = loaded ? "" : "hidden"
 

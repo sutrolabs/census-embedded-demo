@@ -13,21 +13,12 @@ export default async function handler(req, res) {
     return
   }
 
-  const { type } = req.body
   const workspaceApiKey = getWorkspaceAccessToken(req)
-  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destination_connect_links`, {
+  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sync_management_links`, {
     method: "POST",
-    headers: {
-      ["authorization"]: `Bearer ${workspaceApiKey}`,
-      ["content-type"]: "application/json",
-    },
-    body: JSON.stringify({
-      type,
-      redirect_uri: req.headers["referer"],
-    }),
+    headers: { ["authorization"]: `Bearer ${workspaceApiKey}`, ["content-type"]: "application/json" },
   })
   await checkStatus(apiResponse, 201)
   const { data } = await apiResponse.json()
-  logger.info([data])
-  res.status(201).json(data)
+  res.status(200).json(data)
 }

@@ -1,6 +1,6 @@
 import fetch from "node-fetch"
 
-import { getWorkspaceApiKey } from "@utils/auth"
+import { getWorkspaceAccessToken } from "@utils/auth"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
@@ -10,8 +10,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const { workspaceId, id } = req.body
-  const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
+  const { id } = req.body
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destinations/${id}`, {
     method: "DELETE",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },

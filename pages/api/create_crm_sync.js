@@ -1,7 +1,7 @@
 import fetch from "node-fetch"
 import pino from "pino"
 
-import { getWorkspaceApiKey } from "@utils/auth"
+import { getWorkspaceAccessToken } from "@utils/auth"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
@@ -15,9 +15,8 @@ export default async function handler(req, res) {
     return
   }
 
-  const { workspaceId, destinationId, destinationObjectFullName, sourceModelName, primaryIdentifier } =
-    req.body
-  const workspaceApiKey = await getWorkspaceApiKey(req, workspaceId)
+  const { destinationId, destinationObjectFullName, sourceModelName, primaryIdentifier } = req.body
+  const workspaceApiKey = getWorkspaceAccessToken(req)
   const source = await getSource(workspaceApiKey)
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/syncs`, {
     method: "POST",
