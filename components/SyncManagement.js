@@ -15,6 +15,7 @@ export default function SyncManagement({
   refetchSyncs,
   runsLoading,
   runs,
+  devMode,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -66,6 +67,7 @@ export default function SyncManagement({
               setSyncs={setSyncs}
               runsLoading={runsLoading}
               runs={runs}
+              devMode={devMode}
             />
           ))}
         {showCreateSyncWizard ? (
