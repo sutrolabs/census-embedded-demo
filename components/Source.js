@@ -170,9 +170,7 @@ export default function Source({
         />
       </h3>
       {showEmbeddedFrame &&
-        (!source ? (
-          <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
-        ) : (
+        (source ? (
           <SyncManagement
             sourceId={source.id}
             type={type}
@@ -185,6 +183,8 @@ export default function Source({
             runsLoading={runsLoading}
             runs={runs}
           />
+        ) : (
+          <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
         ))}
     </Card>
   )

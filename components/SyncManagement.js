@@ -29,7 +29,7 @@ export default function SyncManagement({
         connectLink={
           syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
         }
-        onExit={(connectionDetails) => {
+        onExit={async (connectionDetails) => {
           if (connectionDetails.status === "created") {
             setSyncs((syncs) => [
               ...syncs,
@@ -41,9 +41,9 @@ export default function SyncManagement({
                 mappings: [],
               },
             ])
-            refetchSyncs()
+            await refetchSyncs()
             // prepares a new link for the next sync creation
-            resetSyncManagementLink()
+            await resetSyncManagementLink()
           }
           setShowCreateSyncWizard(false)
         }}
