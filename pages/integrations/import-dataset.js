@@ -22,7 +22,7 @@ export default function ImportDataset({
   runs,
 }) {
   const [embedSourceFlow, setEmbedSourceFlow] = useState(true)
-  const [devMode, setDevMode] = useState(true)
+  const [devMode, setDevMode] = useState(false)
 
   return (
     <>
@@ -128,6 +128,7 @@ export default function ImportDataset({
         refetchSourceConnectLinks={refetchSourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
+        devMode={devMode}
         syncManagementLinks={syncManagementLinks}
         refetchSyncManagementLinks={refetchSyncManagementLinks}
         syncs={syncs}

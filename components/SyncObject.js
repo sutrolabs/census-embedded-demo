@@ -117,7 +117,7 @@ export function SyncObject({
         <p className="-mb-2 text-sm">These attributes will get synced...</p>
         <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
           {sync.mappings.map((mapping) => (
-            <li key={mapping.from.data}>{mapping.from.data}</li>
+            <li key={mapping.to}>{mapping.to}</li>
           ))}
         </ul>
         <div className="flex flex-row items-center justify-between gap-2">
