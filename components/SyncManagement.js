@@ -25,22 +25,22 @@ export default function SyncManagement({
     workspaceAccessToken,
   )
 
-  const linkWithSourcePrepopulated = (link) => {
-    return link.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
+  const linkWithSourcePrepopulated = () => {
+    return syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
   }
 
   const initiateSyncWizardFlow = () => {
     if (embedSourceFlow) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourcePrepopulated(syncManagementLink)
+      window.location.href = linkWithSourcePrepopulated()
     }
   }
 
   const SyncCreationWizard = () => {
     return (
       <EmbeddedFrame
-        connectLink={linkWithSourcePrepopulated(syncManagementLink)}
+        connectLink={linkWithSourcePrepopulated()}
         onExit={async (connectionDetails) => {
           if (connectionDetails.status === "created") {
             setSyncs((syncs) => [
