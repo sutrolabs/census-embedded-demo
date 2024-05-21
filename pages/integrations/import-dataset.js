@@ -62,6 +62,7 @@ export default function ImportDataset({
         sources={sources}
         setSources={setSources}
         refetchSources={refetchSources}
+        refetchSourceConnectLinks={refetchSourceConnectLinks}
         sourceConnectLinks={sourceConnectLinks}
         sourceEmbedLinks={sourceEmbedLinks}
         embedSourceFlow={embedSourceFlow}
