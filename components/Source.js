@@ -206,6 +206,7 @@ export default function Source({
               runsLoading={runsLoading}
               runs={runs}
               devMode={devMode}
+              embedSourceFlow={embedSourceFlow}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />

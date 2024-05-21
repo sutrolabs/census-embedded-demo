@@ -16,6 +16,7 @@ export default function SyncManagement({
   runsLoading,
   runs,
   devMode,
+  embedSourceFlow,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -23,6 +24,14 @@ export default function SyncManagement({
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
+
+  const initiateSyncWizardFlow = () => {
+    if (embedSourceFlow) {
+      setShowCreateSyncWizard(true)
+    } else {
+      window.location.href = syncManagementLink.uri
+    }
+  }
 
   const SyncCreationWizard = () => {
     return (
@@ -76,7 +85,7 @@ export default function SyncManagement({
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
       shadow-sm"
-            onClick={() => setShowCreateSyncWizard(true)}
+            onClick={initiateSyncWizardFlow}
           >
             <i className="fa-solid fa-plus mr-4" />
             Configure data to import
