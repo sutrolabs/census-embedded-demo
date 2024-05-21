@@ -3,6 +3,8 @@ import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 
 export default function SyncCreationWizard({
   sourceId,
+  setSyncs,
+  refetchSyncs,
   syncManagementLinks,
   refetchSyncManagementLinks,
   workspaceAccessToken,

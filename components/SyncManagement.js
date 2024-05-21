@@ -48,6 +48,8 @@ export default function SyncManagement({
         {showCreateSyncWizard ? (
           <SyncCreationWizard
             sourceId={sourceId}
+            setSyncs={setSyncs}
+            refetchSyncs={refetchSyncs}
             syncManagementLinks={syncManagementLinks}
             refetchSyncManagementLinks={refetchSyncManagementLinks}
             workspaceAccessToken={workspaceAccessToken}
