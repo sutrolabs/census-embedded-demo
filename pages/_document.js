@@ -14,7 +14,7 @@ export default function Document() {
         />
         <script src="https://kit.fontawesome.com/8010c05861.js" crossOrigin="anonymous" async></script>
       </Head>
-      <body className="min-h-screen bg-stone-50 font-poppins text-stone-900">
+      <body className="bg-stone-50 font-poppins text-stone-900">
         <Main />
         <NextScript />
       </body>

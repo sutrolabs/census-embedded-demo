@@ -6,13 +6,9 @@ import dynamic from "next/dynamic"
 import { useSessionStorage } from "usehooks-ts"
 
 import Error_ from "@components/Error_"
-// import Footer from "@components/Footer"
-// import Header from "@components/Header"
 import Loading from "@components/Loading"
-import LogIn from "@components/LogIn"
 import MainLayout from "@components/MainLayout"
 import { Setup } from "@components/Setup"
-import SetupLayout from "@components/SetupLayout"
 import Sidebar from "@components/Sidebar"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
@@ -28,25 +24,11 @@ function Application({ Component, pageProps }) {
 
   return (
     <>
-      {/* <Header
-        loggedIn={loggedIn}
-        onLogOut={() => {
-          setWorkspaceAccessToken(null)
-          setLoggedIn(false)
-        }}
-      /> */}
-
       {!workspaceAccessToken ? (
-        <SetupLayout>
-          <Setup
-            workspaceAccessToken={workspaceAccessToken}
-            setWorkspaceAccessToken={setWorkspaceAccessToken}
-          />
-        </SetupLayout>
-      ) : !loggedIn ? (
-        <SetupLayout>
-          <LogIn onLogIn={() => setLoggedIn(true)} />
-        </SetupLayout>
+        <Setup
+          workspaceAccessToken={workspaceAccessToken}
+          setWorkspaceAccessToken={setWorkspaceAccessToken}
+        />
       ) : (
         <MainApplication
           Component={Component}
@@ -58,7 +40,6 @@ function Application({ Component, pageProps }) {
           }}
         />
       )}
-      {/* <Footer /> */}
     </>
   )
 }
