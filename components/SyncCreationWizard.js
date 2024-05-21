@@ -6,15 +6,20 @@ export default function SyncCreationWizard({
   syncManagementLinks,
   refetchSyncManagementLinks,
   workspaceAccessToken,
+  setShowCreateSyncWizard,
 }) {
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
+
+  const linkWithSourcePrepopulated =
+    syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
+
   return (
     <EmbeddedFrame
-      connectLink={syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"}
+      connectLink={linkWithSourcePrepopulated}
       onExit={async (connectionDetails) => {
         if (connectionDetails.status === "created") {
           setSyncs((syncs) => [
