@@ -33,7 +33,7 @@ export default function Source({
   const source = sources.find((item) => item.type === type)
   const isChecked = isCheckedOverride ?? !!source
 
-  const [sourceConnectLink, getNewSourceConnectLink, sourceConnectLinkLoading] = useSourceConnectLink(
+  const [sourceConnectLink, getNewSourceConnectLink] = useSourceConnectLink(
     sourceConnectLinks,
     type,
     workspaceAccessToken,
