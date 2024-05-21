@@ -15,15 +15,14 @@ export default function Index() {
       <h2 className="text-2xl font-bold text-stone-700">Dashboard</h2>
       <hr className="border-t border-stone-400" />
       <p className="italic text-stone-500">
-        Unlock the full potential of your tea production business with comprehensive data on retailers and
-        trends.
+        Unlock the full potential of your business with comprehensive data on retailers and trends.
       </p>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className="flex flex-col gap-3">
           <h3 className="font-medium text-teal-800">Retailer Datasets</h3>
           <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-stone-600">
             <li>
-              <Anchor href="/retailers">US tea boutiques</Anchor> updated 1 week ago
+              <Anchor href="/retailers">US boutiques</Anchor> updated 1 week ago
             </li>
             <li>
               <Anchor href="/retailers">Australia grocers</Anchor> updated 3 week ago
@@ -56,7 +55,7 @@ export default function Index() {
               <span className="text-teal-600">Location:</span> UK
             </ol>
             <ol>
-              <span className="text-teal-600">Annual tea revenue:</span> $2.1M
+              <span className="text-teal-600">Annual revenue:</span> $2.1M
             </ol>
             <ol>
               <span className="text-teal-600">Contacts:</span> 4

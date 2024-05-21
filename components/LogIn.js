@@ -13,11 +13,11 @@ export default function LogIn({ onLogIn }) {
 
       <div className="flex max-w-xl flex-col items-stretch gap-4 rounded-md bg-stone-50 px-12 py-10 shadow-lg">
         <h1 className="flex flex-row items-center justify-center gap-3">
-          <i className="fa-solid fa-mug-tea text-4xl text-teal-600" />
-          <div className="text-3xl font-bold  text-teal-700">Tea Research International</div>
+          <i className="fa-solid fa-magnet text-4xl text-teal-600" />
+          <div className="text-3xl font-bold  text-teal-700">Marketing Magnet</div>
         </h1>
         <div className="mt-2 text-center text-lg text-stone-700">
-          Log in to access your personalized tea distribution market intelligence workspace
+          Log in to access your personalized distribution market intelligence workspace
         </div>
         <input
           className="mx-8 my-2 min-w-[420px] rounded-md border border-indigo-500 px-4 py-2 text-lg shadow-inner"

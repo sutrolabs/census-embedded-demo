@@ -6,8 +6,8 @@ import dynamic from "next/dynamic"
 import { useSessionStorage } from "usehooks-ts"
 
 import Error_ from "@components/Error_"
-import Footer from "@components/Footer"
-import Header from "@components/Header"
+// import Footer from "@components/Footer"
+// import Header from "@components/Header"
 import Loading from "@components/Loading"
 import LogIn from "@components/LogIn"
 import MainLayout from "@components/MainLayout"
@@ -28,13 +28,13 @@ function Application({ Component, pageProps }) {
 
   return (
     <>
-      <Header
+      {/* <Header
         loggedIn={loggedIn}
         onLogOut={() => {
           setWorkspaceAccessToken(null)
           setLoggedIn(false)
         }}
-      />
+      /> */}
 
       {!workspaceAccessToken ? (
         <SetupLayout>
@@ -52,9 +52,13 @@ function Application({ Component, pageProps }) {
           Component={Component}
           pageProps={pageProps}
           workspaceAccessToken={workspaceAccessToken}
+          onLogOut={() => {
+            setWorkspaceAccessToken(null)
+            setLoggedIn(false)
+          }}
         />
       )}
-      <Footer />
+      {/* <Footer /> */}
     </>
   )
 }
@@ -63,7 +67,7 @@ export default dynamic(() => Promise.resolve(Application), {
   ssr: false,
 })
 
-function MainApplication({ Component, pageProps, workspaceAccessToken }) {
+function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut }) {
   const {
     loading: destinationsLoading,
     error: destinationsError,
@@ -203,9 +207,15 @@ function MainApplication({ Component, pageProps, workspaceAccessToken }) {
   }
 
   return (
-    <>
-      <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
+    <main className="relative flex min-h-screen w-screen flex-col md:flex-row">
+      <Sidebar
+        syncsLoading={syncsLoading}
+        syncs={syncs}
+        runsLoading={runsLoading}
+        runs={runs}
+        onLogOut={onLogOut}
+      />
       <MainLayout>{component}</MainLayout>
-    </>
+    </main>
   )
 }
