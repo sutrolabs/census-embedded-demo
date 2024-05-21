@@ -17,6 +17,9 @@ export default async function handler(req, res) {
   const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sync_management_links`, {
     method: "POST",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}`, ["content-type"]: "application/json" },
+    body: JSON.stringify({
+      redirect_uri: req.headers["referer"],
+    }),
   })
   await checkStatus(apiResponse, 201)
   const { data } = await apiResponse.json()
