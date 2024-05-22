@@ -3,6 +3,8 @@ import React, { useState } from "react"
 import Button from "@components/Button"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
+import { useSyncManagementLink } from "@hooks/use-sync-management-link"
+
 
 export default function SyncManagement({
   sourceId,
@@ -18,12 +20,19 @@ export default function SyncManagement({
   embedSourceFlow,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
+  const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
+    syncManagementLinks,
+    refetchSyncManagementLinks,
+    workspaceAccessToken,
+  )
+  const linkWithSourcePrepopulated =
+    syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
 
   const initiateSyncWizardFlow = () => {
     if (embedSourceFlow) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourcePrepopulated()
+      window.location.href = linkWithSourcePrepopulated
     }
   }
 
@@ -50,10 +59,9 @@ export default function SyncManagement({
             sourceId={sourceId}
             setSyncs={setSyncs}
             refetchSyncs={refetchSyncs}
-            syncManagementLinks={syncManagementLinks}
-            refetchSyncManagementLinks={refetchSyncManagementLinks}
-            workspaceAccessToken={workspaceAccessToken}
+            resetSyncManagementLink={resetSyncManagementLink}
             setShowCreateSyncWizard={setShowCreateSyncWizard}
+            linkWithSourcePrepopulated={linkWithSourcePrepopulated}
           />
         ) : (
           <Button
