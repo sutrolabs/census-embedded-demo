@@ -1,7 +1,7 @@
-import { useState } from "react"
+import React, { useState } from "react"
 
 import Button from "@components/Button"
-import EmbeddedFrame from "@components/EmbeddedFrame"
+import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 
@@ -24,43 +24,15 @@ export default function SyncManagement({
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
-
-  const linkWithSourcePrepopulated = () => {
-    return syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
-  }
+  const linkWithSourcePrepopulated =
+    syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
 
   const initiateSyncWizardFlow = () => {
     if (embedSourceFlow) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourcePrepopulated()
+      window.location.href = linkWithSourcePrepopulated
     }
-  }
-
-  const SyncCreationWizard = () => {
-    return (
-      <EmbeddedFrame
-        connectLink={linkWithSourcePrepopulated()}
-        onExit={async (connectionDetails) => {
-          if (connectionDetails.status === "created") {
-            setSyncs((syncs) => [
-              ...syncs,
-              {
-                id: connectionDetails.details.id,
-                paused: true,
-                label: "Loading Sync",
-                source_attributes: { connection_id: sourceId },
-                mappings: [],
-              },
-            ])
-            await refetchSyncs()
-            // prepares a new link for the next sync creation
-            await resetSyncManagementLink()
-          }
-          setShowCreateSyncWizard(false)
-        }}
-      />
-    )
   }
 
   return (
@@ -82,7 +54,14 @@ export default function SyncManagement({
             />
           ))}
         {showCreateSyncWizard ? (
-          <SyncCreationWizard />
+          <SyncCreationWizard
+            sourceId={sourceId}
+            setSyncs={setSyncs}
+            refetchSyncs={refetchSyncs}
+            resetSyncManagementLink={resetSyncManagementLink}
+            setShowCreateSyncWizard={setShowCreateSyncWizard}
+            linkWithSourcePrepopulated={linkWithSourcePrepopulated}
+          />
         ) : (
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
