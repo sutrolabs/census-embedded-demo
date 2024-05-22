@@ -17,7 +17,7 @@ export default function Sidebar({ syncsLoading, syncs, runsLoading, runs }) {
         <Item name="Alerts" href="/alerts" />
         <Item name="Settings" href="/settings" />
       </nav>
-      <div className="flex flex-col items-center gap-2 border-t  border-stone-300 p-4">
+      <div className="flex flex-col items-center gap-2 border-t border-stone-300 p-4">
         <div className="text-sm font-medium">Sync Status</div>
         <SyncStatus syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       </div>
