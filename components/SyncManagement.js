@@ -5,7 +5,6 @@ import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 
-
 export default function SyncManagement({
   sourceId,
   syncManagementLinks,
