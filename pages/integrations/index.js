@@ -15,7 +15,7 @@ export default function Index() {
       <h3 className="text-xl font-bold text-stone-700">Export</h3>
       <p className="italic text-stone-500">
         Activate your data by <Anchor href="https://www.getcensus.com">syncing</Anchor> it to the tools you
-        use every day. It&apos;s time to bring your tea revenue to the next level!
+        use every day. It&apos;s time to bring your revenue to the next level!
       </p>
       <Link href="/integrations/export-crm">
         <Button className="min-w-[300px] self-center" solid>
