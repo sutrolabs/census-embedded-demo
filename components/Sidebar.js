@@ -39,30 +39,7 @@ export default function Sidebar({ onLogOut }) {
           <Item nested name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
         </nav>
 
-        <div className="flex items-center justify-between md:mt-auto md:w-full">
-          <button onClick={onLogOut} className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl">
-            <i className="fa-solid fa-right-from-bracket mb-2 ml-2 md:mb-1" />
-            <p className="hidden md:block">Log out</p>
-          </button>
-          <div className="hidden items-center gap-4 text-2xl md:flex">
-            <Link
-              className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
-              href="https://developers.getcensus.com/getting-started/introduction"
-            >
-              <a target="_blank">
-                <i className="fa-solid fa-book" />
-              </a>
-            </Link>
-            <Link
-              className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
-              href="https://github.com/sutrolabs/census-embedded-demo"
-            >
-              <a target="_blank">
-                <i className="fa-brands fa-github" />
-              </a>
-            </Link>
-          </div>
-        </div>
+        <SidebarFooter onLogOut={onLogOut} />
       </div>
     </>
   )
@@ -85,3 +62,30 @@ function Item({ name, nested, href }) {
     </Link>
   )
 }
+
+const SidebarFooter = ({ onLogOut }) => (
+  <div className="flex items-center justify-between md:mt-auto md:w-full">
+    <button onClick={onLogOut} className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl">
+      <i className="fa-solid fa-right-from-bracket mb-2 ml-2 md:mb-1" />
+      <p className="hidden md:block">Log out</p>
+    </button>
+    <div className="hidden items-center gap-4 text-2xl md:flex">
+      <Link
+        className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
+        href="https://developers.getcensus.com/getting-started/introduction"
+      >
+        <a target="_blank">
+          <i className="fa-solid fa-book" />
+        </a>
+      </Link>
+      <Link
+        className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
+        href="https://github.com/sutrolabs/census-embedded-demo"
+      >
+        <a target="_blank">
+          <i className="fa-brands fa-github" />
+        </a>
+      </Link>
+    </div>
+  </div>
+)
