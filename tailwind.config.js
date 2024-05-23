@@ -6,6 +6,16 @@ module.exports = {
       fontFamily: {
         poppins: ['"Poppins"', "sans-serif"],
       },
+      keyframes: {
+        ["shine-infinite"]: {
+          "0%": {
+            transform: "skew(-12deg) translateX(-60%)",
+          },
+          "100%": {
+            transform: "skew(-12deg) translateX(60%)",
+          },
+        },
+      },
     },
   },
   plugins: [],
