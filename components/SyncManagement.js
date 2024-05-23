@@ -25,7 +25,7 @@ export default function SyncManagement({
     workspaceAccessToken,
   )
   const linkWithSourcePrepopulated =
-    syncManagementLink.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
+    syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
 
   const initiateSyncWizardFlow = () => {
     if (embedSourceFlow) {
