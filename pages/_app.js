@@ -20,7 +20,30 @@ registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
   const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
-  const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
+
+  const onSubmitWorkspaceAccessToken = async (token) => {
+    let response = await fetch("/api/get_or_create_demo_dest", {
+      method: "POST",
+      headers: {
+        ["authorization"]: `Bearer ${token}`,
+      },
+    })
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+
+    response = await fetch("/api/get_or_create_demo_source", {
+      method: "POST",
+      headers: {
+        ["authorization"]: `Bearer ${token}`,
+      },
+    })
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+
+    setWorkspaceAccessToken(token)
+  }
 
   return (
     <>
@@ -28,6 +51,7 @@ function Application({ Component, pageProps }) {
         <Setup
           workspaceAccessToken={workspaceAccessToken}
           setWorkspaceAccessToken={setWorkspaceAccessToken}
+          onSubmit={onSubmitWorkspaceAccessToken}
         />
       ) : (
         <MainApplication
@@ -36,7 +60,6 @@ function Application({ Component, pageProps }) {
           workspaceAccessToken={workspaceAccessToken}
           onLogOut={() => {
             setWorkspaceAccessToken(null)
-            setLoggedIn(false)
           }}
         />
       )}

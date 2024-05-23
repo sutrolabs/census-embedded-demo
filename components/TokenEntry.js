@@ -4,11 +4,19 @@ import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import { useBasicFetch } from "@utils/fetch"
 
-export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessToken }) {
+export default function TokenEntry({ workspaceAccessToken, onSubmit }) {
   const [localCensusWorkspaceToken, setLocalCensusWorkspaceToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_WORKSPACE_ACCESS_TOKEN"] ?? "",
   )
-  const { loading, error, setError, data, setData, refetch } = useBasicFetch(
+  const [isLoadingDemoConnections, setIsLoadingDemoConnections] = useState(false)
+  const {
+    loading: isLoadingTestToken,
+    error,
+    setError,
+    data,
+    setData,
+    refetch,
+  } = useBasicFetch(
     () =>
       new Request("/api/test_workspace_access_token", {
         method: "POST",
@@ -18,12 +26,19 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
       }),
     { initial: false },
   )
+  const loading = isLoadingDemoConnections || isLoadingTestToken
+
   useEffect(() => {
-    if (data?.data?.id) {
-      setWorkspaceAccessToken(localCensusWorkspaceToken)
-      setData()
+    async function setWorkspaceAccessToken() {
+      if (data?.data?.id) {
+        setIsLoadingDemoConnections(true)
+        await onSubmit(localCensusWorkspaceToken)
+        setData()
+        setIsLoadingDemoConnections(false)
+      }
     }
-  }, [data, setData, setWorkspaceAccessToken, localCensusWorkspaceToken])
+    setWorkspaceAccessToken()
+  }, [data, setData, onSubmit, localCensusWorkspaceToken])
 
   useEffect(() => {
     setError()
