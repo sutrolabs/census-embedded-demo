@@ -7,8 +7,8 @@ import Destination from "@components/Destination"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 
-const accountDisplayMappings = ["Retailer type", "Annual tea revenue", "Local tea market YoY growth"]
-const contactDisplayMappings = ["Job title", "Years of experience", "Personal tea preference"]
+const accountDisplayMappings = ["Retailer type", "Annual revenue", "Local YoY growth"]
+const contactDisplayMappings = ["Job title", "Years of experience", "Personal preferences"]
 
 const config = [
   {
@@ -86,7 +86,7 @@ export default function Index({
       <h2 className="text-2xl font-bold text-stone-700">Integrations / CRM</h2>
       <hr className="border-t border-stone-400" />
       <p className="italic text-stone-500">
-        Get access to relevant tea retailer and trend data right within your everyday sales tools.
+        Get access to relevant retailer and trend data right within your everyday sales tools.
       </p>
       <p className="text-teal-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
       {config.map((destination) => (

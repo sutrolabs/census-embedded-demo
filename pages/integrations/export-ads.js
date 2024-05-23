@@ -66,7 +66,7 @@ function Segment() {
         </span>
         <Toggle disabled />
       </h3>
-      <p className="text-sm">All types of retailers in cities where tea growth YoY &gt; 10%</p>
+      <p className="text-sm">All types of retailers in cities where product growth YoY &gt; 10%</p>
       <p className="text-sm">82,991 contacts</p>
       <div className="flex flex-row items-center justify-between">
         <SyncStatus syncsLoading={false} syncs={[]} runsLoading={false} runs={[]} />
