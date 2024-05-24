@@ -41,6 +41,8 @@ export default function SyncManagement({
     }
   }
 
+  const showAddNewSyncButton = useCase === "import" || syncs.length === 0
+
   return (
     <>
       <p className="text-teal-400">{stepText}</p>
@@ -67,7 +69,7 @@ export default function SyncManagement({
             setShowCreateSyncWizard={setShowCreateSyncWizard}
             linkWithSourcePrepopulated={linkWithSourcePrepopulated}
           />
-        ) : useCase === "import" || syncs.length === 0 ? (
+        ) : showAddNewSyncButton ? (
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
               shadow-sm"
