@@ -150,6 +150,7 @@ export default function Source({
                   )}
                 </pre>
               }
+              link="https://developers.getcensus.com/api-reference/sources/delete-source"
             />
           )}
         </Dialog>
