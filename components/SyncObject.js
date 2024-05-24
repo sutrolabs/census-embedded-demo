@@ -192,90 +192,86 @@ export function SyncObject({
         )}
       </Card>
 
-      {!editSyncWizardLink && (
-        <div>
-          <RequestTooltip
-            devMode={devMode}
-            anchorSelect={`#run-${sync.id}`}
-            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/trigger`}
-            method="POST"
-            headers={
-              <pre>
-                {JSON.stringify(
-                  {
-                    ["authorization"]: "Bearer <workspaceAccessToken>",
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            }
-          />
-          <RequestTooltip
-            devMode={devMode}
-            anchorSelect={`#delete-${sync.id}`}
-            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
-            method="DELETE"
-            headers={
-              <pre>
-                {JSON.stringify(
-                  {
-                    ["authorization"]: "Bearer <workspaceAccessToken>",
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            }
-          />
-          <RequestTooltip
-            devMode={devMode}
-            anchorSelect={`#configure-${sync.id}`}
-            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/connect_links`}
-            method="POST"
-            headers={
-              <pre>
-                {JSON.stringify(
-                  {
-                    ["authorization"]: "Bearer <workspaceAccessToken>",
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            }
-          />
-          <RequestTooltip
-            devMode={devMode}
-            anchorSelect={`#toggle-${sync.id}`}
-            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
-            method="PATCH"
-            headers={
-              <pre>
-                {JSON.stringify(
-                  {
-                    ["authorization"]: "Bearer <workspaceAccessToken>",
-                    ["content-type"]: "application/json",
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            }
-            body={
-              <pre>
-                {JSON.stringify(
-                  {
-                    ["paused"]: !sync.paused,
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            }
-          />
-        </div>
-      )}
+      <RequestTooltip
+        devMode={devMode}
+        anchorSelect={`#run-${sync.id}`}
+        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/trigger`}
+        method="POST"
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+      />
+      <RequestTooltip
+        devMode={devMode}
+        anchorSelect={`#delete-${sync.id}`}
+        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
+        method="DELETE"
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+      />
+      <RequestTooltip
+        devMode={devMode}
+        anchorSelect={`#configure-${sync.id}`}
+        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/connect_links`}
+        method="POST"
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+      />
+      <RequestTooltip
+        devMode={devMode}
+        anchorSelect={`#toggle-${sync.id}`}
+        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
+        method="PATCH"
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+                ["content-type"]: "application/json",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+        body={
+          <pre>
+            {JSON.stringify(
+              {
+                ["paused"]: !sync.paused,
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+      />
     </>
   )
 }
