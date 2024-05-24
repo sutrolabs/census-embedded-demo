@@ -1,10 +1,6 @@
 import EmbeddedFrame from "@components/EmbeddedFrame"
 
-export default function SyncEditWizard({
-  refetchSyncs,
-  closeSyncWizard,
-  connectLink,
-}) {
+export default function SyncEditWizard({ refetchSyncs, closeSyncWizard, connectLink }) {
   return (
     <EmbeddedFrame
       connectLink={connectLink}

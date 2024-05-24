@@ -43,11 +43,7 @@ export function SyncObject({
         throw new Error(response.statusText)
       }
       setSyncs((syncs) =>
-        syncs.map((item) =>
-          item.id === sync.id
-            ? { ...sync, updated_at: new Date().toISOString() }
-            : item,
-        ),
+        syncs.map((item) => (item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item)),
       )
       await refetchSyncs()
     } finally {
@@ -125,9 +121,7 @@ export function SyncObject({
         throw new Error(response.statusText)
       }
       const data = await response.json()
-      setSyncs((syncs) =>
-        syncs.map((item) => (item.id === sync.id ? data : item)),
-      )
+      setSyncs((syncs) => syncs.map((item) => (item.id === sync.id ? data : item)))
       await refetchSyncs()
     } finally {
       setLoading(false)
@@ -139,17 +133,11 @@ export function SyncObject({
     <>
       <Card className="flex flex-col gap-4" disabled={disabled}>
         <h4 className="flex flex-row justify-between">
-          <span className="font-medium">
-            {sync.label ?? `Sync: ${sync.id}`}
-          </span>
+          <span className="font-medium">{sync.label ?? `Sync: ${sync.id}`}</span>
           {!showEditSyncWizard && (
             <div className="flex flex-row items-center gap-2">
               <a id={`toggle-${sync.id}`}>
-                <Toggle
-                  checked={!disabled}
-                  disabled={loading || running}
-                  onChange={toggleSync}
-                />
+                <Toggle checked={!disabled} disabled={loading || running} onChange={toggleSync} />
               </a>
               <a id={`delete-${sync.id}`}>
                 <Button onClick={deleteSync}>
@@ -183,11 +171,7 @@ export function SyncObject({
               />
               <div className="flex flex-row gap-3">
                 <a id={`run-${sync.id}`}>
-                  <Button
-                    className="text-sm"
-                    disabled={disabled || loading || running}
-                    onClick={runSync}
-                  >
+                  <Button className="text-sm" disabled={disabled || loading || running} onClick={runSync}>
                     <i className="fa-solid fa-play mr-2" />
                     Run now
                   </Button>
