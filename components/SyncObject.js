@@ -247,6 +247,19 @@ export function SyncObject({
           </pre>
         }
         link="https://developers.getcensus.com/api-reference/sync-management-links/create-sync-management-link-to-edit-sync"
+        body={
+          embedMode ? null : (
+            <pre>
+              {JSON.stringify(
+                {
+                  redirect_uri: window.location.href,
+                },
+                null,
+                2,
+              )}
+            </pre>
+          )
+        }
       />
       <RequestTooltip
         devMode={devMode}
