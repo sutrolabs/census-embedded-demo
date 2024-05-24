@@ -22,7 +22,7 @@ function Application({ Component, pageProps }) {
   const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
 
   const onSubmitWorkspaceAccessToken = async (token) => {
-    let response = await fetch("/api/get_or_create_demo_dest", {
+    let response = await fetch("/api/get_or_create_demo_destination", {
       method: "POST",
       headers: {
         ["authorization"]: `Bearer ${token}`,
