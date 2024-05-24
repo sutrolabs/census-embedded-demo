@@ -3,6 +3,7 @@ import { useState } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import RequestTooltip from "@components/RequestTooltip"
+import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 import { censusBaseUrl } from "@utils/url"
@@ -15,12 +16,15 @@ export function SyncObject({
   runsLoading,
   runs,
   devMode,
+  embedSourceFlow,
 }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
+  const [editSyncWizardLink, setEditSyncWizardLink] = useState(null)
   const run = runs.find((item) => item.sync_id === sync?.id)
   const running = run ? !run.completed_at : false
   const disabled = disabledOverride ?? sync?.paused ?? true
+  const showEditSyncWizard = !!editSyncWizardLink
 
   const runSync = async () => {
     try {
@@ -39,9 +43,40 @@ export function SyncObject({
         throw new Error(response.statusText)
       }
       setSyncs((syncs) =>
-        syncs.map((item) => (item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item)),
+        syncs.map((item) =>
+          item.id === sync.id
+            ? { ...sync, updated_at: new Date().toISOString() }
+            : item,
+        ),
       )
       await refetchSyncs()
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const initiateEditSyncWizard = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch("/api/create_edit_sync_management_link", {
+        method: "POST",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
+        body: JSON.stringify({
+          syncId: sync.id,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      const data = await response.json()
+      if (embedSourceFlow) {
+        setEditSyncWizardLink(data.uri)
+      } else {
+        window.location.href = data.uri
+      }
     } finally {
       setLoading(false)
     }
@@ -90,7 +125,9 @@ export function SyncObject({
         throw new Error(response.statusText)
       }
       const data = await response.json()
-      setSyncs((syncs) => syncs.map((item) => (item.id === sync.id ? data : item)))
+      setSyncs((syncs) =>
+        syncs.map((item) => (item.id === sync.id ? data : item)),
+      )
       await refetchSyncs()
     } finally {
       setLoading(false)
@@ -102,110 +139,159 @@ export function SyncObject({
     <>
       <Card className="flex flex-col gap-4" disabled={disabled}>
         <h4 className="flex flex-row justify-between">
-          <span className="font-medium">{sync.label ?? `Sync: ${sync.id}`}</span>
-          <div className="flex flex-row items-center gap-2">
-            <a id={`toggle-${sync.id}`}>
-              <Toggle checked={!disabled} disabled={loading || running} onChange={toggleSync} />
-            </a>
-            <a id={`delete-${sync.id}`}>
-              <Button onClick={deleteSync}>
-                <i className="fa-solid fa-trash" />
-              </Button>
-            </a>
-          </div>
+          <span className="font-medium">
+            {sync.label ?? `Sync: ${sync.id}`}
+          </span>
+          {!showEditSyncWizard && (
+            <div className="flex flex-row items-center gap-2">
+              <a id={`toggle-${sync.id}`}>
+                <Toggle
+                  checked={!disabled}
+                  disabled={loading || running}
+                  onChange={toggleSync}
+                />
+              </a>
+              <a id={`delete-${sync.id}`}>
+                <Button onClick={deleteSync}>
+                  <i className="fa-solid fa-trash" />
+                </Button>
+              </a>
+            </div>
+          )}
         </h4>
-        <p className="-mb-2 text-sm">These attributes will get synced...</p>
-        <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-          {sync.mappings.map((mapping) => (
-            <li key={mapping.to}>{mapping.to}</li>
-          ))}
-        </ul>
-        <div className="flex flex-row items-center justify-between gap-2">
-          <SyncStatus
-            syncsLoading={false}
-            syncs={[sync].filter(Boolean)}
-            runsLoading={runsLoading}
-            runs={runs}
-            showAge
+        {showEditSyncWizard ? (
+          <SyncEditWizard
+            connectLink={editSyncWizardLink}
+            closeSyncWizard={() => setEditSyncWizardLink(null)}
+            refetchSyncs={refetchSyncs}
           />
-          <div className="flex flex-row gap-3">
-            <a id={`run-${sync.id}`}>
-              <Button className="text-sm" disabled={disabled || loading || running} onClick={runSync}>
-                <i className="fa-solid fa-play mr-2" />
-                Run now
-              </Button>
-            </a>
-            <Button className="text-sm" disabled={disabled || loading || running}>
-              <i className="fa-solid fa-gear mr-2" />
-              Configure
-            </Button>
+        ) : (
+          <div>
+            <p className="mb-2 text-sm">These attributes will get synced...</p>
+            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
+              {sync.mappings.map((mapping) => (
+                <li key={mapping.to}>{mapping.to}</li>
+              ))}
+            </ul>
+            <div className="flex flex-row items-center justify-between gap-2">
+              <SyncStatus
+                syncsLoading={false}
+                syncs={[sync].filter(Boolean)}
+                runsLoading={runsLoading}
+                runs={runs}
+                showAge
+              />
+              <div className="flex flex-row gap-3">
+                <a id={`run-${sync.id}`}>
+                  <Button
+                    className="text-sm"
+                    disabled={disabled || loading || running}
+                    onClick={runSync}
+                  >
+                    <i className="fa-solid fa-play mr-2" />
+                    Run now
+                  </Button>
+                </a>
+                <a id={`configure-${sync.id}`}>
+                  <Button
+                    className="text-sm"
+                    disabled={disabled || loading || running}
+                    onClick={initiateEditSyncWizard}
+                  >
+                    <i className="fa-solid fa-gear mr-2" />
+                    Configure
+                  </Button>
+                </a>
+              </div>
+            </div>
           </div>
-        </div>
+        )}
       </Card>
 
-      <RequestTooltip
-        devMode={devMode}
-        anchorSelect={`#run-${sync.id}`}
-        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/trigger`}
-        method="POST"
-        headers={
-          <pre>
-            {JSON.stringify(
-              {
-                ["authorization"]: "Bearer <workspaceAccessToken>",
-              },
-              null,
-              2,
-            )}
-          </pre>
-        }
-      />
-      <RequestTooltip
-        devMode={devMode}
-        anchorSelect={`#delete-${sync.id}`}
-        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
-        method="DELETE"
-        headers={
-          <pre>
-            {JSON.stringify(
-              {
-                ["authorization"]: "Bearer <workspaceAccessToken>",
-              },
-              null,
-              2,
-            )}
-          </pre>
-        }
-      />
-      <RequestTooltip
-        devMode={devMode}
-        anchorSelect={`#toggle-${sync.id}`}
-        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
-        method="PATCH"
-        headers={
-          <pre>
-            {JSON.stringify(
-              {
-                ["authorization"]: "Bearer <workspaceAccessToken>",
-                ["content-type"]: "application/json",
-              },
-              null,
-              2,
-            )}
-          </pre>
-        }
-        body={
-          <pre>
-            {JSON.stringify(
-              {
-                ["paused"]: !sync.paused,
-              },
-              null,
-              2,
-            )}
-          </pre>
-        }
-      />
+      {!editSyncWizardLink && (
+        <div>
+          <RequestTooltip
+            devMode={devMode}
+            anchorSelect={`#run-${sync.id}`}
+            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/trigger`}
+            method="POST"
+            headers={
+              <pre>
+                {JSON.stringify(
+                  {
+                    ["authorization"]: "Bearer <workspaceAccessToken>",
+                  },
+                  null,
+                  2,
+                )}
+              </pre>
+            }
+          />
+          <RequestTooltip
+            devMode={devMode}
+            anchorSelect={`#delete-${sync.id}`}
+            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
+            method="DELETE"
+            headers={
+              <pre>
+                {JSON.stringify(
+                  {
+                    ["authorization"]: "Bearer <workspaceAccessToken>",
+                  },
+                  null,
+                  2,
+                )}
+              </pre>
+            }
+          />
+          <RequestTooltip
+            devMode={devMode}
+            anchorSelect={`#configure-${sync.id}`}
+            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/connect_links`}
+            method="POST"
+            headers={
+              <pre>
+                {JSON.stringify(
+                  {
+                    ["authorization"]: "Bearer <workspaceAccessToken>",
+                  },
+                  null,
+                  2,
+                )}
+              </pre>
+            }
+          />
+          <RequestTooltip
+            devMode={devMode}
+            anchorSelect={`#toggle-${sync.id}`}
+            url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
+            method="PATCH"
+            headers={
+              <pre>
+                {JSON.stringify(
+                  {
+                    ["authorization"]: "Bearer <workspaceAccessToken>",
+                    ["content-type"]: "application/json",
+                  },
+                  null,
+                  2,
+                )}
+              </pre>
+            }
+            body={
+              <pre>
+                {JSON.stringify(
+                  {
+                    ["paused"]: !sync.paused,
+                  },
+                  null,
+                  2,
+                )}
+              </pre>
+            }
+          />
+        </div>
+      )}
     </>
   )
 }

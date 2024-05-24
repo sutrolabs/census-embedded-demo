@@ -51,6 +51,7 @@ export default function SyncManagement({
               runsLoading={runsLoading}
               runs={runs}
               devMode={devMode}
+              embedSourceFlow={embedSourceFlow}
             />
           ))}
         {showCreateSyncWizard ? (
