@@ -213,7 +213,26 @@ export default function Source({
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
           ))}
       </Card>
-      {devMode && !isChecked && (
+      {devMode && isChecked ? (
+        <RequestTooltip
+          anchorSelect={`#toggle-source-${type}`}
+          url={`${censusBaseUrl}/api/v1/sources/${source.id}`}
+          method="DELETE"
+          devMode={devMode}
+          headers={
+            <pre>
+              {JSON.stringify(
+                {
+                  ["authorization"]: "Bearer <workspaceAccessToken>",
+                },
+                null,
+                2,
+              )}
+            </pre>
+          }
+          link="https://developers.getcensus.com/api-reference/sources/delete-source"
+        />
+      ) : (
         <Tooltip anchorSelect={`#toggle-source-${type}`}>
           {embedSourceFlow ? (
             <div className="max-w-sm">
