@@ -1,7 +1,10 @@
 import Link from "next/link"
 import { useRouter } from "next/router"
+import { Tooltip } from "react-tooltip"
 
-export default function Sidebar({ onLogOut }) {
+import Toggle from "@components/Toggle"
+
+export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
     <>
       <div className="hidden md:block md:h-screen md:w-2/5 xl:w-1/4" />
@@ -39,7 +42,13 @@ export default function Sidebar({ onLogOut }) {
           <Item nested name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
         </nav>
 
-        <SidebarFooter onLogOut={onLogOut} />
+        <SidebarFooter
+          onLogOut={onLogOut}
+          embedMode={embedMode}
+          setEmbedMode={setEmbedMode}
+          devMode={devMode}
+          setDevMode={setDevMode}
+        />
       </div>
     </>
   )
@@ -63,29 +72,51 @@ function Item({ name, nested, href }) {
   )
 }
 
-const SidebarFooter = ({ onLogOut }) => (
-  <div className="flex items-center justify-between md:mt-auto md:w-full">
-    <button onClick={onLogOut} className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl">
-      <i className="fa-solid fa-right-from-bracket mb-2 ml-2 md:mb-1" />
-      <p className="hidden md:block">Log out</p>
-    </button>
-    <div className="hidden items-center gap-4 text-2xl md:flex">
-      <Link
-        className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
-        href="https://developers.getcensus.com/getting-started/introduction"
-      >
-        <a target="_blank">
-          <i className="fa-solid fa-book" />
+const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) => (
+  <div className="flex flex-col items-center justify-between md:mt-auto md:w-full">
+    <div className="mb-3 flex flex-col gap-3 md:w-full">
+      <div className="flex items-center">
+        <span className="px-2">Embed</span>
+        <a id="embed-mode">
+          <Toggle checked={embedMode} onChange={() => setEmbedMode((prevCheck) => !prevCheck)} />
         </a>
-      </Link>
-      <Link
-        className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
-        href="https://github.com/sutrolabs/census-embedded-demo"
-      >
-        <a target="_blank">
-          <i className="fa-brands fa-github" />
+        <Tooltip anchorSelect="#embed-mode">
+          Show Census UI flows embedded directly in the application, or redirect to the flows.
+        </Tooltip>
+      </div>
+      <div className="flex items-center">
+        <span className="px-2">Dev Mode</span>
+        <a id="dev-mode">
+          <Toggle checked={devMode} onChange={() => setDevMode((prevCheck) => !prevCheck)} />
         </a>
-      </Link>
+        <Tooltip anchorSelect="#dev-mode">
+          Show tooltips of the Census API requests being made when interacting with the UX.
+        </Tooltip>
+      </div>
+    </div>
+    <div className="flex items-center justify-between md:mt-auto md:w-full">
+      <button onClick={onLogOut} className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl">
+        <i className="fa-solid fa-right-from-bracket mb-2 ml-2 md:mb-1" />
+        <p className="hidden md:block">Log out</p>
+      </button>
+      <div className="hidden items-center gap-4 text-2xl md:flex">
+        <Link
+          className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
+          href="https://developers.getcensus.com/getting-started/introduction"
+        >
+          <a target="_blank">
+            <i className="fa-solid fa-book" />
+          </a>
+        </Link>
+        <Link
+          className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
+          href="https://github.com/sutrolabs/census-embedded-demo"
+        >
+          <a target="_blank">
+            <i className="fa-brands fa-github" />
+          </a>
+        </Link>
+      </div>
     </div>
   </div>
 )

@@ -20,7 +20,7 @@ export default function Source({
   refetchSources,
   sourceConnectLinks,
   refetchSourceConnectLinks,
-  embedSourceFlow,
+  embedMode,
   devMode,
   refetchSyncs,
   syncManagementLinks,
@@ -44,7 +44,7 @@ export default function Source({
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
-    if (embedSourceFlow) {
+    if (embedMode) {
       setShowEmbeddedFrame(true)
     } else {
       window.location.href = sourceConnectLinkData.uri
@@ -206,7 +206,7 @@ export default function Source({
               runsLoading={runsLoading}
               runs={runs}
               devMode={devMode}
-              embedSourceFlow={embedSourceFlow}
+              embedMode={embedMode}
               addNewSyncText={"Configure data to import to Marketing Magnet"}
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}

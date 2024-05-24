@@ -16,7 +16,7 @@ export function SyncObject({
   runsLoading,
   runs,
   devMode,
-  embedSourceFlow,
+  embedMode,
 }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
@@ -68,7 +68,7 @@ export function SyncObject({
         throw new Error(response.statusText)
       }
       const data = await response.json()
-      if (embedSourceFlow) {
+      if (embedMode) {
         setEditSyncWizardLink(data.uri)
       } else {
         window.location.href = data.uri

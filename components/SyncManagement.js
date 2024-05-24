@@ -19,10 +19,10 @@ export default function SyncManagement({
   runsLoading,
   runs,
   devMode,
-  embedSourceFlow,
+  embedMode,
   addNewSyncText,
   stepText,
-  useCase
+  useCase,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -34,7 +34,7 @@ export default function SyncManagement({
     syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
 
   const initiateSyncWizardFlow = () => {
-    if (embedSourceFlow) {
+    if (embedMode) {
       setShowCreateSyncWizard(true)
     } else {
       window.location.href = linkWithSourcePrepopulated
@@ -45,20 +45,19 @@ export default function SyncManagement({
     <>
       <p className="text-teal-400">{stepText}</p>
       <div className="flex flex-col gap-5">
-        {syncs
-          .map((sync) => (
-            <SyncObject
-              key={sync.id}
-              sync={sync}
-              refetchSyncs={refetchSyncs}
-              workspaceAccessToken={workspaceAccessToken}
-              setSyncs={setSyncs}
-              runsLoading={runsLoading}
-              runs={runs}
-              devMode={devMode}
-              embedSourceFlow={embedSourceFlow}
-            />
-          ))}
+        {syncs.map((sync) => (
+          <SyncObject
+            key={sync.id}
+            sync={sync}
+            refetchSyncs={refetchSyncs}
+            workspaceAccessToken={workspaceAccessToken}
+            setSyncs={setSyncs}
+            runsLoading={runsLoading}
+            runs={runs}
+            devMode={devMode}
+            embedMode={embedMode}
+          />
+        ))}
         {showCreateSyncWizard ? (
           <SyncCreationWizard
             sourceId={sourceId}
@@ -68,7 +67,7 @@ export default function SyncManagement({
             setShowCreateSyncWizard={setShowCreateSyncWizard}
             linkWithSourcePrepopulated={linkWithSourcePrepopulated}
           />
-        ) : (useCase === "import" || syncs.length === 0) ? (
+        ) : useCase === "import" || syncs.length === 0 ? (
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
               shadow-sm"
