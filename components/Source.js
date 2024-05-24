@@ -201,12 +201,15 @@ export default function Source({
               syncManagementLinks={syncManagementLinks}
               refetchSyncManagementLinks={refetchSyncManagementLinks}
               workspaceAccessToken={workspaceAccessToken}
-              syncs={syncs}
+              syncs={syncs.filter((sync) => sync.source_attributes.connection_id === source.id)}
               setSyncs={setSyncs}
               runsLoading={runsLoading}
               runs={runs}
               devMode={devMode}
               embedSourceFlow={embedSourceFlow}
+              addNewSyncText={"Configure data to import to Marketing Magnet"}
+              stepText={"Step 2: Choose which source objects to sync."}
+              useCase={"import"}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />

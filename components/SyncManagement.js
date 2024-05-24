@@ -20,6 +20,9 @@ export default function SyncManagement({
   runs,
   devMode,
   embedSourceFlow,
+  addNewSyncText,
+  stepText,
+  useCase
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -40,10 +43,9 @@ export default function SyncManagement({
 
   return (
     <>
-      <p className="text-teal-400">Step 2: Choose which source objects to sync.</p>
+      <p className="text-teal-400">{stepText}</p>
       <div className="flex flex-col gap-5">
         {syncs
-          .filter((sync) => sync.source_attributes.connection_id === sourceId)
           .map((sync) => (
             <SyncObject
               key={sync.id}
@@ -66,7 +68,7 @@ export default function SyncManagement({
             setShowCreateSyncWizard={setShowCreateSyncWizard}
             linkWithSourcePrepopulated={linkWithSourcePrepopulated}
           />
-        ) : (
+        ) : (useCase === "import" || syncs.length === 0) ? (
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
               shadow-sm"
@@ -74,10 +76,10 @@ export default function SyncManagement({
           >
             <a id={`create-sync-${type}`}>
               <i className="fa-solid fa-plus mr-4" />
-              Configure data to import
+              {addNewSyncText}
             </a>
           </Button>
-        )}
+        ) : null}
       </div>
 
       <RequestTooltip
