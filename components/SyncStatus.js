@@ -27,7 +27,7 @@ const modes = [
   {
     status: "pending",
     className: "bg-stone-300 text-stone-50",
-    text: "Pending",
+    text: "Not run yet",
   },
   {
     status: "done",
