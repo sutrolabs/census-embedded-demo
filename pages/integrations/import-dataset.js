@@ -57,7 +57,7 @@ export default function ImportDataset({
       <Source
         label="Redshift"
         type="redshift"
-        iconClassName="fa-brands fa-amazon"
+        iconClassName="fa-brands fa-aws"
         workspaceAccessToken={workspaceAccessToken}
         sources={sources}
         setSources={setSources}
