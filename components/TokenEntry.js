@@ -2,12 +2,14 @@ import { useEffect, useState } from "react"
 
 import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
+import Checkbox from "@components/Checkbox"
 import { useBasicFetch } from "@utils/fetch"
 
 export default function TokenEntry({ workspaceAccessToken, onSubmit }) {
   const [localCensusWorkspaceToken, setLocalCensusWorkspaceToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_WORKSPACE_ACCESS_TOKEN"] ?? "",
   )
+  const [checked, setChecked] = useState(true)
   const [isLoadingDemoConnections, setIsLoadingDemoConnections] = useState(false)
   const {
     loading: isLoadingTestToken,
@@ -64,6 +66,11 @@ export default function TokenEntry({ workspaceAccessToken, onSubmit }) {
         </Anchor>{" "}
         for authentication, so that&apos;s how we&apos;ll start here:
       </p>
+      <Checkbox
+        label="I acknowledge that Census will create a demo source and demo destination to my workspace to better showcase this application's features."
+        checked={checked}
+        onChange={(event) => setChecked(event.target.checked)}
+      />
       <input
         className="my-2 w-full max-w-sm self-center rounded-md border border-indigo-500 px-4 py-2 font-mono shadow-inner"
         autoFocus
@@ -80,7 +87,7 @@ export default function TokenEntry({ workspaceAccessToken, onSubmit }) {
         <Button
           className="self-center px-6 py-2"
           solid
-          disabled={!localCensusWorkspaceToken || !!error || loading}
+          disabled={!localCensusWorkspaceToken || !!error || loading || !checked}
         >
           Continue
         </Button>
