@@ -156,13 +156,13 @@ export function SyncObject({
         ) : (
           <div>
             <p className="mb-2 text-sm">These attributes will get synced...</p>
-            <a id={`mappings-${sync.id}`}>
-              <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-                {sync.mappings.map((mapping) => (
-                  <li key={mapping.to}>{mapping.to}</li>
-                ))}
-              </ul>
-            </a>
+            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
+              {sync.mappings.map((mapping) => (
+                <li key={mapping.to}>
+                  <a id={`mappings-${sync.id}-${mapping.to}`}>{mapping.to}</a>
+                </li>
+              ))}
+            </ul>
             <div className="flex flex-row items-center justify-between gap-2">
               <SyncStatus
                 syncsLoading={false}
@@ -246,6 +246,7 @@ export function SyncObject({
             )}
           </pre>
         }
+        link="https://developers.getcensus.com/api-reference/sync-management-links/create-sync-management-link-to-edit-sync"
       />
       <RequestTooltip
         devMode={devMode}
@@ -279,7 +280,7 @@ export function SyncObject({
       />
       <RequestTooltip
         devMode={devMode}
-        anchorSelect={`#mappings-${sync.id}`}
+        anchorSelect={`[id^=mappings-${sync.id}]`}
         url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
         method="GET"
         headers={
