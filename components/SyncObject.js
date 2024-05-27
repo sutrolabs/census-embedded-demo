@@ -158,7 +158,9 @@ export function SyncObject({
             <p className="mb-2 text-sm">These attributes will get synced...</p>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
               {sync.mappings.map((mapping) => (
-                <li key={mapping.to}>{mapping.to}</li>
+                <li key={mapping.to}>
+                  <a id={`mappings-${sync.id}-${mapping.to}`}>{mapping.to}</a>
+                </li>
               ))}
             </ul>
             <div className="flex flex-row items-center justify-between gap-2">
@@ -208,6 +210,7 @@ export function SyncObject({
             )}
           </pre>
         }
+        link="https://developers.getcensus.com/api-reference/syncs/trigger-a-sync-run"
       />
       <RequestTooltip
         devMode={devMode}
@@ -225,6 +228,7 @@ export function SyncObject({
             )}
           </pre>
         }
+        link="https://developers.getcensus.com/api-reference/syncs/delete-a-sync"
       />
       <RequestTooltip
         devMode={devMode}
@@ -242,6 +246,7 @@ export function SyncObject({
             )}
           </pre>
         }
+        link="https://developers.getcensus.com/api-reference/sync-management-links/create-sync-management-link-to-edit-sync"
       />
       <RequestTooltip
         devMode={devMode}
@@ -271,6 +276,26 @@ export function SyncObject({
             )}
           </pre>
         }
+        link="https://developers.getcensus.com/api-reference/syncs/update-a-sync"
+      />
+      <RequestTooltip
+        devMode={devMode}
+        anchorSelect={`[id^=mappings-${sync.id}]`}
+        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}`}
+        method="GET"
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+        note="This will return the details of the entire sync object. To get only the mappings, you can filter the response by the 'data.mappings' attribute."
+        link="https://developers.getcensus.com/api-reference/syncs/fetch-sync"
       />
     </>
   )
