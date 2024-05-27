@@ -97,15 +97,17 @@ export default function SyncManagement({
           </pre>
         }
         body={
-          <pre>
-            {JSON.stringify(
-              {
-                redirect_uri: window.location.href,
-              },
-              null,
-              2,
-            )}
-          </pre>
+          !embedSourceFlow && (
+            <pre>
+              {JSON.stringify(
+                {
+                  redirect_uri: window.location.href,
+                },
+                null,
+                2,
+              )}
+            </pre>
+          )
         }
         link="https://developers.getcensus.com/api-reference/sync-management-links/create-a-new-sync-management-link"
       />
