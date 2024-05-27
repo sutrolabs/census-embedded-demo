@@ -1,6 +1,5 @@
 import { Dialog } from "@headlessui/react"
 import { useState } from "react"
-import { Tooltip } from "react-tooltip"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
@@ -213,41 +212,54 @@ export default function Source({
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
           ))}
       </Card>
-      {devMode &&
-        (isChecked ? (
-          <RequestTooltip
-            anchorSelect={`#toggle-source-${type}`}
-            url={`${censusBaseUrl}/api/v1/sources/${source.id}`}
-            method="DELETE"
-            devMode={devMode}
-            headers={
-              <pre>
-                {JSON.stringify(
-                  {
-                    ["authorization"]: "Bearer <workspaceAccessToken>",
-                  },
-                  null,
-                  2,
-                )}
-              </pre>
-            }
-            link="https://developers.getcensus.com/api-reference/sources/delete-source"
-          />
-        ) : (
-          <Tooltip anchorSelect={`#toggle-source-${type}`}>
-            {embedSourceFlow ? (
-              <div className="max-w-sm">
-                <p>Toggling this will open a source connect wizard within an embedded iframe like so:</p>
-                <p>{`<iframe src="${sourceConnectLink?.uri ?? `${censusBaseUrl}pbc?auth=...`}" />`}</p>
-              </div>
-            ) : (
-              <div className="max-w-sm">
-                <p>Toggling this will open a source connect wizard at a redirect flow like so:</p>
-                <p>{sourceConnectLink?.uri ?? `${censusBaseUrl}pbc?auth=...`}</p>
-              </div>
-            )}
-          </Tooltip>
-        ))}
+      {isChecked ? (
+        <RequestTooltip
+          anchorSelect={`#toggle-source-${type}`}
+          url={`${censusBaseUrl}/api/v1/sources/${source.id}`}
+          method="DELETE"
+          devMode={devMode}
+          headers={
+            <pre>
+              {JSON.stringify(
+                {
+                  ["authorization"]: "Bearer <workspaceAccessToken>",
+                },
+                null,
+                2,
+              )}
+            </pre>
+          }
+          link="https://developers.getcensus.com/api-reference/sources/delete-source"
+        />
+      ) : (
+        <RequestTooltip
+          anchorSelect={`#toggle-source-${type}`}
+          url={`${censusBaseUrl}/api/v1/source_connect_links`}
+          method="POST"
+          devMode={devMode}
+          headers={
+            <pre>
+              {JSON.stringify(
+                {
+                  ["authorization"]: "Bearer <workspaceAccessToken>",
+                  ["content-type"]: "application/json",
+                },
+                null,
+                2,
+              )}
+            </pre>
+          }
+          body={
+            <pre>
+              {JSON.stringify(
+                embedSourceFlow ? { type } : { type, redirect_uri: window.location.href },
+                null,
+                2,
+              )}
+            </pre>
+          }
+        />
+      )}
     </>
   )
 }

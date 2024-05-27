@@ -2,7 +2,7 @@ import { Tooltip } from "react-tooltip"
 
 export default function RequestTooltip({ anchorSelect, url, method, headers, body, note, link, devMode }) {
   return (
-    <Tooltip anchorSelect={anchorSelect} className={devMode ? "" : "hidden"} clickable={!!link}>
+    <Tooltip anchorSelect={anchorSelect} className={devMode ? "z-10" : "z-10 hidden"} clickable={!!link}>
       {url && (
         <p>
           <b>Request URL: </b> {url}

@@ -29,7 +29,7 @@ export default function ImportDataset({
       <Head>
         <title>Data Sources - Integrations - Census Embedded Demo App</title>
       </Head>
-      <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
         <h2 className="text-2xl font-bold text-stone-700">Integrations / Import Dataset</h2>
         <div className="flex flex-row items-center gap-6">
           <div className="flex items-center">
