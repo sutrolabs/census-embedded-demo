@@ -252,10 +252,7 @@ export default function Source({
           body={
             <pre>
               {JSON.stringify(
-                {
-                  type,
-                  redirect_uri: window.location.href,
-                },
+                embedSourceFlow ? { type } : { type, redirect_uri: window.location.href },
                 null,
                 2,
               )}
