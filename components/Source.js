@@ -20,7 +20,7 @@ export default function Source({
   refetchSources,
   sourceConnectLinks,
   refetchSourceConnectLinks,
-  embedSourceFlow,
+  embedMode,
   devMode,
   refetchSyncs,
   syncManagementLinks,
@@ -44,7 +44,7 @@ export default function Source({
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
-    if (embedSourceFlow) {
+    if (embedMode) {
       setShowEmbeddedFrame(true)
     } else {
       window.location.href = sourceConnectLinkData.uri
@@ -201,12 +201,15 @@ export default function Source({
               syncManagementLinks={syncManagementLinks}
               refetchSyncManagementLinks={refetchSyncManagementLinks}
               workspaceAccessToken={workspaceAccessToken}
-              syncs={syncs}
+              syncs={syncs.filter((sync) => sync.source_attributes.connection_id === source.id)}
               setSyncs={setSyncs}
               runsLoading={runsLoading}
               runs={runs}
               devMode={devMode}
-              embedSourceFlow={embedSourceFlow}
+              embedMode={embedMode}
+              addNewSyncText={"Configure data to import to Marketing Magnet"}
+              stepText={"Step 2: Choose which source objects to sync."}
+              useCase={"import"}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
@@ -251,11 +254,7 @@ export default function Source({
           }
           body={
             <pre>
-              {JSON.stringify(
-                embedSourceFlow ? { type } : { type, redirect_uri: window.location.href },
-                null,
-                2,
-              )}
+              {JSON.stringify(embedMode ? { type } : { type, redirect_uri: window.location.href }, null, 2)}
             </pre>
           }
         />

@@ -3,6 +3,7 @@ import "@styles/globals.css"
 import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
+import { useState } from "react"
 import { useSessionStorage } from "usehooks-ts"
 
 import Error_ from "@components/Error_"
@@ -72,6 +73,9 @@ export default dynamic(() => Promise.resolve(Application), {
 })
 
 function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut }) {
+  const [embedMode, setEmbedMode] = useState(true)
+  const [devMode, setDevMode] = useState(false)
+
   const {
     loading: destinationsLoading,
     error: destinationsError,
@@ -205,6 +209,10 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
         refetchSyncs={refetchSyncs}
         runsLoading={runsLoading}
         runs={runs}
+        embedMode={embedMode}
+        setEmbedMode={setEmbedMode}
+        devMode={devMode}
+        setDevMode={setDevMode}
         {...pageProps}
       />
     )
@@ -218,6 +226,10 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
         runsLoading={runsLoading}
         runs={runs}
         onLogOut={onLogOut}
+        embedMode={embedMode}
+        setEmbedMode={setEmbedMode}
+        devMode={devMode}
+        setDevMode={setDevMode}
       />
       <MainLayout>{component}</MainLayout>
     </main>

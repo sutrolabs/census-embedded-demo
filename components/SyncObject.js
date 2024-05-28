@@ -16,7 +16,7 @@ export function SyncObject({
   runsLoading,
   runs,
   devMode,
-  embedSourceFlow,
+  embedMode,
 }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
@@ -68,7 +68,7 @@ export function SyncObject({
         throw new Error(response.statusText)
       }
       const data = await response.json()
-      if (embedSourceFlow) {
+      if (embedMode) {
         setEditSyncWizardLink(data.uri)
       } else {
         window.location.href = data.uri
@@ -247,6 +247,19 @@ export function SyncObject({
           </pre>
         }
         link="https://developers.getcensus.com/api-reference/sync-management-links/create-sync-management-link-to-edit-sync"
+        body={
+          embedMode ? null : (
+            <pre>
+              {JSON.stringify(
+                {
+                  redirect_uri: window.location.href,
+                },
+                null,
+                2,
+              )}
+            </pre>
+          )
+        }
       />
       <RequestTooltip
         devMode={devMode}

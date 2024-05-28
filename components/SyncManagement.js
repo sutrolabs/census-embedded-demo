@@ -19,7 +19,10 @@ export default function SyncManagement({
   runsLoading,
   runs,
   devMode,
-  embedSourceFlow,
+  embedMode,
+  addNewSyncText,
+  stepText,
+  useCase,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -31,32 +34,32 @@ export default function SyncManagement({
     syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
 
   const initiateSyncWizardFlow = () => {
-    if (embedSourceFlow) {
+    if (embedMode) {
       setShowCreateSyncWizard(true)
     } else {
       window.location.href = linkWithSourcePrepopulated
     }
   }
 
+  const showAddNewSyncButton = useCase === "import" || syncs.length === 0
+
   return (
     <>
-      <p className="text-teal-400">Step 2: Choose which source objects to sync.</p>
+      <p className="text-teal-400">{stepText}</p>
       <div className="flex flex-col gap-5">
-        {syncs
-          .filter((sync) => sync.source_attributes.connection_id === sourceId)
-          .map((sync) => (
-            <SyncObject
-              key={sync.id}
-              sync={sync}
-              refetchSyncs={refetchSyncs}
-              workspaceAccessToken={workspaceAccessToken}
-              setSyncs={setSyncs}
-              runsLoading={runsLoading}
-              runs={runs}
-              devMode={devMode}
-              embedSourceFlow={embedSourceFlow}
-            />
-          ))}
+        {syncs.map((sync) => (
+          <SyncObject
+            key={sync.id}
+            sync={sync}
+            refetchSyncs={refetchSyncs}
+            workspaceAccessToken={workspaceAccessToken}
+            setSyncs={setSyncs}
+            runsLoading={runsLoading}
+            runs={runs}
+            devMode={devMode}
+            embedMode={embedMode}
+          />
+        ))}
         {showCreateSyncWizard ? (
           <SyncCreationWizard
             sourceId={sourceId}
@@ -66,7 +69,7 @@ export default function SyncManagement({
             setShowCreateSyncWizard={setShowCreateSyncWizard}
             linkWithSourcePrepopulated={linkWithSourcePrepopulated}
           />
-        ) : (
+        ) : showAddNewSyncButton ? (
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
               shadow-sm"
@@ -74,10 +77,10 @@ export default function SyncManagement({
           >
             <a id={`create-sync-${type}`}>
               <i className="fa-solid fa-plus mr-4" />
-              Configure data to import
+              {addNewSyncText}
             </a>
           </Button>
-        )}
+        ) : null}
       </div>
 
       <RequestTooltip
@@ -98,7 +101,7 @@ export default function SyncManagement({
           </pre>
         }
         body={
-          !embedSourceFlow && (
+          !embedMode && (
             <pre>
               {JSON.stringify(
                 {
