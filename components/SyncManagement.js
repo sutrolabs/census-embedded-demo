@@ -101,7 +101,7 @@ export default function SyncManagement({
           </pre>
         }
         body={
-          !embedSourceFlow && (
+          !embedMode && (
             <pre>
               {JSON.stringify(
                 {
