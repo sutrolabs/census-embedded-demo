@@ -74,7 +74,7 @@ function Item({ name, nested, href }) {
 
 const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) => (
   <div className="flex flex-col items-center justify-between md:mt-auto md:w-full">
-    <div className="mb-3 flex flex-col gap-3 md:w-full">
+    <div className="mb-3 hidden md:flex md:w-full md:flex-col md:gap-3">
       <div className="flex items-center">
         <span className="px-2">Embed</span>
         <a id="embed-mode">
