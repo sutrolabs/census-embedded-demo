@@ -254,11 +254,7 @@ export default function Source({
           }
           body={
             <pre>
-              {JSON.stringify(
-                embedMode ? { type } : { type, redirect_uri: window.location.href },
-                null,
-                2,
-              )}
+              {JSON.stringify(embedMode ? { type } : { type, redirect_uri: window.location.href }, null, 2)}
             </pre>
           }
         />
