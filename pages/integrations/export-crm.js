@@ -69,6 +69,7 @@ const config = [
 
 export default function Index({
   workspaceAccessToken,
+  sources,
   destinations,
   setDestinations,
   destinationConnectLinks,
@@ -78,6 +79,12 @@ export default function Index({
   runsLoading,
   runs,
 }) {
+  const embeddedDemoSource = sources.find((source) => source.label === "embedded_demo")
+  if (!embeddedDemoSource) {
+    return <h1>Add an embedded demo source to enable this feature</h1>
+  }
+  const filteredSyncs = syncs.filter((sync) => sync.source_attributes.connection_id === embeddedDemoSource.id)
+
   return (
     <>
       <Head>
@@ -100,7 +107,7 @@ export default function Index({
           setDestinations={setDestinations}
           destinationConnectLinks={destinationConnectLinks}
           setDestinationConnectLinks={setDestinationConnectLinks}
-          syncs={syncs}
+          syncs={filteredSyncs}
         >
           <p className="text-teal-400">Step 2: Choose which destinations objects to sync.</p>
           <div className="flex flex-col gap-5">
@@ -115,7 +122,7 @@ export default function Index({
                 destinationType={destination.type}
                 workspaceAccessToken={workspaceAccessToken}
                 destinations={destinations}
-                syncs={syncs}
+                syncs={filteredSyncs}
                 setSyncs={setSyncs}
                 runsLoading={runsLoading}
                 runs={runs}
@@ -149,10 +156,12 @@ function Object({
     (item) =>
       item.destination_attributes.connection_id === destination.id &&
       item.destination_attributes.object === fullName,
+
   )
   const run = runs.find((item) => item.sync_id === sync?.id)
   const running = run ? !run.completed_at : false
   const disabled = disabledOverride ?? sync?.paused ?? true
+
   return (
     <Card className="flex flex-col gap-4" disabled={disabled}>
       <h4 className="flex flex-row justify-between">

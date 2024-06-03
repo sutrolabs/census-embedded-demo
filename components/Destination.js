@@ -22,7 +22,7 @@ export default function Destination({
   const [disabledOverride, setDisabledOverride] = useState()
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
 
-  const destination = destinations.find((item) => item.type === type)
+  const destination = destinations.find((item) => item.type === type && item.name != 'Brad Developer Salesforce')
   const destinationConnectLink = destinationConnectLinks.find(
     (item) => item.type === type && new Date(item.expiration) > now && !item.revoked && !item.destination_id,
   )
