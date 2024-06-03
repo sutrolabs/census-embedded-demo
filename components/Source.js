@@ -215,7 +215,7 @@ export default function Source({
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
           ))}
       </Card>
-      {isChecked ? (
+      {isChecked && source ? (
         <RequestTooltip
           anchorSelect={`#toggle-source-${type}`}
           url={`${censusBaseUrl}/api/v1/sources/${source.id}`}
