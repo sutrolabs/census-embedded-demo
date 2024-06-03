@@ -14,7 +14,7 @@ export default async function handler(req, res) {
   }
 
   const workspaceApiKey = getWorkspaceAccessToken(req)
-  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/get_or_create_demo_source`, {
+  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/get_or_create_embedded_demo_source`, {
     method: "POST",
     headers: {
       ["authorization"]: `Bearer ${workspaceApiKey}`,

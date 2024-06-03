@@ -23,7 +23,7 @@ function Application({ Component, pageProps }) {
   const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
 
   const onSubmitWorkspaceAccessToken = async (token) => {
-    let response = await fetch("/api/get_or_create_demo_destination", {
+    let response = await fetch("/api/get_or_create_embedded_demo_destination", {
       method: "POST",
       headers: {
         ["authorization"]: `Bearer ${token}`,
@@ -33,7 +33,7 @@ function Application({ Component, pageProps }) {
       throw new Error(response.statusText)
     }
 
-    response = await fetch("/api/get_or_create_demo_source", {
+    response = await fetch("/api/get_or_create_embedded_demo_source", {
       method: "POST",
       headers: {
         ["authorization"]: `Bearer ${token}`,
