@@ -156,7 +156,6 @@ function Object({
     (item) =>
       item.destination_attributes.connection_id === destination.id &&
       item.destination_attributes.object === fullName,
-
   )
   const run = runs.find((item) => item.sync_id === sync?.id)
   const running = run ? !run.completed_at : false
