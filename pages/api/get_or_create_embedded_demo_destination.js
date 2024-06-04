@@ -14,13 +14,16 @@ export default async function handler(req, res) {
   }
 
   const workspaceApiKey = getWorkspaceAccessToken(req)
-  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destinations/get_or_create_embedded_demo_destination`, {
-    method: "POST",
-    headers: {
-      ["authorization"]: `Bearer ${workspaceApiKey}`,
-      ["content-type"]: "application/json",
+  const apiResponse = await fetch(
+    `${censusBaseUrl}/api/v1/destinations/get_or_create_embedded_demo_destination`,
+    {
+      method: "POST",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceApiKey}`,
+        ["content-type"]: "application/json",
+      },
     },
-  })
+  )
   await checkStatus(apiResponse, 200, 201)
   const { data } = await apiResponse.json()
   logger.info([data])
