@@ -28,7 +28,13 @@ export default function EmbeddedFrame({ connectLink, onExit }) {
 
   return (
     <>
-      <iframe className={iframeClass} width="100%" height="800px" src={connectLink} />
+      <iframe
+        className={iframeClass}
+        width="100%"
+        height="800px"
+        src={connectLink}
+        allow="clipboard-read; clipboard-write"
+      />
     </>
   )
 }
