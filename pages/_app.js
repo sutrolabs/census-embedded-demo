@@ -13,6 +13,8 @@ import { Setup } from "@components/Setup"
 import Sidebar from "@components/Sidebar"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
+import { IntegrationsProvider } from "contexts/IntegrationsContext"
+
 registry.add(LineElement)
 registry.add(PointElement)
 registry.add(LinearScale)
@@ -24,7 +26,7 @@ function Application({ Component, pageProps }) {
   const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
 
   return (
-    <>
+    <IntegrationsProvider>
       {!workspaceAccessToken ? (
         <Setup
           workspaceAccessToken={workspaceAccessToken}
@@ -41,7 +43,7 @@ function Application({ Component, pageProps }) {
           }}
         />
       )}
-    </>
+    </IntegrationsProvider>
   )
 }
 

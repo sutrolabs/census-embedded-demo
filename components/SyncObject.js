@@ -7,6 +7,7 @@ import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 import { censusBaseUrl } from "@utils/url"
+import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
 
 export function SyncObject({
   workspaceAccessToken,
@@ -18,6 +19,7 @@ export function SyncObject({
   devMode,
   embedMode,
 }) {
+  const formatLinkToHideSourceDestination = useHideSourceDestination()
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const [editSyncWizardLink, setEditSyncWizardLink] = useState(null)
@@ -69,7 +71,7 @@ export function SyncObject({
       }
       const data = await response.json()
       if (embedMode) {
-        setEditSyncWizardLink(data.uri)
+        setEditSyncWizardLink(formatLinkToHideSourceDestination(data.uri))
       } else {
         window.location.href = data.uri
       }

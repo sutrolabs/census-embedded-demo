@@ -1,6 +1,9 @@
 import Head from "next/head"
+import { useContext, useEffect } from "react"
 
 import Source from "@components/Source"
+
+import { IntegrationsContext } from "contexts/IntegrationsContext"
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -21,6 +24,12 @@ export default function ImportDataset({
   embedMode,
   devMode,
 }) {
+  const { setDestinationHidden } = useContext(IntegrationsContext)
+
+  useEffect(() => {
+    setDestinationHidden(true)
+  }, [setDestinationHidden])
+
   return (
     <>
       <Head>
