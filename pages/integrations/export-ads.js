@@ -1,9 +1,10 @@
 import Head from "next/head"
-
+import { useContext, useEffect } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
+import { IntegrationsContext } from "contexts/IntegrationsContext"
 
 export default function Index({
   workspaceAccessToken,
@@ -18,6 +19,13 @@ export default function Index({
   embedMode,
   devMode,
 }) {
+  const { setSourceHidden, setDestinationHidden } = useContext(IntegrationsContext)
+
+  useEffect(() => {
+    setSourceHidden(true)
+    setDestinationHidden(true)
+  })
+
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
   }

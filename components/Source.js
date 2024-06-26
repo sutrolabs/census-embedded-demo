@@ -9,6 +9,7 @@ import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 import { censusBaseUrl } from "@utils/url"
+import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
 
 export default function Source({
   label,
@@ -35,6 +36,7 @@ export default function Source({
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
   const source = sources.find((item) => item.type === type)
   const isChecked = isCheckedOverride ?? !!source
+  const formatLinkToHideSourceDestination = useHideSourceDestination()
 
   const [sourceConnectLink, getNewSourceConnectLink] = useSourceConnectLink(
     sourceConnectLinks,
@@ -47,7 +49,7 @@ export default function Source({
     if (embedMode) {
       setShowEmbeddedFrame(true)
     } else {
-      window.location.href = sourceConnectLinkData.uri
+      window.location.href = formatLinkToHideSourceDestination(sourceConnectLinkData.uri)
     }
   }
 
@@ -212,7 +214,10 @@ export default function Source({
               useCase={"import"}
             />
           ) : (
-            <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
+            <EmbeddedFrame
+              connectLink={formatLinkToHideSourceDestination(sourceConnectLink?.uri)}
+              onExit={onExitedConnectionFlow}
+            />
           ))}
       </Card>
       {isChecked && source ? (

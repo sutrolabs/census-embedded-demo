@@ -73,7 +73,7 @@ export function SyncObject({
       if (embedMode) {
         setEditSyncWizardLink(formatLinkToHideSourceDestination(data.uri))
       } else {
-        window.location.href = data.uri
+        window.location.href = formatLinkToHideSourceDestination(data.uri)
       }
     } finally {
       setLoading(false)

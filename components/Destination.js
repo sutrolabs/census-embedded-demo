@@ -4,6 +4,7 @@ import { useState } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Toggle from "@components/Toggle"
+import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
 
 export default function Destination({
   label,
@@ -30,6 +31,7 @@ export default function Destination({
     (item) => item.destination_attributes.connection_id === destination?.id,
   ).length
   const disabled = disabledOverride ?? !destination
+  const formatLinkToHideSourceDestination = useHideSourceDestination()
 
   return (
     <Card className="flex flex-col gap-4" disabled={disabled}>
@@ -115,7 +117,7 @@ export default function Destination({
             } else if (destinationConnectLink) {
               setLoading(true)
               setDisabledOverride(false)
-              window.location.href = destinationConnectLink.uri
+              window.location.href = formatLinkToHideSourceDestination(destinationConnectLink.uri)
             } else {
               try {
                 setLoading(true)
@@ -134,7 +136,7 @@ export default function Destination({
                   throw new Error(response.statusText)
                 }
                 const data = await response.json()
-                window.location.href = data.uri
+                window.location.href = formatLinkToHideSourceDestination(data.uri)
               } catch (error) {
                 setLoading(false)
                 setDisabledOverride()

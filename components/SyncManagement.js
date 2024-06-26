@@ -6,6 +6,7 @@ import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { censusBaseUrl } from "@utils/url"
+import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
 
 export default function SyncManagement({
   sourceId,
@@ -24,14 +25,16 @@ export default function SyncManagement({
   stepText,
   useCase,
 }) {
+  const formatLinkToHideSourceDestination = useHideSourceDestination()
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
-  const linkWithSourcePrepopulated =
-    syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
+  const linkWithSourcePrepopulated = formatLinkToHideSourceDestination(
+    syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse",
+  )
 
   const initiateSyncWizardFlow = () => {
     if (embedMode) {
