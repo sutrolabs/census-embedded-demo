@@ -2,6 +2,7 @@ import Head from "next/head"
 import { useContext, useEffect } from "react"
 
 import Source from "@components/Source"
+import { destinationName, destinationObject } from "@utils/preset_source_destination"
 
 import { IntegrationsContext } from "contexts/IntegrationsContext"
 
@@ -10,6 +11,7 @@ export default function ImportDataset({
   dd,
   sources,
   setSources,
+  destinations,
   refetchSyncs,
   refetchSources,
   sourceConnectLinks,
@@ -24,11 +26,18 @@ export default function ImportDataset({
   embedMode,
   devMode,
 }) {
-  const { setDestinationHidden } = useContext(IntegrationsContext)
+  const { setDestinationHidden, setDestination } = useContext(IntegrationsContext)
 
   useEffect(() => {
+    const marketingMagnetDestination = destinations.find((d) => d.name == destinationName)
+    if (!marketingMagnetDestination) return
+
+    setDestination({
+      connection_id: marketingMagnetDestination.id,
+      object_name: destinationObject,
+    })
     setDestinationHidden(true)
-  }, [setDestinationHidden])
+  }, [setDestination, setDestinationHidden])
 
   return (
     <>

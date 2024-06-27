@@ -3,14 +3,34 @@ import { useContext } from "react"
 import { IntegrationsContext } from "contexts/IntegrationsContext"
 
 export const useHideSourceDestination = () => {
-  const { sourceHidden, destinationHidden } = useContext(IntegrationsContext)
+  const { sourceHidden, destinationHidden, destination, source } = useContext(IntegrationsContext)
 
   const formatLinkToHideSourceDestination = (link) => {
     if (!link) return link
 
     let formattedLink = link
-    if (sourceHidden) formattedLink += "&source_hidden=true"
-    else if (destinationHidden) formattedLink += "&destination_hidden=true"
+
+    // If the source or destination is hidden, it must be preset
+    if (source?.connection_id && source?.model_id) {
+      formattedLink =
+        formattedLink +
+        "&source_connection_id=" +
+        source.source_connection_id +
+        "&model_id=" +
+        source.model_id
+
+      if (sourceHidden) formattedLink += "&source_hidden=true"
+    }
+    if (destination?.connection_id && destination?.object_name) {
+      formattedLink =
+        formattedLink +
+        "&destination_connection_id=" +
+        destination.connection_id +
+        "&destination_object_name=" +
+        destination.object_name
+
+      if (destinationHidden) formattedLink += "&destination_hidden=true"
+    }
 
     return formattedLink
   }
