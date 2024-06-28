@@ -29,11 +29,11 @@ export default function ImportDataset({
   const { setDestinationHidden, setDestination } = useContext(IntegrationsContext)
 
   useEffect(() => {
-    const marketingMagnetDestination = destinations.find((d) => d.name == destinationName)
-    if (!marketingMagnetDestination) return
+    const presetDestination = destinations.find((d) => d.label == destinationName)
+    if (!presetDestination) return
 
     setDestination({
-      connection_id: marketingMagnetDestination.id,
+      connection_id: presetDestination.id,
       object_name: destinationObject,
     })
     setDestinationHidden(true)

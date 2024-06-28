@@ -5,8 +5,11 @@ import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
 import { IntegrationsContext } from "contexts/IntegrationsContext"
+import { censusBaseUrl } from "@utils/url"
+import { sourceLabel, sourceModelName } from "@utils/preset_source_destination"
 
 export default function Index({
+  sources,
   workspaceAccessToken,
   destinations,
   setDestinations,
@@ -19,12 +22,24 @@ export default function Index({
   embedMode,
   devMode,
 }) {
-  const { setSourceHidden, setDestinationHidden } = useContext(IntegrationsContext)
+  const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
 
   useEffect(() => {
-    setSourceHidden(true)
-    setDestinationHidden(true)
-  })
+    async function prefillAndHideSource(sourceId) {
+      const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
+        method: "GET",
+        headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
+      })
+      const res = await apiResponse.json()
+
+      const models = res.data
+      const presetModel = models.find((m) => m.name == sourceModelName)
+      setSource({ connection_id: sourceId, model_id: presetModel.id })
+      setSourceHidden(true)
+    }
+    const presetSource = sources.find((s) => s.label == sourceLabel)
+    prefillAndHideSource(presetSource?.id)
+  }, [sources, destinations, setSource, setSourceHidden])
 
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
