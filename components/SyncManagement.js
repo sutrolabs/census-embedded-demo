@@ -41,32 +41,26 @@ export default function SyncManagement({
     if (embedMode) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourceDestinationPopulation
+      window.location.href = linkWithSourceDestinationQueryParams
     }
   }
 
-  const formatLinkToHideSourceDestination = usePrepopulateHideSourceDestination()
-  const linkWithSourcePrepopulated = formatLinkToHideSourceDestination(syncManagementLink?.uri)
-  let linkWithSourceDestinationPopulation = linkWithSourcePrepopulated
-  if (destination) {
-    // linkWithSourceDestinationPopulation =
+  const formatLinkToPrepopulateHideSourceDestination = usePrepopulateHideSourceDestination()
+  const formattedLink = formatLinkToPrepopulateHideSourceDestination(syncManagementLink?.uri)
+  let linkWithSourceDestinationQueryParams = formattedLink
+
+  // If a destination is passed to the component as opposed to being set in the Integrations context
+  // it is because there are multiple destinations being displayed on the page, and a global destination
+  // state cannot be set
+  if (destination && destination.id) {
+    linkWithSourceDestinationQueryParams += `&destination_connection_id=${destination.id}&destination_hidden=true`
+
     if (destination.name == "Facebook Ads") {
-      linkWithSourceDestinationPopulation =
-        linkWithSourceDestinationPopulation +
-        "&destination_connection_id=" +
-        destination.id +
-        "&destination_object_name=customer" +
-        "&destination_hidden=true"
-    } else {
-      linkWithSourceDestinationPopulation =
-        linkWithSourceDestinationPopulation +
-        "&destination_connection_id=" +
-        destination.id +
-        "&destination_object_name=user_data" +
-        "&destination_hidden=true"
+      linkWithSourceDestinationQueryParams += "&destination_object_name=customer"
+    } else if (destination.name == "Google Ads") {
+      linkWithSourceDestinationQueryParams += "&destination_object_name=user_data"
     }
   }
-  const { setDestination, setDestinationHidden } = useContext(IntegrationsContext)
 
   const showAddNewSyncButton = useCase === "import" || syncs.length === 0
 
@@ -94,8 +88,7 @@ export default function SyncManagement({
             refetchSyncs={refetchSyncs}
             resetSyncManagementLink={resetSyncManagementLink}
             setShowCreateSyncWizard={setShowCreateSyncWizard}
-            linkWithSourcePrepopulated={linkWithSourceDestinationPopulation}
-            destination={destination}
+            linkWithSourcePrepopulated={linkWithSourceDestinationQueryParams}
           />
         ) : showAddNewSyncButton ? (
           <Button

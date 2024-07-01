@@ -19,7 +19,7 @@ export function SyncObject({
   devMode,
   embedMode,
 }) {
-  const formatLinkToHideSourceDestination = usePrepopulateHideSourceDestination()
+  const formatLinkToPrepopulateHideSourceDestination = usePrepopulateHideSourceDestination()
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const [editSyncWizardLink, setEditSyncWizardLink] = useState(null)
@@ -71,9 +71,9 @@ export function SyncObject({
       }
       const data = await response.json()
       if (embedMode) {
-        setEditSyncWizardLink(formatLinkToHideSourceDestination(data.uri, true))
+        setEditSyncWizardLink(formatLinkToPrepopulateHideSourceDestination(data.uri, true))
       } else {
-        window.location.href = formatLinkToHideSourceDestination(data.uri, true)
+        window.location.href = formatLinkToPrepopulateHideSourceDestination(data.uri, true)
       }
     } finally {
       setLoading(false)

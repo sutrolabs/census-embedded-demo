@@ -5,7 +5,7 @@ import { IntegrationsContext } from "contexts/IntegrationsContext"
 export const usePrepopulateHideSourceDestination = () => {
   const { sourceHidden, destinationHidden, destination, source } = useContext(IntegrationsContext)
 
-  const formatLinkToHideSourceDestination = (link, edit = false) => {
+  const formatLinkToPrepopulateHideSourceDestination = (link, edit = false) => {
     if (!link) return link
 
     let formattedLink = link
@@ -33,5 +33,5 @@ export const usePrepopulateHideSourceDestination = () => {
     return formattedLink
   }
 
-  return formatLinkToHideSourceDestination
+  return formatLinkToPrepopulateHideSourceDestination
 }
