@@ -4,6 +4,7 @@ import Button from "@components/Button"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
+import { usePrepopulateHideSourceDestination } from "@hooks/use-prepopulate-hide-source-destination"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { censusBaseUrl } from "@utils/url"
 
@@ -23,6 +24,7 @@ export default function SyncManagement({
   addNewSyncText,
   stepText,
   useCase,
+  destination,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -30,17 +32,38 @@ export default function SyncManagement({
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
-  const linkWithSourcePrepopulated =
-    syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
 
   const initiateSyncWizardFlow = () => {
     if (embedMode) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourcePrepopulated
+      window.location.href = linkWithSourceDestinationQueryParams
     }
   }
 
+  const formatLinkToPrepopulateHideSourceDestination = usePrepopulateHideSourceDestination()
+
+  const formatSyncManagementLink = (link, editMode = false) => {
+    const formattedLink = formatLinkToPrepopulateHideSourceDestination(link, editMode)
+
+    let linkWithSourceDestinationQueryParams = formattedLink
+
+    // If a destination is passed to the component as opposed to being set in the Integrations context
+    // it is because there are multiple destinations being displayed on the page, and a global destination
+    // state cannot be set
+    if (destination && destination.id) {
+      linkWithSourceDestinationQueryParams += `&destination_connection_id=${destination.id}&destination_hidden=true`
+
+      if (destination.name == "Facebook Ads") {
+        linkWithSourceDestinationQueryParams += "&destination_object_name=customer"
+      } else if (destination.name == "Google Ads") {
+        linkWithSourceDestinationQueryParams += "&destination_object_name=user_data"
+      }
+    }
+    return linkWithSourceDestinationQueryParams
+  }
+
+  const linkWithSourceDestinationQueryParams = formatSyncManagementLink(syncManagementLink?.uri)
   const showAddNewSyncButton = useCase === "import" || syncs.length === 0
 
   return (
@@ -58,6 +81,7 @@ export default function SyncManagement({
             runs={runs}
             devMode={devMode}
             embedMode={embedMode}
+            formatSyncManagementLink={formatSyncManagementLink}
           />
         ))}
         {showCreateSyncWizard ? (
@@ -67,7 +91,7 @@ export default function SyncManagement({
             refetchSyncs={refetchSyncs}
             resetSyncManagementLink={resetSyncManagementLink}
             setShowCreateSyncWizard={setShowCreateSyncWizard}
-            linkWithSourcePrepopulated={linkWithSourcePrepopulated}
+            linkWithSourcePrepopulated={linkWithSourceDestinationQueryParams}
           />
         ) : showAddNewSyncButton ? (
           <Button
