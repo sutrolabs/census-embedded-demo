@@ -44,7 +44,15 @@ export default function ImportDataset({
       })
       setDestinationHidden(true)
     }
-  }, [setSource, setSourceHidden, destinations, setDestination, setDestinationHidden])
+  }, [
+    setSource,
+    setSourceHidden,
+    destinations,
+    setDestination,
+    setDestinationHidden,
+    destinationLabel,
+    destinationObject,
+  ])
 
   return (
     <>

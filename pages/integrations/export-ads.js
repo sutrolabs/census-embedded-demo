@@ -27,6 +27,7 @@ export default function Index({
   useEffect(() => {
     setDestination(null)
     setDestinationHidden(false)
+
     async function prefillAndHideSource(sourceId) {
       const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
         method: "GET",
@@ -44,6 +45,7 @@ export default function Index({
         setSourceHidden(false)
       }
     }
+
     const presetSource = sources.find((s) => s.label == sourceLabel)
     prefillAndHideSource(presetSource?.id)
   }, [sources, setSource, setSourceHidden, censusBaseUrl, sourceModelName, sourceLabel])
