@@ -9,11 +9,13 @@ import { Card } from "@components/Card"
 import { IntegrationsContext } from "contexts/IntegrationsContext"
 
 export default function Index() {
-  const { setSourceHidden, setDestinationHidden } = useContext(IntegrationsContext)
+  const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
 
   useEffect(() => {
     setSourceHidden(false)
+    setSource(null)
     setDestinationHidden(false)
+    setDestination(null)
   })
 
   return (
