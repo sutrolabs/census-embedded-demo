@@ -71,9 +71,9 @@ export function SyncObject({
       }
       const data = await response.json()
       if (embedMode) {
-        setEditSyncWizardLink(formatLinkToHideSourceDestination(data.uri))
+        setEditSyncWizardLink(formatLinkToHideSourceDestination(data.uri, true))
       } else {
-        window.location.href = formatLinkToHideSourceDestination(data.uri)
+        window.location.href = formatLinkToHideSourceDestination(data.uri, true)
       }
     } finally {
       setLoading(false)

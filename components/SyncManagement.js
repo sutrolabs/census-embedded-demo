@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useContext, useEffect } from "react"
 
 import Button from "@components/Button"
 import RequestTooltip from "@components/RequestTooltip"
@@ -7,6 +7,8 @@ import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { censusBaseUrl } from "@utils/url"
 import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
+import { IntegrationsContext } from "contexts/IntegrationsContext"
+import { destinationObject } from "@utils/preset_source_destination"
 
 export default function SyncManagement({
   sourceId,
@@ -24,25 +26,46 @@ export default function SyncManagement({
   addNewSyncText,
   stepText,
   useCase,
+  destination,
 }) {
-  const formatLinkToHideSourceDestination = useHideSourceDestination()
+  // const formatLinkToHideSourceDestination = useHideSourceDestination()
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
-  const linkWithSourcePrepopulated = formatLinkToHideSourceDestination(
-    syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse",
-  )
 
   const initiateSyncWizardFlow = () => {
     if (embedMode) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourcePrepopulated
+      window.location.href = linkWithSourceDestinationPopulation
     }
   }
+
+  const formatLinkToHideSourceDestination = useHideSourceDestination()
+  const linkWithSourcePrepopulated = formatLinkToHideSourceDestination(syncManagementLink?.uri)
+  let linkWithSourceDestinationPopulation = linkWithSourcePrepopulated
+  if (destination) {
+    // linkWithSourceDestinationPopulation =
+    if (destination.name == "Facebook Ads") {
+      linkWithSourceDestinationPopulation =
+        linkWithSourceDestinationPopulation +
+        "&destination_connection_id=" +
+        destination.id +
+        "&destination_object_name=customer" +
+        "&destination_hidden=true"
+    } else {
+      linkWithSourceDestinationPopulation =
+        linkWithSourceDestinationPopulation +
+        "&destination_connection_id=" +
+        destination.id +
+        "&destination_object_name=user_data" +
+        "&destination_hidden=true"
+    }
+  }
+  const { setDestination, setDestinationHidden } = useContext(IntegrationsContext)
 
   const showAddNewSyncButton = useCase === "import" || syncs.length === 0
 
@@ -70,7 +93,8 @@ export default function SyncManagement({
             refetchSyncs={refetchSyncs}
             resetSyncManagementLink={resetSyncManagementLink}
             setShowCreateSyncWizard={setShowCreateSyncWizard}
-            linkWithSourcePrepopulated={linkWithSourcePrepopulated}
+            linkWithSourcePrepopulated={linkWithSourceDestinationPopulation}
+            destination={destination}
           />
         ) : showAddNewSyncButton ? (
           <Button

@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
@@ -25,6 +25,8 @@ export default function Index({
   const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
 
   useEffect(() => {
+    setDestination(null)
+    setDestinationHidden(false)
     async function prefillAndHideSource(sourceId) {
       const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
         method: "GET",
@@ -34,12 +36,17 @@ export default function Index({
 
       const models = res.data
       const presetModel = models.find((m) => m.name == sourceModelName)
+
       setSource({ connection_id: sourceId, model_id: presetModel.id })
-      setSourceHidden(true)
+      if (sourceId && presetModel.id) {
+        setSourceHidden(true)
+      } else {
+        setSourceHidden(false)
+      }
     }
     const presetSource = sources.find((s) => s.label == sourceLabel)
     prefillAndHideSource(presetSource?.id)
-  }, [sources, destinations, setSource, setSourceHidden])
+  }, [sources, setSource, setSourceHidden, censusBaseUrl, sourceModelName, sourceLabel])
 
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
@@ -93,6 +100,7 @@ export default function Index({
       />
       <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
       <Segment
+        destinations={destinations}
         facebookAudienceSyncs={facebookAudienceSyncs}
         googleAudienceSyncs={googleAudienceSyncs}
         runsLoading={runsLoading}
@@ -111,6 +119,7 @@ export default function Index({
 }
 
 function Segment({
+  destinations,
   facebookAudienceSyncs,
   googleAudienceSyncs,
   refetchSyncs,
@@ -120,6 +129,14 @@ function Segment({
   devMode,
   embedMode,
 }) {
+  const [googleAdsDestination, setGoogleAdsDestination] = useState(null)
+  const [facebookAdsDestination, setFacebookAdsDestination] = useState(null)
+
+  useEffect(() => {
+    setGoogleAdsDestination(destinations.find((d) => d.type == "google_ads"))
+    setFacebookAdsDestination(destinations.find((d) => d.type == "facebook"))
+  }, [])
+
   return (
     <Card className="flex flex-col gap-4" disabled>
       <h3 className="flex flex-row justify-between text-lg font-medium">
@@ -145,6 +162,7 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
+          destination={googleAdsDestination}
         />
       </Card>
       <Card>
@@ -163,6 +181,7 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
+          destination={facebookAdsDestination}
         />
       </Card>
     </Card>
