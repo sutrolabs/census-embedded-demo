@@ -11,12 +11,7 @@ export default function SyncCreationWizard({
   resetSyncManagementLink,
   setShowCreateSyncWizard,
   linkWithSourcePrepopulated,
-  destination,
 }) {
-  // useEffect(() => {
-  //   set
-  // })
-  // // const link = formatLinkToHideSourceDestination(linkWithSourcePrepopulated)
   return (
     <Card>
       <EmbeddedFrame
