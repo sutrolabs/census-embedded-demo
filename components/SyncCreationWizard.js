@@ -1,8 +1,5 @@
-import { useEffect, useContext } from "react"
 import { Card } from "@components/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
-import { IntegrationsContext } from "contexts/IntegrationsContext"
-import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
 
 export default function SyncCreationWizard({
   sourceId,
