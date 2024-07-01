@@ -1,14 +1,16 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext } from "react"
 
 import Button from "@components/Button"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
+
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
+import { usePrepopulateHideSourceDestination } from "@hooks/use-prepopulate-hide-source-destination"
+
 import { censusBaseUrl } from "@utils/url"
-import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
+
 import { IntegrationsContext } from "contexts/IntegrationsContext"
-import { destinationObject } from "@utils/preset_source_destination"
 
 export default function SyncManagement({
   sourceId,
@@ -28,7 +30,6 @@ export default function SyncManagement({
   useCase,
   destination,
 }) {
-  // const formatLinkToHideSourceDestination = useHideSourceDestination()
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
@@ -44,7 +45,7 @@ export default function SyncManagement({
     }
   }
 
-  const formatLinkToHideSourceDestination = useHideSourceDestination()
+  const formatLinkToHideSourceDestination = usePrepopulateHideSourceDestination()
   const linkWithSourcePrepopulated = formatLinkToHideSourceDestination(syncManagementLink?.uri)
   let linkWithSourceDestinationPopulation = linkWithSourcePrepopulated
   if (destination) {

@@ -2,7 +2,7 @@ import { useContext } from "react"
 
 import { IntegrationsContext } from "contexts/IntegrationsContext"
 
-export const useHideSourceDestination = () => {
+export const usePrepopulateHideSourceDestination = () => {
   const { sourceHidden, destinationHidden, destination, source } = useContext(IntegrationsContext)
 
   const formatLinkToHideSourceDestination = (link, edit = false) => {
@@ -10,7 +10,6 @@ export const useHideSourceDestination = () => {
 
     let formattedLink = link
 
-    // If the source or destination is hidden, it must be preset
     if (source?.connection_id && source?.model_id) {
       if (!edit) {
         formattedLink =
@@ -19,6 +18,7 @@ export const useHideSourceDestination = () => {
 
       if (sourceHidden) formattedLink += "&source_hidden=true"
     }
+
     if (destination?.connection_id && destination?.object_name) {
       formattedLink =
         formattedLink +

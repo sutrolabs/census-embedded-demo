@@ -7,7 +7,7 @@ import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 import { censusBaseUrl } from "@utils/url"
-import { useHideSourceDestination } from "@hooks/use-hide-source-destination"
+import { usePrepopulateHideSourceDestination } from "@hooks/use-prepopulate-hide-source-destination"
 
 export function SyncObject({
   workspaceAccessToken,
@@ -19,7 +19,7 @@ export function SyncObject({
   devMode,
   embedMode,
 }) {
-  const formatLinkToHideSourceDestination = useHideSourceDestination()
+  const formatLinkToHideSourceDestination = usePrepopulateHideSourceDestination()
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const [editSyncWizardLink, setEditSyncWizardLink] = useState(null)
