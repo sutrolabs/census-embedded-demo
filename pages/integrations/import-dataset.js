@@ -2,9 +2,8 @@ import Head from "next/head"
 import { useContext, useEffect } from "react"
 
 import Source from "@components/Source"
-import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
-
 import { IntegrationsContext } from "@contexts/IntegrationsContext"
+import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -44,15 +43,7 @@ export default function ImportDataset({
       })
       setDestinationHidden(true)
     }
-  }, [
-    setSource,
-    setSourceHidden,
-    destinations,
-    setDestination,
-    setDestinationHidden,
-    destinationLabel,
-    destinationObject,
-  ])
+  }, [setSource, setSourceHidden, destinations, setDestination, setDestinationHidden])
 
   return (
     <>
