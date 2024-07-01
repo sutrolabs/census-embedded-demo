@@ -1,6 +1,6 @@
 import { useContext } from "react"
 
-import { IntegrationsContext } from "contexts/IntegrationsContext"
+import { IntegrationsContext } from "@contexts/IntegrationsContext"
 
 export const usePrepopulateHideSourceDestination = () => {
   const { sourceHidden, destinationHidden, destination, source } = useContext(IntegrationsContext)

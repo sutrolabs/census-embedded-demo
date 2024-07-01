@@ -4,7 +4,7 @@ import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
-import { IntegrationsContext } from "contexts/IntegrationsContext"
+import { IntegrationsContext } from "@contexts/IntegrationsContext"
 import { censusBaseUrl } from "@utils/url"
 import { sourceLabel, sourceModelName } from "@utils/preset_source_destination"
 

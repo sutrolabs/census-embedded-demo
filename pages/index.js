@@ -1,12 +1,13 @@
-import { useContext, useEffect } from "react"
 import Head from "next/head"
 import Link from "next/link"
+import { useContext, useEffect } from "react"
 import { Line } from "react-chartjs-2"
 
 import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
-import { IntegrationsContext } from "contexts/IntegrationsContext"
+
+import { IntegrationsContext } from "@contexts/IntegrationsContext"
 
 export default function Index() {
   const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)

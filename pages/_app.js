@@ -11,9 +11,8 @@ import Loading from "@components/Loading"
 import MainLayout from "@components/MainLayout"
 import { Setup } from "@components/Setup"
 import Sidebar from "@components/Sidebar"
+import { IntegrationsProvider } from "@contexts/IntegrationsContext"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
-
-import { IntegrationsProvider } from "contexts/IntegrationsContext"
 
 registry.add(LineElement)
 registry.add(PointElement)

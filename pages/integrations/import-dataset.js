@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react"
 import Source from "@components/Source"
 import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
 
-import { IntegrationsContext } from "contexts/IntegrationsContext"
+import { IntegrationsContext } from "@contexts/IntegrationsContext"
 
 export default function ImportDataset({
   workspaceAccessToken,
