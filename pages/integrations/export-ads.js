@@ -49,15 +49,7 @@ export default function Index({
 
     const presetSource = sources.find((s) => s.label == sourceLabel)
     prefillAndHideSource(presetSource?.id)
-  }, [
-    sources,
-    setSource,
-    setSourceHidden,
-    sourceModelName,
-    sourceLabel,
-    setDestination,
-    setDestinationHidden,
-  ])
+  }, [sources, setSource, setSourceHidden, setDestination, setDestinationHidden, workspaceAccessToken])
 
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)

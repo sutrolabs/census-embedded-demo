@@ -1,13 +1,11 @@
-import React, { useState, useContext } from "react"
+import React, { useState } from "react"
 
 import Button from "@components/Button"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
-
-import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { usePrepopulateHideSourceDestination } from "@hooks/use-prepopulate-hide-source-destination"
-
+import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SyncManagement({
