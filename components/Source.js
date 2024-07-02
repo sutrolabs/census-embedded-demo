@@ -210,6 +210,7 @@ export default function Source({
               addNewSyncText={"Configure data to import to Marketing Magnet"}
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}
+              // syncLinkQueryParams={`?sourceId=${source.id}&sourceName=${}&source_hidden=true`}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />

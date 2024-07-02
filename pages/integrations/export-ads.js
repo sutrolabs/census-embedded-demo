@@ -1,3 +1,4 @@
+import { IntegrationsContext } from "@contexts/IntegrationsContext"
 import Head from "next/head"
 import { useContext, useEffect, useState } from "react"
 
@@ -5,7 +6,6 @@ import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
-import { IntegrationsContext } from "@contexts/IntegrationsContext"
 import { sourceLabel, sourceModelName } from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
@@ -166,6 +166,7 @@ function Segment({
           addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
           destination={googleAdsDestination}
+          // syncLinkQueryParams={`?sourceId=${}&sourceName=${}&source_hidden=true&destination_name=google_ads&destination_obect=...}`}
         />
       </Card>
       <Card>
@@ -185,6 +186,7 @@ function Segment({
           addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
           destination={facebookAdsDestination}
+          // syncLinkQueryParams={`?sourceId=${}&sourceName=${}&source_hidden=true&destination_name=facebook&destination_obect=...}`}
         />
       </Card>
     </Card>
