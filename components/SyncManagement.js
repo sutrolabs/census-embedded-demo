@@ -4,7 +4,6 @@ import Button from "@components/Button"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
-import { usePrepopulateHideSourceDestination } from "@hooks/use-prepopulate-hide-source-destination"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { censusBaseUrl } from "@utils/url"
 
@@ -68,7 +67,6 @@ export default function SyncManagement({
             devMode={devMode}
             embedMode={embedMode}
             queryParams={removeSourceQueryParams()}
-            // formatSyncManagementLink={formatSyncManagementLink}
           />
         ))}
         {showCreateSyncWizard ? (

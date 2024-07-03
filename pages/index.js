@@ -6,18 +6,8 @@ import { Line } from "react-chartjs-2"
 import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
-import { IntegrationsContext } from "@contexts/IntegrationsContext"
 
 export default function Index() {
-  const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
-
-  useEffect(() => {
-    setSourceHidden(false)
-    setSource(null)
-    setDestinationHidden(false)
-    setDestination(null)
-  })
-
   return (
     <>
       <Head>

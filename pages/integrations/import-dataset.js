@@ -2,7 +2,6 @@ import Head from "next/head"
 import { useContext, useEffect } from "react"
 
 import Source from "@components/Source"
-import { IntegrationsContext } from "@contexts/IntegrationsContext"
 import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
 
 export default function ImportDataset({
@@ -25,26 +24,6 @@ export default function ImportDataset({
   embedMode,
   devMode,
 }) {
-  const { setDestinationHidden, setDestination, setSourceHidden, setSource } = useContext(IntegrationsContext)
-
-  useEffect(() => {
-    // Remove any previously set state from other pages
-    setSource(null)
-    setSourceHidden(false)
-
-    const presetDestination = destinations.find((d) => d.name == destinationLabel)
-    if (!presetDestination) {
-      setDestination(null)
-      setDestinationHidden(false)
-    } else {
-      setDestination({
-        connection_id: presetDestination.id,
-        object_name: destinationObject,
-      })
-      setDestinationHidden(true)
-    }
-  }, [setSource, setSourceHidden, destinations, setDestination, setDestinationHidden])
-
   return (
     <>
       <Head>

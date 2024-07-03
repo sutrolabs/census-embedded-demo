@@ -1,4 +1,3 @@
-import { IntegrationsContext } from "@contexts/IntegrationsContext"
 import Head from "next/head"
 import { useContext, useEffect, useState } from "react"
 
@@ -23,8 +22,6 @@ export default function Index({
   embedMode,
   devMode,
 }) {
-  // const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
-
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
   }
