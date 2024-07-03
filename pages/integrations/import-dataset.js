@@ -1,8 +1,6 @@
 import Head from "next/head"
-import { useContext, useEffect } from "react"
 
 import Source from "@components/Source"
-import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
 
 export default function ImportDataset({
   workspaceAccessToken,

@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
@@ -35,6 +35,7 @@ export default function Source({
   const [loading, setLoading] = useState(false)
   const [isCheckedOverride, setIsCheckedOverride] = useState()
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [presetDestination, setPresetDestination] = useState(null)
   const source = sources.find((item) => item.type === type)
   const isChecked = isCheckedOverride ?? !!source
 
@@ -45,13 +46,16 @@ export default function Source({
   )
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
+  useEffect(() => {
+    setPresetDestination(destinations.find((d) => d.name == destinationName))
+  }, [destinations])
+
   // The Source component is only called from ImportDataset, so it is safe to preset the
   // destination to Marketing Magnet
-  const presetDestination = () => {
+  const prefillDestination = () => {
     // The custom Marketing Magnet connector is required to have a unique type upon creation
     // Therefore, we check by the name
-    const presetDestination = destinations.find((d) => d.name == destinationName)
-    if (!presetDestination || !presetDestination.id || !destinationObject) return ""
+    if (!presetDestination?.id || !destinationObject) return ""
 
     return `&destination_connection_id=${presetDestination.id}&destination_object_name=${destinationObject}&destination_hidden=true`
   }
@@ -223,7 +227,7 @@ export default function Source({
               addNewSyncText={"Configure data to import to Marketing Magnet"}
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}
-              syncLinkQueryParams={presetDestination()}
+              syncLinkQueryParams={prefillDestination()}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />

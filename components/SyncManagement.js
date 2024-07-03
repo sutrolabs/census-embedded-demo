@@ -23,7 +23,6 @@ export default function SyncManagement({
   addNewSyncText,
   stepText,
   useCase,
-  destination,
   syncLinkQueryParams,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
@@ -35,7 +34,7 @@ export default function SyncManagement({
   const linkWithSourceDestinationQueryParams = syncManagementLink?.uri + syncLinkQueryParams
 
   const removeSourceQueryParams = () => {
-    const regex = /(&source_connection_id=[^&]*|&model_id=[^&]*)/g
+    const regex = /(&source_connection_id=\d+|&model_id=\d+)/g
     const sourceParamsRemoved = syncLinkQueryParams.replace(regex, "")
 
     return sourceParamsRemoved

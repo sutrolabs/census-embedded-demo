@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useContext, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
@@ -120,18 +120,16 @@ function Segment({
       const models = res.data
       setPresetModel(models.find((m) => m.name == sourceModelName))
     } catch (error) {
-      console.error("Error fetching models:", error)
+      console.error(`Error fetching ${sourceId} models:`, error)
     }
   }
 
   useEffect(() => {
-    if (sources.length > 0 && workspaceAccessToken) {
-      const source = sources.find((s) => s.label === sourceLabel)
-      if (source?.id) {
-        prefillAndHideSource(source.id)
-      }
-      setPresetSource(source)
+    const source = sources.find((s) => s.label === sourceLabel)
+    if (source?.id) {
+      prefillAndHideSource(source.id)
     }
+    setPresetSource(source)
   }, [sources, workspaceAccessToken])
 
   useEffect(() => {
@@ -143,9 +141,9 @@ function Segment({
     if (!presetSource?.id || !presetModel?.id || !destination?.id) return ""
 
     let queryParams = `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}&source_hidden=true&destination_connection_id=${destination.id}`
-    if (destination.name === "Facebook Ads") {
+    if (destination.type === "facebook") {
       queryParams += "&destination_object_name=customer&destination_hidden=true"
-    } else if (destination.name === "Google Ads") {
+    } else if (destination.type === "google_ads") {
       queryParams += "&destination_object_name=user_data&destination_hidden=true"
     }
 
