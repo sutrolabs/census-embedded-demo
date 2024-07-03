@@ -65,6 +65,7 @@ export default function ImportDataset({
         iconClassName="fa-brands fa-aws"
         workspaceAccessToken={workspaceAccessToken}
         sources={sources}
+        destinations={destinations}
         setSources={setSources}
         refetchSources={refetchSources}
         refetchSourceConnectLinks={refetchSourceConnectLinks}
@@ -86,6 +87,7 @@ export default function ImportDataset({
         iconClassName="fa-brands fa-google"
         workspaceAccessToken={workspaceAccessToken}
         sources={sources}
+        destinations={destinations}
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
@@ -107,6 +109,7 @@ export default function ImportDataset({
         iconClassName="fa-brands fa-google"
         workspaceAccessToken={workspaceAccessToken}
         sources={sources}
+        destinations={destinations}
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}
@@ -128,6 +131,7 @@ export default function ImportDataset({
         iconClassName="fa-solid fa-snowflake"
         workspaceAccessToken={workspaceAccessToken}
         sources={sources}
+        destinations={destinations}
         setSources={setSources}
         refetchSources={refetchSources}
         sourceConnectLinks={sourceConnectLinks}

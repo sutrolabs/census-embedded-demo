@@ -8,6 +8,7 @@ import RequestTooltip from "@components/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
+import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function Source({
@@ -16,6 +17,7 @@ export default function Source({
   iconClassName,
   workspaceAccessToken,
   sources,
+  destinations,
   setSources,
   refetchSources,
   sourceConnectLinks,
@@ -42,6 +44,15 @@ export default function Source({
     workspaceAccessToken,
   )
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
+
+  // The Source component is only called from ImportDataset, so it is safe to preset the
+  // destination to Marketing Magnet
+  const presetDestination = () => {
+    const presetDestination = destinations.find((d) => d.name == destinationLabel)
+    if (!presetDestination || !presetDestination.id || !destinationObject) return ""
+
+    return `&destination_connection_id=${presetDestination.id}&destination_object_name=${destinationObject}&destination_hidden=true`
+  }
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
     if (embedMode) {
@@ -210,7 +221,7 @@ export default function Source({
               addNewSyncText={"Configure data to import to Marketing Magnet"}
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}
-              // syncLinkQueryParams={`?sourceId=${source.id}&sourceName=${}&source_hidden=true`}
+              syncLinkQueryParams={presetDestination()}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />

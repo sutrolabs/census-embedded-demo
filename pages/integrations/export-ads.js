@@ -23,33 +23,7 @@ export default function Index({
   embedMode,
   devMode,
 }) {
-  const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
-
-  useEffect(() => {
-    setDestination(null)
-    setDestinationHidden(false)
-
-    async function prefillAndHideSource(sourceId) {
-      const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
-        method: "GET",
-        headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
-      })
-      const res = await apiResponse.json()
-
-      const models = res.data
-      const presetModel = models.find((m) => m.name == sourceModelName)
-
-      setSource({ connection_id: sourceId, model_id: presetModel.id })
-      if (sourceId && presetModel.id) {
-        setSourceHidden(true)
-      } else {
-        setSourceHidden(false)
-      }
-    }
-
-    const presetSource = sources.find((s) => s.label == sourceLabel)
-    prefillAndHideSource(presetSource?.id)
-  }, [sources, setSource, setSourceHidden, setDestination, setDestinationHidden, workspaceAccessToken])
+  // const { setSourceHidden, setSource, setDestinationHidden, setDestination } = useContext(IntegrationsContext)
 
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
@@ -104,6 +78,7 @@ export default function Index({
       <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
       <Segment
         destinations={destinations}
+        sources={sources}
         facebookAudienceSyncs={facebookAudienceSyncs}
         googleAudienceSyncs={googleAudienceSyncs}
         runsLoading={runsLoading}
@@ -122,6 +97,7 @@ export default function Index({
 }
 
 function Segment({
+  sources,
   destinations,
   facebookAudienceSyncs,
   googleAudienceSyncs,
@@ -132,13 +108,54 @@ function Segment({
   devMode,
   embedMode,
 }) {
+  const [presetModel, setPresetModel] = useState(null)
+  const [presetSource, setPresetSource] = useState(null)
   const [googleAdsDestination, setGoogleAdsDestination] = useState(null)
   const [facebookAdsDestination, setFacebookAdsDestination] = useState(null)
 
+  const prefillAndHideSource = async (sourceId) => {
+    try {
+      const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
+        method: "GET",
+        headers: { authorization: `Bearer ${workspaceAccessToken}` },
+      })
+      const res = await apiResponse.json()
+      const models = res.data
+      console.log("models", models)
+      setPresetModel(models.find((m) => m.name == sourceModelName))
+    } catch (error) {
+      console.error("Error fetching models:", error)
+    }
+  }
+
   useEffect(() => {
-    setGoogleAdsDestination(destinations.find((d) => d.type == "google_ads"))
-    setFacebookAdsDestination(destinations.find((d) => d.type == "facebook"))
+    if (sources.length > 0 && workspaceAccessToken) {
+      const source = sources.find((s) => s.label === sourceLabel)
+      console.log("source", source)
+      if (source?.id) {
+        prefillAndHideSource(source.id)
+      }
+      setPresetSource(source)
+    }
+  }, [sources, workspaceAccessToken])
+
+  useEffect(() => {
+    setGoogleAdsDestination(destinations.find((d) => d.type === "google_ads"))
+    setFacebookAdsDestination(destinations.find((d) => d.type === "facebook"))
   }, [destinations])
+
+  const presetSourceAndDestination = (destination) => {
+    if (!presetSource?.id || !presetModel?.id || !destination?.id) return ""
+
+    let queryParams = `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}&source_hidden=true&destination_connection_id=${destination.id}`
+    if (destination.name === "Facebook Ads") {
+      queryParams += "&destination_object_name=customer&destination_hidden=true"
+    } else if (destination.name === "Google Ads") {
+      queryParams += "&destination_object_name=user_data&destination_hidden=true"
+    }
+
+    return queryParams
+  }
 
   return (
     <Card className="flex flex-col gap-4" disabled>
@@ -165,8 +182,8 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
-          destination={googleAdsDestination}
-          // syncLinkQueryParams={`?sourceId=${}&sourceName=${}&source_hidden=true&destination_name=google_ads&destination_obect=...}`}
+          // destination={googleAdsDestination}
+          syncLinkQueryParams={presetSourceAndDestination(googleAdsDestination)}
         />
       </Card>
       <Card>
@@ -185,8 +202,8 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
-          destination={facebookAdsDestination}
-          // syncLinkQueryParams={`?sourceId=${}&sourceName=${}&source_hidden=true&destination_name=facebook&destination_obect=...}`}
+          // destination={facebookAdsDestination}
+          syncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination)}
         />
       </Card>
     </Card>

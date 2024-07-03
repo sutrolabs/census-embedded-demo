@@ -25,6 +25,7 @@ export default function SyncManagement({
   stepText,
   useCase,
   destination,
+  syncLinkQueryParams,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -32,6 +33,14 @@ export default function SyncManagement({
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
+  const linkWithSourceDestinationQueryParams = syncManagementLink?.uri + syncLinkQueryParams
+
+  const removeSourceQueryParams = () => {
+    const regex = /(&source_connection_id=[^&]*|&model_id=[^&]*)/g
+    const sourceParamsRemoved = syncLinkQueryParams.replace(regex, "")
+
+    return sourceParamsRemoved
+  }
 
   const initiateSyncWizardFlow = () => {
     if (embedMode) {
@@ -41,29 +50,6 @@ export default function SyncManagement({
     }
   }
 
-  const formatLinkToPrepopulateHideSourceDestination = usePrepopulateHideSourceDestination()
-
-  const formatSyncManagementLink = (link, editMode = false) => {
-    const formattedLink = formatLinkToPrepopulateHideSourceDestination(link, editMode)
-
-    let linkWithSourceDestinationQueryParams = formattedLink
-
-    // If a destination is passed to the component as opposed to being set in the Integrations context
-    // it is because there are multiple destinations being displayed on the page, and a global destination
-    // state cannot be set
-    if (destination && destination.id) {
-      linkWithSourceDestinationQueryParams += `&destination_connection_id=${destination.id}&destination_hidden=true`
-
-      if (destination.name == "Facebook Ads") {
-        linkWithSourceDestinationQueryParams += "&destination_object_name=customer"
-      } else if (destination.name == "Google Ads") {
-        linkWithSourceDestinationQueryParams += "&destination_object_name=user_data"
-      }
-    }
-    return linkWithSourceDestinationQueryParams
-  }
-
-  const linkWithSourceDestinationQueryParams = formatSyncManagementLink(syncManagementLink?.uri)
   const showAddNewSyncButton = useCase === "import" || syncs.length === 0
 
   return (
@@ -81,7 +67,8 @@ export default function SyncManagement({
             runs={runs}
             devMode={devMode}
             embedMode={embedMode}
-            formatSyncManagementLink={formatSyncManagementLink}
+            queryParams={removeSourceQueryParams()}
+            // formatSyncManagementLink={formatSyncManagementLink}
           />
         ))}
         {showCreateSyncWizard ? (
