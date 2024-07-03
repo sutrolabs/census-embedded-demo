@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
