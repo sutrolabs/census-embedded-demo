@@ -118,7 +118,6 @@ function Segment({
       })
       const res = await apiResponse.json()
       const models = res.data
-      console.log("models", models)
       setPresetModel(models.find((m) => m.name == sourceModelName))
     } catch (error) {
       console.error("Error fetching models:", error)
@@ -128,7 +127,6 @@ function Segment({
   useEffect(() => {
     if (sources.length > 0 && workspaceAccessToken) {
       const source = sources.find((s) => s.label === sourceLabel)
-      console.log("source", source)
       if (source?.id) {
         prefillAndHideSource(source.id)
       }
@@ -179,7 +177,6 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
-          // destination={googleAdsDestination}
           syncLinkQueryParams={presetSourceAndDestination(googleAdsDestination)}
         />
       </Card>
@@ -199,7 +196,6 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
-          // destination={facebookAdsDestination}
           syncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination)}
         />
       </Card>
