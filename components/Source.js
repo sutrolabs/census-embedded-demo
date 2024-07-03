@@ -50,11 +50,11 @@ export default function Source({
     setPresetDestination(destinations.find((d) => d.name == destinationName))
   }, [destinations])
 
-  // The Source component is only called from ImportDataset, so it is safe to preset the
+  // The Source component is only called from ImportDataset, so it is safe to prefill the
   // destination to Marketing Magnet
   const prefillDestination = () => {
     // The custom Marketing Magnet connector is required to have a unique type upon creation
-    // Therefore, we check by the name
+    // Therefore, we check by the name as it is more consistent across different connectors
     if (!presetDestination?.id || !destinationObject) return ""
 
     return `&destination_connection_id=${presetDestination.id}&destination_object_name=${destinationObject}&destination_hidden=true`
