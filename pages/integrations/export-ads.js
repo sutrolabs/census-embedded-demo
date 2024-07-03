@@ -130,7 +130,7 @@ function Segment({
       prefillAndHideSource(source.id)
     }
     setPresetSource(source)
-  }, [sources, workspaceAccessToken])
+  }, [sources, workspaceAccessToken, prefillAndHideSource])
 
   useEffect(() => {
     setGoogleAdsDestination(destinations.find((d) => d.type === "google_ads"))
