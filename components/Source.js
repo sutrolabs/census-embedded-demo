@@ -8,7 +8,7 @@ import RequestTooltip from "@components/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
-import { destinationLabel, destinationObject } from "@utils/preset_source_destination"
+import { destinationName, destinationObject } from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function Source({
@@ -48,7 +48,9 @@ export default function Source({
   // The Source component is only called from ImportDataset, so it is safe to preset the
   // destination to Marketing Magnet
   const presetDestination = () => {
-    const presetDestination = destinations.find((d) => d.name == destinationLabel)
+    // The custom Marketing Magnet connector is required to have a unique type upon creation
+    // Therefore, we check by the name
+    const presetDestination = destinations.find((d) => d.name == destinationName)
     if (!presetDestination || !presetDestination.id || !destinationObject) return ""
 
     return `&destination_connection_id=${presetDestination.id}&destination_object_name=${destinationObject}&destination_hidden=true`
