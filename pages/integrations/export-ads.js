@@ -110,19 +110,22 @@ function Segment({
   const [googleAdsDestination, setGoogleAdsDestination] = useState(null)
   const [facebookAdsDestination, setFacebookAdsDestination] = useState(null)
 
-  const prefillAndHideSource = async (sourceId) => {
-    try {
-      const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
-        method: "GET",
-        headers: { authorization: `Bearer ${workspaceAccessToken}` },
-      })
-      const res = await apiResponse.json()
-      const models = res.data
-      setPresetModel(models.find((m) => m.name == sourceModelName))
-    } catch (error) {
-      console.error(`Error fetching ${sourceId} models:`, error)
-    }
-  }
+  const prefillAndHideSource = useCallback(
+    async (sourceId) => {
+      try {
+        const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
+          method: "GET",
+          headers: { authorization: `Bearer ${workspaceAccessToken}` },
+        })
+        const res = await apiResponse.json()
+        const models = res.data
+        setPresetModel(models.find((m) => m.name === sourceModelName))
+      } catch (error) {
+        // do nothing, we will display the source selector if models couldn't be fetched
+      }
+    },
+    [workspaceAccessToken],
+  )
 
   useEffect(() => {
     const source = sources.find((s) => s.label === sourceLabel)
