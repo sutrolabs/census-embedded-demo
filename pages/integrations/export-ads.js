@@ -5,7 +5,7 @@ import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
-import { sourceLabel, sourceModelName } from "@utils/preset_source_destination"
+import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function Index({
@@ -119,7 +119,7 @@ function Segment({
         })
         const res = await apiResponse.json()
         const models = res.data
-        setPresetModel(models.find((m) => m.name === sourceModelName))
+        setPresetModel(models.find((m) => m.name === usersInHighGrowthCitiesModelName))
       } catch (error) {
         // do nothing, we will display the source selector if models couldn't be fetched
       }
@@ -128,7 +128,7 @@ function Segment({
   )
 
   useEffect(() => {
-    const source = sources.find((s) => s.label === sourceLabel)
+    const source = sources.find((s) => s.label === embeddedDemoSourceLabel)
     if (source?.id) {
       prefillAndHideSource(source.id)
     }
@@ -140,10 +140,15 @@ function Segment({
     setFacebookAdsDestination(destinations.find((d) => d.type === "facebook"))
   }, [destinations])
 
-  const presetSourceAndDestination = (destination) => {
+  const presetSourceAndDestination = (destination, edit = false) => {
     if (!presetSource?.id || !presetModel?.id || !destination?.id) return ""
 
-    let queryParams = `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}&source_hidden=true&destination_connection_id=${destination.id}`
+    let queryParams = `&source_hidden=true&destination_connection_id=${destination.id}`
+
+    if (!edit) {
+      queryParams += `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}`
+    }
+
     if (destination.type === "facebook") {
       queryParams += "&destination_object_name=customer&destination_hidden=true"
     } else if (destination.type === "google_ads") {
@@ -178,7 +183,8 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
-          syncLinkQueryParams={presetSourceAndDestination(googleAdsDestination)}
+          createSyncLinkQueryParams={presetSourceAndDestination(googleAdsDestination)}
+          editSyncLinkQueryParams={presetSourceAndDestination(googleAdsDestination, true)}
         />
       </Card>
       <Card>
@@ -197,7 +203,8 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
-          syncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination)}
+          createSyncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination)}
+          editSyncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination, true)}
         />
       </Card>
     </Card>

@@ -8,7 +8,10 @@ import RequestTooltip from "@components/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
-import { destinationName, destinationObject } from "@utils/preset_source_destination"
+import {
+  marketingMagnetDestinationName,
+  marketingMagnetDestinationObject,
+} from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function Source({
@@ -47,17 +50,18 @@ export default function Source({
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
   useEffect(() => {
-    setPresetDestination(destinations.find((d) => d.name == destinationName))
+    console.log("d", marketingMagnetDestinationName)
+    setPresetDestination(destinations.find((d) => d.name == marketingMagnetDestinationName))
   }, [destinations])
 
-  // The Source component is only called from ImportDataset, so it is safe to prefill the
-  // destination to Marketing Magnet
+  // The Source component is only called from ImportDataset
+  // When importing datasets, the destination will always be our application, aka Marketing Magnet
   const prefillDestination = () => {
     // The custom Marketing Magnet connector is required to have a unique type upon creation
     // Therefore, we check by the name as it is more consistent across different connectors
-    if (!presetDestination?.id || !destinationObject) return ""
+    if (!presetDestination?.id) return ""
 
-    return `&destination_connection_id=${presetDestination.id}&destination_object_name=${destinationObject}&destination_hidden=true`
+    return `&destination_connection_id=${presetDestination.id}&destination_object_name=${marketingMagnetDestinationObject}&destination_hidden=true`
   }
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
@@ -227,7 +231,8 @@ export default function Source({
               addNewSyncText={"Configure data to import to Marketing Magnet"}
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}
-              syncLinkQueryParams={prefillDestination()}
+              createSyncLinkQueryParams={prefillDestination()}
+              editSyncLinkQueryParams={prefillDestination()}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
