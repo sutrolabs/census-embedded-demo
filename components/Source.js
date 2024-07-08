@@ -50,7 +50,6 @@ export default function Source({
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
   useEffect(() => {
-    console.log("d", marketingMagnetDestinationName)
     setPresetDestination(destinations.find((d) => d.name == marketingMagnetDestinationName))
   }, [destinations])
 
