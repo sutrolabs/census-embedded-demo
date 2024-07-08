@@ -1,8 +1,8 @@
 import fetch from "node-fetch"
 import pino from "pino"
 
-import { embeddedDemoSourceLabel } from "@utils/preset_source_destination"
 import { getWorkspaceAccessToken } from "@utils/auth"
+import { embeddedDemoSourceLabel } from "@utils/preset_source_destination"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
