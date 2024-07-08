@@ -50,17 +50,23 @@ export default function Source({
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
 
   useEffect(() => {
+    // The custom Marketing Magnet connector is required to have a unique type upon creation
+    // Therefore, we check by the name as it is more consistent across different connectors
     setPresetDestination(destinations.find((d) => d.name == marketingMagnetDestinationName))
   }, [destinations])
 
   // The Source component is only called from ImportDataset
   // When importing datasets, the destination will always be our application, aka Marketing Magnet
-  const prefillDestination = () => {
-    // The custom Marketing Magnet connector is required to have a unique type upon creation
-    // Therefore, we check by the name as it is more consistent across different connectors
+  const prefillDestination = (edit = false) => {
     if (!presetDestination?.id) return ""
 
-    return `&destination_connection_id=${presetDestination.id}&destination_object_name=${marketingMagnetDestinationObject}&destination_hidden=true`
+    let queryParams = "&destination_hidden=true"
+
+    if (!edit) {
+      queryParams += `&destination_connection_id=${presetDestination.id}&destination_object_name=${marketingMagnetDestinationObject}`
+    }
+
+    return queryParams
   }
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
@@ -231,7 +237,7 @@ export default function Source({
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}
               createSyncLinkQueryParams={prefillDestination()}
-              editSyncLinkQueryParams={prefillDestination()}
+              editSyncLinkQueryParams={prefillDestination(true)}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />

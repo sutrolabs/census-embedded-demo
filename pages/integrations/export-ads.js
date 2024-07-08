@@ -143,16 +143,16 @@ function Segment({
   const presetSourceAndDestination = (destination, edit = false) => {
     if (!presetSource?.id || !presetModel?.id || !destination?.id) return ""
 
-    let queryParams = `&source_hidden=true&destination_connection_id=${destination.id}`
+    let queryParams = `&source_hidden=true&destination_hidden=true`
 
     if (!edit) {
-      queryParams += `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}`
-    }
+      queryParams += `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}&destination_connection_id=${destination.id}`
 
-    if (destination.type === "facebook") {
-      queryParams += "&destination_object_name=customer&destination_hidden=true"
-    } else if (destination.type === "google_ads") {
-      queryParams += "&destination_object_name=user_data&destination_hidden=true"
+      if (destination.type === "facebook") {
+        queryParams += "&destination_object_name=customer"
+      } else if (destination.type === "google_ads") {
+        queryParams += "&destination_object_name=user_data"
+      }
     }
 
     return queryParams
