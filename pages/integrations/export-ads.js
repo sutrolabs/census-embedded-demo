@@ -1,11 +1,15 @@
 import Head from "next/head"
+import { useEffect, useState, useCallback } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
+import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
+import { censusBaseUrl } from "@utils/url"
 
 export default function Index({
+  sources,
   workspaceAccessToken,
   destinations,
   setDestinations,
@@ -70,6 +74,8 @@ export default function Index({
       />
       <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
       <Segment
+        destinations={destinations}
+        sources={sources}
         facebookAudienceSyncs={facebookAudienceSyncs}
         googleAudienceSyncs={googleAudienceSyncs}
         runsLoading={runsLoading}
@@ -88,6 +94,8 @@ export default function Index({
 }
 
 function Segment({
+  sources,
+  destinations,
   facebookAudienceSyncs,
   googleAudienceSyncs,
   refetchSyncs,
@@ -97,6 +105,59 @@ function Segment({
   devMode,
   embedMode,
 }) {
+  const [presetModel, setPresetModel] = useState(null)
+  const [presetSource, setPresetSource] = useState(null)
+  const [googleAdsDestination, setGoogleAdsDestination] = useState(null)
+  const [facebookAdsDestination, setFacebookAdsDestination] = useState(null)
+
+  const prefillAndHideSource = useCallback(
+    async (sourceId) => {
+      try {
+        const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
+          method: "GET",
+          headers: { authorization: `Bearer ${workspaceAccessToken}` },
+        })
+        const res = await apiResponse.json()
+        const models = res.data
+        setPresetModel(models.find((m) => m.name === usersInHighGrowthCitiesModelName))
+      } catch (error) {
+        // do nothing, we will display the source selector if models couldn't be fetched
+      }
+    },
+    [workspaceAccessToken],
+  )
+
+  useEffect(() => {
+    const source = sources.find((s) => s.label === embeddedDemoSourceLabel)
+    if (source?.id) {
+      prefillAndHideSource(source.id)
+    }
+    setPresetSource(source)
+  }, [sources, workspaceAccessToken, prefillAndHideSource])
+
+  useEffect(() => {
+    setGoogleAdsDestination(destinations.find((d) => d.type === "google_ads"))
+    setFacebookAdsDestination(destinations.find((d) => d.type === "facebook"))
+  }, [destinations])
+
+  const presetSourceAndDestination = (destination, edit = false) => {
+    if (!presetSource?.id || !presetModel?.id || !destination?.id) return ""
+
+    let queryParams = `&source_hidden=true&destination_hidden=true`
+
+    if (!edit) {
+      queryParams += `&source_connection_id=${presetSource.id}&model_id=${presetModel.id}&destination_connection_id=${destination.id}`
+
+      if (destination.type === "facebook") {
+        queryParams += "&destination_object_name=customer"
+      } else if (destination.type === "google_ads") {
+        queryParams += "&destination_object_name=user_data"
+      }
+    }
+
+    return queryParams
+  }
+
   return (
     <Card className="flex flex-col gap-4" disabled>
       <h3 className="flex flex-row justify-between text-lg font-medium">
@@ -122,6 +183,8 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
+          createSyncLinkQueryParams={presetSourceAndDestination(googleAdsDestination)}
+          editSyncLinkQueryParams={presetSourceAndDestination(googleAdsDestination, true)}
         />
       </Card>
       <Card>
@@ -140,6 +203,8 @@ function Segment({
           embedMode={embedMode}
           addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
+          createSyncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination)}
+          editSyncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination, true)}
         />
       </Card>
     </Card>

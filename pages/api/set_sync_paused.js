@@ -7,8 +7,6 @@ import { censusBaseUrl } from "@utils/url"
 
 const logger = pino({ name: __filename })
 
-const sourceLabel = "embedded_demo"
-
 export default async function handler(req, res) {
   if (req.method !== "POST") {
     res.status(405).json({})

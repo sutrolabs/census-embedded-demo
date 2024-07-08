@@ -2,12 +2,11 @@ import fetch from "node-fetch"
 import pino from "pino"
 
 import { getWorkspaceAccessToken } from "@utils/auth"
+import { embeddedDemoSourceLabel } from "@utils/preset_source_destination"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
 const logger = pino({ name: __filename })
-
-const sourceLabel = "embedded_demo"
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -70,7 +69,7 @@ async function getSource(workspaceApiKey) {
     await checkStatus(apiResponse, 200)
     const { pagination, data } = await apiResponse.json()
     logger.info([data])
-    const source = data.find((item) => item.label === sourceLabel)
+    const source = data.find((item) => item.label === embeddedDemoSourceLabel)
     if (source) {
       return source
     }

@@ -23,6 +23,8 @@ export default function SyncManagement({
   addNewSyncText,
   stepText,
   useCase,
+  createSyncLinkQueryParams,
+  editSyncLinkQueryParams,
 }) {
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
@@ -30,14 +32,13 @@ export default function SyncManagement({
     refetchSyncManagementLinks,
     workspaceAccessToken,
   )
-  const linkWithSourcePrepopulated =
-    syncManagementLink?.uri + "&form_connection_id=" + sourceId + "&form_source_type=warehouse"
+  const createLinkWithQueryParams = syncManagementLink?.uri + createSyncLinkQueryParams
 
   const initiateSyncWizardFlow = () => {
     if (embedMode) {
       setShowCreateSyncWizard(true)
     } else {
-      window.location.href = linkWithSourcePrepopulated
+      window.location.href = createLinkWithQueryParams
     }
   }
 
@@ -58,6 +59,7 @@ export default function SyncManagement({
             runs={runs}
             devMode={devMode}
             embedMode={embedMode}
+            queryParams={editSyncLinkQueryParams}
           />
         ))}
         {showCreateSyncWizard ? (
@@ -67,7 +69,7 @@ export default function SyncManagement({
             refetchSyncs={refetchSyncs}
             resetSyncManagementLink={resetSyncManagementLink}
             setShowCreateSyncWizard={setShowCreateSyncWizard}
-            linkWithSourcePrepopulated={linkWithSourcePrepopulated}
+            linkWithSourcePrepopulated={createLinkWithQueryParams}
           />
         ) : showAddNewSyncButton ? (
           <Button

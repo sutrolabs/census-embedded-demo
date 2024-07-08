@@ -17,6 +17,7 @@ export function SyncObject({
   runs,
   devMode,
   embedMode,
+  queryParams,
 }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
@@ -69,9 +70,9 @@ export function SyncObject({
       }
       const data = await response.json()
       if (embedMode) {
-        setEditSyncWizardLink(data.uri)
+        setEditSyncWizardLink(data.uri + queryParams)
       } else {
-        window.location.href = data.uri
+        window.location.href = data.uri + queryParams
       }
     } finally {
       setLoading(false)

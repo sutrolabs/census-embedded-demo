@@ -1,5 +1,5 @@
 import { Dialog } from "@headlessui/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import Button from "@components/Button"
 import { Card } from "@components/Card"
@@ -8,6 +8,10 @@ import RequestTooltip from "@components/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
+import {
+  marketingMagnetDestinationName,
+  marketingMagnetDestinationObject,
+} from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function Source({
@@ -16,6 +20,7 @@ export default function Source({
   iconClassName,
   workspaceAccessToken,
   sources,
+  destinations,
   setSources,
   refetchSources,
   sourceConnectLinks,
@@ -33,6 +38,7 @@ export default function Source({
   const [loading, setLoading] = useState(false)
   const [isCheckedOverride, setIsCheckedOverride] = useState()
   const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false)
+  const [presetDestination, setPresetDestination] = useState(null)
   const source = sources.find((item) => item.type === type)
   const isChecked = isCheckedOverride ?? !!source
 
@@ -42,6 +48,26 @@ export default function Source({
     workspaceAccessToken,
   )
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(!!source)
+
+  useEffect(() => {
+    // The custom Marketing Magnet connector is required to have a unique type upon creation
+    // Therefore, we check by the name as it is more consistent across different connectors
+    setPresetDestination(destinations.find((d) => d.name == marketingMagnetDestinationName))
+  }, [destinations])
+
+  // The Source component is only called from ImportDataset
+  // When importing datasets, the destination will always be our application, aka Marketing Magnet
+  const prefillDestination = (edit = false) => {
+    if (!presetDestination?.id) return ""
+
+    let queryParams = "&destination_hidden=true"
+
+    if (!edit) {
+      queryParams += `&destination_connection_id=${presetDestination.id}&destination_object_name=${marketingMagnetDestinationObject}`
+    }
+
+    return queryParams
+  }
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
     if (embedMode) {
@@ -210,6 +236,8 @@ export default function Source({
               addNewSyncText={"Configure data to import to Marketing Magnet"}
               stepText={"Step 2: Choose which source objects to sync."}
               useCase={"import"}
+              createSyncLinkQueryParams={prefillDestination()}
+              editSyncLinkQueryParams={prefillDestination(true)}
             />
           ) : (
             <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
