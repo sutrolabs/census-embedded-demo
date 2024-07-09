@@ -2,9 +2,9 @@ import fetch from "node-fetch"
 import pino from "pino"
 
 import { getWorkspaceAccessToken } from "@utils/auth"
+import { getSearchParams } from "@utils/request"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
-import { getSearchParams } from "@utils/request"
 
 const logger = pino({ name: __filename })
 

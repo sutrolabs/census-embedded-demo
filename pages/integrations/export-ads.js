@@ -6,7 +6,6 @@ import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
-import { censusBaseUrl } from "@utils/url"
 
 export default function Index({
   sources,
