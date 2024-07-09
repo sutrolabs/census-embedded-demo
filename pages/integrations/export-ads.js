@@ -6,7 +6,6 @@ import { Card } from "@components/Card"
 import Destination from "@components/Destination"
 import SyncManagement from "@components/SyncManagement"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
-import { censusBaseUrl } from "@utils/url"
 
 export default function Index({
   sources,
@@ -113,12 +112,13 @@ function Segment({
   const prefillAndHideSource = useCallback(
     async (sourceId) => {
       try {
-        const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
+        const apiResponse = await fetch(`/api/list_models_for_source?sourceId=${sourceId}`, {
           method: "GET",
-          headers: { authorization: `Bearer ${workspaceAccessToken}` },
+          headers: {
+            ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          },
         })
-        const res = await apiResponse.json()
-        const models = res.data
+        const models = await apiResponse.json()
         setPresetModel(models.find((m) => m.name === usersInHighGrowthCitiesModelName))
       } catch (error) {
         // do nothing, we will display the source selector if models couldn't be fetched
