@@ -28,8 +28,8 @@ export default async function handler(req, res) {
     })
 
     await checkStatus(apiResponse, 200)
-
     const { pagination, data } = await apiResponse.json()
+
     logger.info([pagination, data])
     allData.push(...data)
     page = pagination.next_page
