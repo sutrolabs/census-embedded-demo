@@ -119,8 +119,7 @@ function Segment({
             ["authorization"]: `Bearer ${workspaceAccessToken}`,
           },
         })
-        const res = await apiResponse.json()
-        const models = res.data
+        const models = await apiResponse.json()
         setPresetModel(models.find((m) => m.name === usersInHighGrowthCitiesModelName))
       } catch (error) {
         // do nothing, we will display the source selector if models couldn't be fetched
