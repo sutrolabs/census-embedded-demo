@@ -113,9 +113,11 @@ function Segment({
   const prefillAndHideSource = useCallback(
     async (sourceId) => {
       try {
-        const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${sourceId}/models`, {
+        const apiResponse = await fetch(`/api/list_models_for_source?sourceId=${sourceId}`, {
           method: "GET",
-          headers: { authorization: `Bearer ${workspaceAccessToken}` },
+          headers: {
+            ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          },
         })
         const res = await apiResponse.json()
         const models = res.data
