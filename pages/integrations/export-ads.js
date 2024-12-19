@@ -4,7 +4,6 @@ import { useEffect, useState, useCallback } from "react"
 import Button from "@components/Button"
 import { Card } from "@components/Card"
 import Destination from "@components/Destination"
-import SegmentManagement from "@components/SegmentManagement"
 import SyncManagement from "@components/SyncManagement"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
@@ -18,9 +17,6 @@ export default function Index({
   syncs,
   runsLoading,
   refetchSyncs,
-  segments,
-  refetchSegments,
-  setSegments,
   runs,
   embedMode,
   devMode,
@@ -77,15 +73,6 @@ export default function Index({
       />
       <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
       <Segment
-        segments={segments}
-        refetchSegments={refetchSegments}
-        setSegments={setSegments}
-        workspaceAccessToken={workspaceAccessToken}
-        devMode={devMode}
-        embedMode={embedMode}
-      />
-      <p className="mt-2 text-teal-400">Step 3: Sync your custom audience segments to ad platforms.</p>
-      <Sync
         destinations={destinations}
         sources={sources}
         facebookAudienceSyncs={facebookAudienceSyncs}
@@ -105,25 +92,7 @@ export default function Index({
   )
 }
 
-function Segment({ segments, refetchSegments, workspaceAccessToken, devMode, embedMode }) {
-  return (
-    <Card className="flex flex-col gap-4" disabled>
-      <SegmentManagement
-        segments={segments}
-        refetchSegments={refetchSegments}
-        setSegments={() => {}}
-        segmentManagementLinks={[]}
-        refetchSegmentManagementLinks={() => {}}
-        workspaceAccessToken={workspaceAccessToken}
-        devMode={devMode}
-        embedMode={embedMode}
-        addNewSegmentText={"Create New Segment"}
-      />
-    </Card>
-  )
-}
-
-function Sync({
+function Segment({
   sources,
   destinations,
   facebookAudienceSyncs,
@@ -191,6 +160,13 @@ function Sync({
 
   return (
     <Card className="flex flex-col gap-4" disabled>
+      <h3 className="flex flex-row justify-between text-lg font-medium">
+        <span className="text-stone-500 data-[enabled]:text-teal-900" data-enabled={null}>
+          High growth cities
+        </span>
+      </h3>
+      <p className="text-sm">All types of retailers in cities where product growth YoY &gt; 10%</p>
+      <p className="text-sm">82,991 contacts</p>
       <Card>
         <DestinationLabel label={"Google Ads"} />
         <SyncManagement
@@ -205,7 +181,7 @@ function Sync({
           runs={runs}
           devMode={devMode}
           embedMode={embedMode}
-          addNewSyncText={"Sync segment to Google Ads"}
+          addNewSyncText={"Export segment to Google Ads"}
           useCase={"export"}
           createSyncLinkQueryParams={presetSourceAndDestination(googleAdsDestination)}
           editSyncLinkQueryParams={presetSourceAndDestination(googleAdsDestination, true)}
@@ -225,7 +201,7 @@ function Sync({
           runs={runs}
           devMode={devMode}
           embedMode={embedMode}
-          addNewSyncText={"Sync segment to Facebook"}
+          addNewSyncText={"Export segment to Facebook"}
           useCase={"export"}
           createSyncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination)}
           editSyncLinkQueryParams={presetSourceAndDestination(facebookAdsDestination, true)}

@@ -141,22 +141,6 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
         },
       }),
   )
-
-  const {
-    loading: segmentsLoading,
-    error: segmentsError,
-    data: segments,
-    setData: setSegments,
-    refetchInBackground: refetchSegments,
-  } = useBasicFetch(
-    () =>
-      new Request(`/api/list_segments`, {
-        method: "GET",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-        },
-      }),
-  )
   const { runsLoading, runsError, runs } = useFetchRuns(workspaceAccessToken, syncsLoading, syncs)
 
   const anyError =
@@ -166,7 +150,6 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
     sourceConnectLinksError ??
     syncManagementLinksError ??
     syncsError ??
-    segmentsError ??
     runsError
   const anyLoading =
     destinationsLoading ||
@@ -174,8 +157,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
     sourcesLoading ||
     sourceConnectLinksLoading ||
     syncManagementLinksLoading ||
-    syncsLoading ||
-    segmentsLoading
+    syncsLoading
   let component
   if (anyError) {
     component = <Error_ error={anyError} />
@@ -202,9 +184,6 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
         syncs={syncs}
         setSyncs={setSyncs}
         refetchSyncs={refetchSyncs}
-        segments={segments}
-        setSegments={setSegments}
-        refetchSegments={refetchSegments}
         runsLoading={runsLoading}
         runs={runs}
         embedMode={embedMode}

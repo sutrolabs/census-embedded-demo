@@ -13,11 +13,7 @@ export default function EmbeddedFrame({ connectLink, onExit }) {
 
       if (event.data.message === "LOADED") setLoaded(true)
 
-      if (
-        event.data.message === "EXITED_CONNECT_FLOW" ||
-        event.data.message === "EXITED_SYNC_FLOW" ||
-        event.data.message === "EXITED_SEGMENT_FLOW"
-      )
+      if (event.data.message === "EXITED_CONNECT_FLOW" || event.data.message === "EXITED_SYNC_FLOW")
         onExit(event.data.data)
     }
 
