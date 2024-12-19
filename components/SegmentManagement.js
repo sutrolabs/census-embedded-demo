@@ -3,9 +3,9 @@ import React, { useState } from "react"
 import Button from "@components/Button"
 import RequestTooltip from "@components/RequestTooltip"
 import SegmentCreationWizard from "@components/SegmentCreationWizard"
+import { SegmentObject } from "@components/SegmentObject"
 import { useSegmentManagementLink } from "@hooks/use-segment-management-link"
 import { censusBaseUrl } from "@utils/url"
-import { SegmentObject } from "@components/SegmentObject"
 
 export default function SegmentManagement({
   segmentManagementLinks,
@@ -34,8 +34,6 @@ export default function SegmentManagement({
     }
   }
 
-  const showAddNewSegmentButton = true
-
   return (
     <>
       <p className="text-teal-400"></p>
@@ -61,22 +59,22 @@ export default function SegmentManagement({
             setShowCreateSegmentWizard={setShowCreateSegmentWizard}
             connectLink={createLink}
           />
-        ) : showAddNewSegmentButton ? (
+        ) : (
           <Button
             className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
               shadow-sm"
             onClick={initiateSegmentWizardFlow}
           >
-            <a id={`create-segment`}>
+            <a id={"create-segment"}>
               <i className="fa-solid fa-plus mr-4" />
               {addNewSegmentText}
             </a>
           </Button>
-        ) : null}
+        )}
       </div>
 
       <RequestTooltip
-        anchorSelect={`#create-segment`}
+        anchorSelect={"create-segment"}
         url={`${censusBaseUrl}/api/v1/segment_management_links`}
         method="POST"
         devMode={devMode}

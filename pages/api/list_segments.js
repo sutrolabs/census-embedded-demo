@@ -16,6 +16,8 @@ export default async function handler(req, res) {
   const allSegments = []
   const workspaceApiKey = getWorkspaceAccessToken(req)
 
+  // This should go through all pages of segments per source to exhaustively get all segments
+  // For our demo app, one page per source is enough
   const sources = await getSources(workspaceApiKey)
   for (const source of sources) {
     const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources/${source.id}/filter_segments`, {

@@ -19,15 +19,17 @@ export function SegmentObject({
   const [editSegmentWizardLink, setEditSegmentWizardLink] = useState(null)
   const showEditSegmentWizard = !!editSegmentWizardLink
 
+  const headers = {
+    ["authorization"]: `Bearer ${workspaceAccessToken}`,
+    ["content-type"]: "application/json",
+  }
+
   const initiateEditSegmentWizard = async () => {
     try {
       setLoading(true)
       const response = await fetch("/api/create_edit_segment_management_link", {
         method: "POST",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          ["content-type"]: "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({
           sourceId: segment.source_id,
           segmentId: segment.id,
@@ -52,10 +54,7 @@ export function SegmentObject({
       setLoading(true)
       const response = await fetch("/api/delete_segment", {
         method: "DELETE",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          ["content-type"]: "application/json",
-        },
+        headers: headers,
         body: JSON.stringify({
           sourceId: segment.source_id,
           segmentId: segment.id,
@@ -76,15 +75,17 @@ export function SegmentObject({
     <>
       <Card className="flex flex-col gap-4" variant={showEditSegmentWizard ? "thin" : "default"}>
         <h4 className="flex flex-row justify-between">
-          <span className="font-medium">{`Segment: ${segment.name}`}</span>
           {!showEditSegmentWizard && (
-            <div className="flex flex-row items-center gap-2">
-              <a id={`delete-${segment.id}`}>
-                <Button onClick={deleteSegment}>
-                  <i className="fa-solid fa-trash" />
-                </Button>
-              </a>
-            </div>
+            <>
+              <span className="font-medium">{`Segment: ${segment.name}`}</span>
+              <div className="flex flex-row items-center gap-2">
+                <a id={`delete-${segment.id}`}>
+                  <Button onClick={deleteSegment}>
+                    <i className="fa-solid fa-trash" />
+                  </Button>
+                </a>
+              </div>
+            </>
           )}
         </h4>
         {showEditSegmentWizard ? (
@@ -97,15 +98,17 @@ export function SegmentObject({
           <div>
             <p className="mb-2 text-sm">Constraints:</p>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-              {segment.molecules.map((molecule) =>
+              {segment.molecules.map((molecule, index) =>
                 typeof molecule === "string" ? (
-                  <div className="text-m my-2">{molecule}</div>
+                  <div key={`string-${index}`} className="my-2">
+                    {molecule}
+                  </div>
                 ) : (
-                  <>
+                  <div key={`object-${index}`}>
                     <li>{`Attribute: ${molecule.attribute}`}</li>
                     <li>{`Operator: ${molecule.operator}`}</li>
                     <li>{`Value: ${molecule.value}`}</li>
-                  </>
+                  </div>
                 ),
               )}
             </ul>
@@ -157,7 +160,7 @@ export function SegmentObject({
             )}
           </pre>
         }
-        link="https://developers.getcensus.com/api-reference/segment-management-links/list-segment-management-links"
+        link="https://developers.getcensus.com/api-reference/segment-management-links/create-a-segment-management-link-to-edit-a-segment"
         body={
           embedMode ? null : (
             <pre>
