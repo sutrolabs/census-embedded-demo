@@ -103,6 +103,10 @@ export function SegmentObject({
                   <div key={`string-${index}`} className="my-2">
                     {molecule}
                   </div>
+                ) : molecule.filter_segment_id ? (
+                  <div key={`existing-segment-${index}`}>
+                    <li>{`Includes Members of 'High Ranking Contacts'`}</li>
+                  </div>
                 ) : (
                   <div key={`object-${index}`}>
                     <li>{`Attribute: ${molecule.attribute}`}</li>
