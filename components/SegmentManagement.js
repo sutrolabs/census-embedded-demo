@@ -74,7 +74,7 @@ export default function SegmentManagement({
       </div>
 
       <RequestTooltip
-        anchorSelect={"create-segment"}
+        anchorSelect={"#create-segment"}
         url={`${censusBaseUrl}/api/v1/segment_management_links`}
         method="POST"
         devMode={devMode}
