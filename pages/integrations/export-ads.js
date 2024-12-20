@@ -97,10 +97,6 @@ export default function Index({
         devMode={devMode}
         embedMode={embedMode}
       />
-      <Button className="self-start" solid>
-        <i className="fa-solid fa-plus mr-2" />
-        New Segment
-      </Button>
     </>
   )
 }
