@@ -1,4 +1,4 @@
-import { Card } from "@components/Card"
+import Card from "@components/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 
 export default function SyncCreationWizard({

@@ -6,6 +6,7 @@ import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
 const logger = pino({ name: __filename })
+const CENSUS_API_GET_SOURCES = `${censusBaseUrl}/api/v1/sources`
 
 export default async function handler(req, res) {
   if (req.method !== "GET") {
@@ -37,7 +38,7 @@ async function getSources(workspaceApiKey) {
   let page = 1
   const allData = []
   while (page) {
-    const apiResponse = await fetch(`${censusBaseUrl}/api/v1/sources`, {
+    const apiResponse = await fetch(CENSUS_API_GET_SOURCES, {
       method: "GET",
       headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
     })

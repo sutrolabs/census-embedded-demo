@@ -2,7 +2,7 @@ import Head from "next/head"
 import { useState } from "react"
 
 import Button from "@components/Button"
-import { Card } from "@components/Card"
+import Card from "@components/Card"
 import Destination from "@components/Destination"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"

@@ -11,14 +11,12 @@ export default async function handler(req, res) {
   }
 
   const { sourceId, segmentId } = req.body
+  const CENSUS_API_DELETE_SEGMENT = `${censusBaseUrl}/api/v1/sources/${sourceId}/filter_segments/${segmentId}`
   const workspaceApiKey = getWorkspaceAccessToken(req)
-  const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/sources/${sourceId}/filter_segments/${segmentId}`,
-    {
-      method: "DELETE",
-      headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
-    },
-  )
+  const apiResponse = await fetch(CENSUS_API_DELETE_SEGMENT, {
+    method: "DELETE",
+    headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
+  })
   await checkStatus(apiResponse, 200)
   res.status(200).json(null)
 }
