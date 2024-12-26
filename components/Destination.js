@@ -2,7 +2,7 @@ import { Dialog } from "@headlessui/react"
 import { useState } from "react"
 
 import Button from "@components/Button"
-import { Card } from "@components/Card"
+import Card from "@components/Card"
 import Toggle from "@components/Toggle"
 
 export default function Destination({
