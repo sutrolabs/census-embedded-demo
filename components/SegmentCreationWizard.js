@@ -1,4 +1,4 @@
-import { Card } from "@components/Card"
+import Card from "@components/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 
 export default function SegmentCreationWizard({
@@ -9,7 +9,7 @@ export default function SegmentCreationWizard({
   connectLink,
 }) {
   return (
-    <Card variant="thin">
+    <Card>
       <EmbeddedFrame
         connectLink={connectLink}
         onExit={async (response) => {

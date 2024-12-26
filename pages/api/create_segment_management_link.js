@@ -14,7 +14,8 @@ export default async function handler(req, res) {
   }
 
   const workspaceApiKey = getWorkspaceAccessToken(req)
-  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/segment_management_links`, {
+  const CENSUS_API_CREATE_SEGMENT = `${censusBaseUrl}/api/v1/segment_management_links`
+  const apiResponse = await fetch(CENSUS_API_CREATE_SEGMENT, {
     method: "POST",
     headers: { ["authorization"]: `Bearer ${workspaceApiKey}`, ["content-type"]: "application/json" },
     body: JSON.stringify({
