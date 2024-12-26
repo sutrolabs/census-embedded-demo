@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import Button from "@components/Button"
-import Card from "@components/Card"
+import { Card } from "@components/Card"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"

@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import Button from "@components/Button"
-import Card from "@components/Card"
+import { Card } from "@components/Card"
 import RequestTooltip from "@components/RequestTooltip"
 import SegmentEditWizard from "@components/SegmentEditWizard"
 import { censusBaseUrl } from "@utils/url"
@@ -24,34 +24,10 @@ export function SegmentObject({
     ["content-type"]: "application/json",
   }
 
-  const devModeHeaders = (
-    <pre>
-      {JSON.stringify(
-        {
-          ["authorization"]: "Bearer <workspaceAccessToken>",
-        },
-        null,
-        2,
-      )}
-    </pre>
-  )
-
-  // Internal API endpoints
-  const API_CREATE_EDIT_SEGMENT_LINK = "/api/create_edit_segment_management_link"
-  const API_DELETE_SEGMENT = "/api/delete_segment"
-
-  // Census API endpoints
-  const CENSUS_API_SEGMENT_MANAGEMENT_EDIT_LINK = `${censusBaseUrl}/api/v1/sources/${segment.source_id}/filter_segments/${segment.id}`
-  const CENSUS_API_DELETE_SEGMENT = `${censusBaseUrl}/api/v1/sources/${segment.source_id}/filter_segments/${segment.id}/segment_management_links`
-  const CENSUS_API_DOCS_DELETE_SEGMENT =
-    "https://developers.getcensus.com/api-reference/segments/delete-segment"
-  const CENSUS_API_DOCS_EDIT_SEGMENT =
-    "https://developers.getcensus.com/api-reference/segment-management-links/create-a-segment-management-link-to-edit-a-segment"
-
   const initiateEditSegmentWizard = async () => {
     try {
       setLoading(true)
-      const response = await fetch(API_CREATE_EDIT_SEGMENT_LINK, {
+      const response = await fetch("/api/create_edit_segment_management_link", {
         method: "POST",
         headers: headers,
         body: JSON.stringify({
@@ -76,7 +52,7 @@ export function SegmentObject({
   const deleteSegment = async () => {
     try {
       setLoading(true)
-      const response = await fetch(API_DELETE_SEGMENT, {
+      const response = await fetch("/api/delete_segment", {
         method: "DELETE",
         headers: headers,
         body: JSON.stringify({
@@ -97,7 +73,7 @@ export function SegmentObject({
 
   return (
     <>
-      <Card className="flex flex-col gap-4">
+      <Card className="flex flex-col gap-4" variant={showEditSegmentWizard ? "thin" : "default"}>
         <h4 className="flex flex-row justify-between">
           {!showEditSegmentWizard && (
             <>
@@ -157,18 +133,38 @@ export function SegmentObject({
       <RequestTooltip
         devMode={devMode}
         anchorSelect={`#delete-${segment.id}`}
-        url={CENSUS_API_DELETE_SEGMENT}
+        url={`${censusBaseUrl}/api/v1/sources/${segment.source_id}/filter_segments/${segment.id}`}
         method="DELETE"
-        headers={devModeHeaders}
-        link={CENSUS_API_DOCS_DELETE_SEGMENT}
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+        link="https://developers.getcensus.com/api-reference/segments/delete-segment"
       />
       <RequestTooltip
         devMode={devMode}
         anchorSelect={`#configure-${segment.id}`}
-        url={CENSUS_API_SEGMENT_MANAGEMENT_EDIT_LINK}
+        url={`${censusBaseUrl}/api/v1/sources/${segment.source_id}/filter_segments/${segment.id}/segment_management_links`}
         method="POST"
-        headers={devModeHeaders}
-        link={CENSUS_API_DOCS_EDIT_SEGMENT}
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+        link="https://developers.getcensus.com/api-reference/segment-management-links/create-a-segment-management-link-to-edit-a-segment"
         body={
           embedMode ? null : (
             <pre>

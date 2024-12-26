@@ -14,15 +14,17 @@ export default async function handler(req, res) {
   }
 
   const { sourceId, segmentId } = req.body
-  const CENSUS_API_EDIT_SEGMENT = `${censusBaseUrl}/api/v1/sources/${sourceId}/filter_segments/${segmentId}/segment_management_links`
   const workspaceApiKey = getWorkspaceAccessToken(req)
-  const apiResponse = await fetch(CENSUS_API_EDIT_SEGMENT, {
-    method: "POST",
-    headers: { ["authorization"]: `Bearer ${workspaceApiKey}`, ["content-type"]: "application/json" },
-    body: JSON.stringify({
-      redirect_uri: req.headers["referer"],
-    }),
-  })
+  const apiResponse = await fetch(
+    `${censusBaseUrl}/api/v1/sources/${sourceId}/filter_segments/${segmentId}/segment_management_links`,
+    {
+      method: "POST",
+      headers: { ["authorization"]: `Bearer ${workspaceApiKey}`, ["content-type"]: "application/json" },
+      body: JSON.stringify({
+        redirect_uri: req.headers["referer"],
+      }),
+    },
+  )
   await checkStatus(apiResponse, 201)
   const { data } = await apiResponse.json()
   logger.info([data])

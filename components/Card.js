@@ -1,4 +1,4 @@
-export default function Card({ className, disabled, children }) {
+export function Card({ className, disabled, children, variant = "default" }) {
   return (
     <div
       className={`

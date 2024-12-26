@@ -11,15 +11,14 @@ export default function EmbeddedFrame({ connectLink, onExit }) {
         return
       }
 
-      if (event.data.message === "LOADED") {
-        setLoaded(true)
-      } else if (
+      if (event.data.message === "LOADED") setLoaded(true)
+
+      if (
         event.data.message === "EXITED_CONNECT_FLOW" ||
         event.data.message === "EXITED_SYNC_FLOW" ||
         event.data.message === "EXITED_SEGMENT_FLOW"
-      ) {
+      )
         onExit(event.data.data)
-      }
     }
 
     window.addEventListener("message", handleMessage, false)

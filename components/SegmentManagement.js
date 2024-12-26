@@ -26,10 +26,6 @@ export default function SegmentManagement({
   )
   const createLink = segmentManagementLink?.uri
 
-  const CENSUS_API_SEGMENT_MANAGEMENT_LINK = `${censusBaseUrl}/api/v1/segment_management_links`
-  const CENSUS_API_DOCS_SEGMENT_MANAGEMENT_LINK =
-    "https://developers.getcensus.com/api-reference/segment-management-links/create-a-new-segment-management-link"
-
   const initiateSegmentWizardFlow = () => {
     if (embedMode) {
       setShowCreateSegmentWizard(true)
@@ -79,7 +75,7 @@ export default function SegmentManagement({
 
       <RequestTooltip
         anchorSelect={"#create-segment"}
-        url={CENSUS_API_SEGMENT_MANAGEMENT_LINK}
+        url={`${censusBaseUrl}/api/v1/segment_management_links`}
         method="POST"
         devMode={devMode}
         headers={
@@ -107,7 +103,7 @@ export default function SegmentManagement({
             </pre>
           )
         }
-        link={CENSUS_API_DOCS_SEGMENT_MANAGEMENT_LINK}
+        link="https://developers.getcensus.com/api-reference/segment-management-links/create-a-new-segment-management-link"
       />
     </>
   )
