@@ -217,7 +217,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
   }
 
   return (
-    <main className="relative flex min-h-screen w-screen flex-col md:flex-row">
+    <main className="relative flex min-h-screen w-screen flex-row">
       <Sidebar
         syncsLoading={syncsLoading}
         syncs={syncs}
