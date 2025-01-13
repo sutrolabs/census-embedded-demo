@@ -5,3 +5,28 @@
 #__next {
   display: contents;
 }
+
+@layer base {
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../assets/fonts/InterVariable.woff2") format("woff2");
+  }
+  @font-face {
+    font-family: "Inter";
+    font-style: italic;
+    font-weight: 100 900;
+    font-display: swap;
+    src: url("../assets/fonts/InterVariable-Italic.woff2") format("woff2");
+  }
+}
+
+body {
+  @apply m-0 h-screen bg-slate-50 p-0 text-base leading-snug text-slate-700 antialiased;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
