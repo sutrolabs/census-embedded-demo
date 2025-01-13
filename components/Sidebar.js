@@ -6,12 +6,12 @@ import Toggle from "@components/Toggle"
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
-    <div className="flex shrink-0 flex-row items-end justify-between gap-4 bg-slate-100 p-2 md:h-screen md:w-[200px] md:flex-col md:items-center md:justify-start md:p-6">
+    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-slate-200 bg-slate-50 p-2 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start md:p-6">
       <div className="flex flex-col gap-4 overflow-x-auto">
         <Link href="/">
           <div className="flex flex-row items-center gap-2 md:p-6">
             <i className="fa-solid fa-magnet" />
-            <span className=" text-center font-bold">Marketing Magnet</span>
+            <span>Marketing Magnet</span>
           </div>
         </Link>
         {/* Mobile Navbar */}
@@ -24,12 +24,12 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
         </nav>
       </div>
       {/* Desktop Navbar */}
-      <nav className="hidden flex-col gap-4 self-start px-6 py-8 md:flex">
+      <nav className="hidden flex-col gap-4 self-start md:flex">
         <Item name="Dashboard" href="/" />
         <Item name="Integrations" href="/integrations" />
-        <Item nested name="Export to CRM" href="/integrations/export-crm" />
-        <Item nested name="Export to Ad Platforms" href="/integrations/export-ads" />
-        <Item nested name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
+        <Item name="Export to CRM" href="/integrations/export-crm" />
+        <Item name="Export to Ad Platforms" href="/integrations/export-ads" />
+        <Item name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
       </nav>
 
       <SidebarFooter
