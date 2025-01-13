@@ -4,31 +4,58 @@ import { Tooltip } from "react-tooltip"
 
 import Toggle from "@components/Toggle"
 import { Text } from "@radix-ui/themes"
+import { usePathname } from "next/navigation"
+
+const navItems = [
+  {
+    id: 1,
+    href: "/",
+    name: "Dashboard",
+  },
+  {
+    id: 2,
+    href: "/integrations",
+    name: "Integrations",
+  },
+  {
+    id: 3,
+    href: "/integrations/export-crm",
+    name: "CRM",
+  },
+  {
+    id: 4,
+    href: "/integrations/export-ads",
+    name: "Ad Platforms",
+  },
+  {
+    id: 5,
+    href: "/integrations/import-dataset",
+    name: "Import Dataset",
+  },
+]
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-slate-200 bg-slate-50 p-2 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start md:p-6">
-      <div className="flex flex-col gap-4 overflow-x-auto">
-        <Link href="/" className="flex flex-row items-center gap-2">
-          <i className="fa-solid fa-magnet" />
-          <Text>Marketing Magnet</Text>
-        </Link>
+      <div className="flex w-full flex-col gap-4">
+        <div className="flex flex-row items-center gap-2">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md border border-slate-200 bg-white p-3 shadow">
+            <i className="fa-solid fa-magnet text-sm leading-none" />
+          </div>
+          <Text className="text-sm font-medium leading-none">Marketing Magnet</Text>
+        </div>
         {/* Mobile Navbar */}
-        <nav className="flex flex-row items-end gap-2 md:hidden">
-          <Item name="Dashboard" href="/" />
-          <Item name="Integrations" href="/integrations" />
-          <Item name="CRM" href="/integrations/export-crm" />
-          <Item name="Ad Platforms" href="/integrations/export-ads" />
-          <Item name="Import Dataset" href="/integrations/import-dataset" />
+        <nav className="flex flex-row items-end gap-1 md:hidden">
+          {navItems.map((item) => (
+            <Item key={item.id} name={item.name} href={item.href} />
+          ))}
         </nav>
       </div>
       {/* Desktop Navbar */}
-      <nav className="hidden flex-col gap-4 self-start md:flex">
-        <Item name="Dashboard" href="/" />
-        <Item name="Integrations" href="/integrations" />
-        <Item name="Export to CRM" href="/integrations/export-crm" />
-        <Item name="Export to Ad Platforms" href="/integrations/export-ads" />
-        <Item name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
+      <nav className="hidden w-full flex-col gap-1 self-start md:flex">
+        {navItems.map((item) => (
+          <Item key={item.id} name={item.name} href={item.href} />
+        ))}
       </nav>
 
       <SidebarFooter
@@ -45,13 +72,14 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
 function Item({ name, nested, href }) {
   const router = useRouter()
   const selected = router.asPath === href
+  const pathname = usePathname()
 
   return (
     <Link
       href={href}
-      className="cursor-pointer text-sm font-medium text-slate-900 hover:border-teal-800 hover:text-teal-800
-    data-[nested]:ml-4"
-      data-selected={selected ? "" : null}
+      className={`cursor-pointer rounded p-2 text-sm font-medium leading-none text-slate-900 hover:border-teal-800 hover:text-teal-500 ${
+        pathname === href ? "hover: bg-slate-200" : ""
+      }`}
       data-nested={nested ? "" : null}
     >
       <Text>{name}</Text>
