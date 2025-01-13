@@ -5,22 +5,26 @@ import { Tooltip } from "react-tooltip"
 import Toggle from "@components/Toggle"
 import { Text } from "@radix-ui/themes"
 import { usePathname } from "next/navigation"
+import { BoltIcon, HomeIcon, SquaresPlusIcon, TableCellsIcon } from "@heroicons/react/20/solid"
 
 const navItems = [
   {
     id: 1,
     href: "/",
     name: "Dashboard",
+    icon: HomeIcon,
   },
   {
     id: 2,
     href: "/integrations/import-dataset",
     name: "Datasets",
+    icon: TableCellsIcon,
   },
   {
     id: 3,
     href: "/integrations",
     name: "Integrations",
+    icon: SquaresPlusIcon,
   },
   {
     id: 4,
@@ -69,14 +73,14 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
       {/* Desktop Navbar */}
       <nav className="hidden w-full flex-col gap-1 self-start md:flex">
         {groupedNavItems.root?.map((item) => (
-          <Item key={item.id} name={item.name} href={item.href} />
+          <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
         ))}
         {Object.entries(groupedNavItems).map(
           ([group, items]) =>
             group !== "root" && (
               <div key={group} className="ml-2 flex flex-col gap-1 border-l border-slate-200 pl-2">
                 {items.map((item) => (
-                  <Item key={item.id} name={item.name} href={item.href} nested={true} />
+                  <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
                 ))}
               </div>
             ),
@@ -94,19 +98,21 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
   )
 }
 
-function Item({ name, nested, href }) {
-  const router = useRouter()
-  const selected = router.asPath === href
+function Item({ name, nested, href, icon: Icon }) {
   const pathname = usePathname()
+  const isActive = pathname === href
 
   return (
     <Link
       href={href}
-      className={`cursor-pointer rounded px-2 py-2 text-sm font-medium leading-none hover:bg-slate-200/50 hover:text-slate-600 ${
-        pathname === href ? "bg-slate-200 text-slate-900 hover:bg-slate-300" : "text-slate-600"
+      className={`flex cursor-pointer flex-row items-center gap-2 rounded px-2 py-2 text-sm font-medium leading-none   ${
+        isActive
+          ? "bg-slate-200 text-slate-900 "
+          : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-700"
       }`}
       data-nested={nested ? "" : null}
     >
+      {Icon && <Icon className={`h-4 ${isActive ? "text-slate-900" : ""}`} />}
       <Text>{name}</Text>
     </Link>
   )
