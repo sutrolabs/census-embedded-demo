@@ -50,7 +50,7 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
         for authentication, so that&apos;s how we&apos;ll start here:
       </p>
       <input
-        className="my-2 w-full max-w-sm self-center rounded-md border border-indigo-500 px-4 py-2 font-mono shadow-inner"
+        className="my-2 w-full max-w-sm self-center rounded-md border border-emerald-500 px-4 py-2 font-mono shadow-inner"
         autoFocus
         type="password"
         name="census_api_token"

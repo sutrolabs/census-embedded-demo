@@ -147,7 +147,7 @@ export default function Index() {
         </Card>
         <Card className="flex animate-[wiggle] flex-col items-center gap-3 lg:col-span-2">
           <h3 className="font-medium text-teal-800">Integrations</h3>
-          <p className="text-sm text-indigo-600">
+          <p className="text-sm text-emerald-600">
             Did you know you can connect this data directly to your CRM and ad platforms?
           </p>
           <Link href="/integrations">

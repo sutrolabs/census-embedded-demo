@@ -12,8 +12,8 @@ export default function Toggle({ checked, disabled, onChange }) {
         transition
         enabled:hover:bg-slate-200
         disabled:opacity-50
-        aria-checked:bg-indigo-600
-        aria-checked:enabled:hover:bg-indigo-500
+        aria-checked:bg-emerald-600
+        aria-checked:enabled:hover:bg-emerald-500
       "
       data-checked={checked ? "" : null}
     >

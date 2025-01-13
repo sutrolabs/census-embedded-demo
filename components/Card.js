@@ -2,7 +2,7 @@ export default function Card({ className, disabled, children }) {
   return (
     <div
       className={`
-        rounded-md border border-indigo-500/40  bg-slate-50
+        rounded-md border border-emerald-500/40  bg-slate-50
         px-3 py-5
         shadow-sm transition
         data-[disabled]:border-slate-200
