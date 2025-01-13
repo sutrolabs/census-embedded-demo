@@ -2,7 +2,7 @@ export function Anchor({ className, href, children }) {
   return (
     <a
       className={`
-        text-orange-700
+        text-orange-500
         underline
         transition
         hover:text-orange-600

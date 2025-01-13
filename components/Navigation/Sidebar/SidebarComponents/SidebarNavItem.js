@@ -9,9 +9,9 @@ export function Item({ name, href, icon: Icon }) {
   return (
     <Link
       href={href}
-      className={`flex cursor-pointer flex-row items-center gap-2 rounded px-2 py-2 text-sm font-medium leading-none   ${
+      className={`flex cursor-pointer flex-row items-center gap-2 rounded-md px-2 py-2 text-sm font-medium leading-none   ${
         isActive
-          ? "bg-slate-200 text-slate-900 "
+          ? "border border-slate-200 bg-white text-slate-900 shadow"
           : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-700"
       }`}
     >

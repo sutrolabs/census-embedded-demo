@@ -18,7 +18,7 @@ export default function Index() {
         </p>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Card className="flex flex-col gap-3">
-            <h3 className="font-medium text-orange-800">Trend Datasets</h3>
+            <h3 className="font-medium text-slate-800">Trend Datasets</h3>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-slate-600">
               <li>
                 <Anchor href="/">Market Trends</Anchor> updated 1 day ago
@@ -37,7 +37,7 @@ export default function Index() {
           </Card>
           <Card className="flex flex-col gap-3">
             <div className="flex flex-row justify-between">
-              <h3 className="font-medium text-orange-800">Retailer Highlights</h3>
+              <h3 className="font-medium text-slate-800">Retailer Highlights</h3>
               <span className="text-sm text-slate-500">1 / 12</span>
             </div>
             <ul className="ml-2 flex grow flex-col text-sm text-slate-600">
@@ -70,7 +70,7 @@ export default function Index() {
           </Card>
 
           <Card className="flex flex-col gap-3">
-            <h3 className="font-medium text-orange-800">Industry Reports</h3>
+            <h3 className="font-medium text-slate-800">Industry Reports</h3>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-slate-600">
               <li>
                 <Anchor href="/">Global IT Services Market Report</Anchor> updated 1 week ago
@@ -89,7 +89,7 @@ export default function Index() {
           </Card>
           <Card className="flex flex-col gap-3">
             <div className="flex flex-row justify-between">
-              <h3 className="font-medium text-orange-800">Trend Highlights</h3>
+              <h3 className="font-medium text-slate-800">Trend Highlights</h3>
               <span className="text-sm text-slate-500">1 / 12</span>
             </div>
             <div className="-mb-3 text-sm text-slate-800 underline">Average Global Price of Oil ($/bbl)</div>
