@@ -6,51 +6,48 @@ import Toggle from "@components/Toggle"
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
-    <>
-      <div className="hidden md:block md:h-screen md:w-2/5 xl:w-1/4" />
-      <div className="flex flex-row items-end justify-between gap-4 border-emerald-600 bg-emerald-400 p-2 md:fixed md:h-screen md:w-2/5 md:flex-col md:items-center md:justify-start md:p-6 xl:w-1/4">
-        <div className="flex flex-col gap-4 overflow-x-auto">
-          <Link href="/">
-            <a className="flex flex-row items-center gap-4 md:flex-col md:p-6">
-              <i className="fa-solid fa-magnet text-2xl md:text-6xl" />
-              <div className="flex flex-col">
-                <h1 className="text-center text-lg font-bold md:text-6xl">Marketing Magnet</h1>
-              </div>
-            </a>
-          </Link>
-          {/* Mobile Navbar */}
-          <nav className="flex flex-row items-end gap-2 md:hidden">
-            <Item name="Dashboard" href="/" />
-            <Item name="Integrations" href="/integrations" />
-            <Item name="CRM" href="/integrations/export-crm" />
-            <Item name="Ad Platforms" href="/integrations/export-ads" />
-            <Item name="Import Dataset" href="/integrations/import-dataset" />
-          </nav>
-        </div>
-        <div className="hidden text-center text-lg italic text-slate-700 md:block md:text-2xl">
-          Superpowering marketing operations since{" "}
-          <abbr title="Did you know, marketing was first invented when someone figured out they could sell more woolly mammoth meat with a catchy slogan?">
-            2024
-          </abbr>
-        </div>
-        {/* Desktop Navbar */}
-        <nav className="hidden flex-col gap-4 self-start px-6 py-8 md:flex">
+    <div className="flex shrink-0 flex-row items-end justify-between gap-4 bg-slate-100 p-2 md:h-screen md:w-[200px] md:flex-col md:items-center md:justify-start md:p-6">
+      <div className="flex flex-col gap-4 overflow-x-auto">
+        <Link href="/">
+          <div className="flex flex-row items-center gap-4 md:flex-col md:p-6">
+            <i className="fa-solid fa-magnet " />
+            <div className="flex flex-col">
+              <h1 className="text-center font-bold ">Marketing Magnet</h1>
+            </div>
+          </div>
+        </Link>
+        {/* Mobile Navbar */}
+        <nav className="flex flex-row items-end gap-2 md:hidden">
           <Item name="Dashboard" href="/" />
           <Item name="Integrations" href="/integrations" />
-          <Item nested name="Export to CRM" href="/integrations/export-crm" />
-          <Item nested name="Export to Ad Platforms" href="/integrations/export-ads" />
-          <Item nested name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
+          <Item name="CRM" href="/integrations/export-crm" />
+          <Item name="Ad Platforms" href="/integrations/export-ads" />
+          <Item name="Import Dataset" href="/integrations/import-dataset" />
         </nav>
-
-        <SidebarFooter
-          onLogOut={onLogOut}
-          embedMode={embedMode}
-          setEmbedMode={setEmbedMode}
-          devMode={devMode}
-          setDevMode={setDevMode}
-        />
       </div>
-    </>
+      <div className="hidden text-center  italic text-slate-700 md:block">
+        Superpowering marketing operations since{" "}
+        <abbr title="Did you know, marketing was first invented when someone figured out they could sell more woolly mammoth meat with a catchy slogan?">
+          2024
+        </abbr>
+      </div>
+      {/* Desktop Navbar */}
+      <nav className="hidden flex-col gap-4 self-start px-6 py-8 md:flex">
+        <Item name="Dashboard" href="/" />
+        <Item name="Integrations" href="/integrations" />
+        <Item nested name="Export to CRM" href="/integrations/export-crm" />
+        <Item nested name="Export to Ad Platforms" href="/integrations/export-ads" />
+        <Item nested name="Import Dataset to Marketing Magnet" href="/integrations/import-dataset" />
+      </nav>
+
+      <SidebarFooter
+        onLogOut={onLogOut}
+        embedMode={embedMode}
+        setEmbedMode={setEmbedMode}
+        devMode={devMode}
+        setDevMode={setDevMode}
+      />
+    </div>
   )
 }
 
@@ -61,8 +58,8 @@ function Item({ name, nested, href }) {
   return (
     <Link href={href}>
       <a
-        className="cursor-pointer border-b-2 border-transparent text-sm font-medium text-slate-900 hover:border-teal-800 hover:text-teal-800
-        data-[nested]:ml-4 data-[selected]:border-slate-900 data-[selected]:font-bold md:border-b-0 md:border-l-2 md:pl-2 md:text-2xl"
+        className="cursor-pointer text-sm font-medium text-slate-900 hover:border-teal-800 hover:text-teal-800
+        data-[nested]:ml-4"
         data-selected={selected ? "" : null}
         data-nested={nested ? "" : null}
       >
