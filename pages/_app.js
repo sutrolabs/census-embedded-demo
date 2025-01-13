@@ -10,7 +10,7 @@ import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
 import MainLayout from "@components/MainLayout"
 import { Setup } from "@components/Setup"
-import Sidebar from "@components/Navigation/Sidebar"
+import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
 registry.add(LineElement)
