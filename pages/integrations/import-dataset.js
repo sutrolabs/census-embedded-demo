@@ -30,7 +30,7 @@ export default function ImportDataset({
           <b>Note to customer:</b> On this page, the end user (your customer) can connect their source to your
           destination.
         </p>
-        <p className="text-teal-400">Step 1: Connect your data source</p>
+        <p className="text-orange-400">Step 1: Connect your data source</p>
         <Source
           label="Redshift"
           type="redshift"

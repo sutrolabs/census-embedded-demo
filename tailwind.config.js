@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: [
-          '"Inter", "sans-serif"',
+          '"IBM Plex Sans", "sans-serif"',
           {
             fontFeatureSettings: '"cv08", "cpsp", "tnum"',
           },

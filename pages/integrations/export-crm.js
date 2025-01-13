@@ -85,7 +85,7 @@ export default function Index({
         <p className="italic text-slate-500">
           Get access to relevant retailer and trend data right within your everyday sales tools.
         </p>
-        <p className="text-teal-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
+        <p className="text-orange-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
         {config.map((destination) => (
           <Destination
             key={destination.type}
@@ -99,7 +99,7 @@ export default function Index({
             setDestinationConnectLinks={setDestinationConnectLinks}
             syncs={syncs}
           >
-            <p className="text-teal-400">Step 2: Choose which destinations objects to sync.</p>
+            <p className="text-orange-400">Step 2: Choose which destinations objects to sync.</p>
             <div className="flex flex-col gap-5">
               {destination.objects.map((object) => (
                 <Object

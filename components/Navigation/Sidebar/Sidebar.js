@@ -55,11 +55,11 @@ const groupedNavItems = navItems.reduce((acc, item) => {
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
-    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-slate-200 bg-slate-50 p-2 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start md:p-6">
+    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-slate-200 bg-slate-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start">
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white p-3 shadow">
-            <i className="fa-solid fa-magnet leading-none" />
+            <i className="fa-solid fa-magnet text-lg leading-none text-slate-400" />
           </div>
           <Text className="text-sm font-medium leading-none">Marketing Magnet</Text>
         </div>

@@ -21,7 +21,7 @@ const unknownMode = {
 const modes = [
   {
     status: "running",
-    className: "bg-emerald-500 text-emerald-50",
+    className: "bg-orange-500 text-orange-50",
     text: "Running...",
   },
   {
@@ -31,7 +31,7 @@ const modes = [
   },
   {
     status: "done",
-    className: "bg-emerald-200 text-emerald-700",
+    className: "bg-orange-200 text-orange-700",
     text: "Up to date",
   },
 ]

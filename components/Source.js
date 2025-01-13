@@ -181,7 +181,7 @@ export default function Source({
         </Dialog>
         <h3 className="flex flex-row justify-between">
           <span
-            className="flex flex-row items-center gap-2 text-lg font-medium text-slate-500 data-[enabled]:text-teal-900"
+            className="flex flex-row items-center gap-2 text-lg font-medium text-slate-500 data-[enabled]:text-orange-900"
             data-enabled={source ? "" : null}
           >
             <i className={iconClassName} />

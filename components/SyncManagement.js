@@ -46,7 +46,7 @@ export default function SyncManagement({
 
   return (
     <>
-      <p className="text-teal-400">{stepText}</p>
+      <p className="text-orange-400">{stepText}</p>
       <div className="flex flex-col gap-5">
         {syncs.map((sync) => (
           <SyncObject
@@ -73,7 +73,7 @@ export default function SyncManagement({
           />
         ) : showAddNewSyncButton ? (
           <Button
-            className="flex items-center justify-center rounded-md border border-emerald-500/40 bg-slate-50  px-5 py-8 text-xl
+            className="flex items-center justify-center rounded-md border border-orange-500/40 bg-slate-50  px-5 py-8 text-xl
               shadow-sm"
             onClick={initiateSyncWizardFlow}
           >

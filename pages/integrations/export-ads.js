@@ -48,7 +48,7 @@ export default function Index({
         <p className="italic text-slate-500">
           Create custom ad audiences to match the retailer segments that matter to your business.
         </p>
-        <p className="text-teal-400">Step 1: Choose your ad platforms.</p>
+        <p className="text-orange-400">Step 1: Choose your ad platforms.</p>
         <Destination
           label="Google Ads"
           type="google_ads"
@@ -71,7 +71,7 @@ export default function Index({
           setDestinationConnectLinks={setDestinationConnectLinks}
           syncs={syncs}
         />
-        <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
+        <p className="mt-2 text-orange-400">Step 2: Define your custom audience segments.</p>
         <Segment
           segments={segments}
           refetchSegments={refetchSegments}
@@ -80,7 +80,7 @@ export default function Index({
           devMode={devMode}
           embedMode={embedMode}
         />
-        <p className="mt-2 text-teal-400">Step 3: Sync your custom audience segments to ad platforms.</p>
+        <p className="mt-2 text-orange-400">Step 3: Sync your custom audience segments to ad platforms.</p>
         <Sync
           destinations={destinations}
           sources={sources}
@@ -231,7 +231,7 @@ function Sync({
 function DestinationLabel({ label }) {
   return (
     <h3 className="mb-2 flex flex-row justify-between">
-      <span className="flex flex-row items-center gap-2 text-lg font-medium text-slate-500 data-[enabled]:text-teal-900">
+      <span className="flex flex-row items-center gap-2 text-lg font-medium text-slate-500 data-[enabled]:text-orange-900">
         {label}
       </span>
     </h3>
