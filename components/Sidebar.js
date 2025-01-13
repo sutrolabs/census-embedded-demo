@@ -10,10 +10,10 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-slate-200 bg-slate-50 p-2 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start md:p-6">
       <div className="flex flex-col gap-4 overflow-x-auto">
         <Link href="/">
-          <div className="flex flex-row items-center gap-2 md:p-6">
+          <a className="flex flex-row items-center gap-2">
             <i className="fa-solid fa-magnet" />
             <Text>Marketing Magnet</Text>
-          </div>
+          </a>
         </Link>
         {/* Mobile Navbar */}
         <nav className="flex flex-row items-end gap-2 md:hidden">
