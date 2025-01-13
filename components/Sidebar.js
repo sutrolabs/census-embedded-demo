@@ -102,8 +102,8 @@ function Item({ name, nested, href }) {
   return (
     <Link
       href={href}
-      className={`cursor-pointer rounded px-2 py-2 text-sm font-medium leading-none text-slate-900 hover:bg-slate-200/50 hover:text-slate-600 ${
-        pathname === href ? "bg-slate-200 hover:bg-slate-300" : ""
+      className={`cursor-pointer rounded px-2 py-2 text-sm font-medium leading-none hover:bg-slate-200/50 hover:text-slate-600 ${
+        pathname === href ? "bg-slate-200 text-slate-900 hover:bg-slate-300" : "text-slate-600"
       }`}
       data-nested={nested ? "" : null}
     >
