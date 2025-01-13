@@ -8,9 +8,9 @@ export default function Toggle({ checked, disabled, onChange }) {
       onChange={onChange}
       className="
         relative inline-flex h-6 w-11 items-center rounded-full
-        bg-stone-300
+        bg-slate-300
         transition
-        enabled:hover:bg-stone-200
+        enabled:hover:bg-slate-200
         disabled:opacity-50
         aria-checked:bg-indigo-600
         aria-checked:enabled:hover:bg-indigo-500

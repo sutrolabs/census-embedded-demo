@@ -132,13 +132,13 @@ export default function Source({
         >
           <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
           <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
-            <Dialog.Panel className="flex w-full max-w-md flex-col gap-4 rounded bg-stone-100 px-8 py-6">
-              <Dialog.Title className="text-xl font-bold text-stone-700">Delete source</Dialog.Title>
-              <Dialog.Description className="text-stone-600">
+            <Dialog.Panel className="flex w-full max-w-md flex-col gap-4 rounded bg-slate-100 px-8 py-6">
+              <Dialog.Title className="text-xl font-bold text-slate-700">Delete source</Dialog.Title>
+              <Dialog.Description className="text-slate-600">
                 This will permanently remove your connection to {label}.
               </Dialog.Description>
 
-              <p className="text-stone-600">Are you sure you want to continue?</p>
+              <p className="text-slate-600">Are you sure you want to continue?</p>
               <div className="flex flex-row justify-end gap-3">
                 <a id={`delete-source-${source?.id}`}>
                   <Button solid disabled={loading} onClick={deleteSource}>
@@ -181,7 +181,7 @@ export default function Source({
         </Dialog>
         <h3 className="flex flex-row justify-between">
           <span
-            className="flex flex-row items-center gap-2 text-lg font-medium text-stone-500 data-[enabled]:text-teal-900"
+            className="flex flex-row items-center gap-2 text-lg font-medium text-slate-500 data-[enabled]:text-teal-900"
             data-enabled={source ? "" : null}
           >
             <i className={iconClassName} />

@@ -4,17 +4,17 @@ import { useMemo } from "react"
 import { Tag } from "@components/Tag"
 
 const loadingMode = {
-  className: "bg-stone-100 text-stone-300",
+  className: "bg-slate-100 text-slate-300",
   text: "Loading...",
 }
 
 const notConnectedMode = {
-  className: "bg-stone-200 text-stone-400",
+  className: "bg-slate-200 text-slate-400",
   text: "Not connected",
 }
 
 const unknownMode = {
-  className: "bg-stone-200 text-stone-900",
+  className: "bg-slate-200 text-slate-900",
   text: "Unknown",
 }
 
@@ -26,7 +26,7 @@ const modes = [
   },
   {
     status: "pending",
-    className: "bg-stone-300 text-stone-50",
+    className: "bg-slate-300 text-slate-50",
     text: "Not run yet",
   },
   {

@@ -27,7 +27,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
             <Item name="Import Dataset" href="/integrations/import-dataset" />
           </nav>
         </div>
-        <div className="hidden text-center text-lg italic text-stone-700 md:block md:text-2xl">
+        <div className="hidden text-center text-lg italic text-slate-700 md:block md:text-2xl">
           Superpowering marketing operations since{" "}
           <abbr title="Did you know, marketing was first invented when someone figured out they could sell more woolly mammoth meat with a catchy slogan?">
             2024
@@ -61,8 +61,8 @@ function Item({ name, nested, href }) {
   return (
     <Link href={href}>
       <a
-        className="cursor-pointer border-b-2 border-transparent text-sm font-medium text-stone-900 hover:border-teal-800 hover:text-teal-800
-        data-[nested]:ml-4 data-[selected]:border-stone-900 data-[selected]:font-bold md:border-b-0 md:border-l-2 md:pl-2 md:text-2xl"
+        className="cursor-pointer border-b-2 border-transparent text-sm font-medium text-slate-900 hover:border-teal-800 hover:text-teal-800
+        data-[nested]:ml-4 data-[selected]:border-slate-900 data-[selected]:font-bold md:border-b-0 md:border-l-2 md:pl-2 md:text-2xl"
         data-selected={selected ? "" : null}
         data-nested={nested ? "" : null}
       >

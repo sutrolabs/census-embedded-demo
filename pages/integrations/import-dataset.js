@@ -28,10 +28,10 @@ export default function ImportDataset({
         <title>Data Sources - Integrations - Census Embedded Demo App</title>
       </Head>
       <div className="flex flex-col gap-2 xl:flex-row xl:items-center xl:justify-between">
-        <h2 className="text-2xl font-bold text-stone-700">Integrations / Import Dataset</h2>
+        <h2 className="text-2xl font-bold text-slate-700">Integrations / Import Dataset</h2>
       </div>
-      <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">
+      <hr className="border-t border-slate-400" />
+      <p className="italic text-slate-500">
         <b>Note to customer:</b> On this page, the end user (your customer) can connect their source to your
         destination.
       </p>

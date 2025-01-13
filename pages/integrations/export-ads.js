@@ -46,9 +46,9 @@ export default function Index({
       <Head>
         <title>Ad Platforms - Integrations - Census Embedded Demo App</title>
       </Head>
-      <h2 className="text-2xl font-bold text-stone-700">Integrations / Ad Platforms</h2>
-      <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">
+      <h2 className="text-2xl font-bold text-slate-700">Integrations / Ad Platforms</h2>
+      <hr className="border-t border-slate-400" />
+      <p className="italic text-slate-500">
         Create custom ad audiences to match the retailer segments that matter to your business.
       </p>
       <p className="text-teal-400">Step 1: Choose your ad platforms.</p>
@@ -233,7 +233,7 @@ function Sync({
 function DestinationLabel({ label }) {
   return (
     <h3 className="mb-2 flex flex-row justify-between">
-      <span className="flex flex-row items-center gap-2 text-lg font-medium text-stone-500 data-[enabled]:text-teal-900">
+      <span className="flex flex-row items-center gap-2 text-lg font-medium text-slate-500 data-[enabled]:text-teal-900">
         {label}
       </span>
     </h3>

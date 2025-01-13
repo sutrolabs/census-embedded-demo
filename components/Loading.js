@@ -6,7 +6,7 @@ export default function Loading() {
       <Head>
         <title>Loading... - Census Embedded Demo App</title>
       </Head>
-      <h2 className="text-2xl text-stone-300">Loading...</h2>
+      <h2 className="text-2xl text-slate-300">Loading...</h2>
     </>
   )
 }

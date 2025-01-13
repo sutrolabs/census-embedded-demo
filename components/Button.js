@@ -10,10 +10,10 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
         text-indigo-700 shadow-sm
         transition
         enabled:hover:bg-indigo-100/50 enabled:hover:text-indigo-600
-        disabled:border-stone-300 disabled:text-stone-300
-        data-[solid]:border-indigo-700 data-[solid]:bg-indigo-700 data-[solid]:text-stone-50
-        data-[solid]:enabled:hover:border-indigo-600 data-[solid]:enabled:hover:bg-indigo-600 data-[solid]:enabled:hover:text-stone-50
-        data-[solid]:disabled:border-stone-400 data-[solid]:disabled:bg-stone-400
+        disabled:border-slate-300 disabled:text-slate-300
+        data-[solid]:border-indigo-700 data-[solid]:bg-indigo-700 data-[solid]:text-slate-50
+        data-[solid]:enabled:hover:border-indigo-600 data-[solid]:enabled:hover:bg-indigo-600 data-[solid]:enabled:hover:text-slate-50
+        data-[solid]:disabled:border-slate-400 data-[solid]:disabled:bg-slate-400
         ${className}
         ${emphasize ? "relative inline-flex items-center justify-center overflow-hidden hover:scale-105" : ""}
       `}

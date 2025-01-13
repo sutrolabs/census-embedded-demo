@@ -10,10 +10,10 @@ export default function Index() {
       <Head>
         <title>Integrations - Census Embedded Demo App</title>
       </Head>
-      <h2 className="text-2xl font-bold text-stone-700">Integrations</h2>
-      <hr className="border-t border-stone-400" />
-      <h3 className="text-xl font-bold text-stone-700">Export</h3>
-      <p className="italic text-stone-500">
+      <h2 className="text-2xl font-bold text-slate-700">Integrations</h2>
+      <hr className="border-t border-slate-400" />
+      <h3 className="text-xl font-bold text-slate-700">Export</h3>
+      <p className="italic text-slate-500">
         Activate your data by <Anchor href="https://www.getcensus.com">syncing</Anchor> it to the tools you
         use every day. It&apos;s time to bring your revenue to the next level!
       </p>
@@ -29,8 +29,8 @@ export default function Index() {
           <i className="fa-solid fa-chevron-right ml-2" />
         </Button>
       </Link>
-      <h3 className="text-xl font-bold text-stone-700">Import</h3>
-      <p className="italic text-stone-500">
+      <h3 className="text-xl font-bold text-slate-700">Import</h3>
+      <p className="italic text-slate-500">
         Enrich your data in Marketing Magnet by <Anchor href="https://www.getcensus.com">syncing</Anchor> it
         from your data warehouse. Enhance your Marketing Research today!
       </p>

@@ -12,16 +12,16 @@ export default function Index() {
       <Head>
         <title>Dashboard - Census Embedded Demo App</title>
       </Head>
-      <h2 className="text-2xl font-bold text-stone-700">Dashboard</h2>
-      <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">
+      <h2 className="text-2xl font-bold text-slate-700">Dashboard</h2>
+      <hr className="border-t border-slate-400" />
+      <p className="italic text-slate-500">
         Unlock the full potential of your business with comprehensive data on consumer trends, retailers,
         industry reports, and more.
       </p>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className="flex flex-col gap-3">
           <h3 className="font-medium text-teal-800">Trend Datasets</h3>
-          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-stone-600">
+          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-slate-600">
             <li>
               <Anchor href="/">Market Trends</Anchor> updated 1 day ago
             </li>
@@ -42,12 +42,12 @@ export default function Index() {
         <Card className="flex flex-col gap-3">
           <div className="flex flex-row justify-between">
             <h3 className="font-medium text-teal-800">Retailer Highlights</h3>
-            <span className="text-sm text-stone-500">1 / 12</span>
+            <span className="text-sm text-slate-500">1 / 12</span>
           </div>
-          <ul className="ml-2 flex grow flex-col text-sm text-stone-600">
+          <ul className="ml-2 flex grow flex-col text-sm text-slate-600">
             <ol>
               <span className="text-teal-600">Name:</span>{" "}
-              <span className="font-medium text-stone-800">Healthways</span>
+              <span className="font-medium text-slate-800">Healthways</span>
             </ol>
             <ol>
               <span className="text-teal-600">Type:</span> Grocery chain
@@ -77,7 +77,7 @@ export default function Index() {
 
         <Card className="flex flex-col gap-3">
           <h3 className="font-medium text-teal-800">Industry Reports</h3>
-          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-stone-600">
+          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-slate-600">
             <li>
               <Anchor href="/">Global IT Services Market Report</Anchor> updated 1 week ago
             </li>
@@ -98,9 +98,9 @@ export default function Index() {
         <Card className="flex flex-col gap-3">
           <div className="flex flex-row justify-between">
             <h3 className="font-medium text-teal-800">Trend Highlights</h3>
-            <span className="text-sm text-stone-500">1 / 12</span>
+            <span className="text-sm text-slate-500">1 / 12</span>
           </div>
-          <div className="-mb-3 text-sm text-stone-800 underline">Average Global Price of Oil ($/bbl)</div>
+          <div className="-mb-3 text-sm text-slate-800 underline">Average Global Price of Oil ($/bbl)</div>
           <Line
             data={{
               labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],

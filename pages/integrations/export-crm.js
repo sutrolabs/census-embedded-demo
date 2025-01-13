@@ -83,9 +83,9 @@ export default function Index({
       <Head>
         <title>CRM - Integrations - Census Embedded Demo App</title>
       </Head>
-      <h2 className="text-2xl font-bold text-stone-700">Integrations / CRM</h2>
-      <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">
+      <h2 className="text-2xl font-bold text-slate-700">Integrations / CRM</h2>
+      <hr className="border-t border-slate-400" />
+      <p className="italic text-slate-500">
         Get access to relevant retailer and trend data right within your everyday sales tools.
       </p>
       <p className="text-teal-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>

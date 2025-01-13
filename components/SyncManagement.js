@@ -73,7 +73,7 @@ export default function SyncManagement({
           />
         ) : showAddNewSyncButton ? (
           <Button
-            className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
+            className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-slate-50  px-5 py-8 text-xl
               shadow-sm"
             onClick={initiateSyncWizardFlow}
           >
