@@ -14,25 +14,40 @@ const navItems = [
   },
   {
     id: 2,
+    href: "/integrations/import-dataset",
+    name: "Datasets",
+  },
+  {
+    id: 3,
     href: "/integrations",
     name: "Integrations",
   },
   {
-    id: 3,
+    id: 4,
     href: "/integrations/export-crm",
     name: "CRM",
-  },
-  {
-    id: 4,
-    href: "/integrations/export-ads",
-    name: "Ad Platforms",
+    group: "integrations",
   },
   {
     id: 5,
-    href: "/integrations/import-dataset",
-    name: "Import Dataset",
+    href: "/integrations/export-ads",
+    name: "Ad Platforms",
+    group: "integrations",
   },
 ]
+
+const groupedNavItems = navItems.reduce((acc, item) => {
+  if (item.group) {
+    if (!acc[item.group]) {
+      acc[item.group] = []
+    }
+    acc[item.group].push(item)
+  } else {
+    acc.root = acc.root || []
+    acc.root.push(item)
+  }
+  return acc
+}, {})
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
@@ -53,9 +68,19 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
       </div>
       {/* Desktop Navbar */}
       <nav className="hidden w-full flex-col gap-1 self-start md:flex">
-        {navItems.map((item) => (
+        {groupedNavItems.root?.map((item) => (
           <Item key={item.id} name={item.name} href={item.href} />
         ))}
+        {Object.entries(groupedNavItems).map(
+          ([group, items]) =>
+            group !== "root" && (
+              <div key={group} className="ml-2 flex flex-col gap-1 border-l border-slate-200 pl-2">
+                {items.map((item) => (
+                  <Item key={item.id} name={item.name} href={item.href} nested={true} />
+                ))}
+              </div>
+            ),
+        )}
       </nav>
 
       <SidebarFooter
@@ -77,8 +102,8 @@ function Item({ name, nested, href }) {
   return (
     <Link
       href={href}
-      className={`cursor-pointer rounded p-2 text-sm font-medium leading-none text-slate-900 hover:border-teal-800 hover:text-teal-500 ${
-        pathname === href ? "hover: bg-slate-200" : ""
+      className={`cursor-pointer rounded px-2 py-2 text-sm font-medium leading-none text-slate-900 hover:bg-slate-200/50 hover:text-slate-600 ${
+        pathname === href ? "bg-slate-200 hover:bg-slate-300" : ""
       }`}
       data-nested={nested ? "" : null}
     >
