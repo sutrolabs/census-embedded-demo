@@ -10,8 +10,6 @@ export default function Index() {
     <>
       <Header title="Integrations" />
       <div className="flex h-full flex-col gap-8 px-8 py-6">
-        <h2 className="text-2xl font-bold text-slate-700">Integrations</h2>
-        <hr className="border-t border-slate-400" />
         <h3 className="text-xl font-bold text-slate-700">Export</h3>
         <p className="italic text-slate-500">
           Activate your data by <Anchor href="https://www.getcensus.com">syncing</Anchor> it to the tools you
