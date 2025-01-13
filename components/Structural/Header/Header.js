@@ -1,12 +1,8 @@
-import Head from "next/head"
-
+import { Text } from "@radix-ui/themes"
 export default function Header({ title, description }) {
   return (
-    <Head>
-      <title>{title ? `${title} - Marketing Magnet` : "Marketing Magnet"}</title>
-      {description && <meta name="description" content={description} />}
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <link rel="icon" href="/favicon.ico" />
-    </Head>
+    <div className="w-full border-b border-slate-200 bg-white px-8 py-4">
+      <Text className="text-lg font-medium leading-none">{title}</Text>
+    </div>
   )
 }
