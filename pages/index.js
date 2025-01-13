@@ -33,10 +33,8 @@ export default function Index() {
             </li>
           </ul>
           <Link href="/">
-            <Button>
-              <i className="fa-solid fa-search mr-2" />
-              Explore trends
-            </Button>
+            <i className="fa-solid fa-search mr-2" />
+            Explore trends
           </Link>
         </Card>
         <Card className="flex flex-col gap-3">
@@ -66,9 +64,7 @@ export default function Index() {
             <Button>
               <i className="fa-solid fa-chevron-left" />
             </Button>
-            <Link href="/">
-              <Button className="grow">View details</Button>
-            </Link>
+            <Link href="/">View details</Link>
             <Button>
               <i className="fa-solid fa-chevron-right" />
             </Button>
@@ -89,10 +85,8 @@ export default function Index() {
             </li>
           </ul>
           <Link href="/">
-            <Button>
-              <i className="fa-solid fa-search mr-2" />
-              Explore retailers
-            </Button>
+            <i className="fa-solid fa-search mr-2" />
+            Explore retailers
           </Link>
         </Card>
         <Card className="flex flex-col gap-3">
@@ -137,9 +131,7 @@ export default function Index() {
             <Button>
               <i className="fa-solid fa-chevron-left" />
             </Button>
-            <Link href="/">
-              <Button className="grow">View details</Button>
-            </Link>
+            <Link href="/">View details</Link>
             <Button>
               <i className="fa-solid fa-chevron-right" />
             </Button>
@@ -151,10 +143,8 @@ export default function Index() {
             Did you know you can connect this data directly to your CRM and ad platforms?
           </p>
           <Link href="/integrations">
-            <Button emphasize solid className="w-full lg:w-1/2">
-              <i className="fa-solid fa-rocket-launch mr-2" />
-              Get started
-            </Button>
+            <i className="fa-solid fa-rocket-launch mr-2" />
+            Get started
           </Link>
         </Card>
       </div>

@@ -17,28 +17,25 @@ export default function Index() {
         Activate your data by <Anchor href="https://www.getcensus.com">syncing</Anchor> it to the tools you
         use every day. It&apos;s time to bring your revenue to the next level!
       </p>
-      <Link href="/integrations/export-crm">
-        <Button className="min-w-[300px] self-center" solid>
-          Connect your CRM
-          <i className="fa-solid fa-chevron-right ml-2" />
-        </Button>
-      </Link>
-      <Link href="/integrations/export-ads">
-        <Button className="min-w-[300px] self-center" solid>
-          Connect your ad platforms
-          <i className="fa-solid fa-chevron-right ml-2" />
-        </Button>
-      </Link>
+
+      <Button className="min-w-[300px] self-center" solid>
+        Connect your CRM
+        <i className="fa-solid fa-chevron-right ml-2" />
+      </Button>
+
+      <Button className="min-w-[300px] self-center" solid>
+        Connect your ad platforms
+        <i className="fa-solid fa-chevron-right ml-2" />
+      </Button>
+
       <h3 className="text-xl font-bold text-slate-700">Import</h3>
       <p className="italic text-slate-500">
         Enrich your data in Marketing Magnet by <Anchor href="https://www.getcensus.com">syncing</Anchor> it
         from your data warehouse. Enhance your Marketing Research today!
       </p>
       <Link href="/integrations/import-dataset">
-        <Button className="min-w-[300px] self-center" solid>
-          Import data to Marketing Magnet
-          <i className="fa-solid fa-chevron-right ml-2" />
-        </Button>
+        Import data to Marketing Magnet
+        <i className="fa-solid fa-chevron-right ml-2" />
       </Link>
     </>
   )

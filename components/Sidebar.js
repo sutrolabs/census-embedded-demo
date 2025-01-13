@@ -9,11 +9,9 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
   return (
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-slate-200 bg-slate-50 p-2 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start md:p-6">
       <div className="flex flex-col gap-4 overflow-x-auto">
-        <Link href="/">
-          <a className="flex flex-row items-center gap-2">
-            <i className="fa-solid fa-magnet" />
-            <Text>Marketing Magnet</Text>
-          </a>
+        <Link href="/" className="flex flex-row items-center gap-2">
+          <i className="fa-solid fa-magnet" />
+          <Text>Marketing Magnet</Text>
         </Link>
         {/* Mobile Navbar */}
         <nav className="flex flex-row items-end gap-2 md:hidden">
@@ -49,15 +47,14 @@ function Item({ name, nested, href }) {
   const selected = router.asPath === href
 
   return (
-    <Link href={href}>
-      <a
-        className="cursor-pointer text-sm font-medium text-slate-900 hover:border-teal-800 hover:text-teal-800
-        data-[nested]:ml-4"
-        data-selected={selected ? "" : null}
-        data-nested={nested ? "" : null}
-      >
-        <Text>{name}</Text>
-      </a>
+    <Link
+      href={href}
+      className="cursor-pointer text-sm font-medium text-slate-900 hover:border-teal-800 hover:text-teal-800
+    data-[nested]:ml-4"
+      data-selected={selected ? "" : null}
+      data-nested={nested ? "" : null}
+    >
+      <Text>{name}</Text>
     </Link>
   )
 }
@@ -94,17 +91,13 @@ const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode 
           className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
           href="https://developers.getcensus.com/getting-started/introduction"
         >
-          <a target="_blank">
-            <i className="fa-solid fa-book" />
-          </a>
+          <i className="fa-solid fa-book" />
         </Link>
         <Link
           className="flex items-center gap-2 text-sm md:gap-3 md:text-2xl"
           href="https://github.com/sutrolabs/census-embedded-demo"
         >
-          <a target="_blank">
-            <i className="fa-brands fa-github" />
-          </a>
+          <i className="fa-brands fa-github" />
         </Link>
       </div>
     </div>
