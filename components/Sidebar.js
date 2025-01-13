@@ -9,11 +9,9 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 bg-slate-100 p-2 md:h-screen md:w-[200px] md:flex-col md:items-center md:justify-start md:p-6">
       <div className="flex flex-col gap-4 overflow-x-auto">
         <Link href="/">
-          <div className="flex flex-row items-center gap-4 md:flex-col md:p-6">
-            <i className="fa-solid fa-magnet " />
-            <div className="flex flex-col">
-              <h1 className="text-center font-bold ">Marketing Magnet</h1>
-            </div>
+          <div className="flex flex-row items-center gap-2 md:p-6">
+            <i className="fa-solid fa-magnet" />
+            <span className=" text-center font-bold">Marketing Magnet</span>
           </div>
         </Link>
         {/* Mobile Navbar */}
@@ -24,12 +22,6 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
           <Item name="Ad Platforms" href="/integrations/export-ads" />
           <Item name="Import Dataset" href="/integrations/import-dataset" />
         </nav>
-      </div>
-      <div className="hidden text-center  italic text-slate-700 md:block">
-        Superpowering marketing operations since{" "}
-        <abbr title="Did you know, marketing was first invented when someone figured out they could sell more woolly mammoth meat with a catchy slogan?">
-          2024
-        </abbr>
       </div>
       {/* Desktop Navbar */}
       <nav className="hidden flex-col gap-4 self-start px-6 py-8 md:flex">
