@@ -78,7 +78,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
         {Object.entries(groupedNavItems).map(
           ([group, items]) =>
             group !== "root" && (
-              <div key={group} className="ml-2 flex flex-col gap-1 border-l border-slate-200 pl-2">
+              <div key={group} className="ml-4 flex flex-col gap-1 border-l border-slate-200 pl-3">
                 {items.map((item) => (
                   <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
                 ))}
@@ -110,7 +110,6 @@ function Item({ name, nested, href, icon: Icon }) {
           ? "bg-slate-200 text-slate-900 "
           : "text-slate-600 hover:bg-slate-200/50 hover:text-slate-700"
       }`}
-      data-nested={nested ? "" : null}
     >
       {Icon && <Icon className={`h-4 ${isActive ? "text-slate-900" : ""}`} />}
       <Text>{name}</Text>
