@@ -3,6 +3,7 @@ import { useRouter } from "next/router"
 import { Tooltip } from "react-tooltip"
 
 import Toggle from "@components/Toggle"
+import { Text } from "@radix-ui/themes"
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
@@ -11,7 +12,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
         <Link href="/">
           <div className="flex flex-row items-center gap-2 md:p-6">
             <i className="fa-solid fa-magnet" />
-            <span>Marketing Magnet</span>
+            <Text>Marketing Magnet</Text>
           </div>
         </Link>
         {/* Mobile Navbar */}
@@ -55,7 +56,7 @@ function Item({ name, nested, href }) {
         data-selected={selected ? "" : null}
         data-nested={nested ? "" : null}
       >
-        {name}
+        <Text>{name}</Text>
       </a>
     </Link>
   )
