@@ -59,7 +59,13 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md border border-neutral-100">
-            <Image src="acme-demo-logo-square.jpg" className="object-cover" alt="" />
+            <Image
+              src="/acme-demo-logo-square.jpg"
+              className="w-full object-cover"
+              alt=""
+              width="200"
+              height="200"
+            />
           </div>
           <div className="flex flex-col gap-0.5 leading-none">
             <Text className=" font-medium">Acme</Text>
