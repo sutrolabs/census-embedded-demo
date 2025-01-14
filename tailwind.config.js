@@ -11,13 +11,7 @@ module.exports = {
           },
         ],
       },
-      fontWeight: {
-        light: "375",
-        normal: "450",
-        medium: "550",
-        semibold: "650",
-        extrabold: "800",
-      },
+
       fontSize: {
         xxs: "0.7rem",
         xs: "0.75rem",
