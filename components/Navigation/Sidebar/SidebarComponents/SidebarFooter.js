@@ -1,5 +1,6 @@
-import { Tooltip } from "react-tooltip"
 import Link from "next/link"
+import { Tooltip } from "react-tooltip"
+
 import Toggle from "@components/Toggle"
 
 export const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) => (

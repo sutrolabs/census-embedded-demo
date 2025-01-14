@@ -1,7 +1,8 @@
-import { Text } from "@radix-ui/themes"
 import { HomeIcon, SquaresPlusIcon, TableCellsIcon } from "@heroicons/react/20/solid"
-import { Item } from "./SidebarComponents/SidebarNavItem"
-import { SidebarFooter } from "./SidebarComponents/SidebarFooter"
+import { Text } from "@radix-ui/themes"
+
+import { SidebarFooter } from "@components/Navigation/Sidebar/SidebarComponents/SidebarFooter"
+import { Item } from "@components/Navigation/Sidebar/SidebarComponents/SidebarNavItem"
 
 const navItems = [
   {

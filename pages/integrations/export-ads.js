@@ -1,9 +1,9 @@
-import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
-import Header from "@components/Structural/Header/Header"
+
 import Card from "@components/Card"
 import Destination from "@components/Destination"
 import SegmentManagement from "@components/SegmentManagement"
+import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 

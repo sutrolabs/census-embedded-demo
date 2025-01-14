@@ -1,5 +1,5 @@
-import Link from "next/link"
 import { Text } from "@radix-ui/themes"
+import Link from "next/link"
 import { usePathname } from "next/navigation"
 
 export function Item({ name, href, icon: Icon }) {
