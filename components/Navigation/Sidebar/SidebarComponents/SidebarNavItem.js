@@ -1,6 +1,6 @@
-import { usePathname } from "next/navigation"
 import Link from "next/link"
 import { Text } from "@radix-ui/themes"
+import { usePathname } from "next/navigation"
 
 export function Item({ name, href, icon: Icon }) {
   const pathname = usePathname()
@@ -9,7 +9,7 @@ export function Item({ name, href, icon: Icon }) {
   return (
     <Link
       href={href}
-      className={`flex cursor-pointer flex-row items-center gap-2 rounded-md border px-2 py-2 text-sm font-medium leading-none  ${
+      className={`flex cursor-pointer flex-row items-center gap-2 rounded-md border p-2 text-sm font-medium leading-none  ${
         isActive
           ? " border-slate-200 bg-white text-slate-900 shadow"
           : "border-transparent text-slate-600 hover:bg-slate-200/50 hover:text-slate-700"
