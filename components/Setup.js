@@ -15,7 +15,6 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
             workspaceAccessToken={workspaceAccessToken}
             setWorkspaceAccessToken={setWorkspaceAccessToken}
           />
-          <hr className="border-t border-slate-200" />
         </div>
       </div>
     </>
