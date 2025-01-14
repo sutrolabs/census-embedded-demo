@@ -14,7 +14,7 @@ export default function Document() {
         />
         <script src="https://kit.fontawesome.com/8010c05861.js" crossOrigin="anonymous" async></script>
       </Head>
-      <body className="bg-slate-50 font-poppins text-slate-900">
+      <body>
         <Main />
         <NextScript />
       </body>
