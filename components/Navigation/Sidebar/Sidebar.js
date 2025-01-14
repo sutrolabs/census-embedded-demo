@@ -1,11 +1,11 @@
-import { HomeIcon, SquaresPlusIcon, TableCellsIcon } from "@heroicons/react/20/solid"
 import { Text } from "@radix-ui/themes"
 
-import { SidebarFooter } from "@components/Navigation/Sidebar/SidebarComponents/SidebarFooter"
-import { Item } from "@components/Navigation/Sidebar/SidebarComponents/SidebarNavItem"
 import { CentralHomeIcon } from "@components/Icons/Home"
 import { CentralTableIcon } from "@components/Icons/Table"
 import { CentralSquareGridCircleIcon } from "@components/Icons/SquareGridCircle"
+import { SidebarFooter } from "@components/Navigation/Sidebar/SidebarComponents/SidebarFooter"
+import { Item } from "@components/Navigation/Sidebar/SidebarComponents/SidebarNavItem"
+import Image from "next/image"
 
 const navItems = [
   {
@@ -59,7 +59,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md border border-neutral-100">
-            <img src="acme-demo-logo-square.jpg" className="object-cover" />
+            <Image src="acme-demo-logo-square.jpg" className="object-cover" />
           </div>
           <div className="flex flex-col gap-0.5 leading-none">
             <Text className=" font-medium">Acme</Text>

@@ -1,8 +1,9 @@
 import Link from "next/link"
 import { Tooltip } from "react-tooltip"
 import { Text } from "@radix-ui/themes"
-import Toggle from "@components/Toggle"
+
 import { CentralLogOutIcon } from "@components/Icons/LogOut"
+import Toggle from "@components/Toggle"
 
 const footerLinks = [
   {
