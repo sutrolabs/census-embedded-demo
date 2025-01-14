@@ -1,7 +1,3 @@
-import Link from "next/link"
-import { Tooltip } from "react-tooltip"
-
-import Toggle from "@components/Toggle"
 import { Text } from "@radix-ui/themes"
 import { HomeIcon, SquaresPlusIcon, TableCellsIcon } from "@heroicons/react/20/solid"
 import { Item } from "./SidebarComponents/SidebarNavItem"
