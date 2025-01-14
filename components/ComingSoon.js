@@ -9,9 +9,9 @@ export default function ComingSoon() {
       <Head>
         <title>Coming Soon - Census Embedded Demo App</title>
       </Head>
-      <h2 className="text-2xl font-bold text-slate-700">Coming Soon</h2>
-      <hr className="border-t border-slate-400" />
-      <p className="italic text-slate-500">Coming soon...</p>
+      <h2 className="text-2xl font-bold text-neutral-700">Coming Soon</h2>
+      <hr className="border-t border-neutral-400" />
+      <p className="italic text-neutral-500">Coming soon...</p>
       <Link href="/integrations/crm">
         <Button className="min-w-[300px] self-center" solid>
           Go to dashboard

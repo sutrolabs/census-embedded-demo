@@ -11,14 +11,14 @@ export default function Index() {
     <>
       <Header title="Dashboard" />
       <div className="*:mx-auto *:w-full *:max-w-[1000px] flex h-full flex-col gap-8 overflow-y-auto px-8 py-6">
-        <p className="italic text-slate-500">
+        <p className="italic text-neutral-500">
           Unlock the full potential of your business with comprehensive data on consumer trends, retailers,
           industry reports, and more.
         </p>
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <Card className="flex flex-col gap-3">
-            <h3 className="font-medium text-slate-800">Trend Datasets</h3>
-            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-slate-600">
+            <h3 className="font-medium text-neutral-800">Trend Datasets</h3>
+            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-neutral-600">
               <li>
                 <Anchor href="/">Market Trends</Anchor> updated 1 day ago
               </li>
@@ -36,25 +36,25 @@ export default function Index() {
           </Card>
           <Card className="flex flex-col gap-3">
             <div className="flex flex-row justify-between">
-              <h3 className="font-medium text-slate-800">Retailer Highlights</h3>
-              <span className="text-sm text-slate-500">1 / 12</span>
+              <h3 className="font-medium text-neutral-800">Retailer Highlights</h3>
+              <span className="text-sm text-neutral-500">1 / 12</span>
             </div>
-            <ul className="ml-2 flex grow flex-col text-sm text-slate-600">
+            <ul className="ml-2 flex grow flex-col text-sm text-neutral-600">
               <ol>
-                <span className="text-orange-600">Name:</span>{" "}
-                <span className="font-medium text-slate-800">Healthways</span>
+                <span className="text-emerald-600">Name:</span>{" "}
+                <span className="font-medium text-neutral-800">Healthways</span>
               </ol>
               <ol>
-                <span className="text-orange-600">Type:</span> Grocery chain
+                <span className="text-emerald-600">Type:</span> Grocery chain
               </ol>
               <ol>
-                <span className="text-orange-600">Location:</span> UK
+                <span className="text-emerald-600">Location:</span> UK
               </ol>
               <ol>
-                <span className="text-orange-600">Annual revenue:</span> $2.1M
+                <span className="text-emerald-600">Annual revenue:</span> $2.1M
               </ol>
               <ol>
-                <span className="text-orange-600">Contacts:</span> 4
+                <span className="text-emerald-600">Contacts:</span> 4
               </ol>
             </ul>
             <div className="flex flex-row justify-center gap-2">
@@ -69,8 +69,8 @@ export default function Index() {
           </Card>
 
           <Card className="flex flex-col gap-3">
-            <h3 className="font-medium text-slate-800">Industry Reports</h3>
-            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-slate-600">
+            <h3 className="font-medium text-neutral-800">Industry Reports</h3>
+            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-neutral-600">
               <li>
                 <Anchor href="/">Global IT Services Market Report</Anchor> updated 1 week ago
               </li>
@@ -88,10 +88,12 @@ export default function Index() {
           </Card>
           <Card className="flex flex-col gap-3">
             <div className="flex flex-row justify-between">
-              <h3 className="font-medium text-slate-800">Trend Highlights</h3>
-              <span className="text-sm text-slate-500">1 / 12</span>
+              <h3 className="font-medium text-neutral-800">Trend Highlights</h3>
+              <span className="text-sm text-neutral-500">1 / 12</span>
             </div>
-            <div className="-mb-3 text-sm text-slate-800 underline">Average Global Price of Oil ($/bbl)</div>
+            <div className="-mb-3 text-sm text-neutral-800 underline">
+              Average Global Price of Oil ($/bbl)
+            </div>
             <Line
               data={{
                 labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
@@ -135,8 +137,8 @@ export default function Index() {
             </div>
           </Card>
           <Card className="flex animate-[wiggle] flex-col items-center gap-3 lg:col-span-2">
-            <h3 className="font-medium text-orange-800">Integrations</h3>
-            <p className="text-sm text-orange-600">
+            <h3 className="font-medium text-emerald-800">Integrations</h3>
+            <p className="text-sm text-emerald-600">
               Did you know you can connect this data directly to your CRM and ad platforms?
             </p>
             <Link href="/integrations">

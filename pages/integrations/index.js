@@ -9,8 +9,8 @@ export default function Index() {
     <>
       <Header title="Integrations" />
       <div className="flex h-full flex-col gap-8 px-8 py-6">
-        <h3 className="text-xl font-bold text-slate-700">Export</h3>
-        <p className="italic text-slate-500">
+        <h3 className="text-xl font-bold text-neutral-700">Export</h3>
+        <p className="italic text-neutral-500">
           Activate your data by <Anchor href="https://www.getcensus.com">syncing</Anchor> it to the tools you
           use every day. It&apos;s time to bring your revenue to the next level!
         </p>
@@ -25,8 +25,8 @@ export default function Index() {
           <i className="fa-solid fa-chevron-right ml-2" />
         </Button>
 
-        <h3 className="text-xl font-bold text-slate-700">Import</h3>
-        <p className="italic text-slate-500">
+        <h3 className="text-xl font-bold text-neutral-700">Import</h3>
+        <p className="italic text-neutral-500">
           Enrich your data in Marketing Magnet by <Anchor href="https://www.getcensus.com">syncing</Anchor> it
           from your data warehouse. Enhance your Marketing Research today!
         </p>

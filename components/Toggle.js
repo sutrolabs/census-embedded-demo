@@ -8,12 +8,12 @@ export default function Toggle({ checked, disabled, onChange }) {
       onChange={onChange}
       className="
         relative inline-flex h-6 w-11 items-center rounded-full
-        bg-slate-300
+        bg-neutral-300
         transition
-        enabled:hover:bg-slate-200
+        enabled:hover:bg-neutral-200
         disabled:opacity-50
-        aria-checked:bg-orange-600
-        aria-checked:enabled:hover:bg-orange-500
+        aria-checked:bg-emerald-600
+        aria-checked:enabled:hover:bg-emerald-500
       "
       data-checked={checked ? "" : null}
     >
