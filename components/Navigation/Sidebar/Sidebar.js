@@ -3,25 +3,28 @@ import { Text } from "@radix-ui/themes"
 
 import { SidebarFooter } from "@components/Navigation/Sidebar/SidebarComponents/SidebarFooter"
 import { Item } from "@components/Navigation/Sidebar/SidebarComponents/SidebarNavItem"
+import { CentralHomeIcon } from "@components/Icons/Home"
+import { CentralTableIcon } from "@components/Icons/Table"
+import { CentralSquareGridCircleIcon } from "@components/Icons/SquareGridCircle"
 
 const navItems = [
   {
     id: 1,
     href: "/",
     name: "Dashboard",
-    icon: HomeIcon,
+    icon: CentralHomeIcon,
   },
   {
     id: 2,
     href: "/integrations/import-dataset",
     name: "Datasets",
-    icon: TableCellsIcon,
+    icon: CentralTableIcon,
   },
   {
     id: 3,
     href: "/integrations",
     name: "Integrations",
-    icon: SquaresPlusIcon,
+    icon: CentralSquareGridCircleIcon,
   },
   {
     id: 4,
@@ -52,13 +55,16 @@ const groupedNavItems = navItems.reduce((acc, item) => {
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
-    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-200 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-start">
+    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-200 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-between">
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
-          <div className="flex h-10 w-10 items-center justify-center rounded-md border border-neutral-200 bg-white p-3 shadow">
-            <i className="fa-solid fa-magnet text-lg leading-none text-neutral-400" />
+          <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md border border-neutral-100">
+            <img src="acme-demo-logo-square.jpg" className="object-cover" />
           </div>
-          <Text className="text-sm font-medium leading-none">Marketing Magnet</Text>
+          <div className="flex flex-col gap-0.5 leading-none">
+            <Text className=" font-medium">Acme</Text>
+            <Text className="text-xxs text-neutral-500">Powering marketing operations</Text>
+          </div>
         </div>
         {/* Mobile Navbar */}
         <nav className="flex flex-row items-end gap-1 md:hidden">
@@ -66,23 +72,23 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
             <Item key={item.id} name={item.name} href={item.href} />
           ))}
         </nav>
+        {/* Desktop Navbar */}
+        <nav className="hidden w-full flex-col gap-0.5 self-start md:flex">
+          {groupedNavItems.root?.map((item) => (
+            <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
+          ))}
+          {Object.entries(groupedNavItems).map(
+            ([group, items]) =>
+              group !== "root" && (
+                <div key={group} className="ml-4 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
+                  {items.map((item) => (
+                    <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
+                  ))}
+                </div>
+              ),
+          )}
+        </nav>
       </div>
-      {/* Desktop Navbar */}
-      <nav className="hidden w-full flex-col gap-0.5 self-start md:flex">
-        {groupedNavItems.root?.map((item) => (
-          <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
-        ))}
-        {Object.entries(groupedNavItems).map(
-          ([group, items]) =>
-            group !== "root" && (
-              <div key={group} className="ml-4 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
-                {items.map((item) => (
-                  <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
-                ))}
-              </div>
-            ),
-        )}
-      </nav>
 
       <SidebarFooter
         onLogOut={onLogOut}
