@@ -9,13 +9,13 @@ export function Item({ name, href, icon: Icon }) {
   return (
     <Link
       href={href}
-      className={`flex cursor-pointer flex-row items-center gap-2 rounded border p-2 text-sm font-medium leading-none  ${
+      className={`flex cursor-pointer flex-row items-center gap-2 rounded p-2  text-sm font-medium leading-none  ${
         isActive
-          ? " border-neutral-100 bg-white text-neutral-700 shadow"
-          : "border-transparent text-neutral-600 hover:bg-neutral-200/50 hover:text-neutral-700"
+          ? "  bg-neutral-200 text-neutral-700"
+          : "border-transparent text-neutral-500 hover:bg-neutral-200/50 hover:text-neutral-700"
       }`}
     >
-      {Icon && <Icon className={`h-4 ${isActive ? "text-emerald-500" : ""}`} />}
+      {Icon && <Icon className={`h-4 w-4 ${isActive ? "text-neutral-600" : "text-neutral-400"}`} />}
       <Text>{name}</Text>
     </Link>
   )
