@@ -4,7 +4,7 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
   return (
     <button
       className={`
-        bg-whtie rounded-md
+        rounded-md
         border border-neutral-200 bg-white
         px-3 py-2
         text-neutral-700        transition-all duration-75
