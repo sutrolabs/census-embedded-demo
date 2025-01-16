@@ -141,10 +141,10 @@ export default function Index() {
             <p className="text-sm text-emerald-600">
               Did you know you can connect this data directly to your CRM and ad platforms?
             </p>
-            <Link href="/integrations">
-              <i className="fa-solid fa-rocket-launch mr-2" />
+            <Button solid onClick={() => (window.location.href = "/integrations")} emphasize>
+              <i className="fa-solid fa-rocket-launch text-sm" />
               Get started
-            </Link>
+            </Button>
           </Card>
         </div>
       </div>
