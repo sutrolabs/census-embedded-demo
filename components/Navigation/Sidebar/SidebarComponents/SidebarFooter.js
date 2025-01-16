@@ -4,6 +4,7 @@ import { Tooltip } from "react-tooltip"
 
 import { CentralLogOutIcon } from "@components/Icons/LogOut"
 import Toggle from "@components/Toggle"
+import Button from "@components/Button"
 
 const footerLinks = [
   {
@@ -66,14 +67,10 @@ export const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setD
           </div>
         ))}
       </div>
-
-      <button
-        onClick={onLogOut}
-        className="flex flex-row items-center justify-center gap-2 rounded-md border border-neutral-200 px-3 py-2 text-sm"
-      >
-        <CentralLogOutIcon className="h-4 w-4 text-neutral-500" />
-        <Text className="hidden text-neutral-600 md:block">Log out</Text>
-      </button>
+      <Button onClick={onLogOut} className="flex flex-row items-center">
+        <Text>Log Out</Text>
+        <CentralLogOutIcon className="h-3.5 w-3.5" />
+      </Button>
     </div>
   )
 }
