@@ -44,7 +44,7 @@ export default function Index({
   return (
     <>
       <Header title="Integrations / Ad Platforms" />
-      <div className="flex h-full flex-col gap-8 px-8 py-6">
+      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 px-8 py-6">
         <p className="  text-neutral-500">
           Create custom ad audiences to match the retailer segments that matter to your business.
         </p>

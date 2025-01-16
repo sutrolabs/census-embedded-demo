@@ -10,12 +10,12 @@ export default function Index() {
   return (
     <>
       <Header title="Dashboard" />
-      <div className="*:mx-auto *:w-full *:max-w-[1000px] flex h-full flex-col gap-8 overflow-y-auto px-8 py-6">
-        <p className=" text-neutral-500">
+      <div className="flex h-full flex-col gap-8 overflow-y-auto px-8 py-6">
+        <p className=" mx-auto w-full max-w-[1200px] text-neutral-500 ">
           Unlock the full potential of your business with comprehensive data on consumer trends, retailers,
           industry reports, and more.
         </p>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <div className="mx-auto grid w-full max-w-[1200px] grid-cols-1 gap-4 lg:grid-cols-2">
           <Card className="flex flex-col gap-3">
             <h3 className="font-medium text-neutral-800">Trend Datasets</h3>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-neutral-600">
