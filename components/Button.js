@@ -10,7 +10,7 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
         text-neutral-700        transition-all duration-75
         enabled:hover:border-emerald-500 enabled:hover:bg-emerald-500 enabled:hover:text-white
         disabled:border-neutral-300 disabled:text-neutral-300
-        data-[solid]:border-emerald-700 data-[solid]:bg-emerald-700 data-[solid]:text-neutral-50
+        data-[solid]:border-emerald-600 data-[solid]:bg-emerald-600 data-[solid]:text-neutral-50
         data-[solid]:enabled:hover:border-emerald-600 data-[solid]:enabled:hover:bg-emerald-600 data-[solid]:enabled:hover:text-neutral-50
         data-[solid]:disabled:border-neutral-400 data-[solid]:disabled:bg-neutral-400
         ${className}
@@ -26,7 +26,9 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
       {emphasize && (
         // eslint-disable-next-line tailwindcss/enforces-negative-arbitrary-values
         <div class="absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full animate-[shine-infinite_4s_ease-in-out_infinite] justify-center blur-[12px]">
-          <div class={`relative h-full w-8 lg:w-12 ${solid ? "bg-white/30" : "bg-emerald-500/30"}`}></div>
+          <div
+            class={`relative h-full w-10 lg:w-12 ${solid ? "bg-emerald-300/50" : "bg-emerald-200/50"}`}
+          ></div>
         </div>
       )}
     </button>
