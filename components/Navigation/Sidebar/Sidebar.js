@@ -86,7 +86,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
           {Object.entries(groupedNavItems).map(
             ([group, items]) =>
               group !== "root" && (
-                <div key={group} className="ml-4 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
+                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
                   {items.map((item) => (
                     <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
                   ))}
