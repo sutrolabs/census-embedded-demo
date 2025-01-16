@@ -53,6 +53,19 @@ const groupedNavItems = navItems.reduce((acc, item) => {
   return acc
 }, {})
 
+// Example output:
+// {
+//   root: [
+//     { id: 1, href: "/", name: "Dashboard", icon: CentralHomeIcon },
+//     { id: 2, href: "/integrations/import-dataset", name: "Data Management", icon: CentralTableIcon },
+//     { id: 3, href: "/integrations", name: "Integrations", icon: CentralSquareGridCircleIcon }
+//   ],
+//   integrations: [
+//     { id: 4, href: "/integrations/export-crm", name: "CRM", group: "integrations" },
+//     { id: 5, href: "/integrations/export-ads", name: "Ad Platforms", group: "integrations" }
+//   ]
+// }
+
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-200 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-between">
