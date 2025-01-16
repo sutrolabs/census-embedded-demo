@@ -22,7 +22,7 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
       onClick={onClick}
       ref={ref}
     >
-      <span className="relative z-10">{children}</span>
+      <div className="relative z-10 flex w-full flex-row items-center justify-center gap-2">{children}</div>
       {emphasize && (
         // eslint-disable-next-line tailwindcss/enforces-negative-arbitrary-values
         <div class="absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full animate-[shine-infinite_4s_ease-in-out_infinite] justify-center blur-[12px]">
