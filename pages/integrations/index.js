@@ -24,16 +24,6 @@ export default function Index() {
           Connect your ad platforms
           <i className="fa-solid fa-chevron-right ml-2" />
         </Button>
-
-        <h3 className="text-xl font-bold text-neutral-700">Import</h3>
-        <p className="italic text-neutral-500">
-          Enrich your data in Marketing Magnet by <Anchor href="https://www.getcensus.com">syncing</Anchor> it
-          from your data warehouse. Enhance your Marketing Research today!
-        </p>
-        <Link href="/integrations/import-dataset">
-          Import data to Marketing Magnet
-          <i className="fa-solid fa-chevron-right ml-2" />
-        </Link>
       </div>
     </>
   )
