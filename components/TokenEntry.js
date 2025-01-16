@@ -54,11 +54,10 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
             onInput={(event) => setLocalCensusWorkspaceToken(event.target.value)}
             disabled={!!workspaceAccessToken}
           />
-          {!!error && <p className="-mt-5 text-center text-red-700">{`${error}`}</p>}
-          <span className="text-sm">
+          {!!error && <p className="text-sm text-red-700">{`${error}`}</p>}
+          <span className="text-sm text-neutral-600">
             Copy your secret token from your workspace settings to preview the Census Embedded Demo App.{" "}
             <Link href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-workspace-apis">
-              {" "}
               Learn More
             </Link>
           </span>
