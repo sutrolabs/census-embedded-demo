@@ -27,7 +27,7 @@ export default function Index() {
 
             <Button className="min-w-[300px] self-center">
               Connect your ad platforms
-              <i className="fa-solid fa-chevron-right ml-2" />
+              <i className="fa-solid fa-chevron-right ml-2 text-xs" />
             </Button>
           </div>
         </div>
