@@ -25,7 +25,7 @@ export default function ImportDataset({
     <>
       <Header title="Data Management" />
       <div className="flex h-full flex-col gap-8 px-8 py-6">
-        <p className="italic text-neutral-500">
+        <p className="  text-neutral-500">
           <b>Note to customer:</b> On this page, the end user (your customer) can connect their source to your
           destination.
         </p>

@@ -45,7 +45,7 @@ export default function Index({
     <>
       <Header title="Integrations / Ad Platforms" />
       <div className="flex h-full flex-col gap-8 px-8 py-6">
-        <p className="italic text-neutral-500">
+        <p className="  text-neutral-500">
           Create custom ad audiences to match the retailer segments that matter to your business.
         </p>
         <p className="text-emerald-400">Step 1: Choose your ad platforms.</p>

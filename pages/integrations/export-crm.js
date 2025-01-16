@@ -82,7 +82,7 @@ export default function Index({
     <>
       <Header title="Integrations / CRM" />
       <div className="flex h-full flex-col gap-8 px-8 py-6">
-        <p className="italic text-neutral-500">
+        <p className="  text-neutral-500">
           Get access to relevant retailer and trend data right within your everyday sales tools.
         </p>
         <p className="text-emerald-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>

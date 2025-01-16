@@ -11,7 +11,7 @@ export default function Index() {
     <>
       <Header title="Dashboard" />
       <div className="*:mx-auto *:w-full *:max-w-[1000px] flex h-full flex-col gap-8 overflow-y-auto px-8 py-6">
-        <p className="italic text-neutral-500">
+        <p className=" text-neutral-500">
           Unlock the full potential of your business with comprehensive data on consumer trends, retailers,
           industry reports, and more.
         </p>
