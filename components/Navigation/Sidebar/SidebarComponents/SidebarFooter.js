@@ -41,7 +41,7 @@ export const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setD
   ]
   return (
     <div className="flex flex-col justify-between md:w-full">
-      <div className="mb-3 hidden md:flex md:w-full md:flex-col md:gap-3">
+      <div className="mb-3 hidden px-2 md:flex md:w-full md:flex-col md:gap-3">
         {modeToggles.map((mode) => (
           <div className="flex flex-row items-center justify-between" key={mode.id} id={mode.id}>
             <Text className="text-sm font-medium">{mode.label}</Text>
@@ -51,11 +51,15 @@ export const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setD
             <Tooltip anchorSelect={mode.anchorSelect}>{mode.tooltip}</Tooltip>
           </div>
         ))}
-        <div className="hidden items-center gap-4 text-2xl md:flex md:flex-col">
+        <div className="items-center gap-4">
           {footerLinks.map((link) => (
-            <Link key={link.id} className="flex items-center gap-2 text-sm" href={link.href}>
-              <Text>{link.label}</Text>
+            <Link
+              key={link.id}
+              className="flex flex-row items-center gap-2 p-1 text-sm text-neutral-500 no-underline"
+              href={link.href}
+            >
               <i className={link.icon} />
+              <Text>{link.label}</Text>
             </Link>
           ))}
         </div>
