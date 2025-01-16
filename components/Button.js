@@ -4,12 +4,11 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
   return (
     <button
       className={`
-        rounded-md border
-        border-emerald-500 bg-emerald-50/50
+        bg-whtie rounded-md
+        border border-neutral-200 bg-white
         px-3 py-2
-        text-emerald-700 shadow-sm
-        transition duration-75
-        enabled:hover:bg-emerald-100/50 enabled:hover:text-emerald-600
+        text-neutral-700        transition-all duration-75
+        enabled:hover:border-emerald-500 enabled:hover:bg-emerald-500 enabled:hover:text-white
         disabled:border-neutral-300 disabled:text-neutral-300
         data-[solid]:border-emerald-700 data-[solid]:bg-emerald-700 data-[solid]:text-neutral-50
         data-[solid]:enabled:hover:border-emerald-600 data-[solid]:enabled:hover:bg-emerald-600 data-[solid]:enabled:hover:text-neutral-50
