@@ -11,7 +11,7 @@ const footerLinks = [
     id: 1,
     label: "Documentation",
     href: "https://developers.getcensus.com/getting-started/introduction",
-    icon: "fa-solid fa-book ",
+    icon: "fa-solid fa-book",
   },
   {
     id: 2,
