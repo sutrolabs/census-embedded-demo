@@ -24,11 +24,11 @@ export default function RequestTooltip({ anchorSelect, url, method, headers, bod
         </p>
       )}
       {(note || link) && <br />}
-      {note && <p className=" ">{note}</p>}
+      {note && <p>{note}</p>}
       {link && (
         <p>
-          <b>Documentation: </b>
-          <a href={link} target="_blank" rel="noreferrer" className="  underline">
+          <b>Documentation:</b>
+          <a href={link} target="_blank" rel="noreferrer" className="underline">
             {link}
           </a>
         </p>
