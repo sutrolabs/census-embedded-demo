@@ -1,9 +1,8 @@
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
-import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import { useBasicFetch } from "@utils/fetch"
-import Link from "next/link"
 
 export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessToken }) {
   const [localCensusWorkspaceToken, setLocalCensusWorkspaceToken] = useState(

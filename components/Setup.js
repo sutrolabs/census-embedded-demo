@@ -1,5 +1,5 @@
 import Head from "next/head"
-import { Anchor } from "./Anchor"
+
 import TokenEntry from "@components/TokenEntry"
 
 export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
