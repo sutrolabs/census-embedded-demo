@@ -10,13 +10,13 @@ const footerLinks = [
     id: 1,
     label: "Documentation",
     href: "https://developers.getcensus.com/getting-started/introduction",
-    icon: "fa-brands fa-github",
+    icon: "fa-solid fa-book ",
   },
   {
     id: 2,
     label: "GitHub",
     href: "https://github.com/sutrolabs/census-embedded-demo",
-    icon: "fa-solid fa-book",
+    icon: "fa-brands fa-github",
   },
 ]
 
@@ -41,6 +41,20 @@ export const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setD
   ]
   return (
     <div className="flex flex-col justify-between md:w-full">
+      <div className="items-center gap-4">
+        {footerLinks.map((link) => (
+          <Link
+            key={link.id}
+            className="flex flex-row items-center gap-2 p-1 text-sm text-neutral-500 no-underline"
+            href={link.href}
+            target="_blank"
+          >
+            <i className={link.icon} />
+            <Text>{link.label}</Text>
+          </Link>
+        ))}
+      </div>
+      <div className="my-4 h-px w-full bg-neutral-200" />
       <div className="mb-3 hidden px-2 md:flex md:w-full md:flex-col md:gap-3">
         {modeToggles.map((mode) => (
           <div className="flex flex-row items-center justify-between" key={mode.id} id={mode.id}>
@@ -51,18 +65,6 @@ export const SidebarFooter = ({ onLogOut, embedMode, setEmbedMode, devMode, setD
             <Tooltip anchorSelect={mode.anchorSelect}>{mode.tooltip}</Tooltip>
           </div>
         ))}
-        <div className="items-center gap-4">
-          {footerLinks.map((link) => (
-            <Link
-              key={link.id}
-              className="flex flex-row items-center gap-2 p-1 text-sm text-neutral-500 no-underline"
-              href={link.href}
-            >
-              <i className={link.icon} />
-              <Text>{link.label}</Text>
-            </Link>
-          ))}
-        </div>
       </div>
 
       <button
