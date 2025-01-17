@@ -1,6 +1,6 @@
+import Link from "next/link"
 import { useEffect, useState } from "react"
 
-import { Anchor } from "@components/Anchor"
 import Button from "@components/Button"
 import { useBasicFetch } from "@utils/fetch"
 
@@ -31,45 +31,42 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
 
   return (
     <form
-      className="flex flex-col gap-4 data-[disabled]:opacity-20"
+      className="flex flex-col data-[disabled]:opacity-20"
       onSubmit={(event) => {
         event.preventDefault()
         refetch()
       }}
       data-disabled={!!workspaceAccessToken ? "" : null}
     >
-      <p>
-        Welcome! This demo app shows how your customer can use Census Embedded to import data from their
-        source to your desination and export data from your destination to their CRM and ad tools.
-      </p>
-      <p>
-        When you use the API, you&apos;ll need a{" "}
-        <Anchor href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-workspace-apis">
-          Workspace Access Token
-        </Anchor>{" "}
-        for authentication, so that&apos;s how we&apos;ll start here:
-      </p>
-      <input
-        className="my-2 w-full max-w-sm self-center rounded-md border border-indigo-500 px-4 py-2 font-mono shadow-inner"
-        autoFocus
-        type="password"
-        name="census_api_token"
-        autoComplete="off"
-        placeholder="secret-token:..."
-        value={localCensusWorkspaceToken}
-        onInput={(event) => setLocalCensusWorkspaceToken(event.target.value)}
-        disabled={!!workspaceAccessToken}
-      />
-      {!!error && <p className="-mt-5 text-center text-red-700">{`${error}`}</p>}
-      {!workspaceAccessToken && (
-        <Button
-          className="self-center px-6 py-2"
-          solid
-          disabled={!localCensusWorkspaceToken || !!error || loading}
-        >
-          Continue
-        </Button>
-      )}
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-2">
+          <label className="font-medium leading-none">Secret Token</label>
+
+          <input
+            className="w-full rounded-md border border-neutral-200 px-3 py-2"
+            autoFocus
+            type="password"
+            name="census_api_token"
+            autoComplete="off"
+            placeholder="secret-token:..."
+            value={localCensusWorkspaceToken}
+            onInput={(event) => setLocalCensusWorkspaceToken(event.target.value)}
+            disabled={!!workspaceAccessToken}
+          />
+          {!!error && <p className="text-sm text-red-700">{`${error}`}</p>}
+          <span className="text-sm text-neutral-600">
+            Copy your secret token from your workspace settings to preview the Census Embedded Demo App.{" "}
+            <Link href="https://developers.getcensus.com/api-reference/introduction/authorization#using-bearer-tokens-with-workspace-apis">
+              Learn More
+            </Link>
+          </span>
+        </div>
+        {!workspaceAccessToken && (
+          <Button solid disabled={!localCensusWorkspaceToken || !!error || loading}>
+            Continue
+          </Button>
+        )}
+      </div>
     </form>
   )
 }

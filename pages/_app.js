@@ -1,5 +1,4 @@
 import "@styles/globals.css"
-
 import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
@@ -9,8 +8,8 @@ import { useSessionStorage } from "usehooks-ts"
 import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
 import MainLayout from "@components/MainLayout"
+import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
-import Sidebar from "@components/Sidebar"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
 registry.add(LineElement)
@@ -217,7 +216,7 @@ function MainApplication({ Component, pageProps, workspaceAccessToken, onLogOut 
   }
 
   return (
-    <main className="relative flex min-h-screen w-screen flex-col md:flex-row">
+    <main className="relative flex h-screen w-screen flex-row">
       <Sidebar
         syncsLoading={syncsLoading}
         syncs={syncs}

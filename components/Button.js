@@ -4,16 +4,15 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
   return (
     <button
       className={`
-        rounded-md border
-        border-indigo-500 bg-indigo-50/50
-        px-3 py-1
-        text-indigo-700 shadow-sm
-        transition
-        enabled:hover:bg-indigo-100/50 enabled:hover:text-indigo-600
-        disabled:border-stone-300 disabled:text-stone-300
-        data-[solid]:border-indigo-700 data-[solid]:bg-indigo-700 data-[solid]:text-stone-50
-        data-[solid]:enabled:hover:border-indigo-600 data-[solid]:enabled:hover:bg-indigo-600 data-[solid]:enabled:hover:text-stone-50
-        data-[solid]:disabled:border-stone-400 data-[solid]:disabled:bg-stone-400
+        rounded-md
+        border border-neutral-200 bg-white
+        px-3 py-2
+        text-neutral-700        transition-all duration-75
+        enabled:hover:border-emerald-500 enabled:hover:bg-emerald-500 enabled:hover:text-white
+        disabled:border-neutral-300 disabled:text-neutral-300
+        data-[solid]:border-emerald-600 data-[solid]:bg-emerald-600 data-[solid]:text-neutral-50
+        data-[solid]:enabled:hover:border-emerald-600 data-[solid]:enabled:hover:bg-emerald-600 data-[solid]:enabled:hover:text-neutral-50
+        data-[solid]:disabled:border-neutral-400 data-[solid]:disabled:bg-neutral-400
         ${className}
         ${emphasize ? "relative inline-flex items-center justify-center overflow-hidden hover:scale-105" : ""}
       `}
@@ -23,11 +22,13 @@ function Button({ solid, autoFocus, emphasize, disabled, className, onClick, chi
       onClick={onClick}
       ref={ref}
     >
-      <span className="relative z-10">{children}</span>
+      <div className="relative z-10 flex w-full flex-row items-center justify-center gap-2">{children}</div>
       {emphasize && (
         // eslint-disable-next-line tailwindcss/enforces-negative-arbitrary-values
         <div class="absolute inset-0 -top-[20px] flex h-[calc(100%+40px)] w-full animate-[shine-infinite_4s_ease-in-out_infinite] justify-center blur-[12px]">
-          <div class={`relative h-full w-8 lg:w-12 ${solid ? "bg-white/30" : "bg-indigo-500/30"}`}></div>
+          <div
+            class={`relative h-full w-10 lg:w-12 ${solid ? "bg-emerald-300/50" : "bg-emerald-200/50"}`}
+          ></div>
         </div>
       )}
     </button>

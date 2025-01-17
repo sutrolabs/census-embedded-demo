@@ -1,9 +1,9 @@
-import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
 import Card from "@components/Card"
 import Destination from "@components/Destination"
 import SegmentManagement from "@components/SegmentManagement"
+import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
@@ -43,59 +43,57 @@ export default function Index({
 
   return (
     <>
-      <Head>
-        <title>Ad Platforms - Integrations - Census Embedded Demo App</title>
-      </Head>
-      <h2 className="text-2xl font-bold text-stone-700">Integrations / Ad Platforms</h2>
-      <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">
-        Create custom ad audiences to match the retailer segments that matter to your business.
-      </p>
-      <p className="text-teal-400">Step 1: Choose your ad platforms.</p>
-      <Destination
-        label="Google Ads"
-        type="google_ads"
-        iconClassName="fa-brands fa-google"
-        workspaceAccessToken={workspaceAccessToken}
-        destinations={destinations}
-        setDestinations={setDestinations}
-        destinationConnectLinks={destinationConnectLinks}
-        setDestinationConnectLinks={setDestinationConnectLinks}
-        syncs={syncs}
-      />
-      <Destination
-        label="Facebook Ads"
-        type="facebook"
-        iconClassName="fa-brands fa-facebook"
-        workspaceAccessToken={workspaceAccessToken}
-        destinations={destinations}
-        setDestinations={setDestinations}
-        destinationConnectLinks={destinationConnectLinks}
-        setDestinationConnectLinks={setDestinationConnectLinks}
-        syncs={syncs}
-      />
-      <p className="mt-2 text-teal-400">Step 2: Define your custom audience segments.</p>
-      <Segment
-        segments={segments}
-        refetchSegments={refetchSegments}
-        setSegments={setSegments}
-        workspaceAccessToken={workspaceAccessToken}
-        devMode={devMode}
-        embedMode={embedMode}
-      />
-      <p className="mt-2 text-teal-400">Step 3: Sync your custom audience segments to ad platforms.</p>
-      <Sync
-        destinations={destinations}
-        sources={sources}
-        facebookAudienceSyncs={facebookAudienceSyncs}
-        googleAudienceSyncs={googleAudienceSyncs}
-        runsLoading={runsLoading}
-        refetchSyncs={refetchSyncs}
-        runs={runs}
-        workspaceAccessToken={workspaceAccessToken}
-        devMode={devMode}
-        embedMode={embedMode}
-      />
+      <Header title="Integrations / Ad Platforms" />
+      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 px-8 py-6">
+        <p className="  text-neutral-500">
+          Create custom ad audiences to match the retailer segments that matter to your business.
+        </p>
+        <p className="text-emerald-400">Step 1: Choose your ad platforms.</p>
+        <Destination
+          label="Google Ads"
+          type="google_ads"
+          iconClassName="fa-brands fa-google"
+          workspaceAccessToken={workspaceAccessToken}
+          destinations={destinations}
+          setDestinations={setDestinations}
+          destinationConnectLinks={destinationConnectLinks}
+          setDestinationConnectLinks={setDestinationConnectLinks}
+          syncs={syncs}
+        />
+        <Destination
+          label="Facebook Ads"
+          type="facebook"
+          iconClassName="fa-brands fa-facebook"
+          workspaceAccessToken={workspaceAccessToken}
+          destinations={destinations}
+          setDestinations={setDestinations}
+          destinationConnectLinks={destinationConnectLinks}
+          setDestinationConnectLinks={setDestinationConnectLinks}
+          syncs={syncs}
+        />
+        <p className="mt-2 text-emerald-400">Step 2: Define your custom audience segments.</p>
+        <Segment
+          segments={segments}
+          refetchSegments={refetchSegments}
+          setSegments={setSegments}
+          workspaceAccessToken={workspaceAccessToken}
+          devMode={devMode}
+          embedMode={embedMode}
+        />
+        <p className="mt-2 text-emerald-400">Step 3: Sync your custom audience segments to ad platforms.</p>
+        <Sync
+          destinations={destinations}
+          sources={sources}
+          facebookAudienceSyncs={facebookAudienceSyncs}
+          googleAudienceSyncs={googleAudienceSyncs}
+          runsLoading={runsLoading}
+          refetchSyncs={refetchSyncs}
+          runs={runs}
+          workspaceAccessToken={workspaceAccessToken}
+          devMode={devMode}
+          embedMode={embedMode}
+        />
+      </div>
     </>
   )
 }
@@ -233,7 +231,7 @@ function Sync({
 function DestinationLabel({ label }) {
   return (
     <h3 className="mb-2 flex flex-row justify-between">
-      <span className="flex flex-row items-center gap-2 text-lg font-medium text-stone-500 data-[enabled]:text-teal-900">
+      <span className="flex flex-row items-center gap-2 text-lg font-medium text-neutral-500 data-[enabled]:text-emerald-900">
         {label}
       </span>
     </h3>

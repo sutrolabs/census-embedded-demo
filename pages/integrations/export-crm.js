@@ -1,9 +1,9 @@
-import Head from "next/head"
 import { useState } from "react"
 
 import Button from "@components/Button"
 import Card from "@components/Card"
 import Destination from "@components/Destination"
+import Header from "@components/Structural/Header/Header"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle"
 
@@ -80,50 +80,48 @@ export default function Index({
 }) {
   return (
     <>
-      <Head>
-        <title>CRM - Integrations - Census Embedded Demo App</title>
-      </Head>
-      <h2 className="text-2xl font-bold text-stone-700">Integrations / CRM</h2>
-      <hr className="border-t border-stone-400" />
-      <p className="italic text-stone-500">
-        Get access to relevant retailer and trend data right within your everyday sales tools.
-      </p>
-      <p className="text-teal-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
-      {config.map((destination) => (
-        <Destination
-          key={destination.type}
-          label={destination.label}
-          type={destination.type}
-          iconClassName={destination.iconClassName}
-          workspaceAccessToken={workspaceAccessToken}
-          destinations={destinations}
-          setDestinations={setDestinations}
-          destinationConnectLinks={destinationConnectLinks}
-          setDestinationConnectLinks={setDestinationConnectLinks}
-          syncs={syncs}
-        >
-          <p className="text-teal-400">Step 2: Choose which destinations objects to sync.</p>
-          <div className="flex flex-col gap-5">
-            {destination.objects.map((object) => (
-              <Object
-                key={object.fullName}
-                label={object.label}
-                fullName={object.fullName}
-                sourceModelName={object.sourceModelName}
-                primaryIdentifier={object.primaryIdentifier}
-                displayMappings={object.displayMappings}
-                destinationType={destination.type}
-                workspaceAccessToken={workspaceAccessToken}
-                destinations={destinations}
-                syncs={syncs}
-                setSyncs={setSyncs}
-                runsLoading={runsLoading}
-                runs={runs}
-              />
-            ))}
-          </div>
-        </Destination>
-      ))}
+      <Header title="Integrations / CRM" />
+      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 px-8 py-6">
+        <p className="  text-neutral-500">
+          Get access to relevant retailer and trend data right within your everyday sales tools.
+        </p>
+        <p className="text-emerald-400">Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
+        {config.map((destination) => (
+          <Destination
+            key={destination.type}
+            label={destination.label}
+            type={destination.type}
+            iconClassName={destination.iconClassName}
+            workspaceAccessToken={workspaceAccessToken}
+            destinations={destinations}
+            setDestinations={setDestinations}
+            destinationConnectLinks={destinationConnectLinks}
+            setDestinationConnectLinks={setDestinationConnectLinks}
+            syncs={syncs}
+          >
+            <p className="text-emerald-400">Step 2: Choose which destinations objects to sync.</p>
+            <div className="flex flex-col gap-5">
+              {destination.objects.map((object) => (
+                <Object
+                  key={object.fullName}
+                  label={object.label}
+                  fullName={object.fullName}
+                  sourceModelName={object.sourceModelName}
+                  primaryIdentifier={object.primaryIdentifier}
+                  displayMappings={object.displayMappings}
+                  destinationType={destination.type}
+                  workspaceAccessToken={workspaceAccessToken}
+                  destinations={destinations}
+                  syncs={syncs}
+                  setSyncs={setSyncs}
+                  runsLoading={runsLoading}
+                  runs={runs}
+                />
+              ))}
+            </div>
+          </Destination>
+        ))}
+      </div>
     </>
   )
 }

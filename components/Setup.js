@@ -8,14 +8,17 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
       <Head>
         <title>API Setup - Census Embedded Demo App</title>
       </Head>
-      <div className="grid min-h-screen place-items-center bg-stone-200 p-8">
-        <div className="flex max-w-xl flex-col gap-6 rounded-md border-2 border-indigo-500 bg-white px-10 py-8 shadow-md">
-          <h1 className="text-2xl font-bold text-indigo-700">Census Embedded API Setup</h1>
+      <div className="grid min-h-screen place-items-center bg-neutral-100 p-8">
+        <div className="flex max-w-xl flex-col gap-6 rounded-md border  border-neutral-200 bg-white px-10 py-8">
+          <h1 className="text-2xl font-bold leading-none">Welcome to the Census Embedded Demo</h1>
+          <p className="text-lg leading-normal">
+            Welcome! This demo app shows how your customer can use Census Embedded to import data from their
+            source to your desination and export data from your destination to their CRM and ad tools.
+          </p>
           <TokenEntry
             workspaceAccessToken={workspaceAccessToken}
             setWorkspaceAccessToken={setWorkspaceAccessToken}
           />
-          <hr className="border-t border-stone-400" />
         </div>
       </div>
     </>

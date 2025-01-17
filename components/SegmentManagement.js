@@ -40,7 +40,7 @@ export default function SegmentManagement({
 
   return (
     <>
-      <p className="text-teal-400"></p>
+      <p className="text-emerald-400"></p>
       <div className="flex flex-col gap-5">
         {segments
           .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
@@ -65,7 +65,7 @@ export default function SegmentManagement({
           />
         ) : (
           <Button
-            className="flex items-center justify-center rounded-md border border-indigo-500/40 bg-stone-50  px-5 py-8 text-xl
+            className="flex items-center justify-center rounded-md border border-emerald-500/40 bg-neutral-50  px-5 py-8 text-xl
               shadow-sm"
             onClick={initiateSegmentWizardFlow}
           >
