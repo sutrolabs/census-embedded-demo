@@ -1,6 +1,5 @@
 import Head from "next/head"
 import Link from "next/link"
-
 import { Line } from "react-chartjs-2"
 
 import { Anchor } from "@components/Anchor"
