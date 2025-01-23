@@ -1,8 +1,8 @@
 import Link from "next/link"
+import { useRouter } from "next/router"
 
 import Button from "@components/Button"
 import Header from "@components/Structural/Header/Header"
-import { useRouter } from "next/router"
 
 export default function Index() {
   const router = useRouter()
