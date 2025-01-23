@@ -1,4 +1,5 @@
 import Link from "next/link"
+import Head from "next/head"
 import { useRouter } from "next/router"
 
 import Button from "@components/Button"
@@ -8,6 +9,9 @@ export default function Index() {
   const router = useRouter()
   return (
     <>
+      <Head>
+        <title>Integrations | Census Embedded Demo App</title>
+      </Head>
       <Header title="Integrations" />
       <div className="flex h-full flex-col gap-6 px-8 py-6">
         <div className="mx-auto flex w-full max-w-[1400px] flex-col items-center gap-5 rounded-lg bg-neutral-100 p-8">
