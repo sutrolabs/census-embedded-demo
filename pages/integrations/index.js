@@ -2,8 +2,10 @@ import Link from "next/link"
 
 import Button from "@components/Button"
 import Header from "@components/Structural/Header/Header"
+import { useRouter } from "next/router"
 
 export default function Index() {
+  const router = useRouter()
   return (
     <>
       <Header title="Integrations" />
@@ -20,12 +22,18 @@ export default function Index() {
             </p>
           </div>
           <div className="flex flex-row gap-4">
-            <Button className="min-w-[300px] self-center">
+            <Button
+              className="min-w-[300px] self-center"
+              onClick={() => router.push("integrations/export-crm")}
+            >
               Connect your CRM
               <i className="fa-solid fa-chevron-right ml-2 text-xs" />
             </Button>
 
-            <Button className="min-w-[300px] self-center">
+            <Button
+              onClick={() => router.push("integrations/export-ads")}
+              className="min-w-[300px] self-center"
+            >
               Connect your ad platforms
               <i className="fa-solid fa-chevron-right ml-2 text-xs" />
             </Button>
