@@ -46,7 +46,7 @@ export default function SyncManagement({
 
   return (
     <>
-      <p className="text-emerald-400">{stepText}</p>
+      <p>{stepText}</p>
       <div className="flex flex-col gap-5">
         {syncs.map((sync) => (
           <SyncObject
