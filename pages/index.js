@@ -1,5 +1,4 @@
 import Head from "next/head"
-import Link from "next/link"
 import { Line } from "react-chartjs-2"
 
 import { Anchor } from "@components/Anchor"
@@ -139,10 +138,8 @@ export default function Index() {
             </div>
           </Card>
           <Card className="flex animate-[wiggle] flex-col items-center gap-3 lg:col-span-2">
-            <h3 className="font-medium text-emerald-800">Integrations</h3>
-            <p className="text-sm text-emerald-600">
-              Did you know you can connect this data directly to your CRM and ad platforms?
-            </p>
+            <h3 className="font-medium">Integrations</h3>
+            <p>Did you know you can connect this data directly to your CRM and ad platforms?</p>
             <Button
               solid
               onClick={() => (window.location.href = "/integrations")}
