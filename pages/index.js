@@ -45,20 +45,19 @@ export default function Index() {
             </div>
             <ul className="ml-2 flex grow flex-col text-sm text-neutral-600">
               <ol>
-                <span className="text-emerald-600">Name:</span>{" "}
-                <span className="font-medium text-neutral-800">Healthways</span>
+                <span>Name:</span> <span className="font-medium text-neutral-800">Healthways</span>
               </ol>
               <ol>
-                <span className="text-emerald-600">Type:</span> Grocery chain
+                <span>Type:</span> Grocery chain
               </ol>
               <ol>
-                <span className="text-emerald-600">Location:</span> UK
+                <span>Location:</span> UK
               </ol>
               <ol>
-                <span className="text-emerald-600">Annual revenue:</span> $2.1M
+                <span>Annual revenue:</span> $2.1M
               </ol>
               <ol>
-                <span className="text-emerald-600">Contacts:</span> 4
+                <span>Contacts:</span> 4
               </ol>
             </ul>
             <div className="flex flex-row justify-center gap-2">
@@ -130,11 +129,11 @@ export default function Index() {
                 },
               }}
             />
-            <div className="flex flex-row justify-center gap-2">
+            <div className="flex flex-row items-center justify-center gap-5">
               <Button>
                 <i className="fa-solid fa-chevron-left" />
               </Button>
-              <Link href="/">View details</Link>
+              <Link href="#">View details</Link>
               <Button>
                 <i className="fa-solid fa-chevron-right" />
               </Button>
