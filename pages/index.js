@@ -33,10 +33,10 @@ export default function Index() {
                 <Anchor href="/">Competitive Analysis</Anchor> updated 1 month ago
               </li>
             </ul>
-            <Link href="/">
+            <Button>
               <i className="fa-solid fa-search mr-2" />
-              Explore trends
-            </Link>
+              Explore Trends
+            </Button>
           </Card>
           <Card className="flex flex-col gap-3">
             <div className="flex flex-row justify-between">
@@ -60,11 +60,11 @@ export default function Index() {
                 <span>Contacts:</span> 4
               </ol>
             </ul>
-            <div className="flex flex-row justify-center gap-2">
+            <div className="flex flex-row items-center gap-3">
               <Button>
                 <i className="fa-solid fa-chevron-left" />
               </Button>
-              <Link href="/">View details</Link>
+
               <Button>
                 <i className="fa-solid fa-chevron-right" />
               </Button>
@@ -84,10 +84,10 @@ export default function Index() {
                 <Anchor href="/">Renewable Energy Market Report</Anchor> updated 2 months ago
               </li>
             </ul>
-            <Link href="/">
+            <Button>
               <i className="fa-solid fa-search mr-2" />
-              Explore retailers
-            </Link>
+              Explore Retailers
+            </Button>
           </Card>
           <Card className="flex flex-col gap-3">
             <div className="flex flex-row justify-between">
@@ -129,11 +129,10 @@ export default function Index() {
                 },
               }}
             />
-            <div className="flex flex-row items-center justify-center gap-5">
+            <div className="flex flex-row items-center gap-3">
               <Button>
                 <i className="fa-solid fa-chevron-left" />
               </Button>
-              <Link href="#">View details</Link>
               <Button>
                 <i className="fa-solid fa-chevron-right" />
               </Button>
@@ -144,7 +143,12 @@ export default function Index() {
             <p className="text-sm text-emerald-600">
               Did you know you can connect this data directly to your CRM and ad platforms?
             </p>
-            <Button solid onClick={() => (window.location.href = "/integrations")} emphasize>
+            <Button
+              solid
+              onClick={() => (window.location.href = "/integrations")}
+              emphasize
+              className="w-1/3"
+            >
               <i className="fa-solid fa-rocket-launch text-sm" />
               Get started
             </Button>
