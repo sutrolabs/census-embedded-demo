@@ -4,7 +4,6 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>Census Embedded Demo App</title>
         <meta name="description" content="Demo application showcasing Census Embedded capabilities" />
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="shortcut icon" href="/logo.svg" />

@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { useState } from "react"
 
 import Button from "@components/Button"
@@ -80,6 +81,9 @@ export default function Index({
 }) {
   return (
     <>
+      <Head>
+        <title>Census Embedded Demo App</title>
+      </Head>
       <Header title="Integrations / CRM" />
       <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 overflow-y-auto px-8 py-6">
         <p className="text-neutral-500">

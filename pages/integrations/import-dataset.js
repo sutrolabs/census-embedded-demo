@@ -1,3 +1,5 @@
+import Head from "next/head"
+
 import Source from "@components/Source"
 import Header from "@components/Structural/Header/Header"
 
@@ -23,6 +25,9 @@ export default function ImportDataset({
 }) {
   return (
     <>
+      <Head>
+        <title>Census Embedded Demo App</title>
+      </Head>
       <Header title="Data Management" />
       <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 px-8 py-6">
         <p className="text-neutral-500">

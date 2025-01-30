@@ -1,3 +1,4 @@
+import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
 import Card from "@components/Card"
@@ -43,6 +44,9 @@ export default function Index({
 
   return (
     <>
+      <Head>
+        <title>Census Embedded Demo App</title>
+      </Head>
       <Header title="Integrations / Ad Platforms" />
       <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 overflow-y-auto px-8 py-6">
         <p>Create custom ad audiences to match the retailer segments that matter to your business.</p>
