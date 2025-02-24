@@ -85,46 +85,48 @@ export default function Index({
         <title>Census Embedded Demo App</title>
       </Head>
       <Header title="Integrations / CRM" />
-      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 overflow-y-auto px-8 py-6">
-        <p className="text-neutral-500">
-          Get access to relevant retailer and trend data right within your everyday sales tools.
-        </p>
-        <p>Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
-        {config.map((destination) => (
-          <Destination
-            key={destination.type}
-            label={destination.label}
-            type={destination.type}
-            iconClassName={destination.iconClassName}
-            workspaceAccessToken={workspaceAccessToken}
-            destinations={destinations}
-            setDestinations={setDestinations}
-            destinationConnectLinks={destinationConnectLinks}
-            setDestinationConnectLinks={setDestinationConnectLinks}
-            syncs={syncs}
-          >
-            <p>Step 2: Choose which destinations objects to sync.</p>
-            <div className="flex flex-col gap-5">
-              {destination.objects.map((object) => (
-                <Object
-                  key={object.fullName}
-                  label={object.label}
-                  fullName={object.fullName}
-                  sourceModelName={object.sourceModelName}
-                  primaryIdentifier={object.primaryIdentifier}
-                  displayMappings={object.displayMappings}
-                  destinationType={destination.type}
-                  workspaceAccessToken={workspaceAccessToken}
-                  destinations={destinations}
-                  syncs={syncs}
-                  setSyncs={setSyncs}
-                  runsLoading={runsLoading}
-                  runs={runs}
-                />
-              ))}
-            </div>
-          </Destination>
-        ))}
+      <div className="mx-auto h-full w-full overflow-y-auto">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-8 px-8 py-6">
+          <p className="text-neutral-500">
+            Get access to relevant retailer and trend data right within your everyday sales tools.
+          </p>
+          <p>Step 1: Choose which CRM system you&apos;d like to keep in sync.</p>
+          {config.map((destination) => (
+            <Destination
+              key={destination.type}
+              label={destination.label}
+              type={destination.type}
+              iconClassName={destination.iconClassName}
+              workspaceAccessToken={workspaceAccessToken}
+              destinations={destinations}
+              setDestinations={setDestinations}
+              destinationConnectLinks={destinationConnectLinks}
+              setDestinationConnectLinks={setDestinationConnectLinks}
+              syncs={syncs}
+            >
+              <p>Step 2: Choose which destinations objects to sync.</p>
+              <div className="flex flex-col gap-5">
+                {destination.objects.map((object) => (
+                  <Object
+                    key={object.fullName}
+                    label={object.label}
+                    fullName={object.fullName}
+                    sourceModelName={object.sourceModelName}
+                    primaryIdentifier={object.primaryIdentifier}
+                    displayMappings={object.displayMappings}
+                    destinationType={destination.type}
+                    workspaceAccessToken={workspaceAccessToken}
+                    destinations={destinations}
+                    syncs={syncs}
+                    setSyncs={setSyncs}
+                    runsLoading={runsLoading}
+                    runs={runs}
+                  />
+                ))}
+              </div>
+            </Destination>
+          ))}
+        </div>
       </div>
     </>
   )
