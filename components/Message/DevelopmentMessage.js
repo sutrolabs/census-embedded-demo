@@ -5,7 +5,7 @@ export default function DevelopmentMessage({ message }) {
         <span className="font-medium text-[#4640EB]">Census Embedded Tip</span>
         <span className="text-neutral-700">{message}</span>
       </div>
-      <div className="bg-development-warning absolute inset-0 -z-0 h-full w-full [mask-image:linear-gradient(transparent_0%,black)]" />
+      <div className="bg-brand-development absolute inset-0 -z-0 h-full w-full" />
     </div>
   )
 }
