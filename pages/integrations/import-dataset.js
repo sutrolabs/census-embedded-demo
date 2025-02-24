@@ -1,5 +1,6 @@
 import Head from "next/head"
 
+import DevelopmentMessage from "@components/Message/DevelopmentMessage"
 import Source from "@components/Source"
 import Header from "@components/Structural/Header/Header"
 
@@ -31,10 +32,10 @@ export default function ImportDataset({
       <Header title="Data Management" />
       <div className="mx-auto h-full w-full overflow-y-auto">
         <div className="mx-auto flex max-w-[1200px] flex-col gap-8 px-8 py-6">
-          <p className="text-neutral-500">
-            <b>Note to customer:</b> On this page, the end user (your customer) can connect their source to
-            your destination.
-          </p>
+          <DevelopmentMessage
+            message="On this page, the end user (your customer) can connect their source to
+            your destination."
+          />
           <p>Step 1: Connect your data source</p>
           <Source
             label="Redshift"
