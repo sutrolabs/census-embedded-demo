@@ -48,53 +48,55 @@ export default function Index({
         <title>Census Embedded Demo App</title>
       </Head>
       <Header title="Integrations / Ad Platforms" />
-      <div className="mx-auto flex h-full w-full max-w-[1200px] flex-col gap-8 overflow-y-auto px-8 py-6">
-        <p>Create custom ad audiences to match the retailer segments that matter to your business.</p>
-        <p>Step 1: Choose your ad platforms.</p>
-        <Destination
-          label="Google Ads"
-          type="google_ads"
-          iconClassName="fa-brands fa-google"
-          workspaceAccessToken={workspaceAccessToken}
-          destinations={destinations}
-          setDestinations={setDestinations}
-          destinationConnectLinks={destinationConnectLinks}
-          setDestinationConnectLinks={setDestinationConnectLinks}
-          syncs={syncs}
-        />
-        <Destination
-          label="Facebook Ads"
-          type="facebook"
-          iconClassName="fa-brands fa-facebook"
-          workspaceAccessToken={workspaceAccessToken}
-          destinations={destinations}
-          setDestinations={setDestinations}
-          destinationConnectLinks={destinationConnectLinks}
-          setDestinationConnectLinks={setDestinationConnectLinks}
-          syncs={syncs}
-        />
-        <p className="mt-2">Step 2: Define your custom audience segments.</p>
-        <Segment
-          segments={segments}
-          refetchSegments={refetchSegments}
-          setSegments={setSegments}
-          workspaceAccessToken={workspaceAccessToken}
-          devMode={devMode}
-          embedMode={embedMode}
-        />
-        <p className="mt-2">Step 3: Sync your custom audience segments to ad platforms.</p>
-        <Sync
-          destinations={destinations}
-          sources={sources}
-          facebookAudienceSyncs={facebookAudienceSyncs}
-          googleAudienceSyncs={googleAudienceSyncs}
-          runsLoading={runsLoading}
-          refetchSyncs={refetchSyncs}
-          runs={runs}
-          workspaceAccessToken={workspaceAccessToken}
-          devMode={devMode}
-          embedMode={embedMode}
-        />
+      <div className="mx-auto h-full w-full overflow-y-auto">
+        <div className="mx-auto flex max-w-[1200px] flex-col gap-8 px-8 py-6">
+          <p>Create custom ad audiences to match the retailer segments that matter to your business.</p>
+          <p>Step 1: Choose your ad platforms.</p>
+          <Destination
+            label="Google Ads"
+            type="google_ads"
+            iconClassName="fa-brands fa-google"
+            workspaceAccessToken={workspaceAccessToken}
+            destinations={destinations}
+            setDestinations={setDestinations}
+            destinationConnectLinks={destinationConnectLinks}
+            setDestinationConnectLinks={setDestinationConnectLinks}
+            syncs={syncs}
+          />
+          <Destination
+            label="Facebook Ads"
+            type="facebook"
+            iconClassName="fa-brands fa-facebook"
+            workspaceAccessToken={workspaceAccessToken}
+            destinations={destinations}
+            setDestinations={setDestinations}
+            destinationConnectLinks={destinationConnectLinks}
+            setDestinationConnectLinks={setDestinationConnectLinks}
+            syncs={syncs}
+          />
+          <p className="mt-2">Step 2: Define your custom audience segments.</p>
+          <Segment
+            segments={segments}
+            refetchSegments={refetchSegments}
+            setSegments={setSegments}
+            workspaceAccessToken={workspaceAccessToken}
+            devMode={devMode}
+            embedMode={embedMode}
+          />
+          <p className="mt-2">Step 3: Sync your custom audience segments to ad platforms.</p>
+          <Sync
+            destinations={destinations}
+            sources={sources}
+            facebookAudienceSyncs={facebookAudienceSyncs}
+            googleAudienceSyncs={googleAudienceSyncs}
+            runsLoading={runsLoading}
+            refetchSyncs={refetchSyncs}
+            runs={runs}
+            workspaceAccessToken={workspaceAccessToken}
+            devMode={devMode}
+            embedMode={embedMode}
+          />
+        </div>
       </div>
     </>
   )
