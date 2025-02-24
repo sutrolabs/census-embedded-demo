@@ -22,7 +22,7 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
               setWorkspaceAccessToken={setWorkspaceAccessToken}
             />
           </div>
-          <div className="bg-brand-development absolute inset-0 " />
+          <div className="bg-brand-development absolute inset-x-0 bottom-0 h-1/5 w-full" />
         </div>
         <div className="flex w-1/2 flex-col items-center justify-center p-12">
           <div className="relative flex flex-col gap-4 overflow-hidden">
