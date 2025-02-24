@@ -26,10 +26,12 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
             </div>
           </div>
         </div>
-        <div className="flex w-1/2 flex-col items-center p-12">
-          <div className="flex w-[525px] flex-col gap-8">
-            <h1 className="text-3xl leading-snug">Your product as the source of truth for your customers</h1>
-            <p className="text-lg leading-normal">
+        <div className="flex w-1/2 flex-col items-center justify-center p-12">
+          <div className="flex w-[525px] flex-col gap-4">
+            <h1 className="text-xl font-medium leading-snug">
+              Your product as the source of truth for your customers
+            </h1>
+            <p className="text-base leading-normal">
               Welcome! This demo app shows how your customer can use Census Embedded to import data from their
               source to your desination and export data from your destination to their CRM and ad tools.
             </p>
