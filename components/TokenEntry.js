@@ -43,7 +43,7 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
           <label className="text-lg font-medium leading-none">Workspace API Key</label>
 
           <input
-            className="w-full rounded-lg border border-neutral-200 px-4 py-2.5 text-lg"
+            className="w-full rounded-lg border border-neutral-100 px-4 py-2.5 text-lg"
             autoFocus
             type="password"
             name="census_api_token"

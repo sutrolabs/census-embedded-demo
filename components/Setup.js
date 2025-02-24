@@ -10,7 +10,7 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
         <title>API Setup</title>
       </Head>
       <div className="relative z-50 flex h-screen flex-row overflow-hidden  bg-neutral-50 p-8">
-        <div className="flex h-full w-1/2 flex-col items-center  justify-center gap-6 rounded-md border border-neutral-200 bg-white px-9 py-8 shadow-xl shadow-neutral-900/10">
+        <div className="flex h-full w-1/2 flex-col items-center  justify-center gap-6 rounded-md border border-neutral-100 bg-white px-9 py-8 shadow-xl shadow-neutral-900/10">
           <div className="flex w-4/5 max-w-[625px] flex-col gap-8">
             <h1 className="text-2xl font-bold">
               Get Started with Embedded Data Syncing and Audience Segmenting
