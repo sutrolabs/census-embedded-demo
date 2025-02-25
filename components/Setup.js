@@ -5,6 +5,7 @@ import Link from "next/link"
 import Button from "@components/Button"
 import { FlickeringGrid } from "@components/Magic/FlickeringGridBackground"
 import TokenEntry from "@components/TokenEntry"
+import { censusFrontendBaseUrl } from "@utils/url"
 
 export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
   return (
