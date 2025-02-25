@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 
 import Button from "@components/Button"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
+import Source from "@components/Source"
 import Header from "@components/Structural/Header/Header"
 import {
   Table,
@@ -118,7 +119,28 @@ export default function ImportDataset({
                 availableSourceTypes.map((source) => {
                   return (
                     <div key={source.label}>
-                      {source.label} {source.configuration_fields.fields.id}
+                      <Source
+                        label={source.label}
+                        type={source.service_name}
+                        iconClassName="fa-solid fa-flag"
+                        workspaceAccessToken={workspaceAccessToken}
+                        sources={sources}
+                        destinations={destinations}
+                        setSources={setSources}
+                        refetchSources={refetchSources}
+                        refetchSourceConnectLinks={refetchSourceConnectLinks}
+                        sourceConnectLinks={sourceConnectLinks}
+                        sourceEmbedLinks={sourceEmbedLinks}
+                        embedMode={embedMode}
+                        devMode={devMode}
+                        syncManagementLinks={syncManagementLinks}
+                        refetchSyncManagementLinks={refetchSyncManagementLinks}
+                        syncs={syncs}
+                        setSyncs={setSyncs}
+                        refetchSyncs={refetchSyncs}
+                        runsLoading={runsLoading}
+                        runs={runs}
+                      />
                     </div>
                   )
                 })
