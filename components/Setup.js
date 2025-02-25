@@ -13,8 +13,8 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
       </Head>
       <div className="relative z-50 flex h-screen flex-row items-center justify-around overflow-hidden bg-[#fafafa] bg-opacity-[.05] pl-8">
         <div className="flex grow items-center justify-center">
-          <div className="relative flex  max-w-xl flex-col items-center justify-center gap-6 overflow-hidden rounded-lg border border-neutral-100 bg-white px-12 py-16 shadow-md">
-            <div className="flex w-4/5 max-w-[625px] flex-col gap-8">
+          <div className="relative flex  max-w-xl flex-col items-center justify-center gap-6 overflow-hidden rounded-lg border border-neutral-100 bg-white py-16 shadow-md">
+            <div className="flex w-4/5 max-w-[650px] flex-col gap-8">
               <div className="flex flex-col gap-3">
                 <div className="flex flex-row items-center gap-3">
                   <Image
@@ -28,7 +28,8 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
                 </div>
                 <h1 className="text-2xl font-bold">Explore Census Embedded</h1>
                 <h2 className="text-xl font-normal text-neutral-500">
-                  Acme Marketing demos how to use embedded data syncing and audience segmenting
+                  Acme Marketing demos how to use embedded data syncing and audience segmenting. Get started
+                  using a secret token from your workspace.
                 </h2>
               </div>
               <TokenEntry
@@ -39,17 +40,26 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
             <div className="bg-brand-development absolute inset-x-0 bottom-0 h-1/5 w-full" />
           </div>
         </div>
-        <div className="flex h-full w-1/3 flex-col items-start justify-center gap-3 rounded-lg border border-neutral-300 bg-white p-12">
-          <Image src="/census-logo.svg" height={50} width={120} alt="" />
-          <h1 className="text-lg font-medium leading-snug">
-            Your product as the source of truth for your customers
-          </h1>
-          <p className="text-lg leading-normal">
-            Welcome! This demo app shows how your customer can use Census Embedded to import data from their
-            source to your desination and export data from your destination to their CRM and ad tools.
-          </p>
-          <div className="flex flex-row items-stretch gap-3">
-            <Button brand>Sign Up for Census</Button>
+        <div className=" flex h-full w-1/3 flex-col items-start gap-3 rounded-l-lg bg-white px-16 py-12">
+          <Image src="/census-logo.svg" height={50} width={120} alt="Census Logo" />
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="mx-auto flex w-full max-w-[350px] flex-col items-start gap-4">
+              <h1 className=" text-2xl font-medium leading-snug">
+                Your product as the source of truth for your customers
+              </h1>
+              <p className="text-lg leading-normal">
+                The best way to import and export data for your customers. Unlock 200+ integrations, onboard
+                users faster, and focus on building your core product. Leave the APIs to us.
+              </p>
+              <div className="flex flex-row gap-5">
+                <Button brand className="mt-4">
+                  Sign Up for Census
+                </Button>
+                <Button brand className="mt-4">
+                  Read the Docs
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
         <FlickeringGrid
