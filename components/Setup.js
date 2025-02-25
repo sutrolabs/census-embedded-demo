@@ -40,7 +40,7 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
             <div className="bg-brand-development absolute inset-x-0 bottom-0 h-1/5 w-full" />
           </div>
         </div>
-        <div className=" relative flex h-full w-1/3 max-w-[550px] flex-col items-start gap-3  bg-white bg-[url('/sidebar-bg.jpg')] bg-cover bg-center px-16 py-12 ">
+        <div className=" relative flex h-full w-1/3 max-w-[550px]  flex-col items-start gap-3 bg-white bg-[url('/sidebar-bg.jpg')] bg-cover bg-center px-16 py-12 shadow-[inset_0_0px_24px_0_rgb(0,0,0,0.07)]">
           <Image src="/census-logo.svg" height={50} width={120} alt="Census Logo" />
 
           <div className="flex h-full w-full items-center justify-center">
