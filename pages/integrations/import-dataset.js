@@ -34,6 +34,7 @@ export default function ImportDataset({
   embedMode,
   devMode,
 }) {
+  const [showSidebar, setShowSidebar] = useState(false)
   const [availableSourceTypes, setAvailableSourceTypes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -68,7 +69,10 @@ export default function ImportDataset({
       </Head>
       <Header title="Data Management" />
       <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-8 py-3">
-        Customers <Button size="small">Import Data</Button>
+        Customers{" "}
+        <Button size="small" onClick={() => setShowSidebar(!showSidebar)}>
+          Import Data
+        </Button>
       </div>
 
       <div className="flex h-full flex-row items-stretch justify-stretch">
@@ -101,21 +105,27 @@ export default function ImportDataset({
             </TableBody>
           </Table>
         </div>
-        <div className="w-[450px] overflow-y-auto border-l border-neutral-100 bg-white p-4 shadow-md">
-          <div className="flex flex-col gap-4">
-            {loading ? (
-              <div className="flex items-center justify-center py-8">
-                <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500"></div>
-              </div>
-            ) : error ? (
-              <div className="p-4 text-red-500">Error loading sources: {error}</div>
-            ) : (
-              availableSourceTypes.map((source) => {
-                return <div key={source.index}>{source.label}</div>
-              })
-            )}
+        {showSidebar && (
+          <div className="w-[550px] overflow-y-auto border-l border-neutral-100 bg-white p-4">
+            <div className="flex flex-col gap-4">
+              {loading ? (
+                <div className="flex items-center justify-center py-8">
+                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
+                </div>
+              ) : error ? (
+                <div className="p-4 text-red-500">Error loading sources: {error}</div>
+              ) : (
+                availableSourceTypes.map((source) => {
+                  return (
+                    <div key={source.label}>
+                      {source.label} {source.configuration_fields.fields.id}
+                    </div>
+                  )
+                })
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   )
