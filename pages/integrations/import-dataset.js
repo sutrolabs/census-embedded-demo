@@ -1,8 +1,8 @@
-import { b2bCustomerData } from "@assets/fake-data/fake-customer-dataset/b2b-customer-data"
 import Head from "next/head"
 import { useState, useEffect } from "react"
 
 import Button from "@components/Button"
+import { b2bCustomerData } from "@components/Data/b2b-customer-data"
 import Header from "@components/Structural/Header/Header"
 import {
   Table,
