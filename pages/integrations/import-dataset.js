@@ -1,4 +1,4 @@
-import { b2bCustomerData } from "@fake-data/fake-customer-dataset/b2b-customer-data.js"
+import { b2bCustomerData } from "@assets/fake-data/fake-customer-dataset/b2b-customer-data"
 import Head from "next/head"
 
 // import Source from "@components/Source"
@@ -62,8 +62,8 @@ export default function ImportDataset({
                   <TableCell className=" font-medium">{customer.customer_id}</TableCell>
                   <TableCell className="truncate">{customer.company_name}</TableCell>
                   <TableCell>{customer.hq_city}</TableCell>
-                  <TableCell>{customer.industry}</TableCell>
-                  <TableCell>${customer.contract_value.toLocaleString()}</TableCell>
+                  <TableCell className="max-w-[200px] truncate">{customer.industry}</TableCell>
+                  <TableCell>{customer.contract_value.toLocaleString()}</TableCell>
                   <TableCell>{new Date(customer.last_logged_in).toLocaleDateString()}</TableCell>
                   <TableCell>{new Date(customer.contract_signed).toLocaleDateString()}</TableCell>
                   <TableCell>{customer.campaigns_received}</TableCell>

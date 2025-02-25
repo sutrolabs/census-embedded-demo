@@ -7,7 +7,7 @@
       "@pages/*": ["pages/*"],
       "@styles/*": ["styles/*"],
       "@utils/*": ["utils/*"],
-      "@fake-data/*": ["fake-data/*"]
+      "@assets/*": ["assets/*"]
     }
   }
 }
