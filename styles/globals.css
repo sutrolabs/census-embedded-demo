@@ -41,3 +41,8 @@ a {
 ::-webkit-scrollbar {
   display: none;
 }
+
+.bg-brand-development {
+  @apply bg-development-warning;
+  mask-image: linear-gradient(transparent 0%, black);
+}

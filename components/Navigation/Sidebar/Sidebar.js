@@ -68,7 +68,7 @@ const groupedNavItems = navItems.reduce((acc, item) => {
 
 export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
   return (
-    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-200 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-between">
+    <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-100 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-between">
       <div className="flex w-full flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center overflow-hidden rounded-md border border-neutral-100">
@@ -99,7 +99,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
           {Object.entries(groupedNavItems).map(
             ([group, items]) =>
               group !== "root" && (
-                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
+                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-100 pl-3">
                   {items.map((item) => (
                     <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
                   ))}

@@ -34,6 +34,10 @@ module.exports = {
           },
         },
       },
+      backgroundImage: {
+        "development-warning":
+          "repeating-linear-gradient(-45deg, rgba(70, 64, 235, 0.07), rgba(70, 64, 235, 0.07) 6px, rgba(70, 64, 235, 0.1) 6px, rgba(70, 64, 235, 0.1) 12px)",
+      },
     },
   },
   plugins: [],

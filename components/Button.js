@@ -1,22 +1,23 @@
 import { forwardRef } from "react"
 
-function Button({ solid, autoFocus, emphasize, disabled, className, onClick, children }, ref) {
+function Button({ solid, brand, autoFocus, emphasize, disabled, className, onClick, children }, ref) {
   return (
     <button
       className={`
         rounded-md
         border border-neutral-200 bg-white
         px-3 py-2
-        text-neutral-700        transition-all duration-75
+        text-neutral-700 transition-all duration-75
         enabled:hover:border-emerald-500 enabled:hover:bg-emerald-500 enabled:hover:text-white
         disabled:border-neutral-300 disabled:text-neutral-300
-        data-[solid]:border-emerald-600 data-[solid]:bg-emerald-600 data-[solid]:text-neutral-50
+        data-[solid]:border-emerald-600 data-[brand]:bg-[#4640EB] data-[solid]:bg-emerald-600 data-[brand]:text-white data-[solid]:text-neutral-50 data-[brand]:hover:bg-[#2F2BBE]
         data-[solid]:enabled:hover:border-emerald-600 data-[solid]:enabled:hover:bg-emerald-600 data-[solid]:enabled:hover:text-neutral-50
         data-[solid]:disabled:border-neutral-400 data-[solid]:disabled:bg-neutral-400
         ${className}
         ${emphasize ? "relative inline-flex items-center justify-center overflow-hidden hover:scale-105" : ""}
       `}
       data-solid={solid ? "" : null}
+      data-brand={brand ? "" : null}
       autoFocus={autoFocus}
       disabled={disabled}
       onClick={onClick}

@@ -40,10 +40,10 @@ export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessTok
     >
       <div className="flex flex-col gap-6">
         <div className="flex flex-col gap-2">
-          <label className="font-medium leading-none">Secret Token</label>
+          <label className="text-lg font-medium leading-none">Workspace API Key</label>
 
           <input
-            className="w-full rounded-md border border-neutral-200 px-3 py-2"
+            className="w-full rounded-lg border border-neutral-100 px-4 py-2.5 text-lg"
             autoFocus
             type="password"
             name="census_api_token"
