@@ -54,7 +54,7 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
                 users faster, and focus on building your core product.
               </p>
               <div className="flex flex-row gap-5">
-                <Link href={`${censusFrontendBaseUrl}/signup`}  target="_blank">
+                <Link href={`${censusFrontendBaseUrl}/signup`} target="_blank">
                   <Button brand className="mt-4">
                     Sign Up for Census
                   </Button>
