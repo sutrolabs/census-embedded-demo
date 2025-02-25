@@ -1,5 +1,6 @@
 import Head from "next/head"
 import Image from "next/image"
+import Link from "next/link"
 
 import Button from "@components/Button"
 import { FlickeringGrid } from "@components/Magic/FlickeringGridBackground"
@@ -53,12 +54,16 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
                 users faster, and focus on building your core product.
               </p>
               <div className="flex flex-row gap-5">
-                <Button brand className="mt-4">
-                  Sign Up for Census
-                </Button>
-                <Button brand className="mt-4">
-                  Read the Docs
-                </Button>
+                <Link href="https://app.getcensus.com/signup" target="_blank">
+                  <Button brand className="mt-4">
+                    Sign Up for Census
+                  </Button>
+                </Link>
+                <Link href="https://developers.getcensus.com/embedded/overview" target="_blank">
+                  <Button brand className="mt-4">
+                    Read the Docs
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
