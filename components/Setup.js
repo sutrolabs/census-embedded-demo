@@ -40,10 +40,10 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
             <div className="bg-brand-development absolute inset-x-0 bottom-0 h-1/5 w-full" />
           </div>
         </div>
-        <div className=" flex h-full w-1/3 flex-col items-start gap-3 rounded-l-lg bg-white px-16 py-12">
+        <div className=" flex h-full w-1/3 max-w-[550px] flex-col items-start gap-3 rounded-l-lg bg-white px-16 py-12">
           <Image src="/census-logo.svg" height={50} width={120} alt="Census Logo" />
           <div className="flex h-full w-full items-center justify-center">
-            <div className="mx-auto flex w-full max-w-[350px] flex-col items-start gap-4">
+            <div className=" flex w-full flex-col items-start gap-4">
               <h1 className=" text-2xl font-medium leading-snug">
                 Your product as the source of truth for your customers
               </h1>
@@ -64,10 +64,10 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
         </div>
         <FlickeringGrid
           className="absolute inset-0 -z-10 w-full [mask-image:radial-gradient(1800px_circle_at_right,transparent,black)]"
-          squareSize={2.5}
+          squareSize={2}
           gridGap={8}
-          color="#4640EB"
-          maxOpacity={0.4}
+          color="#817DFC"
+          maxOpacity={0.3}
           flickerChance={0.4}
           height={2500}
           width={2000}
