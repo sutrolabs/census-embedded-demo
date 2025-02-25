@@ -120,7 +120,7 @@ export default function Source({
 
   return (
     <>
-      <Card className="flex flex-col gap-4" disabled={!isChecked}>
+      <Card shadow={false} className="flex flex-col gap-4" disabled={!isChecked}>
         <Dialog
           open={isDeleteConfirmOpen}
           onClose={() => {
