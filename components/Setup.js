@@ -11,9 +11,9 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
       <Head>
         <title>API Setup</title>
       </Head>
-      <div className="relative z-50 flex h-screen flex-row items-center justify-around overflow-hidden bg-[#fafafa] bg-opacity-[.05] pl-8">
+      <div className="relative z-50 flex h-screen flex-row items-center justify-around overflow-hidden bg-[#fafafa] bg-opacity-[.05]">
         <div className="flex grow items-center justify-center">
-          <div className="relative flex  max-w-xl flex-col items-center justify-center gap-6 overflow-hidden rounded-lg border border-neutral-100 bg-white py-16 shadow-md">
+          <div className="relative flex  max-w-xl flex-col items-center justify-center gap-6 overflow-hidden rounded-lg border-b border-neutral-100 bg-white py-16 shadow">
             <div className="flex w-4/5 max-w-[650px] flex-col gap-8">
               <div className="flex flex-col gap-3">
                 <div className="flex flex-row items-center gap-3">
@@ -40,16 +40,17 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
             <div className="bg-brand-development absolute inset-x-0 bottom-0 h-1/5 w-full" />
           </div>
         </div>
-        <div className=" flex h-full w-1/3 max-w-[550px] flex-col items-start gap-3 rounded-l-lg bg-white px-16 py-12">
+        <div className=" relative flex h-full w-1/3 max-w-[550px] flex-col items-start gap-3  bg-white bg-[url('/sidebar-bg.jpg')] bg-cover bg-center px-16 py-12 ">
           <Image src="/census-logo.svg" height={50} width={120} alt="Census Logo" />
+
           <div className="flex h-full w-full items-center justify-center">
             <div className=" flex w-full flex-col items-start gap-4">
               <h1 className=" text-2xl font-medium leading-snug">
-                Your product as the source of truth for your customers
+                Sign up for Census and get an API key in a few minutes
               </h1>
               <p className="text-lg leading-normal">
                 The best way to import and export data for your customers. Unlock 200+ integrations, onboard
-                users faster, and focus on building your core product. Leave the APIs to us.
+                users faster, and focus on building your core product.
               </p>
               <div className="flex flex-row gap-5">
                 <Button brand className="mt-4">
@@ -63,7 +64,7 @@ export function Setup({ workspaceAccessToken, setWorkspaceAccessToken }) {
           </div>
         </div>
         <FlickeringGrid
-          className="absolute inset-0 -z-10 w-full [mask-image:radial-gradient(1800px_circle_at_right,transparent,black)]"
+          className="absolute inset-0 -z-10 w-full [mask-image:radial-gradient(center,transparent,black)]"
           squareSize={2}
           gridGap={8}
           color="#817DFC"
