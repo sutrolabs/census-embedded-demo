@@ -76,8 +76,8 @@ export default function ImportDataset({
         </Button>
       </div>
 
-      <div className="flex h-full flex-row items-stretch justify-stretch">
-        <div className="mx-auto h-full w-full overflow-y-auto">
+      <div className="flex h-full w-full flex-row items-stretch justify-stretch">
+        <div className="h-full w-full grow overflow-auto">
           <Table>
             <TableCaption>A list of your recent invoices.</TableCaption>
             <TableHeader>
@@ -106,8 +106,9 @@ export default function ImportDataset({
             </TableBody>
           </Table>
         </div>
+
         {showSidebar && (
-          <div className="w-[550px] overflow-y-auto border-l border-neutral-100 bg-white p-4">
+          <div className="w-1/2 overflow-y-auto border-l border-neutral-100 bg-white p-4">
             <div className="flex flex-col gap-4">
               {loading ? (
                 <div className="flex items-center justify-center py-8">
