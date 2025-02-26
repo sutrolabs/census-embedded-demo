@@ -65,11 +65,11 @@ export const source_connection_logos = [
   },
   {
     label: "mysql",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/mysql_logo.svg",
   },
   {
     label: "mother_duck",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/motherduck_logo.svg",
   },
   {
     label: "postgres",
@@ -77,14 +77,18 @@ export const source_connection_logos = [
   },
   {
     label: "pub_sub",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/googlePubSub_logo.svg",
   },
   {
     label: "s3",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/aws-s3_logo.svg",
   },
   {
     label: "single_store",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/singleStore_logo.svg",
+  },
+  {
+    label: "google_cloud_postgres",
+    logo: "/logos/connections/sources/googlecloud_logo.svg",
   },
 ]
