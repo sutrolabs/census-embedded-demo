@@ -1,66 +1,72 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
+
+import EmbeddedFrame from "@components/EmbeddedFrame"
+import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 
 export default function SourceConnectionForm({
   sourceType,
   workspaceAccessToken,
   onSourceConnected,
   onBack,
+  sourceConnectLinks,
+  refetchSourceConnectLinks,
+  embedMode = true, // Default to embedded mode for better UX
 }) {
-  const [connecting, setConnecting] = useState(false)
+  const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [connectLink, setConnectLink] = useState(null)
+  const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(false)
 
-  // Create a source connect link when the component mounts
-  useEffect(() => {
-    const createSourceConnectLink = async () => {
-      if (!sourceType) return
+  // Use the same hook that Source.js uses to manage connect links
+  const [sourceConnectLink, getNewSourceConnectLink] = useSourceConnectLink(
+    sourceConnectLinks,
+    sourceType?.service_name,
+    workspaceAccessToken,
+  )
 
-      setConnecting(true)
+  const initiateSourceConnectFlow = (sourceConnectLinkData) => {
+    if (embedMode) {
+      setShowEmbeddedFrame(true)
+    } else {
+      // For non-embedded mode, redirect to the Census connect page
+      window.location.href = sourceConnectLinkData.uri
+    }
+  }
+
+  const onExitedConnectionFlow = async (connectionDetails) => {
+    setLoading(false)
+
+    if (connectionDetails.status === "created") {
+      // Connection was successful
+      await refetchSourceConnectLinks() // Current sourceConnectLink becomes invalid. Refetch to get a new one.
+
+      // Pass the new source to the parent component
+      onSourceConnected({
+        id: connectionDetails.details.id,
+        type: sourceType.service_name,
+        name: connectionDetails.details.name || sourceType.label,
+      })
+    } else {
+      // Connection failed or was cancelled
+      setShowEmbeddedFrame(false)
+    }
+  }
+
+  const handleConnect = async () => {
+    try {
+      setLoading(true)
       setError(null)
 
-      try {
-        const response = await fetch("/api/create_source_connect_link", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          },
-          body: JSON.stringify({
-            type: sourceType.service_name,
-          }),
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to create source connect link")
-        }
-
-        const data = await response.json()
-        setConnectLink(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setConnecting(false)
+      if (sourceConnectLink) {
+        // We already have a source connect link
+        initiateSourceConnectFlow(sourceConnectLink)
+      } else {
+        // We need to create a source connect link
+        const newLink = await getNewSourceConnectLink()
+        initiateSourceConnectFlow(newLink)
       }
-    }
-
-    createSourceConnectLink()
-  }, [sourceType, workspaceAccessToken])
-
-  // Handle the redirect to the connect link
-  const handleConnect = () => {
-    if (connectLink?.url) {
-      // Store any necessary state in localStorage or sessionStorage
-      // to handle the redirect back from Census
-      sessionStorage.setItem(
-        "pendingSourceConnection",
-        JSON.stringify({
-          sourceType: sourceType.service_name,
-          timestamp: Date.now(),
-        }),
-      )
-
-      // Redirect to the Census connect link
-      window.location.href = connectLink.url
+    } catch (err) {
+      setError(err.message || "Failed to create connection link")
+      setLoading(false)
     }
   }
 
@@ -68,44 +74,52 @@ export default function SourceConnectionForm({
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Connect {sourceType.label}</h2>
-        <button className="rounded border px-3 py-1 text-sm" onClick={onBack}>
+        <button
+          className="rounded border px-3 py-1 text-sm"
+          onClick={onBack}
+          disabled={loading || showEmbeddedFrame}
+        >
           Back
         </button>
       </div>
 
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
-      <div className="mt-4 flex flex-col gap-4">
-        <div className="rounded bg-gray-50 p-4">
-          <p className="mb-2">
-            You&apos;ll be redirected to Census to securely connect your {sourceType.label} account.
-          </p>
-          <p className="text-sm text-gray-600">
-            After connecting, you&apos;ll be returned to this application to continue the setup process.
-          </p>
-        </div>
+      {showEmbeddedFrame ? (
+        <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
+      ) : (
+        <div className="mt-4 flex flex-col gap-4">
+          <div className="rounded bg-gray-50 p-4">
+            <p className="mb-2">Connect your {sourceType.label} account to import your data.</p>
+            <p className="text-sm text-gray-600">
+              {embedMode
+                ? "You'll be guided through a secure connection process."
+                : "You'll be redirected to Census to securely connect your account."}
+            </p>
+          </div>
 
-        <div className="mt-4 flex justify-between">
-          <button type="button" className="rounded border px-4 py-2" onClick={onBack} disabled={connecting}>
-            Back
-          </button>
-          <button
-            type="button"
-            className="rounded bg-emerald-500 px-4 py-2 text-white"
-            onClick={handleConnect}
-            disabled={connecting || !connectLink}
-          >
-            {connecting ? (
-              <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-                Preparing connection...
-              </span>
-            ) : (
-              "Connect with Census"
-            )}
-          </button>
+          <div className="mt-4 flex justify-between">
+            <button type="button" className="rounded border px-4 py-2" onClick={onBack} disabled={loading}>
+              Back
+            </button>
+            <button
+              type="button"
+              className="rounded bg-emerald-500 px-4 py-2 text-white"
+              onClick={handleConnect}
+              disabled={loading}
+            >
+              {loading ? (
+                <span className="flex items-center gap-2">
+                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
+                  Preparing connection...
+                </span>
+              ) : (
+                "Connect with Census"
+              )}
+            </button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

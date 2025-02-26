@@ -20,6 +20,9 @@ export default function SourceConnectionFlow({
   onCancel,
   initialStep = STEPS.INITIAL,
   existingSourceId = null,
+  sourceConnectLinks = [],
+  refetchSourceConnectLinks,
+  embedMode = true,
 }) {
   // Flow state
   const [currentStep, setCurrentStep] = useState(initialStep)
@@ -228,6 +231,9 @@ export default function SourceConnectionFlow({
             workspaceAccessToken={workspaceAccessToken}
             onSourceConnected={goToSelectObjects}
             onBack={goBack}
+            sourceConnectLinks={sourceConnectLinks}
+            refetchSourceConnectLinks={refetchSourceConnectLinks}
+            embedMode={embedMode}
           />
         )
 

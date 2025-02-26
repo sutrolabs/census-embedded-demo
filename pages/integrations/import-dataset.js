@@ -121,6 +121,9 @@ export default function ImportDataset({
               onComplete={handleSourceConnectionComplete}
               onCancel={() => setShowSidebar(false)}
               existingSourceId={selectedSourceId}
+              sourceConnectLinks={sourceConnectLinks}
+              refetchSourceConnectLinks={refetchSourceConnectLinks}
+              embedMode={embedMode}
             />
           </div>
         )}
