@@ -70,7 +70,7 @@ export default function SourceObjectSelection({
         </button>
       </div>
 
-      <p className="text-gray-600">Select which data you want to sync from this source.</p>
+      <p className="text-neutral-600">Select which data you want to sync from this source.</p>
 
       <div className="mt-4 flex flex-col gap-5">
         {/* Display existing syncs */}

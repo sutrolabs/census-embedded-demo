@@ -207,7 +207,7 @@ export default function SourceConnectionFlow({
             <h2 className="text-xl font-semibold">Connect a Data Source</h2>
 
             <div className="flex flex-col gap-4">
-              <button className="rounded border p-4 hover:bg-gray-50" onClick={goToSourceTypes}>
+              <button className="rounded border p-4 hover:bg-neutral-50" onClick={goToSourceTypes}>
                 Connect a new source
               </button>
 
@@ -272,7 +272,7 @@ export default function SourceConnectionFlow({
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-semibold">Review and Confirm</h2>
 
-            <div className="rounded bg-gray-50 p-4">
+            <div className="rounded bg-neutral-50 p-4">
               <h3 className="font-medium">Selected Source</h3>
               <p>{selectedSource?.name || "Unknown source"}</p>
 

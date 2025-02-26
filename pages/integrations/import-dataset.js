@@ -113,7 +113,7 @@ export default function ImportDataset({
         </Table>
 
         {showSidebar && (
-          <div className="fixed right-0 h-full w-2/3 overflow-y-auto border-l border-neutral-100 bg-white p-4">
+          <div className="fixed right-0 h-full w-2/3 overflow-y-auto border-l border-neutral-100 bg-white p-4 shadow-md">
             <SourceConnectionFlow
               workspaceAccessToken={workspaceAccessToken}
               onComplete={handleSourceConnectionComplete}

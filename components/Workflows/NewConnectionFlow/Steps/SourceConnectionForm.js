@@ -87,9 +87,9 @@ export default function SourceConnectionForm({
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-4">
-          <div className="rounded bg-gray-50 p-4">
+          <div className="rounded bg-neutral-50 p-4">
             <p className="mb-2">Connect your {sourceType.label} account to import your data.</p>
-            <p className="text-sm text-gray-600">
+            <p className="text-sm text-neutral-600">
               {embedMode
                 ? "You'll be guided through a secure connection process."
                 : "You'll be redirected to Census to securely connect your account."}
