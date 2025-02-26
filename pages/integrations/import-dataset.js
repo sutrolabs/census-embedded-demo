@@ -83,7 +83,7 @@ export default function ImportDataset({
         </Button>
       </div>
 
-      <div className="flex h-full w-full flex-row items-stretch justify-stretch">
+      <div className="flex h-full w-full flex-row items-stretch">
         <div className="h-full w-full overflow-auto">
           <Table>
             <TableCaption>A list of your recent invoices.</TableCaption>

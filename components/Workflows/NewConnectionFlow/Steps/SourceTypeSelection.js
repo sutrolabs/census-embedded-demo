@@ -12,7 +12,7 @@ export default function SourceTypeSelection({ sourceTypes, loading, error, onSel
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Select a Source Type</h2>
         <button className="rounded border px-3 py-1 text-sm" onClick={onBack}>
