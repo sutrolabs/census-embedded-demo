@@ -232,6 +232,7 @@ export default function SourceConnectionFlow({
             error={error}
             onSelectSourceType={goToConnectSource}
             onBack={goBack}
+            showOnlyCreatableViaLink={true}
           />
         )
 

@@ -2,7 +2,14 @@ import Image from "next/image"
 
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
-export default function SourceTypeSelection({ sourceTypes, loading, error, onSelectSourceType, onBack }) {
+export default function SourceTypeSelection({
+  sourceTypes,
+  loading,
+  error,
+  onSelectSourceType,
+  onBack,
+  showOnlyCreatableViaLink = true,
+}) {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">
@@ -17,9 +24,15 @@ export default function SourceTypeSelection({ sourceTypes, loading, error, onSel
 
   const excludedConnections = ["entity_resolution", "http_request"]
 
-  const filteredSourceTypes = sourceTypes.filter(
-    (sourceType) => !excludedConnections.includes(sourceType.service_name),
-  )
+  // Filter source types based on both excludedConnections and creatable_via_connect_link
+  const filteredSourceTypes = sourceTypes.filter((sourceType) => {
+    // First check if it's in the excluded list
+    if (excludedConnections.includes(sourceType.service_name)) {
+      return false
+    }
+
+    return sourceType.creatable_via_connect_link === true
+  })
 
   return (
     <div className="flex h-full flex-col gap-4">
