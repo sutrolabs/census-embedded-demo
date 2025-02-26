@@ -1,7 +1,9 @@
+import Image from "next/image"
 import { useState } from "react"
 
 import EmbeddedFrame from "@components/EmbeddedFrame"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
+import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
 export default function SourceConnectionForm({
   sourceType,
@@ -75,7 +77,8 @@ export default function SourceConnectionForm({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-row items-center gap-2">
+        <Image src={getLogoForSourceType(sourceType)} height={30} width={30} alt="" />
         <h2 className="text-xl font-semibold">Connect {sourceType.label}</h2>
       </div>
 

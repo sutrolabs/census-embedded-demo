@@ -1,3 +1,7 @@
+import Image from "next/image"
+
+import { getLogoForSource } from "@hooks/useSourceLogos"
+
 export default function ExistingSourcesList({ sources, loading, error, onSelectSource }) {
   if (loading) {
     return (
@@ -17,16 +21,20 @@ export default function ExistingSourcesList({ sources, loading, error, onSelectS
 
   return (
     <div className="divide-y rounded border">
-      {sources.map((source) => (
-        <div
-          key={source.id}
-          className="cursor-pointer p-4 hover:bg-neutral-50"
-          onClick={() => onSelectSource(source)}
-        >
-          <div className="font-medium">{source.name}</div>
-          <div className="text-sm text-neutral-500">{source.type}</div>
-        </div>
-      ))}
+      {sources.map((source) => {
+        const logo = getLogoForSource(source.type)
+        return (
+          <div
+            key={source.id}
+            className="cursor-pointer p-4 hover:bg-neutral-50"
+            onClick={() => onSelectSource(source)}
+          >
+            <Image src={logo} height={20} width={20} alt="" />
+            <div className="font-medium">{source.name}</div>
+            <div className="text-sm text-neutral-500">{source.type}</div>
+          </div>
+        )
+      })}
     </div>
   )
 }

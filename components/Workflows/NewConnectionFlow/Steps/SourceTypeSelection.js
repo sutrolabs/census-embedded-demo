@@ -1,5 +1,7 @@
 import Image from "next/image"
 
+import { getLogoForSourceType } from "@hooks/useSourceLogos"
+
 export default function SourceTypeSelection({ sourceTypes, loading, error, onSelectSourceType, onBack }) {
   if (loading) {
     return (
@@ -18,15 +20,6 @@ export default function SourceTypeSelection({ sourceTypes, loading, error, onSel
   const filteredSourceTypes = sourceTypes.filter(
     (sourceType) => !excludedConnections.includes(sourceType.service_name),
   )
-
-  const { source_connection_logos } = require("@components/Data/Connections/source-connection-logos")
-
-  const getLogoForSourceType = (sourceType) => {
-    const logoEntry = source_connection_logos.find(
-      (logo) => logo.label.toLowerCase() === sourceType.service_name.toLowerCase(),
-    )
-    return logoEntry ? logoEntry.logo : null
-  }
 
   return (
     <div className="flex h-full flex-col gap-4">
@@ -54,7 +47,7 @@ export default function SourceTypeSelection({ sourceTypes, loading, error, onSel
                       alt={`${sourceType.label} logo`}
                       width={20}
                       height={20}
-                      className=" object-contain"
+                      className="h-5 object-contain"
                     />
                   )}
                   <div className="font-medium">{sourceType.label}</div>
