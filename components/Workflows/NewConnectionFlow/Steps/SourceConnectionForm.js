@@ -8,7 +8,7 @@ export default function SourceConnectionForm({
   workspaceAccessToken,
   onSourceConnected,
   onBack,
-  sourceConnectLinks,
+  sourceConnectLinks = [],
   refetchSourceConnectLinks,
   embedMode = true, // Default to embedded mode for better UX
 }) {
@@ -17,7 +17,7 @@ export default function SourceConnectionForm({
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(false)
 
   // Use the same hook that Source.js uses to manage connect links
-  const [sourceConnectLink, getNewSourceConnectLink] = useSourceConnectLink(
+  const [sourceConnectLink, getNewSourceConnectLink, isLinkLoading] = useSourceConnectLink(
     sourceConnectLinks,
     sourceType?.service_name,
     workspaceAccessToken,
@@ -58,10 +58,13 @@ export default function SourceConnectionForm({
 
       if (sourceConnectLink) {
         // We already have a source connect link
+
         initiateSourceConnectFlow(sourceConnectLink)
       } else {
         // We need to create a source connect link
+
         const newLink = await getNewSourceConnectLink()
+
         initiateSourceConnectFlow(newLink)
       }
     } catch (err) {
@@ -86,7 +89,9 @@ export default function SourceConnectionForm({
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
       {showEmbeddedFrame ? (
-        <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
+        <div className="h-[800px] w-full">
+          <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
+        </div>
       ) : (
         <div className="mt-4 flex flex-col gap-4">
           <div className="rounded bg-gray-50 p-4">

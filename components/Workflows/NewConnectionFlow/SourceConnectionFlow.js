@@ -41,6 +41,9 @@ export default function SourceConnectionFlow({
   const [loadingObjects, setLoadingObjects] = useState(false)
   const [error, setError] = useState(null)
 
+  // Add console logging to help debug
+  useEffect(() => {}, [sourceConnectLinks, selectedSourceType])
+
   // Fetch available source types
   useEffect(() => {
     const fetchSourceTypes = async () => {
