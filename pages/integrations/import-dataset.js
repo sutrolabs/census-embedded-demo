@@ -3,7 +3,6 @@ import { useState, useEffect } from "react"
 
 import Button from "@components/Button"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
-import Source from "@components/Source"
 import Header from "@components/Structural/Header/Header"
 import {
   Table,
@@ -14,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/Table/Table"
+import SourceConnectionFlow from "@components/Workflows/NewConnectionFlow/SourceConnectionFlow"
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -36,9 +36,16 @@ export default function ImportDataset({
   devMode,
 }) {
   const [showSidebar, setShowSidebar] = useState(false)
+  const [selectedSourceId, setSelectedSourceId] = useState(null)
   const [availableSourceTypes, setAvailableSourceTypes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const handleSourceConnectionComplete = (result) => {
+    // Handle the completed source connection
+    refetchSources()
+    setShowSidebar(false)
+  }
 
   // Fetch available sources when the component mounts
   useEffect(() => {
@@ -109,44 +116,12 @@ export default function ImportDataset({
 
         {showSidebar && (
           <div className="w-1/2 overflow-y-auto border-l border-neutral-100 bg-white p-4">
-            <div className="flex flex-col gap-4">
-              {loading ? (
-                <div className="flex items-center justify-center py-8">
-                  <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
-                </div>
-              ) : error ? (
-                <div className="p-4 text-red-500">Error loading sources: {error}</div>
-              ) : (
-                availableSourceTypes.map((source) => {
-                  return (
-                    <div key={source.label}>
-                      <Source
-                        label={source.label}
-                        type={source.service_name}
-                        iconClassName="fa-solid fa-flag"
-                        workspaceAccessToken={workspaceAccessToken}
-                        sources={sources}
-                        destinations={destinations}
-                        setSources={setSources}
-                        refetchSources={refetchSources}
-                        refetchSourceConnectLinks={refetchSourceConnectLinks}
-                        sourceConnectLinks={sourceConnectLinks}
-                        sourceEmbedLinks={sourceEmbedLinks}
-                        embedMode={embedMode}
-                        devMode={devMode}
-                        syncManagementLinks={syncManagementLinks}
-                        refetchSyncManagementLinks={refetchSyncManagementLinks}
-                        syncs={syncs}
-                        setSyncs={setSyncs}
-                        refetchSyncs={refetchSyncs}
-                        runsLoading={runsLoading}
-                        runs={runs}
-                      />
-                    </div>
-                  )
-                })
-              )}
-            </div>
+            <SourceConnectionFlow
+              workspaceAccessToken={workspaceAccessToken}
+              onComplete={handleSourceConnectionComplete}
+              onCancel={() => setShowSidebar(false)}
+              existingSourceId={selectedSourceId}
+            />
           </div>
         )}
       </div>
