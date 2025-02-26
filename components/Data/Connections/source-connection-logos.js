@@ -33,23 +33,23 @@ export const source_connection_logos = [
   },
   {
     label: "click_house",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/clickhouse_logo.svg",
   },
   {
     label: "confluent_kafka",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/confluent_logo.svg",
   },
   {
     label: "elasticsearch",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/elasticsearch_logo.svg",
   },
   {
     label: "greenplum",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/greenplum_logo.svg",
   },
   {
     label: "kafka",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/kafka_logo.svg",
   },
   {
     label: "http_request",
@@ -57,7 +57,7 @@ export const source_connection_logos = [
   },
   {
     label: "materialize",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "/logos/connections/sources/materialize_logo.svg",
   },
   {
     label: "microsoft_fabric",
