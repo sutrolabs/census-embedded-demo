@@ -22,6 +22,14 @@ export default function SourceConnectionFlow({
   existingSourceId = null,
   sourceConnectLinks = [],
   refetchSourceConnectLinks,
+  syncManagementLinks = [],
+  refetchSyncManagementLinks,
+  syncs = [],
+  setSyncs,
+  refetchSyncs,
+  runsLoading = false,
+  runs = [],
+  devMode = false,
   embedMode = true,
 }) {
   // Flow state
@@ -173,7 +181,7 @@ export default function SourceConnectionFlow({
       case STEPS.SELECT_OBJECTS:
         // If we came from an existing source, go to initial
         // Otherwise go back to connect source
-        setCurrentStep(existingSourceId ? STEPS.INITIAL : STEPS.CONNECT_SOURCE)
+        setCurrentStep(STEPS.INITIAL)
         break
       case STEPS.REVIEW:
         setCurrentStep(STEPS.SELECT_OBJECTS)
@@ -247,6 +255,15 @@ export default function SourceConnectionFlow({
             workspaceAccessToken={workspaceAccessToken}
             onObjectsSelected={goToReview}
             onBack={goBack}
+            syncs={syncs}
+            setSyncs={setSyncs}
+            refetchSyncs={refetchSyncs}
+            syncManagementLinks={syncManagementLinks}
+            refetchSyncManagementLinks={refetchSyncManagementLinks}
+            runsLoading={runsLoading}
+            runs={runs}
+            devMode={devMode}
+            embedMode={embedMode}
           />
         )
 

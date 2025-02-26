@@ -1,104 +1,161 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
-export default function SourceObjectSelection({ source, workspaceAccessToken, onObjectsSelected, onBack }) {
-  const [objects, setObjects] = useState([])
-  const [selectedObjectIds, setSelectedObjectIds] = useState([])
+import Button from "@components/Button"
+import RequestTooltip from "@components/RequestTooltip"
+import SyncCreationWizard from "@components/SyncCreationWizard"
+import { SyncObject } from "@components/SyncObject"
+import { useSyncManagementLink } from "@hooks/use-sync-management-link"
+import { censusBaseUrl } from "@utils/url"
+
+export default function SourceObjectSelection({
+  source,
+  workspaceAccessToken,
+  onObjectsSelected,
+  onBack,
+  syncs = [],
+  setSyncs,
+  refetchSyncs,
+  syncManagementLinks = [],
+  refetchSyncManagementLinks,
+  runsLoading = false,
+  runs = [],
+  devMode = false,
+  embedMode = true,
+}) {
+  const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
 
-  useEffect(() => {
-    const fetchObjects = async () => {
-      setLoading(true)
-      setError(null)
+  // Filter syncs for this source
+  const sourceSpecificSyncs = syncs.filter((sync) => sync.source_attributes?.connection_id === source.id)
 
-      try {
-        // This would be replaced with your actual API endpoint for fetching objects
-        const response = await fetch(`/api/source_objects?source_id=${source.id}`, {
-          headers: {
-            ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          },
-        })
+  // Use the sync management link hook
+  const [syncManagementLink, resetSyncManagementLink, isLinkLoading] = useSyncManagementLink(
+    syncManagementLinks,
+    refetchSyncManagementLinks,
+    workspaceAccessToken,
+  )
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch objects")
-        }
+  // Default query parameters for destination
+  const createSyncLinkQueryParams = "&destination_hidden=true"
+  const editSyncLinkQueryParams = "&destination_hidden=true"
 
-        const data = await response.json()
-        setObjects(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
+  // Full link with query parameters
+  const createLinkWithQueryParams = syncManagementLink?.uri + createSyncLinkQueryParams
+
+  // Initiate the sync wizard flow
+  const initiateSyncWizardFlow = () => {
+    if (embedMode) {
+      setShowCreateSyncWizard(true)
+    } else {
+      window.location.href = createLinkWithQueryParams
     }
-
-    if (source?.id) {
-      fetchObjects()
-    }
-  }, [source, workspaceAccessToken])
-
-  const toggleObjectSelection = (objectId) => {
-    setSelectedObjectIds((prev) =>
-      prev.includes(objectId) ? prev.filter((id) => id !== objectId) : [...prev, objectId],
-    )
   }
 
+  // Handle completion of object selection
   const handleContinue = () => {
-    const selectedObjects = objects.filter((obj) => selectedObjectIds.includes(obj.id))
-    onObjectsSelected(selectedObjects)
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return <div className="p-4 text-red-500">Error loading objects: {error}</div>
+    // Pass the selected syncs to the parent component
+    onObjectsSelected(sourceSpecificSyncs)
   }
 
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Select Objects from {source?.name}</h2>
-        <button className="rounded border px-3 py-1 text-sm" onClick={onBack}>
+        <h2 className="text-xl font-semibold">Configure Syncs for {source?.name}</h2>
+        <button
+          className="rounded border px-3 py-1 text-sm"
+          onClick={onBack}
+          disabled={loading || isLinkLoading}
+        >
           Back
         </button>
       </div>
 
-      {objects.length === 0 ? (
-        <div className="p-4 text-gray-500">No objects found for this source.</div>
-      ) : (
-        <div className="mt-4 divide-y rounded border">
-          {objects.map((object) => (
-            <div key={object.id} className="flex items-center gap-3 p-4 hover:bg-gray-50">
-              <input
-                type="checkbox"
-                id={`object-${object.id}`}
-                checked={selectedObjectIds.includes(object.id)}
-                onChange={() => toggleObjectSelection(object.id)}
-                className="h-4 w-4"
-              />
-              <label htmlFor={`object-${object.id}`} className="grow cursor-pointer">
-                <div className="font-medium">{object.name}</div>
-                <div className="text-sm text-gray-500">{object.type}</div>
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
+      <p className="text-gray-600">Select which data you want to sync from this source.</p>
 
+      <div className="mt-4 flex flex-col gap-5">
+        {/* Display existing syncs */}
+        {sourceSpecificSyncs.map((sync) => (
+          <SyncObject
+            key={sync.id}
+            sync={sync}
+            refetchSyncs={refetchSyncs}
+            workspaceAccessToken={workspaceAccessToken}
+            setSyncs={setSyncs}
+            runsLoading={runsLoading}
+            runs={runs}
+            devMode={devMode}
+            embedMode={embedMode}
+            queryParams={editSyncLinkQueryParams}
+          />
+        ))}
+
+        {/* Show sync creation wizard or button */}
+        {showCreateSyncWizard ? (
+          <SyncCreationWizard
+            sourceId={source.id}
+            setSyncs={setSyncs}
+            refetchSyncs={refetchSyncs}
+            resetSyncManagementLink={resetSyncManagementLink}
+            setShowCreateSyncWizard={setShowCreateSyncWizard}
+            linkWithSourcePrepopulated={createLinkWithQueryParams}
+          />
+        ) : (
+          <Button
+            className="flex items-center justify-center rounded-md border border-emerald-500/40 bg-neutral-50 px-5 py-8 text-xl shadow-sm"
+            onClick={initiateSyncWizardFlow}
+            disabled={isLinkLoading}
+          >
+            <span id={`create-sync-${source?.id}`}>
+              <i className="fa-solid fa-plus mr-4" />
+              Add data to sync
+            </span>
+          </Button>
+        )}
+      </div>
+
+      {/* Request tooltip for developer mode */}
+      <RequestTooltip
+        anchorSelect={`#create-sync-${source?.id}`}
+        url={`${censusBaseUrl}/api/v1/sync_management_links`}
+        method="POST"
+        devMode={devMode}
+        headers={
+          <pre>
+            {JSON.stringify(
+              {
+                ["authorization"]: "Bearer <workspaceAccessToken>",
+                ["content-type"]: "application/json",
+              },
+              null,
+              2,
+            )}
+          </pre>
+        }
+        body={
+          !embedMode && (
+            <pre>
+              {JSON.stringify(
+                {
+                  redirect_uri: window.location.href,
+                },
+                null,
+                2,
+              )}
+            </pre>
+          )
+        }
+        link="https://developers.getcensus.com/api-reference/sync-management-links/create-a-new-sync-management-link"
+      />
+
+      {/* Continue button */}
       <div className="mt-4 flex justify-between">
-        <button className="rounded border px-4 py-2" onClick={onBack}>
+        <button className="rounded border px-4 py-2" onClick={onBack} disabled={loading || isLinkLoading}>
           Back
         </button>
         <button
           className="rounded bg-emerald-500 px-4 py-2 text-white"
           onClick={handleContinue}
-          disabled={selectedObjectIds.length === 0}
+          disabled={loading || isLinkLoading}
         >
           Continue
         </button>

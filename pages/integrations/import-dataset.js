@@ -84,7 +84,7 @@ export default function ImportDataset({
       </div>
 
       <div className="flex h-full w-full flex-row items-stretch justify-stretch">
-        <div className="h-full w-full grow overflow-auto">
+        <div className="h-full w-full overflow-auto">
           <Table>
             <TableCaption>A list of your recent invoices.</TableCaption>
             <TableHeader>
@@ -123,6 +123,14 @@ export default function ImportDataset({
               existingSourceId={selectedSourceId}
               sourceConnectLinks={sourceConnectLinks}
               refetchSourceConnectLinks={refetchSourceConnectLinks}
+              syncManagementLinks={syncManagementLinks}
+              refetchSyncManagementLinks={refetchSyncManagementLinks}
+              syncs={syncs}
+              setSyncs={setSyncs}
+              refetchSyncs={refetchSyncs}
+              runsLoading={runsLoading}
+              runs={runs}
+              devMode={devMode}
               embedMode={embedMode}
             />
           </div>
