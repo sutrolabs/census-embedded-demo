@@ -84,38 +84,36 @@ export default function ImportDataset({
       </div>
 
       <div className="flex h-full w-full flex-row items-stretch">
-        <div className="h-full overflow-auto">
-          <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[100px] pl-6">Company</TableHead>
-                <TableHead>City</TableHead>
-                <TableHead>Industry</TableHead>
-                <TableHead>contract_value</TableHead>
-                <TableHead>last_logged_in</TableHead>
-                <TableHead>contract_signed</TableHead>
-                <TableHead>campaigns_received</TableHead>
+        <Table>
+          <TableCaption>A list of your recent invoices.</TableCaption>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[100px] pl-6">Company</TableHead>
+              <TableHead>City</TableHead>
+              <TableHead>Industry</TableHead>
+              <TableHead>contract_value</TableHead>
+              <TableHead>last_logged_in</TableHead>
+              <TableHead>contract_signed</TableHead>
+              <TableHead>campaigns_received</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {b2bCustomerData.map((customer) => (
+              <TableRow key={customer.customer_id}>
+                <TableCell className="truncate pl-6">{customer.company_name}</TableCell>
+                <TableCell className="max-w-[150px] truncate">{customer.hq_city}</TableCell>
+                <TableCell className="max-w-[200px] truncate">{customer.industry}</TableCell>
+                <TableCell>{customer.contract_value.toLocaleString()}</TableCell>
+                <TableCell>{new Date(customer.last_logged_in).toLocaleDateString()}</TableCell>
+                <TableCell>{new Date(customer.contract_signed).toLocaleDateString()}</TableCell>
+                <TableCell>{customer.campaigns_received}</TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {b2bCustomerData.map((customer) => (
-                <TableRow key={customer.customer_id}>
-                  <TableCell className="truncate pl-6">{customer.company_name}</TableCell>
-                  <TableCell className="max-w-[150px] truncate">{customer.hq_city}</TableCell>
-                  <TableCell className="max-w-[200px] truncate">{customer.industry}</TableCell>
-                  <TableCell>{customer.contract_value.toLocaleString()}</TableCell>
-                  <TableCell>{new Date(customer.last_logged_in).toLocaleDateString()}</TableCell>
-                  <TableCell>{new Date(customer.contract_signed).toLocaleDateString()}</TableCell>
-                  <TableCell>{customer.campaigns_received}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
 
         {showSidebar && (
-          <div className="w-2/3 overflow-y-auto border-l border-neutral-100 bg-white p-4">
+          <div className="fixed right-0 h-full w-2/3 overflow-y-auto border-l border-neutral-100 bg-white p-4">
             <SourceConnectionFlow
               workspaceAccessToken={workspaceAccessToken}
               onComplete={handleSourceConnectionComplete}

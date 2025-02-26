@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 export default function SourceTypeSelection({ sourceTypes, loading, error, onSelectSourceType, onBack }) {
   if (loading) {
     return (
@@ -11,6 +13,15 @@ export default function SourceTypeSelection({ sourceTypes, loading, error, onSel
     return <div className="p-4 text-red-500">Error loading source types: {error}</div>
   }
 
+  const { source_connection_logos } = require("@components/Data/Connections/source-connection-logos")
+
+  const getLogoForSourceType = (sourceType) => {
+    const logoEntry = source_connection_logos.find(
+      (logo) => logo.label.toLowerCase() === sourceType.service_name.toLowerCase(),
+    )
+    return logoEntry ? logoEntry.logo : null
+  }
+
   return (
     <div className="flex h-full flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -19,17 +30,33 @@ export default function SourceTypeSelection({ sourceTypes, loading, error, onSel
           Back
         </button>
       </div>
+      <div className="h-full overflow-y-auto">
+        <div className="grid grid-cols-2 gap-4 py-8">
+          {sourceTypes.map((sourceType) => {
+            const logo = getLogoForSourceType(sourceType)
 
-      <div className="mt-4 grid grid-cols-2 gap-4">
-        {sourceTypes.map((sourceType) => (
-          <div
-            key={sourceType.service_name}
-            className="cursor-pointer rounded border p-4 hover:bg-gray-50"
-            onClick={() => onSelectSourceType(sourceType)}
-          >
-            <div className="font-medium">{sourceType.label}</div>
-          </div>
-        ))}
+            return (
+              <div
+                key={sourceType.service_name}
+                className="cursor-pointer rounded border p-4 hover:bg-gray-50"
+                onClick={() => onSelectSourceType(sourceType)}
+              >
+                <div className="flex items-center gap-3">
+                  {logo && (
+                    <Image
+                      src={logo}
+                      alt={`${sourceType.label} logo`}
+                      width={50}
+                      height={50}
+                      className="h-8 w-8 object-contain"
+                    />
+                  )}
+                  <div className="font-medium">{sourceType.label}</div>
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   )
