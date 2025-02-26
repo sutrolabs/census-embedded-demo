@@ -77,19 +77,12 @@ export default function SourceConnectionForm({
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-semibold">Connect {sourceType.label}</h2>
-        <button
-          className="rounded border px-3 py-1 text-sm"
-          onClick={onBack}
-          disabled={loading || showEmbeddedFrame}
-        >
-          Back
-        </button>
       </div>
 
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
       {showEmbeddedFrame ? (
-        <div className="h-[800px] w-full">
+        <div className="mb-8 h-full w-full">
           <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
         </div>
       ) : (

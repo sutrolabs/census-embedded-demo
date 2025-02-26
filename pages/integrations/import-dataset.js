@@ -84,7 +84,7 @@ export default function ImportDataset({
       </div>
 
       <div className="flex h-full w-full flex-row items-stretch">
-        <div className="h-full w-full overflow-auto">
+        <div className="h-full overflow-auto">
           <Table>
             <TableCaption>A list of your recent invoices.</TableCaption>
             <TableHeader>
@@ -115,7 +115,7 @@ export default function ImportDataset({
         </div>
 
         {showSidebar && (
-          <div className="w-1/2 overflow-y-auto border-l border-neutral-100 bg-white p-4">
+          <div className="w-2/3 overflow-y-auto border-l border-neutral-100 bg-white p-4">
             <SourceConnectionFlow
               workspaceAccessToken={workspaceAccessToken}
               onComplete={handleSourceConnectionComplete}
