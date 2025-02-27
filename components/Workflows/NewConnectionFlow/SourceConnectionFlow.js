@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react"
 
+import Button from "@components/Button"
 import ExistingSourcesList from "@components/Workflows/NewConnectionFlow/ExistingSourcesList"
 import SourceConnectionForm from "@components/Workflows/NewConnectionFlow/Steps/SourceConnectionForm"
 import SourceObjectSelection from "@components/Workflows/NewConnectionFlow/Steps/SourceObjectSelection"
@@ -207,9 +208,7 @@ export default function SourceConnectionFlow({
             <h2 className="text-xl font-semibold">Connect a Data Source</h2>
 
             <div className="flex flex-col gap-4">
-              <button className="rounded border p-4 hover:bg-neutral-50" onClick={goToSourceTypes}>
-                Connect a new source
-              </button>
+              <Button onClick={goToSourceTypes}>Connect a new source</Button>
 
               <div className="mt-4">
                 <h3 className="mb-2 text-lg font-medium">Or use an existing source</h3>
@@ -301,5 +300,5 @@ export default function SourceConnectionFlow({
     }
   }
 
-  return <div className="h-full">{renderStep()}</div>
+  return <>{renderStep()}</>
 }

@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/Table/Table"
+import ExistingSourcesList from "@components/Workflows/NewConnectionFlow/ExistingSourcesList"
 import SourceConnectionFlow from "@components/Workflows/NewConnectionFlow/SourceConnectionFlow"
 
 export default function ImportDataset({
@@ -83,7 +84,7 @@ export default function ImportDataset({
         </Button>
       </div>
 
-      <div className="flex h-full w-full flex-row items-stretch">
+      <div className="flex h-full w-full flex-row items-stretch overflow-hidden">
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
@@ -113,7 +114,8 @@ export default function ImportDataset({
         </Table>
 
         {showSidebar && (
-          <div className="fixed right-0 h-full w-2/3 overflow-y-auto border-l border-neutral-100 bg-white p-4 shadow-md">
+          <div className="h-full w-2/3 max-w-[800px] overflow-hidden border-l border-neutral-100 bg-white shadow-md">
+            <ExistingSourcesList />
             <SourceConnectionFlow
               workspaceAccessToken={workspaceAccessToken}
               onComplete={handleSourceConnectionComplete}

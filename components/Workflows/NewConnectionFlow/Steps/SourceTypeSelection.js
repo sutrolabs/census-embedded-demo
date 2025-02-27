@@ -1,5 +1,6 @@
 import Image from "next/image"
 
+import Button from "@components/Button"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
 export default function SourceTypeSelection({
@@ -35,22 +36,20 @@ export default function SourceTypeSelection({
   })
 
   return (
-    <div className="flex h-full flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Select a Source Type</h2>
-        <button className="rounded border px-3 py-1 text-sm" onClick={onBack}>
-          Back
-        </button>
+    <div className="flex h-full flex-col overflow-hidden">
+      <div className="flex items-center justify-between border-b border-neutral-100 px-6 py-4">
+        <h2 className="text-xl font-semibold leading-none">Select a Source Type</h2>
+        <Button onClick={onBack}>Back</Button>
       </div>
-      <div className="h-full overflow-y-auto">
-        <div className="grid grid-cols-2 gap-4 py-8">
+      <div className="h-full overflow-y-auto p-6">
+        <div className="grid grid-cols-2 gap-4">
           {filteredSourceTypes.map((sourceType) => {
             const logo = getLogoForSourceType(sourceType)
 
             return (
               <div
                 key={sourceType.service_name}
-                className="flex cursor-pointer items-center rounded border p-4 hover:bg-neutral-50"
+                className="group flex cursor-pointer items-center rounded-md border p-4 hover:bg-neutral-100"
                 onClick={() => onSelectSourceType(sourceType)}
               >
                 <div className="flex items-center gap-3">
