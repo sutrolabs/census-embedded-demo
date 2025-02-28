@@ -116,7 +116,7 @@ export function SourceFlowProvider({
           setPageTitle("Select a Source Type")
           setPageActions(
             <Button onClick={goBack}>
-              <i class="fa-regular fa-chevron-left" />
+              <i className="fa-regular fa-chevron-left" />
             </Button>,
           )
           break
@@ -124,7 +124,7 @@ export function SourceFlowProvider({
           setPageTitle(`Connect ${selectedSourceType?.label || "Source"}`)
           setPageActions(
             <Button onClick={goBack}>
-              <i class="fa-regular fa-chevron-left" />
+              <i className="fa-regular fa-chevron-left" />
             </Button>,
           )
           break
@@ -132,7 +132,7 @@ export function SourceFlowProvider({
           setPageTitle(`Configure Syncs for ${selectedSource?.name || "Source"}`)
           setPageActions(
             <Button onClick={goBack}>
-              <i class="fa-regular fa-chevron-left" />
+              <i className="fa-regular fa-chevron-left" />
             </Button>,
           )
           break
@@ -140,7 +140,7 @@ export function SourceFlowProvider({
           setPageTitle("Review and Confirm")
           setPageActions(
             <Button onClick={goBack}>
-              <i class="fa-regular fa-chevron-left" />
+              <i className="fa-regular fa-chevron-left" />
             </Button>,
           )
           break

@@ -9,6 +9,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
+  DrawerClose,
 } from "@components/Drawer/Drawer"
 import SourceConnectionFlow from "@components/Workflows/NewSourceFlow/SourceConnectionFlow"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
@@ -30,7 +31,16 @@ export default function NewSourceDrawer({
   devMode = false,
   embedMode = true,
 }) {
-  const { pageTitle, pageActions, closeDrawer, STEPS, selectedSourceType, currentStep } = useSourceFlow()
+  const {
+    pageTitle,
+    pageActions,
+    closeDrawer,
+    isDrawerOpen,
+    openDrawer,
+    STEPS,
+    selectedSourceType,
+    currentStep,
+  } = useSourceFlow()
 
   const getLogo = () => {
     if (
@@ -47,9 +57,9 @@ export default function NewSourceDrawer({
 
   const logo = getLogo()
   return (
-    <Drawer direction="right">
+    <Drawer direction="right" dismissible={false} open={isDrawerOpen}>
       <DrawerTrigger asChild>
-        <Button>Add Data</Button>
+        <Button onClick={openDrawer}>Add Data</Button>
       </DrawerTrigger>
       <DrawerContent direction="right">
         <DrawerHeader>
@@ -68,9 +78,11 @@ export default function NewSourceDrawer({
               <DrawerTitle>{pageTitle}</DrawerTitle>
             </div>
           </div>
-          <Button onClick={closeDrawer}>
-            <i class="fa-regular fa-xmark" />
-          </Button>
+          <DrawerClose asChild>
+            <Button onClick={closeDrawer}>
+              <i className="fa-regular fa-xmark" />
+            </Button>
+          </DrawerClose>
         </DrawerHeader>
         <SourceConnectionFlow
           workspaceAccessToken={workspaceAccessToken}

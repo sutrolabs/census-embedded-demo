@@ -4,8 +4,13 @@ import classNames from "classnames"
 import * as React from "react"
 import { Drawer as DrawerPrimitive } from "vaul"
 
-const Drawer = ({ shouldScaleBackground = true, ...props }) => (
-  <DrawerPrimitive.Root shouldScaleBackground={shouldScaleBackground} {...props} />
+const Drawer = ({ shouldScaleBackground = true, dismissible, open, ...props }) => (
+  <DrawerPrimitive.Root
+    open={open}
+    shouldScaleBackground={shouldScaleBackground}
+    dismissible={dismissible}
+    {...props}
+  />
 )
 Drawer.displayName = "Drawer"
 
