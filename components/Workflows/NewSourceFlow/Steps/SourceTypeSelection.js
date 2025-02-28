@@ -1,15 +1,17 @@
 import Image from "next/image"
 
+import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
-export default function SourceTypeSelection({
-  sourceTypes,
-  loading,
-  error,
-  onSelectSourceType,
-  onBack,
-  showOnlyCreatableViaLink = true,
-}) {
+export default function SourceTypeSelection() {
+  const {
+    availableSourceTypes: sourceTypes,
+    loadingSourceTypes: loading,
+    error,
+    goToConnectSource: onSelectSourceType,
+    goBack: onBack,
+  } = useSourceFlow()
+
   if (loading) {
     return (
       <div className="flex items-center justify-center py-8">

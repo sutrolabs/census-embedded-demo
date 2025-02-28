@@ -1,19 +1,20 @@
-import Image from "next/image"
 import { useState } from "react"
 
+import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
-import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
-export default function SourceConnectionForm({
-  sourceType,
-  workspaceAccessToken,
-  onSourceConnected,
-  onBack,
-  sourceConnectLinks = [],
-  refetchSourceConnectLinks,
-  embedMode = true, // Default to embedded mode for better UX
-}) {
+export default function SourceConnectionForm() {
+  const {
+    selectedSourceType: sourceType,
+    workspaceAccessToken,
+    goToSelectObjects: onSourceConnected,
+    goBack: onBack,
+    sourceConnectLinks = [],
+    refetchSourceConnectLinks,
+    embedMode = true,
+  } = useSourceFlow()
+
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(false)
@@ -60,13 +61,10 @@ export default function SourceConnectionForm({
 
       if (sourceConnectLink) {
         // We already have a source connect link
-
         initiateSourceConnectFlow(sourceConnectLink)
       } else {
         // We need to create a source connect link
-
         const newLink = await getNewSourceConnectLink()
-
         initiateSourceConnectFlow(newLink)
       }
     } catch (err) {
@@ -77,11 +75,6 @@ export default function SourceConnectionForm({
 
   return (
     <div className="flex h-full flex-col gap-4">
-      <div className="flex flex-row items-center gap-2">
-        <Image src={getLogoForSourceType(sourceType)} height={30} width={30} alt="" />
-        <h2 className="text-xl font-semibold">Connect {sourceType.label}</h2>
-      </div>
-
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
       {showEmbeddedFrame ? (

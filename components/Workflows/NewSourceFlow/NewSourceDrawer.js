@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 import Button from "@components/Button"
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import {
@@ -9,6 +11,7 @@ import {
   DrawerTrigger,
 } from "@components/Drawer/Drawer"
 import SourceConnectionFlow from "@components/Workflows/NewSourceFlow/SourceConnectionFlow"
+import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
 export default function NewSourceDrawer({
   workspaceAccessToken,
@@ -27,7 +30,31 @@ export default function NewSourceDrawer({
   devMode = false,
   embedMode = true,
 }) {
-  const { pageTitle, pageActions, closeDrawer, goBack } = useSourceFlow()
+  const {
+    pageTitle,
+    pageActions,
+    closeDrawer,
+    goBack,
+    STEPS,
+    selectedSourceType,
+    selectedSource,
+    currentStep,
+  } = useSourceFlow()
+
+  const getLogo = () => {
+    if (
+      currentStep === STEPS.CONNECT_SOURCE ||
+      currentStep === STEPS.SELECT_OBJECTS ||
+      currentStep === STEPS.REVIEW
+    ) {
+      if (selectedSourceType) {
+        return getLogoForSourceType(selectedSourceType)
+      }
+    }
+    return null
+  }
+
+  const logo = getLogo()
   return (
     <Drawer direction="right">
       <DrawerTrigger asChild>
@@ -35,7 +62,12 @@ export default function NewSourceDrawer({
       </DrawerTrigger>
       <DrawerContent direction="right">
         <DrawerHeader>
-          <DrawerTitle>{pageTitle}</DrawerTitle>
+          <div className="flex flex-row items-center gap-3">
+            {logo && (
+              <Image src={logo} alt="Source logo" width={24} height={24} className="h-6 w-6 object-contain" />
+            )}
+            <DrawerTitle>{pageTitle}</DrawerTitle>
+          </div>
           <Button onClick={closeDrawer}>Close</Button>
         </DrawerHeader>
         <SourceConnectionFlow
