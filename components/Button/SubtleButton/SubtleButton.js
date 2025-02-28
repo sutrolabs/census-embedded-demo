@@ -9,7 +9,7 @@ export function SubtleButton({ onClick, icon, active, syncs, ref }) {
       ref={ref}
     >
       <div
-        className={`flex h-5 w-5 items-center justify-center rounded border border-violet-300 bg-violet-50 transition duration-100 ${
+        className={`flex h-5 w-5 items-center justify-center rounded border border-violet-300 bg-violet-50 transition duration-300 ${
           active ? "border-violet-50 bg-violet-500" : ""
         }`}
       >
