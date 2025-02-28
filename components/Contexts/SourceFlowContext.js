@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 
 // Steps in the connection flow
 export const STEPS = {

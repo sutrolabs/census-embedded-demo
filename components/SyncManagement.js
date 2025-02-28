@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"

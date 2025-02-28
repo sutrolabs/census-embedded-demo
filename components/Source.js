@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react"
 import { useEffect, useState } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import Card from "@components/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 import RequestTooltip from "@components/RequestTooltip"

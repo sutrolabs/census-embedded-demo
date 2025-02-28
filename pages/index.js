@@ -2,7 +2,7 @@ import Head from "next/head"
 import { Line } from "react-chartjs-2"
 
 import { Anchor } from "@components/Anchor"
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import Card from "@components/Card"
 import Header from "@components/Structural/Header/Header"
 

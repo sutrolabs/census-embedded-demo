@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"

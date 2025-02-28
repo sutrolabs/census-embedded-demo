@@ -1,4 +1,4 @@
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import ExistingSourcesList from "@components/Workflows/NewSourceFlow/ExistingSourcesList"
 import SourceConnectionForm from "@components/Workflows/NewSourceFlow/Steps/SourceConnectionForm"
