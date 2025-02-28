@@ -22,16 +22,19 @@ const modes = [
   {
     status: "running",
     className: "bg-emerald-500 text-emerald-50",
+    indicatorClassName: "bg-emerald-500 animate-pulse",
     text: "Running...",
   },
   {
     status: "pending",
     className: "bg-neutral-300 text-neutral-50",
+    indicatorClassName: "bg-neutral-200",
     text: "Not run yet",
   },
   {
     status: "done",
-    className: "bg-emerald-200 text-emerald-700",
+    className: "bg-white border border-neutral-100 text-neutral-700",
+    indicatorClassName: "bg-emerald-500",
     text: "Up to date",
   },
 ]
@@ -66,9 +69,12 @@ export function SyncStatus({ className, syncsLoading, syncs, runsLoading, runs, 
     }
     return [mode ?? unknownMode, completedAt ? Date.now() - new Date(completedAt).getTime() : undefined]
   }, [syncsLoading, syncs, runsLoading, runs])
+
   return (
     <Tag
-      className={`${mode.className} ${className}`}
+      indicator={true}
+      indicatorClassName={mode.indicatorClassName}
+      className={`${mode.className} ${className} max-w-[200px]`}
       text={`${mode.text}${
         showAge && age ? ` (${humanizeDuration(age, { units: ["h", "m"], round: true })} ago)` : ""
       }`}
