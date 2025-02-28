@@ -2,6 +2,7 @@ import Head from "next/head"
 import { useState, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
+import { SubtleButton } from "@components/Button/SubtleButton/SubtleButton"
 import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
@@ -132,21 +133,18 @@ export default function ImportDataset({
       <Header title="Data Management" />
       <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-8 py-3">
         Customers{" "}
-        <button
-          className={`group flex flex-row items-center gap-2 rounded-md px-2 py-1.5 text-sm leading-none transition duration-200 ${
-            showSidebar ? "bg-neutral-100" : ""
-          }`}
+        <SubtleButton
           onClick={() => setShowSidebar(!showSidebar)}
-        >
-          <div className="flex h-4 w-4 items-center justify-center rounded border border-fuchsia-200 bg-fuchsia-50">
-            <CentralDataImportIcon className="h-2 fill-fuchsia-500" />
-          </div>
-          <div className="flex flex-row items-center gap-1">
-            <span>Data Imports</span>
-            <span>•</span>
-            <span className="text-neutral-500">{syncs.length}</span>
-          </div>
-        </button>
+          active={showSidebar}
+          icon={
+            <CentralDataImportIcon
+              className={`h-2.5 fill-violet-500 transition-all duration-300 ${
+                showSidebar ? "rotate-45 fill-violet-50" : ""
+              }`}
+            />
+          }
+          syncs={syncs}
+        />
       </div>
 
       <div className="flex h-full w-full flex-row items-stretch overflow-hidden">
