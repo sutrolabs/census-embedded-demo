@@ -3,7 +3,9 @@ import { useState, useEffect } from "react"
 
 import Button from "@components/Button"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
+import { Drawer, DrawerContent, DrawerTrigger } from "@components/Drawer/Drawer"
 import Header from "@components/Structural/Header/Header"
+import { SyncStatus } from "@components/SyncStatus"
 import {
   Table,
   TableBody,
@@ -13,7 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from "@components/Table/Table"
-import ExistingSourcesList from "@components/Workflows/NewConnectionFlow/ExistingSourcesList"
 import SourceConnectionFlow from "@components/Workflows/NewConnectionFlow/SourceConnectionFlow"
 
 export default function ImportDataset({
@@ -41,6 +42,8 @@ export default function ImportDataset({
   const [availableSourceTypes, setAvailableSourceTypes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
+
+  const editSyncLinkQueryParams = "&edit_mode=true"
 
   const handleSourceConnectionComplete = (result) => {
     // Handle the completed source connection
@@ -71,6 +74,28 @@ export default function ImportDataset({
 
     fetchSourceTypes()
   }, [workspaceAccessToken])
+
+  useEffect(() => {
+    const fetchSyncs = async () => {
+      try {
+        const response = await fetch("/api/list_syncs", {
+          headers: {
+            ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          },
+        })
+        if (!response.ok) {
+          throw new Error("Failed to fetch syncs")
+        }
+        const data = await response.json()
+        setSyncs(data)
+      } catch (err) {
+        setError(err.message)
+      }
+    }
+
+    fetchSyncs()
+  }, [workspaceAccessToken, setSyncs])
+
   return (
     <>
       <Head>
@@ -114,25 +139,50 @@ export default function ImportDataset({
         </Table>
 
         {showSidebar && (
-          <div className="h-full w-2/3 max-w-[800px] overflow-hidden border-l border-neutral-100 bg-white shadow-md">
-            <ExistingSourcesList />
-            <SourceConnectionFlow
-              workspaceAccessToken={workspaceAccessToken}
-              onComplete={handleSourceConnectionComplete}
-              onCancel={() => setShowSidebar(false)}
-              existingSourceId={selectedSourceId}
-              sourceConnectLinks={sourceConnectLinks}
-              refetchSourceConnectLinks={refetchSourceConnectLinks}
-              syncManagementLinks={syncManagementLinks}
-              refetchSyncManagementLinks={refetchSyncManagementLinks}
-              syncs={syncs}
-              setSyncs={setSyncs}
-              refetchSyncs={refetchSyncs}
-              runsLoading={runsLoading}
-              runs={runs}
-              devMode={devMode}
-              embedMode={embedMode}
-            />
+          <div className="h-full w-2/3 max-w-[800px] overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md">
+            <h2 className="text-lg font-semibold">Existing Imports</h2>
+            {syncs.map((sync) => (
+              <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
+                <div className="flex flex-row items-center justify-between">
+                  <span className="font-medium">{sync.label ?? `Sync: ${sync.id}`}</span>
+                  <div className="flex gap-2">
+                    <Button>Pause</Button>
+                    <Button>Edit</Button>
+                  </div>
+                </div>
+                <SyncStatus
+                  syncsLoading={false}
+                  syncs={[sync].filter(Boolean)}
+                  runsLoading={runsLoading}
+                  runs={runs}
+                  showAge
+                />
+              </div>
+            ))}
+            <Drawer direction="right">
+              <DrawerTrigger asChild>
+                <Button>Add Data</Button>
+              </DrawerTrigger>
+              <DrawerContent direction="right">
+                <SourceConnectionFlow
+                  workspaceAccessToken={workspaceAccessToken}
+                  onComplete={handleSourceConnectionComplete}
+                  onCancel={() => setShowSidebar(false)}
+                  existingSourceId={selectedSourceId}
+                  sourceConnectLinks={sourceConnectLinks}
+                  refetchSourceConnectLinks={refetchSourceConnectLinks}
+                  syncManagementLinks={syncManagementLinks}
+                  refetchSyncManagementLinks={refetchSyncManagementLinks}
+                  syncs={syncs}
+                  setSyncs={setSyncs}
+                  refetchSyncs={refetchSyncs}
+                  runsLoading={runsLoading}
+                  runs={runs}
+                  devMode={devMode}
+                  embedMode={embedMode}
+                />
+              </DrawerContent>
+            </Drawer>
           </div>
         )}
       </div>

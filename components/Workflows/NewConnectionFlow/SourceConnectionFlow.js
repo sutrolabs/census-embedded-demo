@@ -204,7 +204,7 @@ export default function SourceConnectionFlow({
     switch (currentStep) {
       case STEPS.INITIAL:
         return (
-          <div className="flex h-full flex-col gap-6">
+          <div className="flex h-full flex-col gap-6 overflow-y-auto p-6">
             <h2 className="text-xl font-semibold">Connect a Data Source</h2>
 
             <div className="flex flex-col gap-4">
