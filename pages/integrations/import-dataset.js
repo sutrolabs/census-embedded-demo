@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 
 import Button from "@components/Button"
 import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
+import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
 import { ConnectionLogo } from "@components/Logo/ConnectionLogo"
 import Header from "@components/Structural/Header/Header"
@@ -17,7 +18,7 @@ import {
   TableRow,
 } from "@components/Table/Table"
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
-import { getLogoForSourceType } from "@hooks/useSourceLogos"
+import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -52,6 +53,9 @@ export default function ImportDataset({
     refetchSources()
     setShowSidebar(false)
   }
+
+  // Remove this line - we'll use the hook inside the component where the provider is available
+  // const { openToSource } = useSourceFlow()
 
   // Fetch available sources when the component mounts
   useEffect(() => {
@@ -98,44 +102,25 @@ export default function ImportDataset({
     fetchSyncs()
   }, [workspaceAccessToken, setSyncs])
 
-  const getSourceMetadataFromConnectionId = (connectionId, sources = []) => {
-    if (!connectionId || !sources.length) return null
-
-    // Find the source with the matching connection_id
-    const sourceEntity = sources.find((source) => source.id === connectionId)
-
-    if (!sourceEntity) return null
-
-    // Get the source type information
-    const sourceType = getSourceTypeFromServiceName(sourceEntity.type)
-
-    // Get the logo for the source type
-    const logo = getLogoForSourceType(sourceType)
-
-    return {
-      id: sourceEntity.id,
-      name: sourceEntity.name,
-      type: sourceEntity.type,
-      object: sourceEntity.object,
-      logo,
-      sourceType,
-      // Add any other metadata you need
-    }
-  }
-
-  const getSourceTypeFromServiceName = (serviceName, availableSourceTypes = []) => {
-    if (!serviceName) return null
-
-    // If availableSourceTypes is provided, search in it
-    if (availableSourceTypes.length) {
-      return availableSourceTypes.find((type) => type.service_name === serviceName) || null
-    }
-
-    // Otherwise, return a minimal source type object
-    return {
-      service_name: serviceName,
-      label: serviceName.charAt(0).toUpperCase() + serviceName.slice(1).replace(/_/g, " "),
-    }
+  const configureSync = async (sync) => {
+    try {
+      const response = await fetch("/api/create_edit_sync_management_link", {
+        method: "POST",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
+        body: JSON.stringify({
+          syncId: sync.id,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      const data = await response.json()
+      setEditSyncLink(data.uri + editSyncLinkQueryParams)
+      setSelectedSync(sync)
+    } catch (error) {}
   }
 
   return (
@@ -182,48 +167,6 @@ export default function ImportDataset({
 
         {showSidebar && (
           <div className="flex h-full w-2/3 max-w-[800px] flex-col gap-4 overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md ">
-            {syncs && (
-              <>
-                <h2 className="text-base font-medium">Existing Imports</h2>
-                {syncs.map((sync) => {
-                  const sourceMetadata = getSourceMetadataFromConnectionId(
-                    sync.source_attributes?.connection_id,
-                    sources,
-                  )
-                  return (
-                    <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
-                      <div className="flex flex-row items-center justify-between gap-4">
-                        <div className="flex flex-row items-center gap-2">
-                          <ConnectionLogo src={sourceMetadata?.logo} />
-                          <span className="font-medium">{sync.source_attributes.object.name}</span>
-                        </div>
-                        <SyncStatus
-                          syncsLoading={false}
-                          syncs={[sync].filter(Boolean)}
-                          runsLoading={runsLoading}
-                          runs={runs}
-                          showAge
-                        />
-                      </div>
-                      <div className="flex gap-2">
-                        <Button>
-                          <i className="fa-solid fa-pause" />
-                          Pause
-                        </Button>
-                        <Button>
-                          <i className="fa-solid fa-play" />
-                          Run Now
-                        </Button>
-                        <Button>
-                          <i className="fa-solid fa-cog" />
-                          Configure
-                        </Button>
-                      </div>
-                    </div>
-                  )
-                })}
-              </>
-            )}
             <SourceFlowProvider
               workspaceAccessToken={workspaceAccessToken}
               sourceConnectLinks={sourceConnectLinks}
@@ -240,11 +183,123 @@ export default function ImportDataset({
               sources={sources}
               availableSourceTypes={availableSourceTypes}
             >
+              <SyncsList
+                syncs={syncs}
+                sources={sources}
+                runsLoading={runsLoading}
+                runs={runs}
+                workspaceAccessToken={workspaceAccessToken}
+                refetchSyncs={refetchSyncs}
+                setSyncs={setSyncs}
+              />
               <NewSourceDrawer />
             </SourceFlowProvider>
           </div>
         )}
       </div>
+    </>
+  )
+}
+
+// Create a new component that will use the useSourceFlow hook
+function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, refetchSyncs, setSyncs }) {
+  // Now we can safely use the useSourceFlow hook here because this component is rendered inside the SourceFlowProvider
+  const { openToSync } = useSourceFlow()
+
+  // Function to run a sync
+  const runSync = async (sync) => {
+    try {
+      const response = await fetch("/api/trigger_sync_run", {
+        method: "POST",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
+        body: JSON.stringify({
+          syncId: sync.id,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      setSyncs((syncs) =>
+        syncs.map((item) => (item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item)),
+      )
+      await refetchSyncs()
+    } catch (error) {}
+  }
+
+  // Function to toggle sync pause state
+  const toggleSync = async (sync) => {
+    try {
+      const response = await fetch("/api/set_sync_paused", {
+        method: "POST",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
+        body: JSON.stringify({
+          id: sync.id,
+          paused: !sync.paused,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      const data = await response.json()
+      setSyncs((syncs) => syncs.map((item) => (item.id === sync.id ? data : item)))
+      await refetchSyncs()
+    } catch (error) {}
+  }
+
+  if (!syncs || syncs.length === 0) {
+    return null
+  }
+
+  return (
+    <>
+      <h2 className="text-base font-medium">Existing Imports</h2>
+      {syncs.map((sync) => {
+        const sourceMetadata = getSourceMetadataFromConnectionId(
+          sync.source_attributes?.connection_id,
+          sources,
+        )
+        const run = runs.find((item) => item.sync_id === sync?.id)
+        const running = run ? !run.completed_at : false
+
+        return (
+          <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
+            <div className="flex w-full flex-row items-center justify-between gap-3">
+              <div className="flex w-full flex-row items-center gap-2 truncate">
+                <ConnectionLogo src={sourceMetadata?.logo} />
+                <span className="w-full truncate font-medium">{sync.source_attributes.object.name}</span>
+              </div>
+              <SyncStatus
+                className="shrink-0"
+                syncsLoading={false}
+                syncs={[sync].filter(Boolean)}
+                runsLoading={runsLoading}
+                runs={runs}
+                showAge
+              />
+            </div>
+            <div className=" flex flex-row items-center gap-2">
+              <Button onClick={() => toggleSync(sync)} disabled={running}>
+                <i className={sync.paused ? "fa-solid fa-play" : "fa-solid fa-pause"} />
+                {sync.paused ? "Resume" : "Pause"}
+              </Button>
+              <Button onClick={() => runSync(sync)} disabled={sync.paused || running}>
+                <i className="fa-solid fa-play" />
+                Run Now
+              </Button>
+              <Button onClick={() => openToSync(sync)}>
+                <i className="fa-solid fa-cog" />
+                Configure
+              </Button>
+            </div>
+          </div>
+        )
+      })}
     </>
   )
 }

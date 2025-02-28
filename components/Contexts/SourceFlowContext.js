@@ -65,6 +65,27 @@ export function SourceFlowProvider({
     setIsDrawerOpen(true)
   }, [])
 
+  const openToSync = useCallback(
+    (sync) => {
+      // Get the source ID from the sync
+      const sourceId = sync?.source_attributes?.connection_id
+      if (sourceId) {
+        // Set the existing source ID
+        setExistingSourceId(sourceId)
+        // Set the selected source from existing sources
+        const source = existingSources.find((source) => source.id === sourceId)
+        if (source) {
+          setSelectedSource(source)
+        }
+        // Go directly to the SELECT_OBJECTS step
+        setCurrentStep(STEPS.SELECT_OBJECTS)
+        // Open the drawer
+        setIsDrawerOpen(true)
+      }
+    },
+    [existingSources],
+  )
+
   const closeDrawer = useCallback(() => {
     setIsDrawerOpen(false)
     setCurrentStep(STEPS.INITIAL)
@@ -193,6 +214,16 @@ export function SourceFlowProvider({
     }
   }, [isDrawerOpen, currentStep, workspaceAccessToken, availableSourceTypes.length])
 
+  useEffect(() => {
+    // When existingSourceId changes, find the corresponding source and set it as selectedSource
+    if (existingSourceId && existingSources.length > 0) {
+      const source = existingSources.find((source) => source.id === existingSourceId)
+      if (source) {
+        setSelectedSource(source)
+      }
+    }
+  }, [existingSourceId, existingSources])
+
   const value = {
     // State
     STEPS,
@@ -214,6 +245,7 @@ export function SourceFlowProvider({
 
     // Actions
     openDrawer,
+    openToSync,
     openToSource,
     closeDrawer,
     goToSourceTypes,
@@ -246,7 +278,7 @@ export function SourceFlowProvider({
 export function useSourceFlow() {
   const context = useContext(SourceFlowContext)
   if (!context) {
-    throw new Error("useSourceFlow must be used within a ConnectionFlowProvider")
+    throw new Error("useSourceFlow must be used within a SourceFlowProvider")
   }
   return context
 }

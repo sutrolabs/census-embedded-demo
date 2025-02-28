@@ -1,32 +1,35 @@
 import { useState } from "react"
 
 import Button from "@components/Button"
+import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { censusBaseUrl } from "@utils/url"
 
-export default function SourceObjectSelection({
-  source,
-  workspaceAccessToken,
-  onObjectsSelected,
-  onBack,
-  syncs = [],
-  setSyncs,
-  refetchSyncs,
-  syncManagementLinks = [],
-  refetchSyncManagementLinks,
-  runsLoading = false,
-  runs = [],
-  devMode = false,
-  embedMode = true,
-}) {
+export default function SourceObjectSelection() {
+  const {
+    selectedSource: source,
+    workspaceAccessToken,
+    syncs,
+    setSyncs,
+    refetchSyncs,
+    syncManagementLinks,
+    refetchSyncManagementLinks,
+    runsLoading,
+    runs,
+    devMode,
+    embedMode,
+    goToReview,
+    goBack,
+  } = useSourceFlow()
+
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [loading, setLoading] = useState(false)
 
   // Filter syncs for this source
-  const sourceSpecificSyncs = syncs.filter((sync) => sync.source_attributes?.connection_id === source.id)
+  const sourceSpecificSyncs = syncs.filter((sync) => sync.source_attributes.connection_id === source.id)
 
   // Use the sync management link hook
   const [syncManagementLink, resetSyncManagementLink, isLinkLoading] = useSyncManagementLink(
