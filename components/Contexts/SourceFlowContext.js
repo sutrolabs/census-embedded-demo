@@ -1,5 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
 
+import Button from "@components/Button"
+
 // Steps in the connection flow
 export const STEPS = {
   INITIAL: "initial", // Choose between existing or new source
@@ -107,52 +109,44 @@ export function SourceFlowProvider({
     const updatePageTitleAndActions = () => {
       switch (currentStep) {
         case STEPS.INITIAL:
-          setPageTitle("Connect a Data Source")
-          setPageActions(
-            <button className="rounded border px-3 py-1 text-sm" onClick={closeDrawer}>
-              Close
-            </button>,
-          )
+          setPageTitle("Import Data")
+          setPageActions(null)
           break
         case STEPS.SOURCE_TYPES:
           setPageTitle("Select a Source Type")
           setPageActions(
-            <button className="rounded border px-3 py-1 text-sm" onClick={goBack}>
-              Back
-            </button>,
+            <Button onClick={goBack}>
+              <i class="fa-regular fa-chevron-left" />
+            </Button>,
           )
           break
         case STEPS.CONNECT_SOURCE:
           setPageTitle(`Connect ${selectedSourceType?.label || "Source"}`)
           setPageActions(
-            <button className="rounded border px-3 py-1 text-sm" onClick={goBack}>
-              Back
-            </button>,
+            <Button onClick={goBack}>
+              <i class="fa-regular fa-chevron-left" />
+            </Button>,
           )
           break
         case STEPS.SELECT_OBJECTS:
           setPageTitle(`Configure Syncs for ${selectedSource?.name || "Source"}`)
           setPageActions(
-            <button className="rounded border px-3 py-1 text-sm" onClick={goBack}>
-              Back
-            </button>,
+            <Button onClick={goBack}>
+              <i class="fa-regular fa-chevron-left" />
+            </Button>,
           )
           break
         case STEPS.REVIEW:
           setPageTitle("Review and Confirm")
           setPageActions(
-            <button className="rounded border px-3 py-1 text-sm" onClick={goBack}>
-              Back
-            </button>,
+            <Button onClick={goBack}>
+              <i class="fa-regular fa-chevron-left" />
+            </Button>,
           )
           break
         default:
           setPageTitle("Connect Data")
-          setPageActions(
-            <button className="rounded border px-3 py-1 text-sm" onClick={closeDrawer}>
-              Close
-            </button>,
-          )
+          setPageActions(null)
       }
     }
 

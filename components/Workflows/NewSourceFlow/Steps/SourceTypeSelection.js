@@ -38,7 +38,7 @@ export default function SourceTypeSelection() {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="h-full overflow-y-auto p-6">
+      <div className="h-full overflow-y-auto">
         <div className="grid grid-cols-2 gap-4">
           {filteredSourceTypes.map((sourceType) => {
             const logo = getLogoForSourceType(sourceType)

@@ -30,16 +30,7 @@ export default function NewSourceDrawer({
   devMode = false,
   embedMode = true,
 }) {
-  const {
-    pageTitle,
-    pageActions,
-    closeDrawer,
-    goBack,
-    STEPS,
-    selectedSourceType,
-    selectedSource,
-    currentStep,
-  } = useSourceFlow()
+  const { pageTitle, pageActions, closeDrawer, STEPS, selectedSourceType, currentStep } = useSourceFlow()
 
   const getLogo = () => {
     if (
@@ -62,13 +53,24 @@ export default function NewSourceDrawer({
       </DrawerTrigger>
       <DrawerContent direction="right">
         <DrawerHeader>
-          <div className="flex flex-row items-center gap-3">
-            {logo && (
-              <Image src={logo} alt="Source logo" width={24} height={24} className="h-6 w-6 object-contain" />
-            )}
-            <DrawerTitle>{pageTitle}</DrawerTitle>
+          <div className="flex flex-row items-center gap-6">
+            {pageActions}
+            <div className="flex items-center gap-3">
+              {logo && (
+                <Image
+                  src={logo}
+                  alt="Source logo"
+                  width={24}
+                  height={24}
+                  className="h-6 w-6 object-contain"
+                />
+              )}
+              <DrawerTitle>{pageTitle}</DrawerTitle>
+            </div>
           </div>
-          <Button onClick={closeDrawer}>Close</Button>
+          <Button onClick={closeDrawer}>
+            <i class="fa-regular fa-xmark" />
+          </Button>
         </DrawerHeader>
         <SourceConnectionFlow
           workspaceAccessToken={workspaceAccessToken}
@@ -87,7 +89,7 @@ export default function NewSourceDrawer({
           devMode={devMode}
           embedMode={embedMode}
         />
-        <DrawerFooter>{pageActions || <Button onClick={goBack}>Back</Button>}</DrawerFooter>
+        <DrawerFooter></DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

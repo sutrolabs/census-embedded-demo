@@ -59,17 +59,6 @@ export default function SourceObjectSelection({
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold">Configure Syncs for {source?.name}</h2>
-        <button
-          className="rounded border px-3 py-1 text-sm"
-          onClick={onBack}
-          disabled={loading || isLinkLoading}
-        >
-          Back
-        </button>
-      </div>
-
       <p className="text-neutral-600">Select which data you want to sync from this source.</p>
 
       <div className="mt-4 flex flex-col gap-5">

@@ -22,16 +22,15 @@ export default function ExistingSourcesList({ sources, loading, error, onSelectS
   return (
     <div className="divide-y rounded border">
       {sources.map((source) => {
-        const logo = getLogoForSource(source.type)
+        const logo = getLogoForSource(source)
         return (
           <div
             key={source.id}
-            className="cursor-pointer p-4 hover:bg-neutral-50"
+            className="flex cursor-pointer flex-row gap-3 p-4 hover:bg-neutral-50"
             onClick={() => onSelectSource(source)}
           >
             <Image src={logo} height={20} width={20} alt="" />
-            <div className="font-medium">{source.name}</div>
-            <div className="text-sm text-neutral-500">{source.type}</div>
+            <div className="font-medium">{source.name || source.type}</div>
           </div>
         )
       })}

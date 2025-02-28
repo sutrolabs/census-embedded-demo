@@ -42,21 +42,21 @@ export default function SourceConnectionFlow() {
     switch (currentStep) {
       case STEPS.INITIAL:
         return (
-          <div className="flex h-full flex-col gap-6 overflow-y-auto p-6">
-            <h2 className="text-xl font-semibold">Connect a Data Source</h2>
-
-            <div className="flex flex-col gap-4">
-              <Button onClick={goToSourceTypes}>Connect a new source</Button>
-
-              <div className="mt-4">
-                <h3 className="mb-2 text-lg font-medium">Or use an existing source</h3>
-                <ExistingSourcesList
-                  sources={existingSources}
-                  loading={loadingSources}
-                  error={error}
-                  onSelectSource={goToSelectObjects}
-                />
-              </div>
+          <div className="flex h-full flex-col gap-12 overflow-y-auto">
+            <div className="flex flex-col gap-3">
+              <span className="text-lg font-medium">Use an existing source</span>
+              <ExistingSourcesList
+                sources={existingSources}
+                loading={loadingSources}
+                error={error}
+                onSelectSource={goToSelectObjects}
+              />
+            </div>
+            <div className="flex flex-col gap-3">
+              <span className="text-lg font-medium">Or connect a new source</span>
+              <Button className="py-4 text-lg" onClick={goToSourceTypes}>
+                Connect a new source
+              </Button>
             </div>
           </div>
         )
@@ -138,5 +138,5 @@ export default function SourceConnectionFlow() {
     }
   }
 
-  return <>{renderStep()}</>
+  return <div className="p-6">{renderStep()}</div>
 }

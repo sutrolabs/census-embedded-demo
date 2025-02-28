@@ -97,9 +97,6 @@ export default function SourceConnectionForm() {
           </div>
 
           <div className="mt-4 flex justify-between">
-            <button type="button" className="rounded border px-4 py-2" onClick={onBack} disabled={loading}>
-              Back
-            </button>
             <button
               type="button"
               className="rounded bg-emerald-500 px-4 py-2 text-white"
