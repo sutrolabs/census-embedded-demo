@@ -294,7 +294,7 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
               />
             </div>
             <div className=" flex flex-row items-center gap-2">
-              <Button onClick={() => toggleSync(sync)} disabled={running}>
+              <Button onClick={() => toggleSync(sync)}>
                 <i className={sync.paused ? "fa-solid fa-play" : "fa-solid fa-pause"} />
                 {sync.paused ? "Resume" : "Pause"}
               </Button>

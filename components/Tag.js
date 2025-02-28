@@ -5,7 +5,7 @@ export function Tag({ className, text, indicator, indicatorClassName }) {
   return (
     <span
       style={{ ["--tw-text-opacity"]: currentText === text ? "1" : "0.8" }}
-      className={`flex flex-row items-center gap-1.5 overflow-hidden rounded-full px-2 py-1.5 text-sm leading-none transition duration-200 ${className}`}
+      className={`flex flex-row items-center gap-1.5 overflow-hidden rounded-full px-2.5 py-1 text-sm leading-tight transition duration-200 ${className}`}
       onTransitionEnd={() => {
         setCurrentText(text)
       }}
