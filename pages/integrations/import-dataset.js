@@ -1,10 +1,11 @@
 import Head from "next/head"
 import { useState, useEffect } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
+import { CentralDataImportIcon } from "@components/Icons/DataImport"
 import { ConnectionLogo } from "@components/Logo/ConnectionLogo"
 import Header from "@components/Structural/Header/Header"
 import { SyncStatus } from "@components/SyncStatus"
@@ -131,13 +132,25 @@ export default function ImportDataset({
       <Header title="Data Management" />
       <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-8 py-3">
         Customers{" "}
-        <Button size="small" onClick={() => setShowSidebar(!showSidebar)}>
-          Import Data
-        </Button>
+        <button
+          className={`group flex flex-row items-center gap-2 rounded-md px-2 py-1.5 text-sm leading-none transition duration-200 ${
+            showSidebar ? "bg-neutral-100" : ""
+          }`}
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          <div className="flex h-4 w-4 items-center justify-center rounded border border-fuchsia-200 bg-fuchsia-50">
+            <CentralDataImportIcon className="h-2 fill-fuchsia-500" />
+          </div>
+          <div className="flex flex-row items-center gap-1">
+            <span>Data Imports</span>
+            <span>•</span>
+            <span className="text-neutral-500">{syncs.length}</span>
+          </div>
+        </button>
       </div>
 
       <div className="flex h-full w-full flex-row items-stretch overflow-hidden">
-        <Table>
+        <Table className>
           <TableCaption>A list of your recent invoices.</TableCaption>
           <TableHeader>
             <TableRow>
@@ -164,9 +177,8 @@ export default function ImportDataset({
             ))}
           </TableBody>
         </Table>
-
         {showSidebar && (
-          <div className="flex h-full w-2/3 max-w-[800px] flex-col gap-4 overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md ">
+          <div className="flex h-full w-2/3 max-w-[800px]  flex-col gap-4 overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md transition duration-100">
             <SourceFlowProvider
               workspaceAccessToken={workspaceAccessToken}
               sourceConnectLinks={sourceConnectLinks}
