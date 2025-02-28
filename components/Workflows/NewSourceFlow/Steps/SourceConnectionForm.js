@@ -76,7 +76,7 @@ export default function SourceConnectionForm({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full flex-col gap-4">
       <div className="flex flex-row items-center gap-2">
         <Image src={getLogoForSourceType(sourceType)} height={30} width={30} alt="" />
         <h2 className="text-xl font-semibold">Connect {sourceType.label}</h2>
@@ -86,7 +86,11 @@ export default function SourceConnectionForm({
 
       {showEmbeddedFrame ? (
         <div className="mb-8 h-full w-full">
-          <EmbeddedFrame connectLink={sourceConnectLink?.uri} onExit={onExitedConnectionFlow} />
+          <EmbeddedFrame
+            connectLink={sourceConnectLink?.uri}
+            onExit={onExitedConnectionFlow}
+            className="h-full"
+          />
         </div>
       ) : (
         <div className="mt-4 flex flex-col gap-4">
