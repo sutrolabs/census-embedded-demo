@@ -138,8 +138,8 @@ export default function ImportDataset({
           active={showSidebar}
           icon={
             <CentralDataImportIcon
-              className={`h-2.5 fill-violet-500 transition-all duration-300 ${
-                showSidebar ? "rotate-45 fill-violet-50" : ""
+              className={`h-2.5 transition-all duration-300 ${
+                showSidebar ? "rotate-45 fill-violet-50" : "fill-violet-500"
               }`}
             />
           }
@@ -193,15 +193,23 @@ export default function ImportDataset({
               sources={sources}
               availableSourceTypes={availableSourceTypes}
             >
-              <SyncsList
-                syncs={syncs}
-                sources={sources}
-                runsLoading={runsLoading}
-                runs={runs}
-                workspaceAccessToken={workspaceAccessToken}
-                refetchSyncs={refetchSyncs}
-                setSyncs={setSyncs}
-              />
+              {syncs.length > 0 ? (
+                <SyncsList
+                  syncs={syncs}
+                  sources={sources}
+                  runsLoading={runsLoading}
+                  runs={runs}
+                  workspaceAccessToken={workspaceAccessToken}
+                  refetchSyncs={refetchSyncs}
+                  setSyncs={setSyncs}
+                />
+              ) : (
+                <>
+                  <div className="flex rounded-lg bg-neutral-100 p-6 text-lg">
+                    No connections importing data. Add a new source below to add your data to Acme.
+                  </div>
+                </>
+              )}
               <NewSourceDrawer />
             </SourceFlowProvider>
           </div>
