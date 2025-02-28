@@ -2,8 +2,8 @@ import Head from "next/head"
 import { useState, useEffect } from "react"
 
 import Button from "@components/Button"
+import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
-import { Drawer, DrawerContent, DrawerTrigger } from "@components/Drawer/Drawer"
 import Header from "@components/Structural/Header/Header"
 import { SyncStatus } from "@components/SyncStatus"
 import {
@@ -15,7 +15,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/Table/Table"
-import SourceConnectionFlow from "@components/Workflows/NewConnectionFlow/SourceConnectionFlow"
+import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -145,6 +145,7 @@ export default function ImportDataset({
               <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
                 <div className="flex flex-row items-center justify-between">
                   <span className="font-medium">{sync.label ?? `Sync: ${sync.id}`}</span>
+                  {sync.source_attributes.connection_id}
                   <div className="flex gap-2">
                     <Button>Pause</Button>
                     <Button>Edit</Button>
@@ -159,30 +160,24 @@ export default function ImportDataset({
                 />
               </div>
             ))}
-            <Drawer direction="right">
-              <DrawerTrigger asChild>
-                <Button>Add Data</Button>
-              </DrawerTrigger>
-              <DrawerContent direction="right">
-                <SourceConnectionFlow
-                  workspaceAccessToken={workspaceAccessToken}
-                  onComplete={handleSourceConnectionComplete}
-                  onCancel={() => setShowSidebar(false)}
-                  existingSourceId={selectedSourceId}
-                  sourceConnectLinks={sourceConnectLinks}
-                  refetchSourceConnectLinks={refetchSourceConnectLinks}
-                  syncManagementLinks={syncManagementLinks}
-                  refetchSyncManagementLinks={refetchSyncManagementLinks}
-                  syncs={syncs}
-                  setSyncs={setSyncs}
-                  refetchSyncs={refetchSyncs}
-                  runsLoading={runsLoading}
-                  runs={runs}
-                  devMode={devMode}
-                  embedMode={embedMode}
-                />
-              </DrawerContent>
-            </Drawer>
+            <SourceFlowProvider
+              workspaceAccessToken={workspaceAccessToken}
+              sourceConnectLinks={sourceConnectLinks}
+              refetchSourceConnectLinks={refetchSourceConnectLinks}
+              syncManagementLinks={syncManagementLinks}
+              refetchSyncManagementLinks={refetchSyncManagementLinks}
+              syncs={syncs}
+              setSyncs={setSyncs}
+              refetchSyncs={refetchSyncs}
+              runsLoading={runsLoading}
+              runs={runs}
+              devMode={devMode}
+              embedMode={embedMode}
+              sources={sources}
+              availableSourceTypes={availableSourceTypes}
+            >
+              <NewSourceDrawer />
+            </SourceFlowProvider>
           </div>
         )}
       </div>
