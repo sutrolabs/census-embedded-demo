@@ -59,8 +59,6 @@ export default function SourceObjectSelection({
 
   return (
     <div className="flex flex-col gap-4">
-      <p className="text-neutral-600">Select which data you want to sync from this source.</p>
-
       <div className="mt-4 flex flex-col gap-5">
         {/* Display existing syncs */}
         {sourceSpecificSyncs.map((sync) => (
@@ -135,20 +133,6 @@ export default function SourceObjectSelection({
         }
         link="https://developers.getcensus.com/api-reference/sync-management-links/create-a-new-sync-management-link"
       />
-
-      {/* Continue button */}
-      <div className="mt-4 flex justify-between">
-        <button className="rounded border px-4 py-2" onClick={onBack} disabled={loading || isLinkLoading}>
-          Back
-        </button>
-        <button
-          className="rounded bg-emerald-500 px-4 py-2 text-white"
-          onClick={handleContinue}
-          disabled={loading || isLinkLoading}
-        >
-          Continue
-        </button>
-      </div>
     </div>
   )
 }

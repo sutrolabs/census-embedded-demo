@@ -5,7 +5,6 @@ import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import {
   Drawer,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -101,7 +100,6 @@ export default function NewSourceDrawer({
           devMode={devMode}
           embedMode={embedMode}
         />
-        <DrawerFooter></DrawerFooter>
       </DrawerContent>
     </Drawer>
   )

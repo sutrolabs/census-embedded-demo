@@ -138,5 +138,5 @@ export default function SourceConnectionFlow() {
     }
   }
 
-  return <div className="p-6">{renderStep()}</div>
+  return <div className="flex h-full w-full flex-col overflow-hidden p-6">{renderStep()}</div>
 }

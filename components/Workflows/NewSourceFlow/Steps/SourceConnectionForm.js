@@ -2,6 +2,7 @@ import { useState } from "react"
 
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import EmbeddedFrame from "@components/EmbeddedFrame"
+import DevelopmentMessage from "@components/Message/DevelopmentMessage"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 
 export default function SourceConnectionForm() {
@@ -86,7 +87,8 @@ export default function SourceConnectionForm() {
           />
         </div>
       ) : (
-        <div className="mt-4 flex flex-col gap-4">
+        <div className="flex flex-col gap-4">
+          <DevelopmentMessage message="Toggle 'embedded components' in the sidebar to see how this feature will look as an embedded experience or a redirect." />
           <div className="rounded bg-neutral-50 p-4">
             <p className="mb-2">Connect your {sourceType.label} account to import your data.</p>
             <p className="text-sm text-neutral-600">

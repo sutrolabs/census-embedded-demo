@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import Button from "@components/Button"
 import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
 import { b2bCustomerData } from "@components/Data/b2b-customer-data"
+import { ConnectionLogo } from "@components/Logo/ConnectionLogo"
 import Header from "@components/Structural/Header/Header"
 import { SyncStatus } from "@components/SyncStatus"
 import {
@@ -16,6 +17,7 @@ import {
   TableRow,
 } from "@components/Table/Table"
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
+import { getLogoForSourceType } from "@hooks/useSourceLogos"
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -96,6 +98,46 @@ export default function ImportDataset({
     fetchSyncs()
   }, [workspaceAccessToken, setSyncs])
 
+  const getSourceMetadataFromConnectionId = (connectionId, sources = []) => {
+    if (!connectionId || !sources.length) return null
+
+    // Find the source with the matching connection_id
+    const sourceEntity = sources.find((source) => source.id === connectionId)
+
+    if (!sourceEntity) return null
+
+    // Get the source type information
+    const sourceType = getSourceTypeFromServiceName(sourceEntity.type)
+
+    // Get the logo for the source type
+    const logo = getLogoForSourceType(sourceType)
+
+    return {
+      id: sourceEntity.id,
+      name: sourceEntity.name,
+      type: sourceEntity.type,
+      object: sourceEntity.object,
+      logo,
+      sourceType,
+      // Add any other metadata you need
+    }
+  }
+
+  const getSourceTypeFromServiceName = (serviceName, availableSourceTypes = []) => {
+    if (!serviceName) return null
+
+    // If availableSourceTypes is provided, search in it
+    if (availableSourceTypes.length) {
+      return availableSourceTypes.find((type) => type.service_name === serviceName) || null
+    }
+
+    // Otherwise, return a minimal source type object
+    return {
+      service_name: serviceName,
+      label: serviceName.charAt(0).toUpperCase() + serviceName.slice(1).replace(/_/g, " "),
+    }
+  }
+
   return (
     <>
       <Head>
@@ -139,27 +181,49 @@ export default function ImportDataset({
         </Table>
 
         {showSidebar && (
-          <div className="h-full w-2/3 max-w-[800px] overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md">
-            <h2 className="text-lg font-semibold">Existing Imports</h2>
-            {syncs.map((sync) => (
-              <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
-                <div className="flex flex-row items-center justify-between">
-                  <span className="font-medium">{sync.label ?? `Sync: ${sync.id}`}</span>
-                  {sync.source_attributes.connection_id}
-                  <div className="flex gap-2">
-                    <Button>Pause</Button>
-                    <Button>Edit</Button>
-                  </div>
-                </div>
-                <SyncStatus
-                  syncsLoading={false}
-                  syncs={[sync].filter(Boolean)}
-                  runsLoading={runsLoading}
-                  runs={runs}
-                  showAge
-                />
-              </div>
-            ))}
+          <div className="flex h-full w-2/3 max-w-[800px] flex-col gap-4 overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md ">
+            {syncs && (
+              <>
+                <h2 className="text-base font-medium">Existing Imports</h2>
+                {syncs.map((sync) => {
+                  const sourceMetadata = getSourceMetadataFromConnectionId(
+                    sync.source_attributes?.connection_id,
+                    sources,
+                  )
+                  return (
+                    <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
+                      <div className="flex flex-row items-center justify-between gap-4">
+                        <div className="flex flex-row items-center gap-2">
+                          <ConnectionLogo src={sourceMetadata?.logo} />
+                          <span className="font-medium">{sync.source_attributes.object.name}</span>
+                        </div>
+                        <SyncStatus
+                          syncsLoading={false}
+                          syncs={[sync].filter(Boolean)}
+                          runsLoading={runsLoading}
+                          runs={runs}
+                          showAge
+                        />
+                      </div>
+                      <div className="flex gap-2">
+                        <Button>
+                          <i className="fa-solid fa-pause" />
+                          Pause
+                        </Button>
+                        <Button>
+                          <i className="fa-solid fa-play" />
+                          Run Now
+                        </Button>
+                        <Button>
+                          <i className="fa-solid fa-cog" />
+                          Configure
+                        </Button>
+                      </div>
+                    </div>
+                  )
+                })}
+              </>
+            )}
             <SourceFlowProvider
               workspaceAccessToken={workspaceAccessToken}
               sourceConnectLinks={sourceConnectLinks}

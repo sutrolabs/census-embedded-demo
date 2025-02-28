@@ -55,6 +55,11 @@ export function SourceFlowProvider({
 
   // Navigation handlers
   const openDrawer = useCallback((sourceId = null) => {
+    setCurrentStep(STEPS.INITIAL)
+    setIsDrawerOpen(true)
+  }, [])
+
+  const openToSource = useCallback((sourceId = null) => {
     setExistingSourceId(sourceId)
     setCurrentStep(sourceId ? STEPS.SELECT_OBJECTS : STEPS.INITIAL)
     setIsDrawerOpen(true)
@@ -209,6 +214,7 @@ export function SourceFlowProvider({
 
     // Actions
     openDrawer,
+    openToSource,
     closeDrawer,
     goToSourceTypes,
     goToConnectSource,
