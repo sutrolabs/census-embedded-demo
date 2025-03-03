@@ -1,7 +1,7 @@
 import Image from "next/image"
 
 import Button from "@components/Button/Button/Button"
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 import {
   Drawer,
   DrawerContent,

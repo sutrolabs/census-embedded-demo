@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 import DevelopmentMessage from "@components/Message/DevelopmentMessage"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"

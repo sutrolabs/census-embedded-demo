@@ -1,5 +1,5 @@
 import Button from "@components/Button/Button/Button"
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 import ExistingSourcesList from "@components/Workflows/NewSourceFlow/ExistingSourcesList"
 import SourceConnectionForm from "@components/Workflows/NewSourceFlow/Steps/SourceConnectionForm"
 import SourceObjectSelection from "@components/Workflows/NewSourceFlow/Steps/SourceObjectSelection"

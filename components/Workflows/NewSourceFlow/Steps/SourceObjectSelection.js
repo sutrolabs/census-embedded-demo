@@ -1,7 +1,7 @@
 import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
