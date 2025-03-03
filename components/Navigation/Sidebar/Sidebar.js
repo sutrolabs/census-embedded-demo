@@ -1,6 +1,7 @@
 import { Text } from "@radix-ui/themes"
 import Image from "next/image"
 
+import { useCensusEmbedded } from "@components/Contexts/CensusEmbeddedContext"
 import { CentralHomeIcon } from "@components/Icons/Home"
 import { CentralSquareGridCircleIcon } from "@components/Icons/SquareGridCircle"
 import { CentralTableIcon } from "@components/Icons/Table"
@@ -66,7 +67,8 @@ const groupedNavItems = navItems.reduce((acc, item) => {
 //   ]
 // }
 
-export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, setDevMode }) {
+export default function Sidebar({ syncsLoading, syncs, runsLoading, runs }) {
+  const { logOut, embedMode, setEmbedMode, devMode, setDevMode } = useCensusEmbedded()
   return (
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-100 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-between">
       <div className="flex w-full flex-col gap-4">
@@ -110,7 +112,7 @@ export default function Sidebar({ onLogOut, embedMode, setEmbedMode, devMode, se
       </div>
 
       <SidebarFooter
-        onLogOut={onLogOut}
+        onLogOut={logOut}
         embedMode={embedMode}
         setEmbedMode={setEmbedMode}
         devMode={devMode}
