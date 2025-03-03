@@ -43,19 +43,21 @@ export default function SourceConnectionFlow() {
       case STEPS.INITIAL:
         return (
           <div className="flex h-full flex-col gap-12 overflow-y-auto">
+            {existingSources.length > 1 && (
+              <div className="flex flex-col gap-3">
+                <span className="text-lg font-medium">Use an existing source</span>
+                <ExistingSourcesList
+                  sources={existingSources}
+                  loading={loadingSources}
+                  error={error}
+                  onSelectSource={goToSelectObjects}
+                />
+              </div>
+            )}
             <div className="flex flex-col gap-3">
-              <span className="text-lg font-medium">Use an existing source</span>
-              <ExistingSourcesList
-                sources={existingSources}
-                loading={loadingSources}
-                error={error}
-                onSelectSource={goToSelectObjects}
-              />
-            </div>
-            <div className="flex flex-col gap-3">
-              <span className="text-lg font-medium">Or connect a new source</span>
+              <span className="text-lg font-medium">Connect a new source</span>
               <Button className="py-4 text-lg" onClick={goToSourceTypes}>
-                Connect a new source
+                Connect a Source
               </Button>
             </div>
           </div>
