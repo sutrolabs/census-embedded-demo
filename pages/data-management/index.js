@@ -5,7 +5,6 @@ import Button from "@components/Button/Button/Button"
 import { SubtleButton } from "@components/Button/SubtleButton/SubtleButton"
 import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
 import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
-import { b2bCustomerData } from "@components/Data/b2b-customer-data"
 import { CentralDataImportIcon } from "@components/Icons/DataImport"
 import { ConnectionLogo } from "@components/Logo/ConnectionLogo"
 import Header from "@components/Structural/Header/Header"
@@ -20,6 +19,7 @@ import {
   TableRow,
 } from "@components/Table/Table"
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
+import { b2bCustomerData } from "@data/b2b-customer-data"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
 
 export default function ImportDataset({

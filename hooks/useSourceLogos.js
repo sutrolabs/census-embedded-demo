@@ -1,4 +1,4 @@
-const { source_connection_logos } = require("@components/Data/Connections/source-connection-logos")
+const { source_connection_logos } = require("@data/connections/source-connection-logos")
 
 export const getLogoForSourceType = (sourceType) => {
   const logoEntry = source_connection_logos.find(
