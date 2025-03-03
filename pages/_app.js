@@ -9,7 +9,8 @@ import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
 import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
-import { useBasicFetch, useFetchRuns } from "@utils/fetch"
+import { useData, DataProvider } from "@providers/DataProvider"
+import { useBasicFetch } from "@utils/fetch"
 
 registry.add(LineElement)
 registry.add(PointElement)
@@ -28,8 +29,14 @@ function Application({ Component, pageProps }) {
 function ApplicationContent({ Component, pageProps }) {
   const { workspaceAccessToken, logOut } = useCensusEmbedded()
 
+  if (!workspaceAccessToken) {
+    return <Setup />
+  }
+
   return (
-    <>{!workspaceAccessToken ? <Setup /> : <MainApplication Component={Component} pageProps={pageProps} />}</>
+    <DataProvider>
+      <MainApplication Component={Component} pageProps={pageProps} />
+    </DataProvider>
   )
 }
 
@@ -39,6 +46,8 @@ export default dynamic(() => Promise.resolve(Application), {
 
 function MainApplication({ Component, pageProps }) {
   const { workspaceAccessToken, embedMode, setEmbedMode, devMode, setDevMode, logOut } = useCensusEmbedded()
+
+  const { anyLoading, anyError, syncs, runs, runsLoading } = useData()
 
   const {
     loading: destinationsLoading,
@@ -113,21 +122,6 @@ function MainApplication({ Component, pageProps }) {
         },
       }),
   )
-  const {
-    loading: syncsLoading,
-    error: syncsError,
-    data: syncs,
-    setData: setSyncs,
-    refetchInBackground: refetchSyncs,
-  } = useBasicFetch(
-    () =>
-      new Request(`/api/list_syncs`, {
-        method: "GET",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-        },
-      }),
-  )
 
   const {
     loading: segmentsLoading,
@@ -144,25 +138,7 @@ function MainApplication({ Component, pageProps }) {
         },
       }),
   )
-  const { runsLoading, runsError, runs } = useFetchRuns(workspaceAccessToken, syncsLoading, syncs)
 
-  const anyError =
-    destinationsError ??
-    destinationConnectLinksError ??
-    sourcesError ??
-    sourceConnectLinksError ??
-    syncManagementLinksError ??
-    syncsError ??
-    segmentsError ??
-    runsError
-  const anyLoading =
-    destinationsLoading ||
-    destinationConnectLinksLoading ||
-    sourcesLoading ||
-    sourceConnectLinksLoading ||
-    syncManagementLinksLoading ||
-    syncsLoading ||
-    segmentsLoading
   let component
   if (anyError) {
     component = <Error_ error={anyError} />
@@ -170,51 +146,17 @@ function MainApplication({ Component, pageProps }) {
     // Runs aren't critical, so it's OK to show the UI without them
     component = <Loading />
   } else {
-    component = (
-      <Component
-        workspaceAccessToken={workspaceAccessToken}
-        destinations={destinations}
-        setDestinations={setDestinations}
-        destinationConnectLinks={destinationConnectLinks}
-        setDestinationConnectLinks={setDestinationConnectLinks}
-        sources={sources}
-        setSources={setSources}
-        refetchSources={refetchSources}
-        sourceConnectLinks={sourceConnectLinks}
-        refetchSourceConnectLinks={refetchSourceConnectLinks}
-        setSourceConnectLinks={setSourceConnectLinks}
-        syncManagementLinks={syncManagementLinks}
-        refetchSyncManagementLinks={refetchSyncManagementLinks}
-        setSyncManagementLinks={setSyncManagementLinks}
-        syncs={syncs}
-        setSyncs={setSyncs}
-        refetchSyncs={refetchSyncs}
-        segments={segments}
-        setSegments={setSegments}
-        refetchSegments={refetchSegments}
-        runsLoading={runsLoading}
-        runs={runs}
-        embedMode={embedMode}
-        setEmbedMode={setEmbedMode}
-        devMode={devMode}
-        setDevMode={setDevMode}
-        {...pageProps}
-      />
-    )
+    component = <Component {...pageProps} />
   }
 
   return (
     <main className="relative flex h-screen w-screen flex-row overflow-hidden">
       <Sidebar
-        syncsLoading={syncsLoading}
-        syncs={syncs}
+        syncsLoading={syncs.loading}
+        syncs={syncs.data || []}
         runsLoading={runsLoading}
         runs={runs}
         onLogOut={logOut}
-        embedMode={embedMode}
-        setEmbedMode={setEmbedMode}
-        devMode={devMode}
-        setDevMode={setDevMode}
       />
       <MainLayout>{component}</MainLayout>
     </main>
