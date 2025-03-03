@@ -1,4 +1,5 @@
 import "@styles/globals.css"
+
 import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
@@ -9,7 +10,6 @@ import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
 import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
-import { useData, DataProvider } from "@providers/DataProvider"
 import { useBasicFetch } from "@utils/fetch"
 
 registry.add(LineElement)
@@ -33,11 +33,7 @@ function ApplicationContent({ Component, pageProps }) {
     return <Setup />
   }
 
-  return (
-    <DataProvider>
-      <MainApplication Component={Component} pageProps={pageProps} />
-    </DataProvider>
-  )
+  return <MainApplication Component={Component} pageProps={pageProps} />
 }
 
 export default dynamic(() => Promise.resolve(Application), {
@@ -45,9 +41,20 @@ export default dynamic(() => Promise.resolve(Application), {
 })
 
 function MainApplication({ Component, pageProps }) {
-  const { workspaceAccessToken, embedMode, setEmbedMode, devMode, setDevMode, logOut } = useCensusEmbedded()
-
-  const { anyLoading, anyError, syncs, runs, runsLoading } = useData()
+  const {
+    workspaceAccessToken,
+    embedMode,
+    setEmbedMode,
+    devMode,
+    setDevMode,
+    logOut,
+    isLoading,
+    hasError,
+    error,
+    syncs,
+    runs,
+    runsLoading,
+  } = useCensusEmbedded()
 
   const {
     loading: destinationsLoading,
@@ -140,9 +147,9 @@ function MainApplication({ Component, pageProps }) {
   )
 
   let component
-  if (anyError) {
-    component = <Error_ error={anyError} />
-  } else if (anyLoading) {
+  if (hasError) {
+    component = <Error_ error={error} />
+  } else if (isLoading) {
     // Runs aren't critical, so it's OK to show the UI without them
     component = <Loading />
   } else {

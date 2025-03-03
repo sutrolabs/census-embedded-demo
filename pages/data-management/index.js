@@ -19,6 +19,7 @@ import {
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
 import { b2bCustomerData } from "@data/b2b-customer-data"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { SourceFlowProvider, useSourceFlow } from "@providers/SourceFlowProvider"
 
 export default function ImportDataset({
@@ -34,18 +35,14 @@ export default function ImportDataset({
   sourceEmbedLinks,
   syncManagementLinks,
   refetchSyncManagementLinks,
-  syncs,
   setSyncs,
   runsLoading,
   runs,
-  embedMode,
-  devMode,
 }) {
+  const { syncs, loading, error, setError, setLoading, sourceTypes } = useCensusEmbedded()
   const [showSidebar, setShowSidebar] = useState(false)
   const [selectedSourceId, setSelectedSourceId] = useState(null)
   const [availableSourceTypes, setAvailableSourceTypes] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
 
   const editSyncLinkQueryParams = "&edit_mode=true"
 
@@ -55,32 +52,9 @@ export default function ImportDataset({
     setShowSidebar(false)
   }
 
-  // Remove this line - we'll use the hook inside the component where the provider is available
-  // const { openToSource } = useSourceFlow()
-
-  // Fetch available sources when the component mounts
   useEffect(() => {
-    const fetchSourceTypes = async () => {
-      try {
-        const response = await fetch("/api/list_source_types", {
-          headers: {
-            ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          },
-        })
-        if (!response.ok) {
-          throw new Error("Failed to fetch sources")
-        }
-        const data = await response.json()
-        setAvailableSourceTypes(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchSourceTypes()
-  }, [workspaceAccessToken])
+    setAvailableSourceTypes(sourceTypes)
+  }, [sourceTypes])
 
   useEffect(() => {
     const fetchSyncs = async () => {
@@ -101,7 +75,7 @@ export default function ImportDataset({
     }
 
     fetchSyncs()
-  }, [workspaceAccessToken, setSyncs])
+  }, [workspaceAccessToken, setSyncs, setError])
 
   const configureSync = async (sync) => {
     try {
@@ -177,7 +151,6 @@ export default function ImportDataset({
         {showSidebar && (
           <div className="flex h-full w-2/3 max-w-[800px]  flex-col gap-4 overflow-hidden border-l border-neutral-100 bg-white p-6 shadow-md transition duration-100">
             <SourceFlowProvider
-              workspaceAccessToken={workspaceAccessToken}
               sourceConnectLinks={sourceConnectLinks}
               refetchSourceConnectLinks={refetchSourceConnectLinks}
               syncManagementLinks={syncManagementLinks}
@@ -187,8 +160,6 @@ export default function ImportDataset({
               refetchSyncs={refetchSyncs}
               runsLoading={runsLoading}
               runs={runs}
-              devMode={devMode}
-              embedMode={embedMode}
               sources={sources}
               availableSourceTypes={availableSourceTypes}
             >

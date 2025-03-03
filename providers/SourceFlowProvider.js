@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 // Steps in the connection flow
 export const STEPS = {
@@ -15,21 +16,29 @@ const SourceFlowContext = createContext(null)
 
 export function SourceFlowProvider({
   children,
-  workspaceAccessToken,
-  sourceConnectLinks,
   refetchSourceConnectLinks,
-  syncManagementLinks,
   refetchSyncManagementLinks,
-  syncs,
   setSyncs,
   refetchSyncs,
-  runsLoading,
-  runs,
-  devMode,
-  embedMode,
-  sources,
   availableSourceTypes: initialSourceTypes,
 }) {
+  const {
+    workspaceAccessToken,
+    devMode,
+    embedMode,
+    sourceConnectLinks,
+    syncManagementLinks,
+    syncs,
+    runs,
+    runsLoading,
+    sources,
+    sourceTypes,
+    loading,
+    error,
+    setError,
+    setLoading,
+  } = useCensusEmbedded()
+
   // Flow state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
   const [currentStep, setCurrentStep] = useState(STEPS.INITIAL)
@@ -51,7 +60,6 @@ export function SourceFlowProvider({
   const [loadingSourceTypes, setLoadingSourceTypes] = useState(false)
   const [loadingSources, setLoadingSources] = useState(false)
   const [loadingObjects, setLoadingObjects] = useState(false)
-  const [error, setError] = useState(null)
 
   // Navigation handlers
   const openDrawer = useCallback((sourceId = null) => {
@@ -185,34 +193,10 @@ export function SourceFlowProvider({
   }, [sources])
 
   useEffect(() => {
-    // Fetch source types when needed
-    const fetchSourceTypes = async () => {
-      if (availableSourceTypes.length === 0) {
-        setLoadingSourceTypes(true)
-        try {
-          const response = await fetch("/api/list_source_types", {
-            headers: {
-              ["authorization"]: `Bearer ${workspaceAccessToken}`,
-            },
-          })
-          if (!response.ok) {
-            throw new Error("Failed to fetch source types")
-          }
-          const data = await response.json()
-          setAvailableSourceTypes(data)
-        } catch (err) {
-          setError(err.message)
-        } finally {
-          setLoadingSourceTypes(false)
-        }
-      }
+    if (sourceTypes?.data) {
+      setAvailableSourceTypes(sourceTypes.data)
     }
-
-    // Only fetch when drawer is open and we're at the source types step
-    if (isDrawerOpen && currentStep === STEPS.SOURCE_TYPES) {
-      fetchSourceTypes()
-    }
-  }, [isDrawerOpen, currentStep, workspaceAccessToken, availableSourceTypes.length])
+  }, [sourceTypes?.data])
 
   useEffect(() => {
     // When existingSourceId changes, find the corresponding source and set it as selectedSource
