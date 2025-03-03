@@ -1,4 +1,4 @@
-import EmbeddedFrame from "@components/EmbeddedFrame"
+import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 
 export default function SyncEditWizard({ refetchSyncs, closeSyncWizard, connectLink }) {
   return (

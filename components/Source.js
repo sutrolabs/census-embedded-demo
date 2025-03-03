@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
-import EmbeddedFrame from "@components/EmbeddedFrame"
+import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle"
