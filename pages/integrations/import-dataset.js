@@ -311,8 +311,8 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                 Run Now
               </Button>
               <Button onClick={() => openToSync(sync)}>
-                <i className="fa-solid fa-cog" />
-                Configure
+                <i className="fa-solid fa-pen" />
+                Details
               </Button>
             </div>
           </div>
