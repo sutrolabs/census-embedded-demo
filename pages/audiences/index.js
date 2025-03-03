@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 
 import Error_ from "@components/Message/Error_"
 import Loading from "@components/Message/Loading"
+import Header from "@components/Structural/Header/Header"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 export default function Audiences() {
@@ -44,9 +45,9 @@ export default function Audiences() {
 
   return (
     <>
-      <div className="p-6">
-        <div className="mb-6 flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Audiences</h1>
+      <Header title="Audiences" />
+      <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-8 py-3">
+        <div>
           <Link href="/audiences/new">
             <a className="rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700">Create New Audience</a>
           </Link>
