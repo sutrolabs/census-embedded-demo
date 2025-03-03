@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import RequestTooltip from "@components/RequestTooltip"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
