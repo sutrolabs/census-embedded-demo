@@ -1,7 +1,6 @@
 import Image from "next/image"
 
 import Button from "@components/Button/Button/Button"
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import {
   Drawer,
   DrawerContent,
@@ -12,6 +11,7 @@ import {
 } from "@components/Drawer/Drawer"
 import SourceConnectionFlow from "@components/Workflows/NewSourceFlow/SourceConnectionFlow"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 
 export default function NewSourceDrawer({
   workspaceAccessToken,

@@ -20,7 +20,10 @@ import {
 } from "@components/Table/Table"
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
 import { b2bCustomerData } from "@data/b2b-customer-data"
+import { b2bCustomerData } from "@data/b2b-customer-data"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
+import { SourceFlowProvider } from "@providers/SourceFlowProvider"
 
 export default function ImportDataset({
   workspaceAccessToken,

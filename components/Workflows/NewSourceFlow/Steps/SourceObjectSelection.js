@@ -6,6 +6,7 @@ import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SourceObjectSelection() {

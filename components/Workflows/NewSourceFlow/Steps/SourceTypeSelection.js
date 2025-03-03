@@ -1,7 +1,7 @@
 import Image from "next/image"
 
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 
 export default function SourceTypeSelection() {
   const {
