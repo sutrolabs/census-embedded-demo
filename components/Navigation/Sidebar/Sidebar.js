@@ -1,12 +1,12 @@
 import { Text } from "@radix-ui/themes"
 import Image from "next/image"
 
-import { useCensusEmbedded } from "@components/Contexts/CensusEmbeddedContext"
 import { CentralHomeIcon } from "@components/Icons/Home"
 import { CentralSquareGridCircleIcon } from "@components/Icons/SquareGridCircle"
 import { CentralTableIcon } from "@components/Icons/Table"
 import { SidebarFooter } from "@components/Navigation/Sidebar/SidebarComponents/SidebarFooter"
 import { Item } from "@components/Navigation/Sidebar/SidebarComponents/SidebarNavItem"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 const navItems = [
   {
@@ -101,7 +101,7 @@ export default function Sidebar({ syncsLoading, syncs, runsLoading, runs }) {
           {Object.entries(groupedNavItems).map(
             ([group, items]) =>
               group !== "root" && (
-                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-100 pl-3">
+                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
                   {items.map((item) => (
                     <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
                   ))}
