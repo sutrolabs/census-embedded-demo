@@ -5,7 +5,7 @@ import { useSessionStorage } from "usehooks-ts"
 const CensusEmbeddedContext = createContext(null)
 
 // Provider component
-export function AppProvider({ children }) {
+export function CensusEmbeddedProvider({ children }) {
   // Authentication state
   const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
   const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
