@@ -1,11 +1,11 @@
 import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import { useSourceFlow } from "@providers/SourceFlowProvider"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
+import { useSourceFlow } from "@providers/SourceFlowProvider"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SourceObjectSelection() {
