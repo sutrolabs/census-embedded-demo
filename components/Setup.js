@@ -3,9 +3,9 @@ import Image from "next/image"
 import Link from "next/link"
 
 import Button from "@components/Button/Button/Button"
-import { useCensusEmbedded } from "@components/Contexts/CensusEmbeddedContext"
 import { FlickeringGrid } from "@components/Magic/FlickeringGridBackground"
 import TokenEntry from "@components/TokenEntry"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusFrontendBaseUrl } from "@utils/url"
 
 export function Setup() {

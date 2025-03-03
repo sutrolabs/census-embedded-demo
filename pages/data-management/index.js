@@ -3,8 +3,6 @@ import { useState, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
 import { SubtleButton } from "@components/Button/SubtleButton/SubtleButton"
-import { SourceFlowProvider } from "@components/Contexts/SourceFlowContext"
-import { useSourceFlow } from "@components/Contexts/SourceFlowContext"
 import { CentralDataImportIcon } from "@components/Icons/DataImport"
 import { ConnectionLogo } from "@components/Logo/ConnectionLogo"
 import Header from "@components/Structural/Header/Header"
@@ -20,10 +18,8 @@ import {
 } from "@components/Table/Table"
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
 import { b2bCustomerData } from "@data/b2b-customer-data"
-import { b2bCustomerData } from "@data/b2b-customer-data"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
-import { useSourceFlow } from "@providers/SourceFlowProvider"
-import { SourceFlowProvider } from "@providers/SourceFlowProvider"
+import { SourceFlowProvider, useSourceFlow } from "@providers/SourceFlowProvider"
 
 export default function ImportDataset({
   workspaceAccessToken,
