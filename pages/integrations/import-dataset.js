@@ -155,10 +155,10 @@ export default function ImportDataset({
               <TableHead className="w-[100px] pl-6">Company</TableHead>
               <TableHead>City</TableHead>
               <TableHead>Industry</TableHead>
-              <TableHead>contract_value</TableHead>
-              <TableHead>last_logged_in</TableHead>
-              <TableHead>contract_signed</TableHead>
-              <TableHead>campaigns_received</TableHead>
+              <TableHead className="w-[150px] truncate text-right">Contract Value</TableHead>
+              <TableHead>Last Logged In</TableHead>
+              <TableHead>Contract Signed</TableHead>
+              <TableHead className="w-[100px] truncate">Campaigns Received</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -167,10 +167,10 @@ export default function ImportDataset({
                 <TableCell className="truncate pl-6">{customer.company_name}</TableCell>
                 <TableCell className="max-w-[150px] truncate">{customer.hq_city}</TableCell>
                 <TableCell className="max-w-[200px] truncate">{customer.industry}</TableCell>
-                <TableCell>{customer.contract_value.toLocaleString()}</TableCell>
+                <TableCell className="text-right">{customer.contract_value.toLocaleString()}</TableCell>
                 <TableCell>{new Date(customer.last_logged_in).toLocaleDateString()}</TableCell>
                 <TableCell>{new Date(customer.contract_signed).toLocaleDateString()}</TableCell>
-                <TableCell>{customer.campaigns_received}</TableCell>
+                <TableCell className="text-right">{customer.campaigns_received}</TableCell>
               </TableRow>
             ))}
           </TableBody>
