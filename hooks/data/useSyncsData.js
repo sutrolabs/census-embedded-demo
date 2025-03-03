@@ -1,7 +1,7 @@
-import { useData } from "@providers/DataProvider"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 export function useSyncsData() {
-  const { syncs, runs, runsLoading } = useData()
+  const { syncs, runs, runsLoading } = useCensusEmbedded()
 
   return {
     loading: syncs.loading,

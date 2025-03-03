@@ -35,11 +35,11 @@ export default function ImportDataset({
   sourceEmbedLinks,
   syncManagementLinks,
   refetchSyncManagementLinks,
-  setSyncs,
   runsLoading,
   runs,
 }) {
   const { syncs, loading, error, setError, setLoading, sourceTypes } = useCensusEmbedded()
+
   const [showSidebar, setShowSidebar] = useState(false)
   const [selectedSourceId, setSelectedSourceId] = useState(null)
   const [availableSourceTypes, setAvailableSourceTypes] = useState([])
@@ -55,48 +55,6 @@ export default function ImportDataset({
   useEffect(() => {
     setAvailableSourceTypes(sourceTypes)
   }, [sourceTypes])
-
-  useEffect(() => {
-    const fetchSyncs = async () => {
-      try {
-        const response = await fetch("/api/list_syncs", {
-          headers: {
-            ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          },
-        })
-        if (!response.ok) {
-          throw new Error("Failed to fetch syncs")
-        }
-        const data = await response.json()
-        setSyncs(data)
-      } catch (err) {
-        setError(err.message)
-      }
-    }
-
-    fetchSyncs()
-  }, [workspaceAccessToken, setSyncs, setError])
-
-  const configureSync = async (sync) => {
-    try {
-      const response = await fetch("/api/create_edit_sync_management_link", {
-        method: "POST",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          ["content-type"]: "application/json",
-        },
-        body: JSON.stringify({
-          syncId: sync.id,
-        }),
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      const data = await response.json()
-      setEditSyncLink(data.uri + editSyncLinkQueryParams)
-      setSelectedSync(sync)
-    } catch (error) {}
-  }
 
   return (
     <>
@@ -156,7 +114,7 @@ export default function ImportDataset({
               syncManagementLinks={syncManagementLinks}
               refetchSyncManagementLinks={refetchSyncManagementLinks}
               syncs={syncs}
-              setSyncs={setSyncs}
+              setSyncs={syncs}
               refetchSyncs={refetchSyncs}
               runsLoading={runsLoading}
               runs={runs}
