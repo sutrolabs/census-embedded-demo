@@ -3,7 +3,7 @@ import { Line } from "react-chartjs-2"
 
 import { Anchor } from "@components/Anchor"
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card"
+import Card from "@components/Card/Card"
 import Header from "@components/Structural/Header/Header"
 
 export default function Index() {

@@ -1,7 +1,7 @@
 import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
-import Card from "@components/Card"
+import Card from "@components/Card/Card"
 import Destination from "@components/Destination"
 import SegmentManagement from "@components/SegmentManagement"
 import Header from "@components/Structural/Header/Header"
