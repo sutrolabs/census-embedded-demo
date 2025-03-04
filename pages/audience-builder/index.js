@@ -2,8 +2,9 @@ import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
+import Button from "@components/Button/Button/Button"
 import Card from "@components/Card"
-import { SegmentObject } from "@components/SegmentObject"
+import EmbeddedFrame from "@components/EmbeddedFrame"
 import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@components/Tabs/Tabs"
@@ -24,8 +25,16 @@ export default function Index({
   setSegments,
   runs,
 }) {
-  const { workspaceAccessToken, embedMode, devMode } = useCensusEmbedded()
+  const { workspaceAccessToken, embedMode, devMode, loading, setLoading } = useCensusEmbedded()
   const [selectedSegment, setSelectedSegment] = useState(null)
+  const [editSegmentWizardLink, setEditSegmentWizardLink] = useState(null)
+  const showEditSegmentWizard = !!editSegmentWizardLink
+
+  const API_CREATE_EDIT_SEGMENT_LINK = "/api/create_edit_segment_management_link"
+  const headers = {
+    ["authorization"]: `Bearer ${workspaceAccessToken}`,
+    ["content-type"]: "application/json",
+  }
 
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
@@ -44,9 +53,34 @@ export default function Index({
   const googleAudienceSyncs = syncs.filter(isGoogleAudienceSync)
   const facebookAudienceSyncs = syncs.filter(isFacebooksAudienceSync)
 
+  const initiateEditSegmentWizard = async (segment) => {
+    try {
+      setLoading(true)
+      const response = await fetch(API_CREATE_EDIT_SEGMENT_LINK, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify({
+          sourceId: segment.source_id,
+          segmentId: segment.id,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      const data = await response.json()
+      if (embedMode) {
+        setEditSegmentWizardLink(data.uri)
+      } else {
+        window.location.href = data.uri
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
   // Handle segment selection
   const handleSegmentClick = (segment) => {
     setSelectedSegment(segment)
+    initiateEditSegmentWizard(segment)
   }
 
   return (
@@ -56,7 +90,7 @@ export default function Index({
       </Head>
       <Header title="Audience Builder" />
       <div className="mx-auto flex h-full w-full flex-row overflow-hidden">
-        <div className="flex h-full w-1/3 max-w-[375px] flex-col overflow-hidden border-r border-neutral-100">
+        <div className="flex h-full w-1/3 max-w-[375px] flex-col overflow-hidden border-r border-neutral-100 bg-white">
           <div className="border-b border-neutral-100 p-3">
             <Text>Your Audiences</Text>
           </div>
@@ -76,26 +110,49 @@ export default function Index({
               ))}
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex h-full w-full flex-col bg-neutral-50 p-2">
           {selectedSegment ? (
-            <div className="flex w-full flex-col gap-6">
-              <Tabs defaultValue="segment">
+            <div className="flex h-full w-full flex-col gap-6 overflow-hidden rounded border border-neutral-100 bg-white shadow">
+              <Tabs defaultValue="segment" className="h-full w-full">
                 <TabsList>
-                  <TabsTrigger value="segment">Segment</TabsTrigger>
-                  <TabsTrigger value="sync">Sync</TabsTrigger>
+                  <div className="w-[300px]">{selectedSegment.name}</div>
+                  <div className="flex grow items-center justify-center">
+                    <TabsTrigger value="segment">Audience</TabsTrigger>
+                    <TabsTrigger value="sync">Sync</TabsTrigger>
+                  </div>
+                  <div className="flex w-[300px] flex-row justify-end">
+                    <Button className="text-sm">
+                      <i className="fa-solid fa-trash mr-2" />
+                      Delete
+                    </Button>
+                  </div>
                 </TabsList>
-                <TabsContent value="segment">
-                  <SegmentObject
-                    segment={selectedSegment}
-                    refetchSegments={refetchSegments}
-                    workspaceAccessToken={workspaceAccessToken}
-                    setSegments={setSegments}
-                    devMode={devMode}
-                    embedMode={embedMode}
-                  />
+                <TabsContent value="segment" className="h-full w-full">
+                  {editSegmentWizardLink ? (
+                    <EmbeddedFrame
+                      className="h-full w-full"
+                      connectLink={editSegmentWizardLink}
+                      onExit={() => setEditSegmentWizardLink(null)}
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center">
+                      <Card className="p-6 text-center">
+                        <Text size="5">Loading segment details...</Text>
+                        {loading && (
+                          <Text size="2" className="mt-2 text-neutral-500">
+                            Please wait while we load the segment editor
+                          </Text>
+                        )}
+                        {!loading && (
+                          <Text size="2" className="mt-2 text-neutral-500">
+                            Click the Configure button to edit this segment
+                          </Text>
+                        )}
+                      </Card>
+                    </div>
+                  )}
                 </TabsContent>
                 <TabsContent value="sync">
-                  {" "}
                   <Sync
                     destinations={destinations}
                     sources={sources}

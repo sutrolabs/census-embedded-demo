@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 import { censusFrontendBaseUrl } from "@utils/url"
 
-export default function EmbeddedFrame({ connectLink, onExit }) {
+export default function EmbeddedFrame({ connectLink, onExit, className }) {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -29,7 +29,7 @@ export default function EmbeddedFrame({ connectLink, onExit }) {
     }
   }, [onExit])
 
-  const iframeClass = loaded ? "" : "hidden"
+  const iframeClass = loaded ? className : "hidden"
 
   return (
     <>
