@@ -132,27 +132,43 @@ export function CensusEmbeddedProvider({ children }) {
     // Data objects - expose both the raw data arrays and the full objects
     destinations: destinations.data || [],
     setDestinations: destinations.setData,
+    refetchDestinations: destinations.refetch,
+    refetchDestinationsInBackground: destinations.refetchInBackground,
 
     destinationConnectLinks: destinationConnectLinks.data || [],
     setDestinationConnectLinks: destinationConnectLinks.setData,
+    refetchDestinationConnectLinks: destinationConnectLinks.refetch,
+    refetchDestinationConnectLinksInBackground: destinationConnectLinks.refetchInBackground,
 
     sources: sources.data || [],
     setSources: sources.setData,
+    refetchSources: sources.refetch,
+    refetchSourcesInBackground: sources.refetchInBackground,
 
     sourceTypes: sourceTypes.data || [],
     setSourceTypes: sourceTypes.setData,
+    refetchSourceTypes: sourceTypes.refetch,
+    refetchSourceTypesInBackground: sourceTypes.refetchInBackground,
 
     sourceConnectLinks: sourceConnectLinks.data || [],
     setSourceConnectLinks: sourceConnectLinks.setData,
+    refetchSourceConnectLinks: sourceConnectLinks.refetch,
+    refetchSourceConnectLinksInBackground: sourceConnectLinks.refetchInBackground,
 
     syncManagementLinks: syncManagementLinks.data || [],
     setSyncManagementLinks: syncManagementLinks.setData,
+    refetchSyncManagementLinks: syncManagementLinks.refetch,
+    refetchSyncManagementLinksInBackground: syncManagementLinks.refetchInBackground,
 
     syncs: syncs.data || [],
     setSyncs: syncs.setData,
+    refetchSyncs: syncs.refetch,
+    refetchSyncsInBackground: syncs.refetchInBackground,
 
     segments: segments.data || [],
     setSegments: segments.setData,
+    refetchSegments: segments.refetch,
+    refetchSegmentsInBackground: segments.refetchInBackground,
 
     // Runs data
     runs,
