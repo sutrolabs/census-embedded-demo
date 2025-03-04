@@ -188,6 +188,7 @@ export default function ImportDataset({
               refetchSyncs={refetchSyncs}
               runsLoading={runsLoading}
               runs={runs}
+              destinations={destinations}
               devMode={devMode}
               embedMode={embedMode}
               sources={sources}
