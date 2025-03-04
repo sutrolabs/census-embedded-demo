@@ -87,7 +87,7 @@ export default function SourceObjectSelection() {
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex h-full flex-col gap-4 overflow-y-auto">
       <div className="mt-4 flex flex-col gap-5">
         {/* Display existing syncs */}
         {sourceSpecificSyncs.map((sync) => (
