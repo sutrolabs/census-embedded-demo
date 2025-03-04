@@ -88,97 +88,122 @@ export default function Index({
       <Head>
         <title>Census Embedded Demo App</title>
       </Head>
-      <Header title="Audience Builder" />
+      <Header title="Audience Builder"></Header>
       <div className="mx-auto flex h-full w-full flex-row overflow-hidden">
-        <div className="flex h-full w-1/3 max-w-[375px] flex-col overflow-hidden border-r border-neutral-100 bg-white">
-          <div className="border-b border-neutral-100 p-3">
-            <Text>Your Audiences</Text>
+        {/* {!selectedSegment && (
+          <div className="flex h-full w-1/3 min-w-[200px] max-w-[375px] flex-col overflow-hidden border-r border-neutral-100 bg-white">
+            <div className="border-b border-neutral-100 p-3">
+              <Text>Your Audiences</Text>
+            </div>
+            <div className="flex h-full flex-col overflow-y-auto p-3">
+              {segments
+                .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+                .map((segment) => (
+                  <button
+                    key={segment.id}
+                    className={`flex w-full flex-row rounded p-2 text-left hover:bg-neutral-100 ${
+                      selectedSegment?.id === segment.id ? "bg-neutral-100" : ""
+                    }`}
+                    onClick={() => handleSegmentClick(segment)}
+                  >
+                    {segment.name}
+                  </button>
+                ))}
+            </div>
+            <div className="flex w-full border-t border-neutral-100 p-4">
+              <Button className="w-full">New Audience</Button>
+            </div>
           </div>
-          <div className="flex h-full flex-col overflow-y-auto p-3">
-            {segments
-              .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-              .map((segment) => (
-                <button
-                  key={segment.id}
-                  className={`flex w-full flex-row rounded p-2 text-left hover:bg-neutral-100 ${
-                    selectedSegment?.id === segment.id ? "bg-neutral-100" : ""
-                  }`}
-                  onClick={() => handleSegmentClick(segment)}
-                >
-                  {segment.name}
-                </button>
-              ))}
-          </div>
-        </div>
-        <div className="flex h-full w-full flex-col bg-neutral-50 p-2">
-          {selectedSegment ? (
-            <div className="flex h-full w-full flex-col gap-6 overflow-hidden rounded border border-neutral-100 bg-white shadow">
-              <Tabs defaultValue="segment" className="h-full w-full">
-                <TabsList>
-                  <div className="w-[300px]">{selectedSegment.name}</div>
-                  <div className="flex grow items-center justify-center">
-                    <TabsTrigger value="segment">Audience</TabsTrigger>
-                    <TabsTrigger value="sync">Sync</TabsTrigger>
-                  </div>
-                  <div className="flex w-[300px] flex-row justify-end">
-                    <Button className="text-sm">
-                      <i className="fa-solid fa-trash mr-2" />
-                      Delete
-                    </Button>
-                  </div>
-                </TabsList>
-                <TabsContent value="segment" className="h-full w-full">
-                  {editSegmentWizardLink ? (
-                    <EmbeddedFrame
-                      className="h-full w-full"
-                      connectLink={editSegmentWizardLink}
-                      onExit={() => setEditSegmentWizardLink(null)}
-                    />
-                  ) : (
-                    <div className="flex h-full items-center justify-center">
-                      <Card className="p-6 text-center">
-                        <Text size="5">Loading segment details...</Text>
-                        {loading && (
-                          <Text size="2" className="mt-2 text-neutral-500">
-                            Please wait while we load the segment editor
-                          </Text>
-                        )}
-                        {!loading && (
-                          <Text size="2" className="mt-2 text-neutral-500">
-                            Click the Configure button to edit this segment
-                          </Text>
-                        )}
-                      </Card>
+        )} */}
+        <div className="flex h-full w-full flex-col bg-neutral-100 p-2">
+          <div className="flex h-full w-full flex-col gap-6 overflow-hidden rounded border border-neutral-100 bg-white shadow">
+            {selectedSegment ? (
+              <div className="flex h-full w-full flex-col overflow-hidden">
+                <Tabs defaultValue="segment" className="h-full w-full">
+                  <TabsList>
+                    <div className="w-[150px] shrink-0">
+                      <button onClick={() => setSelectedSegment(null)}>{"<-"}</button>
+                      {selectedSegment.name}
                     </div>
-                  )}
-                </TabsContent>
-                <TabsContent value="sync">
-                  <Sync
-                    destinations={destinations}
-                    sources={sources}
-                    facebookAudienceSyncs={facebookAudienceSyncs}
-                    googleAudienceSyncs={googleAudienceSyncs}
-                    runsLoading={runsLoading}
-                    refetchSyncs={refetchSyncs}
-                    runs={runs}
-                    workspaceAccessToken={workspaceAccessToken}
-                    devMode={devMode}
-                    embedMode={embedMode}
-                    selectedSegment={selectedSegment}
-                  />
-                </TabsContent>
-              </Tabs>
-            </div>
-          ) : (
-            <div className="flex h-full items-center justify-center">
-              <Card className="p-6 text-center">
-                <Text size="5">Select an audience to view details</Text>
-                <Text size="2" className="mt-2 text-neutral-500">
-                  Click on an audience from the list on the left to view its details and sync options
-                </Text>
-              </Card>
-            </div>
-          )}
+                    <div className=" mx-auto flex w-2/5 items-center justify-center">
+                      <TabsTrigger value="segment">Audience</TabsTrigger>
+                      <TabsTrigger value="sync">Sync</TabsTrigger>
+                    </div>
+                  </TabsList>
+                  <TabsContent value="segment" className="h-full w-full">
+                    {editSegmentWizardLink ? (
+                      <EmbeddedFrame
+                        className="h-full w-full"
+                        connectLink={editSegmentWizardLink}
+                        onExit={() => setEditSegmentWizardLink(null)}
+                      />
+                    ) : (
+                      <div className="flex h-full items-center justify-center">
+                        <Card className="p-6 text-center">
+                          <Text size="5">Loading segment details...</Text>
+                          {loading && (
+                            <Text size="2" className="mt-2 text-neutral-500">
+                              Please wait while we load the segment editor
+                            </Text>
+                          )}
+                          {!loading && (
+                            <Text size="2" className="mt-2 text-neutral-500">
+                              Click the Configure button to edit this segment
+                            </Text>
+                          )}
+                        </Card>
+                      </div>
+                    )}
+                  </TabsContent>
+                  <TabsContent value="sync">
+                    <Sync
+                      destinations={destinations}
+                      sources={sources}
+                      facebookAudienceSyncs={facebookAudienceSyncs}
+                      googleAudienceSyncs={googleAudienceSyncs}
+                      runsLoading={runsLoading}
+                      refetchSyncs={refetchSyncs}
+                      runs={runs}
+                      workspaceAccessToken={workspaceAccessToken}
+                      devMode={devMode}
+                      embedMode={embedMode}
+                      selectedSegment={selectedSegment}
+                    />
+                  </TabsContent>
+                </Tabs>
+                <div className="flex w-full flex-row justify-end border-t border-neutral-100 bg-white p-3">
+                  <Button className="text-sm">
+                    <i className="fa-solid fa-trash mr-2" />
+                    Delete
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex h-full w-full flex-col overflow-hidden ">
+                <div className="border-b border-neutral-100 p-3">
+                  <Text>Your Audiences</Text>
+                </div>
+                <div className="flex h-full flex-col overflow-y-auto p-3">
+                  {segments
+                    .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
+                    .map((segment) => (
+                      <button
+                        key={segment.id}
+                        className={`flex w-full flex-row rounded p-2 text-left hover:bg-neutral-100 ${
+                          selectedSegment?.id === segment.id ? "bg-neutral-100" : ""
+                        }`}
+                        onClick={() => handleSegmentClick(segment)}
+                      >
+                        {segment.name}
+                      </button>
+                    ))}
+                </div>
+                <div className="flex w-full border-t border-neutral-100 p-4">
+                  <Button className="w-full">New Audience</Button>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </>
