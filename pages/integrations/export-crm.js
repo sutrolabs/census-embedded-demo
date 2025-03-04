@@ -7,6 +7,7 @@ import Destination from "@components/Destination"
 import Header from "@components/Structural/Header/Header"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle/Toggle"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 const accountDisplayMappings = ["Retailer type", "Annual revenue", "Local YoY growth"]
 const contactDisplayMappings = ["Job title", "Years of experience", "Personal preferences"]
@@ -68,17 +69,18 @@ const config = [
   },
 ]
 
-export default function Index({
-  workspaceAccessToken,
-  destinations,
-  setDestinations,
-  destinationConnectLinks,
-  setDestinationConnectLinks,
-  syncs,
-  setSyncs,
-  runsLoading,
-  runs,
-}) {
+export default function Index() {
+  const {
+    workspaceAccessToken,
+    destinations,
+    syncs,
+    setSyncs,
+    runs,
+    runsLoading,
+    setDestinations,
+    destinationConnectLinks,
+  } = useCensusEmbedded()
+
   return (
     <>
       <Head>
@@ -101,7 +103,7 @@ export default function Index({
               destinations={destinations}
               setDestinations={setDestinations}
               destinationConnectLinks={destinationConnectLinks}
-              setDestinationConnectLinks={setDestinationConnectLinks}
+              setDestinationConnectLinks={destinationConnectLinks.setData}
               syncs={syncs}
             >
               <p>Step 2: Choose which destinations objects to sync.</p>

@@ -5,11 +5,11 @@ import Link from "next/link"
 import Button from "@components/Button/Button/Button"
 import { FlickeringGrid } from "@components/Magic/FlickeringGridBackground"
 import TokenEntry from "@components/TokenEntry"
-import { useWorkspace } from "@providers/WorkspaceProvider"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusFrontendBaseUrl } from "@utils/url"
 
 export function Setup() {
-  const { workspaceAccessToken, setWorkspaceAccessToken } = useWorkspace()
+  const { workspaceAccessToken, setWorkspaceAccessToken } = useCensusEmbedded()
   return (
     <>
       <Head>

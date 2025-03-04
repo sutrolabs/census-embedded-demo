@@ -23,11 +23,6 @@ import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { SourceFlowProvider, useSourceFlow } from "@providers/SourceFlowProvider"
 
 export default function ImportDataset({
-  workspaceAccessToken,
-  dd,
-  sources,
-  setSources,
-  destinations,
   refetchSyncs,
   refetchSources,
   sourceConnectLinks,
@@ -35,10 +30,18 @@ export default function ImportDataset({
   sourceEmbedLinks,
   syncManagementLinks,
   refetchSyncManagementLinks,
-  runsLoading,
-  runs,
 }) {
-  const { syncs, loading, error, setError, setLoading, sourceTypes } = useCensusEmbedded()
+  const {
+    workspaceAccessToken,
+    syncs,
+    setSyncs,
+    runs,
+    sources,
+    setSources,
+    destinations,
+    runsLoading,
+    sourceTypes,
+  } = useCensusEmbedded()
 
   const [showSidebar, setShowSidebar] = useState(false)
   const [selectedSourceId, setSelectedSourceId] = useState(null)
@@ -114,7 +117,7 @@ export default function ImportDataset({
               syncManagementLinks={syncManagementLinks}
               refetchSyncManagementLinks={refetchSyncManagementLinks}
               syncs={syncs}
-              setSyncs={syncs}
+              setSyncs={setSyncs}
               refetchSyncs={refetchSyncs}
               runsLoading={runsLoading}
               runs={runs}
