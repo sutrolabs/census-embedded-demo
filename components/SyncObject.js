@@ -6,19 +6,12 @@ import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle/Toggle"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
 
-export function SyncObject({
-  workspaceAccessToken,
-  sync,
-  setSyncs,
-  refetchSyncs,
-  runsLoading,
-  runs,
-  devMode,
-  embedMode,
-  queryParams,
-}) {
+export function SyncObject({ refetchSyncs, queryParams, sync }) {
+  const { workspaceAccessToken, setSyncs, runs, runsLoading, devMode, embedMode } = useCensusEmbedded()
+
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const [editSyncWizardLink, setEditSyncWizardLink] = useState(null)

@@ -12,20 +12,15 @@ export default function SyncManagement({
   type,
   syncManagementLinks,
   refetchSyncManagementLinks,
-  workspaceAccessToken,
-  syncs,
-  setSyncs,
-  refetchSyncs,
-  runsLoading,
-  runs,
-  devMode,
-  embedMode,
   addNewSyncText,
   stepText,
   useCase,
   createSyncLinkQueryParams,
   editSyncLinkQueryParams,
 }) {
+  const { workspaceAccessToken, setSyncs, syncs, refetchSyncs, runs, runsLoading, devMode, embedMode } =
+    useCensusEmbedded()
+
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(
     syncManagementLinks,
