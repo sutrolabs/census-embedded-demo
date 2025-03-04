@@ -5,21 +5,31 @@ import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SyncManagement({
   sourceId,
   type,
-  syncManagementLinks,
-  refetchSyncManagementLinks,
+
   addNewSyncText,
   stepText,
   useCase,
   createSyncLinkQueryParams,
   editSyncLinkQueryParams,
 }) {
-  const { workspaceAccessToken, setSyncs, syncs, refetchSyncs, runs, runsLoading, devMode, embedMode } =
-    useCensusEmbedded()
+  const {
+    workspaceAccessToken,
+    setSyncs,
+    syncs,
+    refetchSyncs,
+    runs,
+    runsLoading,
+    devMode,
+    embedMode,
+    syncManagementLinks,
+    refetchSyncManagementLinks,
+  } = useCensusEmbedded()
 
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [syncManagementLink, resetSyncManagementLink] = useSyncManagementLink(

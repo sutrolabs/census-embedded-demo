@@ -4,16 +4,12 @@ import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import SegmentEditWizard from "@components/SegmentEditWizard"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
 
-export function SegmentObject({
-  workspaceAccessToken,
-  segment,
-  setSegments,
-  refetchSegments,
-  devMode,
-  embedMode,
-}) {
+export function SegmentObject({ segment }) {
+  const { workspaceAccessToken, setSegments, refetchSegments, devMode, embedMode } = useCensusEmbedded()
+
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
   const [editSegmentWizardLink, setEditSegmentWizardLink] = useState(null)

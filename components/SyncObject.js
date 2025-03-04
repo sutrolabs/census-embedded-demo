@@ -9,8 +9,9 @@ import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
 
-export function SyncObject({ refetchSyncs, queryParams, sync }) {
-  const { workspaceAccessToken, setSyncs, runs, runsLoading, devMode, embedMode } = useCensusEmbedded()
+export function SyncObject({ queryParams, sync }) {
+  const { workspaceAccessToken, setSyncs, refetchSyncs, runs, runsLoading, devMode, embedMode } =
+    useCensusEmbedded()
 
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
