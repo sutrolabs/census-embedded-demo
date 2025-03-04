@@ -1,5 +1,3 @@
-import React, { useState } from "react"
-
 import Button from "@components/Button/Button/Button"
 import SegmentCreationWizard from "@components/SegmentCreationWizard"
 import { SegmentObject } from "@components/SegmentObject"
@@ -7,6 +5,7 @@ import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useSegmentManagementLink } from "@hooks/use-segment-management-link"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
+import React, { useState } from "react"
 
 export default function SegmentManagement({
   addNewSegmentText,

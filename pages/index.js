@@ -1,10 +1,9 @@
-import Head from "next/head"
-import Link from "next/link"
-import { Line } from "react-chartjs-2"
-
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import Header from "@components/Structural/Header/Header"
+import Head from "next/head"
+import Link from "next/link"
+import { Line } from "react-chartjs-2"
 
 export default function Index() {
   return (

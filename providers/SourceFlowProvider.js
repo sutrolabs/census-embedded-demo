@@ -1,7 +1,6 @@
-import { createContext, useContext, useState, useCallback, useEffect } from "react"
-
 import Button from "@components/Button/Button/Button"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { createContext, useContext, useState, useCallback, useEffect } from "react"
 
 // Steps in the connection flow
 export const STEPS = {

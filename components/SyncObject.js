@@ -1,5 +1,3 @@
-import { useState } from "react"
-
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import SyncEditWizard from "@components/SyncEditWizard"
@@ -8,6 +6,7 @@ import Toggle from "@components/Toggle/Toggle"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
+import { useState } from "react"
 
 export function SyncObject({ queryParams, sync }) {
   const { workspaceAccessToken, setSyncs, refetchSyncs, runs, runsLoading, devMode, embedMode } =

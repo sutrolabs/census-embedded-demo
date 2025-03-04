@@ -1,6 +1,3 @@
-import Head from "next/head"
-import { useState } from "react"
-
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import Destination from "@components/Destination"
@@ -8,6 +5,8 @@ import Header from "@components/Structural/Header/Header"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle/Toggle"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import Head from "next/head"
+import { useState } from "react"
 
 const accountDisplayMappings = ["Retailer type", "Annual revenue", "Local YoY growth"]
 const contactDisplayMappings = ["Job title", "Years of experience", "Personal preferences"]
