@@ -101,7 +101,7 @@ export function SegmentObject({
         <h4 className="flex flex-row justify-between">
           {!showEditSegmentWizard && (
             <>
-              <span className="font-medium">{`Segment: ${segment.name}`}</span>
+              <span className="font-medium">{`Audience: ${segment.name}`}</span>
               <div className="flex flex-row items-center gap-2">
                 <a id={`delete-${segment.id}`}>
                   <Button onClick={deleteSegment}>
