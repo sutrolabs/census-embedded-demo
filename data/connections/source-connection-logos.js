@@ -91,4 +91,8 @@ export const source_connection_logos = [
     label: "google_cloud_postgres",
     logo: "/logos/connections/sources/googlecloud_logo.svg",
   },
+  {
+    label: "sql_server",
+    logo: "/logos/connections/sources/sqlServer_logo.svg",
+  },
 ]
