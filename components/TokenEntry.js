@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { useEffect, useState } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import { useBasicFetch } from "@utils/fetch"
 
 export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessToken }) {

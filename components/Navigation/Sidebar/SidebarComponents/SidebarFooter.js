@@ -2,7 +2,7 @@ import { Text } from "@radix-ui/themes"
 import Link from "next/link"
 import { Tooltip } from "react-tooltip"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import { CentralLogOutIcon } from "@components/Icons/LogOut"
 import Toggle from "@components/Toggle"
 

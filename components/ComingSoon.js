@@ -1,7 +1,7 @@
 import Head from "next/head"
 import Link from "next/link"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 
 export default function ComingSoon() {
   return (

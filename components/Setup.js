@@ -2,7 +2,7 @@ import Head from "next/head"
 import Image from "next/image"
 import Link from "next/link"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import { FlickeringGrid } from "@components/Magic/FlickeringGridBackground"
 import TokenEntry from "@components/TokenEntry"
 import { censusFrontendBaseUrl } from "@utils/url"

@@ -16,7 +16,7 @@ const navItems = [
   },
   {
     id: 2,
-    href: "/integrations/import-dataset",
+    href: "/data-management",
     name: "Data Management",
     icon: CentralTableIcon,
   },

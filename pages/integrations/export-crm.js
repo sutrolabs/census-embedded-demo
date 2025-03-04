@@ -1,7 +1,7 @@
 import Head from "next/head"
 import { useState } from "react"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import Card from "@components/Card"
 import Destination from "@components/Destination"
 import Header from "@components/Structural/Header/Header"

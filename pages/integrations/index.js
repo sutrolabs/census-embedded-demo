@@ -2,7 +2,7 @@ import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
 
-import Button from "@components/Button"
+import Button from "@components/Button/Button/Button"
 import Header from "@components/Structural/Header/Header"
 
 export default function Index() {
