@@ -69,12 +69,6 @@ export default function SourceObjectSelection() {
             key={sync.id}
             sync={sync}
             refetchSyncs={refetchSyncs}
-            workspaceAccessToken={workspaceAccessToken}
-            setSyncs={setSyncs}
-            runsLoading={runsLoading}
-            runs={runs}
-            devMode={devMode}
-            embedMode={embedMode}
             queryParams={editSyncLinkQueryParams}
           />
         ))}
