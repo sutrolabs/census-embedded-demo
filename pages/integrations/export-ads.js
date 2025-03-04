@@ -6,25 +6,26 @@ import Destination from "@components/Destination"
 import SegmentManagement from "@components/SegmentManagement"
 import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
-export default function Index({
-  sources,
-  workspaceAccessToken,
-  destinations,
-  setDestinations,
-  destinationConnectLinks,
-  setDestinationConnectLinks,
-  syncs,
-  runsLoading,
-  refetchSyncs,
-  segments,
-  refetchSegments,
-  setSegments,
-  runs,
-  embedMode,
-  devMode,
-}) {
+export default function Index({ refetchSyncs, refetchSegments }) {
+  const {
+    workspaceAccessToken,
+    syncs,
+    runs,
+    sources,
+    setSources,
+    destinations,
+    setDestinations,
+    setDestinationConnectLinks,
+    destinationConnectLinks,
+    runsLoading,
+    devMode,
+    embedMode,
+    segments,
+    setSegments,
+  } = useCensusEmbedded()
   const destinationForSync = (sync) => {
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
   }
