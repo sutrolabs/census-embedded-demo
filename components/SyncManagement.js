@@ -1,3 +1,5 @@
+import React, { useState } from "react"
+
 import Button from "@components/Button/Button/Button"
 import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
@@ -5,7 +7,6 @@ import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
-import React, { useState } from "react"
 
 export default function SyncManagement({
   sourceId,

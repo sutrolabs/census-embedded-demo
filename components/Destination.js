@@ -1,9 +1,10 @@
+import { Dialog } from "@headlessui/react"
+import { useState } from "react"
+
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import Toggle from "@components/Toggle/Toggle"
-import { Dialog } from "@headlessui/react"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
-import { useState } from "react"
 
 export default function Destination({ label, type, iconClassName, children }) {
   const { workspaceAccessToken, destinations, setDestinations, destinationConnectLinks, syncs } =

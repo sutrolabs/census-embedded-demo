@@ -1,8 +1,9 @@
+import Link from "next/link"
+import { useEffect, useState } from "react"
+
 import Button from "@components/Button/Button/Button"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { useBasicFetch } from "@utils/fetch"
-import Link from "next/link"
-import { useEffect, useState } from "react"
 
 export default function TokenEntry() {
   const { workspaceAccessToken, setWorkspaceAccessToken } = useCensusEmbedded()

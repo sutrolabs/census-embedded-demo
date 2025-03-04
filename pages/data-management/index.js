@@ -1,3 +1,6 @@
+import Head from "next/head"
+import { useState, useEffect } from "react"
+
 import Button from "@components/Button/Button/Button"
 import { SubtleButton } from "@components/Button/SubtleButton/SubtleButton"
 import { CentralDataImportIcon } from "@components/Icons/DataImport"
@@ -18,8 +21,6 @@ import { b2bCustomerData } from "@data/b2b-customer-data"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { SourceFlowProvider, useSourceFlow } from "@providers/SourceFlowProvider"
-import Head from "next/head"
-import { useState, useEffect } from "react"
 
 export default function ImportDataset({
   refetchSyncs,
