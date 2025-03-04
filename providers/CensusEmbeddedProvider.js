@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react"
-import { useSessionStorage } from "usehooks-ts"
 
+import { useWorkspace } from "@providers/WorkspaceProvider"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
 // Create the context
@@ -9,8 +9,7 @@ const CensusEmbeddedContext = createContext(null)
 // Provider component
 export function CensusEmbeddedProvider({ children }) {
   // Authentication state
-  const [workspaceAccessToken, setWorkspaceAccessToken] = useSessionStorage("census_api_token", null)
-  const [loggedIn, setLoggedIn] = useSessionStorage("census-logged-in", false)
+  const { workspaceAccessToken, loggedIn, setLoggedIn, logOut } = useWorkspace()
 
   // UI mode states
   const [embedMode, setEmbedMode] = useState(true)
@@ -20,11 +19,8 @@ export function CensusEmbeddedProvider({ children }) {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
-  // Authentication actions
-  const logOut = () => {
-    setWorkspaceAccessToken(null)
-    setLoggedIn(false)
-  }
+  // Only make API calls if we have a token
+  const hasToken = !!workspaceAccessToken
 
   const destinations = useBasicFetch(
     () =>
@@ -32,6 +28,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
   // Destination connect links
   const destinationConnectLinks = useBasicFetch(
@@ -40,6 +37,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   // Sources data
@@ -49,6 +47,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   const sourceTypes = useBasicFetch(
@@ -57,6 +56,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   // Source connect links
@@ -66,6 +66,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   // Sync management links
@@ -75,6 +76,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   // Syncs data
@@ -84,6 +86,7 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   // Segments data
@@ -93,10 +96,15 @@ export function CensusEmbeddedProvider({ children }) {
         method: "GET",
         headers: { ["authorization"]: `Bearer ${workspaceAccessToken}` },
       }),
+    { initial: hasToken },
   )
 
   // Runs data
-  const { runsLoading, runsError, runs } = useFetchRuns(workspaceAccessToken, syncs.loading, syncs.data || [])
+  const { runsLoading, runsError, runs } = useFetchRuns(
+    workspaceAccessToken,
+    syncs.loading,
+    hasToken ? syncs.data || [] : [],
+  )
 
   // Simplified Boolean checks for loading and error states
   const isLoading = loading
@@ -106,9 +114,7 @@ export function CensusEmbeddedProvider({ children }) {
   const value = {
     // Authentication state
     workspaceAccessToken,
-    setWorkspaceAccessToken,
     loggedIn,
-    setLoggedIn,
     logOut,
 
     // UI mode states

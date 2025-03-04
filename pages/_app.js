@@ -10,6 +10,7 @@ import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
 import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
+import { WorkspaceProvider } from "@providers/WorkspaceProvider"
 import { useBasicFetch } from "@utils/fetch"
 
 registry.add(LineElement)
@@ -20,9 +21,11 @@ registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
   return (
-    <CensusEmbeddedProvider>
-      <ApplicationContent Component={Component} pageProps={pageProps} />
-    </CensusEmbeddedProvider>
+    <WorkspaceProvider>
+      <CensusEmbeddedProvider>
+        <ApplicationContent Component={Component} pageProps={pageProps} />
+      </CensusEmbeddedProvider>
+    </WorkspaceProvider>
   )
 }
 
