@@ -10,7 +10,6 @@ import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
 import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
-import { WorkspaceProvider } from "@providers/WorkspaceProvider"
 import { useBasicFetch } from "@utils/fetch"
 
 registry.add(LineElement)
@@ -21,11 +20,9 @@ registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
   return (
-    <WorkspaceProvider>
-      <CensusEmbeddedProvider>
-        <ApplicationContent Component={Component} pageProps={pageProps} />
-      </CensusEmbeddedProvider>
-    </WorkspaceProvider>
+    <CensusEmbeddedProvider>
+      <ApplicationContent Component={Component} pageProps={pageProps} />
+    </CensusEmbeddedProvider>
   )
 }
 
@@ -59,34 +56,6 @@ function MainApplication({ Component, pageProps }) {
     runsLoading,
   } = useCensusEmbedded()
 
-  const {
-    loading: destinationsLoading,
-    error: destinationsError,
-    data: destinations,
-    setData: setDestinations,
-  } = useBasicFetch(
-    () =>
-      new Request(`/api/list_destinations`, {
-        method: "GET",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-        },
-      }),
-  )
-  const {
-    loading: destinationConnectLinksLoading,
-    error: destinationConnectLinksError,
-    data: destinationConnectLinks,
-    setData: setDestinationConnectLinks,
-  } = useBasicFetch(
-    () =>
-      new Request(`/api/list_destination_connect_links`, {
-        method: "GET",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-        },
-      }),
-  )
   const {
     loading: sourcesLoading,
     error: sourcesError,
