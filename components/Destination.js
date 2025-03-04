@@ -4,19 +4,11 @@ import { useState } from "react"
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import Toggle from "@components/Toggle/Toggle"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
-export default function Destination({
-  label,
-  type,
-  iconClassName,
-  workspaceAccessToken,
-  destinations,
-  setDestinations,
-  destinationConnectLinks,
-  setDestinationConnectLinks,
-  syncs,
-  children,
-}) {
+export default function Destination({ label, type, iconClassName, children }) {
+  const { workspaceAccessToken, destinations, setDestinations, destinationConnectLinks, syncs } =
+    useCensusEmbedded()
   const [now] = useState(() => new Date())
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()

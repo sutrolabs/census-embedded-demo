@@ -5,19 +5,17 @@ import SegmentCreationWizard from "@components/SegmentCreationWizard"
 import { SegmentObject } from "@components/SegmentObject"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useSegmentManagementLink } from "@hooks/use-segment-management-link"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SegmentManagement({
+  addNewSegmentText,
   segmentManagementLinks,
   refetchSegmentManagementLinks,
-  workspaceAccessToken,
-  segments,
-  setSegments,
-  refetchSegments,
-  devMode,
-  embedMode,
-  addNewSegmentText,
 }) {
+  const { segments, devMode, embedMode, setSegments, refetchSegments, workspaceAccessToken } =
+    useCensusEmbedded()
+
   const [showCreateSegmentWizard, setShowCreateSegmentWizard] = useState(false)
   const [segmentManagementLink, resetSegmentManagementLink] = useSegmentManagementLink(
     segmentManagementLinks,
