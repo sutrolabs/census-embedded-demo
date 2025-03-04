@@ -6,6 +6,10 @@ export function useBasicFetch(request, options) {
   const [error, setError] = useState()
   const [data, setData] = useState()
   const run = useCallback(async (currentRequest) => {
+    if (!currentRequest) {
+      setLoading(false)
+      return
+    }
     try {
       setLoading(true)
       const response = await fetch(currentRequest)
