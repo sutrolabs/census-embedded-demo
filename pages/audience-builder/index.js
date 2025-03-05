@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card"
+import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
@@ -90,31 +90,6 @@ export default function Index({
       </Head>
       <Header title="Audience Builder"></Header>
       <div className="mx-auto flex h-full w-full flex-row overflow-hidden">
-        {/* {!selectedSegment && (
-          <div className="flex h-full w-1/3 min-w-[200px] max-w-[375px] flex-col overflow-hidden border-r border-neutral-100 bg-white">
-            <div className="border-b border-neutral-100 p-3">
-              <Text>Your Audiences</Text>
-            </div>
-            <div className="flex h-full flex-col overflow-y-auto p-3">
-              {segments
-                .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-                .map((segment) => (
-                  <button
-                    key={segment.id}
-                    className={`flex w-full flex-row rounded p-2 text-left hover:bg-neutral-100 ${
-                      selectedSegment?.id === segment.id ? "bg-neutral-100" : ""
-                    }`}
-                    onClick={() => handleSegmentClick(segment)}
-                  >
-                    {segment.name}
-                  </button>
-                ))}
-            </div>
-            <div className="flex w-full border-t border-neutral-100 p-4">
-              <Button className="w-full">New Audience</Button>
-            </div>
-          </div>
-        )} */}
         <div className="flex h-full w-full flex-col bg-neutral-100 p-2">
           <div className="flex h-full w-full flex-col gap-6 overflow-hidden rounded border border-neutral-100 bg-white shadow">
             {selectedSegment ? (
