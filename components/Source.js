@@ -4,9 +4,9 @@ import { useEffect, useState } from "react"
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
-import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
 import Toggle from "@components/Toggle/Toggle"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 import {
   marketingMagnetDestinationName,
