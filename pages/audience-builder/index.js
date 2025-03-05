@@ -96,14 +96,14 @@ export default function Index({
               <div className="flex h-full w-full flex-col overflow-hidden">
                 <Tabs defaultValue="segment" className="h-full w-full">
                   <TabsList>
-                    <div className=" flex shrink-0 flex-row items-center gap-2">
+                    <div className=" flex shrink-0 flex-row items-center gap-6">
                       <button
                         className="flex h-6 w-6 items-center justify-center rounded border border-neutral-200 text-xs"
                         onClick={() => setSelectedSegment(null)}
                       >
                         <i className="fa-regular fa-chevron-left" />
                       </button>
-                      <Text className="leading-none">{selectedSegment.name}</Text>
+                      <Text className="font-medium leading-none">{selectedSegment.name}</Text>
                     </div>
                     <div className=" mx-auto flex w-2/5 items-center justify-center">
                       <TabsTrigger value="segment">Audience</TabsTrigger>
@@ -136,6 +136,14 @@ export default function Index({
                     )}
                   </TabsContent>
                   <TabsContent value="sync" className="flex flex-col p-4">
+                    {destinations.map((destination) => {
+                      return (
+                        <div key={destination.id}>
+                          {destination.name}
+                          {destination.type}
+                        </div>
+                      )
+                    })}
                     <Sync
                       destinations={destinations}
                       sources={sources}
