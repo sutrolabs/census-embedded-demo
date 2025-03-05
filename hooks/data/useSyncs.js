@@ -41,6 +41,60 @@ export function useSyncs() {
     }
   }
 
+  const fetchSyncsBySourceId = async (sourceId) => {
+    try {
+      setLoading(true)
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${workspaceAccessToken}`,
+      }
+
+      const response = await fetch(`${API_SYNCS_ENDPOINT}?source_id=${sourceId}`, {
+        method: "GET",
+        headers,
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch syncs for source: ${response.statusText}`)
+      }
+
+      const data = await response.json()
+      return data
+    } catch (err) {
+      setError(err.message)
+      return []
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const fetchSyncManagementLink = async (syncId) => {
+    try {
+      setLoading(true)
+      const headers = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${workspaceAccessToken}`,
+      }
+
+      const response = await fetch(`/api/create_sync_management_link`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({ sync_id: syncId }),
+      })
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch sync management link: ${response.statusText}`)
+      }
+
+      return await response.json()
+    } catch (err) {
+      setError(err.message)
+      throw err
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const triggerSyncRun = async (syncId) => {
     try {
       setLoading(true)
@@ -139,6 +193,8 @@ export function useSyncs() {
     loading,
     error,
     fetchSyncs,
+    fetchSyncsBySourceId,
+    fetchSyncManagementLink,
     triggerSyncRun,
     setSyncPaused,
     deleteSync,
