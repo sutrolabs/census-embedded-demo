@@ -2,7 +2,7 @@ import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
-import RequestTooltip from "@components/RequestTooltip"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import SegmentEditWizard from "@components/SegmentEditWizard"
 import { censusBaseUrl } from "@utils/url"
 

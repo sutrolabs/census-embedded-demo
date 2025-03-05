@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
-import EmbeddedFrame from "@components/EmbeddedFrame"
+import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@components/Tabs/Tabs"

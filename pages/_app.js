@@ -3,7 +3,7 @@ import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 
-import Loading from "@components/Loading"
+import Loading from "@components/Loading/Loading"
 import Error_ from "@components/Message/Error_"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
