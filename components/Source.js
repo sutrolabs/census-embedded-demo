@@ -6,7 +6,7 @@ import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncManagement from "@components/SyncManagement"
-import Toggle from "@components/Toggle"
+import Toggle from "@components/Toggle/Toggle"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 import {
   marketingMagnetDestinationName,

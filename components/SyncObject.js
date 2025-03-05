@@ -5,7 +5,7 @@ import Card from "@components/Card/Card"
 import RequestTooltip from "@components/RequestTooltip"
 import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
-import Toggle from "@components/Toggle"
+import Toggle from "@components/Toggle/Toggle"
 import { censusBaseUrl } from "@utils/url"
 
 export function SyncObject({

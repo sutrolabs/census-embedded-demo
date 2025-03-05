@@ -4,7 +4,7 @@ import { Tooltip } from "react-tooltip"
 
 import Button from "@components/Button/Button/Button"
 import { CentralLogOutIcon } from "@components/Icons/LogOut"
-import Toggle from "@components/Toggle"
+import Toggle from "@components/Toggle/Toggle"
 
 const footerLinks = [
   {

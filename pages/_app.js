@@ -3,11 +3,11 @@ import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 
-import Error_ from "@components/Error_"
 import Loading from "@components/Loading"
-import MainLayout from "@components/MainLayout"
+import Error_ from "@components/Message/Error_"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
+import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
