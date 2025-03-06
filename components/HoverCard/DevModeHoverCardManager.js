@@ -161,7 +161,7 @@ export default function DevModeHoverCardManager() {
     const viewportHeight = window.innerHeight
 
     let top = position.top + position.height + 5
-    let left = position.left
+    let left = position.left - 2
 
     if (cardRef.current) {
       const cardRect = cardRef.current.getBoundingClientRect()
@@ -178,64 +178,160 @@ export default function DevModeHoverCardManager() {
     return { top, left }
   }
 
-  if (!devMode || !isVisible || !hoverData) return null
+  const calculateLabelPosition = () => {
+    if (!hoverTarget) return { top: 0, left: 0 }
+
+    const rect = hoverTarget.getBoundingClientRect()
+
+    const top = rect.top + window.scrollY - 25
+    const left = rect.left + window.scrollX - 1
+
+    return { top, left }
+  }
+
+  const applyHighlightToTarget = (target) => {
+    if (!target) return
+
+    const originalOutline = target.style.outline
+    const originalOutlineOffset = target.style.outlineOffset
+
+    target.style.outline = "0.025rem dashed #4640EB"
+    target.style.outlineOffset = "0.05rem"
+    target.style.animation = "devmode-pulse 2s infinite"
+    target.style.borderRadius = "0.05rem"
+
+    return () => {
+      target.style.outline = originalOutline
+      target.style.outlineOffset = originalOutlineOffset
+    }
+  }
+
+  useEffect(() => {
+    if (isVisible && hoverTarget) {
+      const removeHighlight = applyHighlightToTarget(hoverTarget)
+
+      return () => {
+        removeHighlight()
+      }
+    }
+  }, [isVisible, hoverTarget])
+
+  if (!devMode || !isVisible || !hoverData || !hoverTarget) return null
 
   const cardPosition = calculateCardPosition()
+  const labelPosition = calculateLabelPosition()
+
+  const getElementType = () => {
+    if (!hoverTarget) return "Element"
+
+    if (hoverData.elementType) return hoverData.elementType
+
+    if (hoverTarget.classList.contains("btn") || hoverTarget.classList.contains("button")) {
+      return "Button"
+    }
+
+    if (hoverTarget.tagName === "BUTTON") return "Button"
+    if (hoverTarget.tagName === "A") return "Link"
+    if (hoverTarget.tagName === "INPUT")
+      return hoverTarget.type.charAt(0).toUpperCase() + hoverTarget.type.slice(1)
+    if (hoverTarget.tagName === "SELECT") return "Select"
+
+    return hoverTarget.tagName.toLowerCase()
+  }
+
+  const copyToClipboard = (text) => {
+    if (!text) return
+
+    try {
+      navigator.clipboard.writeText(text).then(
+        () => {},
+        (err) => {},
+      )
+    } catch (err) {}
+  }
+
+  const infoItems = [
+    { key: "url", label: "URL", value: hoverData.url, copiable: true },
+    { key: "method", label: "Method", value: hoverData.method },
+    { key: "headers", label: "Headers", value: hoverData.headers },
+    { key: "body", label: "Body", value: hoverData.body, copiable: true },
+  ].filter((item) => item.value)
 
   return (
     <Portal.Root>
       <AnimatePresence>
         {isVisible && (
-          <motion.div
-            ref={cardRef}
-            className="fixed z-[9999] flex w-[450px] flex-col gap-2 rounded-md border border-neutral-100 bg-white p-4 font-mono text-sm shadow-lg "
-            style={{
-              top: `${cardPosition.top}px`,
-              left: `${cardPosition.left}px`,
-            }}
-            initial={{ opacity: 0, y: 5 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 5 }}
-            transition={{ duration: 0.15 }}
-            onMouseEnter={handleCardMouseEnter}
-            onMouseLeave={handleCardMouseLeave}
-          >
-            <span className="font-medium text-[#4640EB]">Census Dev Mode</span>
-            {hoverData.url && (
-              <div className="flex flex-row items-center justify-between gap-1 text-xs leading-tight">
-                <span className="shrink-0 items-center  font-bold uppercase text-neutral-500">
-                  Request URL
-                </span>{" "}
-                <div className="truncate rounded border border-neutral-900 bg-neutral-800 px-2 py-1.5 text-neutral-400">
-                  {hoverData.url}
+          <>
+            <motion.div
+              className="fixed z-[9999] flex flex-row gap-2 rounded-sm bg-[#4640EB] px-1.5 py-0.5 font-mono text-xs font-medium text-white shadow-sm"
+              style={{
+                top: `${labelPosition.top}px`,
+                left: `${labelPosition.left}px`,
+                pointerEvents: "none",
+              }}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 5 }}
+              transition={{ duration: 0.07 }}
+            >
+              <span className="font-bold">{hoverData.method}</span>
+
+              <span>{hoverData.url}</span>
+            </motion.div>
+
+            <motion.div
+              ref={cardRef}
+              className="fixed z-[9999] flex w-[450px] flex-col gap-2 overflow-hidden rounded-md border border-[#4640EB]/10 bg-white p-4 font-mono text-sm shadow-md shadow-[#4640EB]/10"
+              style={{
+                top: `${cardPosition.top}px`,
+                left: `${cardPosition.left}px`,
+                pointerEvents: "auto",
+              }}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 5 }}
+              transition={{ duration: 0.07 }}
+              onMouseEnter={handleCardMouseEnter}
+              onMouseLeave={handleCardMouseLeave}
+            >
+              <div className="relative z-10 flex flex-col gap-2">
+                <div className="flex flex-col gap-2 leading-none">
+                  {hoverData.note && <p>{hoverData.note}</p>}
                 </div>
+                <div className="my-2 flex h-px w-full flex-col bg-neutral-100" />
+                {infoItems.map((item) => (
+                  <div
+                    key={item.key}
+                    className="flex w-full flex-row items-center gap-3 text-xs leading-tight"
+                  >
+                    <span className="shrink-0 items-center font-bold uppercase text-[#4640EB]">
+                      {item.label}
+                    </span>{" "}
+                    <div className="flex flex-row items-center gap-2 rounded border border-neutral-100 bg-neutral-50 pl-1.5 text-neutral-600">
+                      <span className="shrink truncate">{item.value}</span>
+                      {item.copiable && (
+                        <button
+                          onClick={() => copyToClipboard(item.value)}
+                          className="shrink-0 p-1.5 hover:bg-neutral-100"
+                        >
+                          <i className="fa-solid fa-clone leading-none text-neutral-500 " />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+
+                {hoverData.link && (
+                  <Link href={hoverData.link} target="_blank" rel="noreferrer" className="cursor-pointer">
+                    <button className=" w-full rounded border border-neutral-100 bg-white p-2 shadow">
+                      <span className="font-bold">Documentation</span>
+                    </button>
+                  </Link>
+                )}
               </div>
-            )}
-            {hoverData.method && (
-              <p>
-                <span className="font-bold">Request Method:</span> {hoverData.method}
-              </p>
-            )}
-            {hoverData.headers && (
-              <p>
-                <span className="font-bold">Request Headers:</span> {hoverData.headers}
-              </p>
-            )}
-            {hoverData.body && (
-              <p>
-                <span className="font-bold">Request Body:</span> {hoverData.body}
-              </p>
-            )}
-            {hoverData.note && <p>{hoverData.note}</p>}
-            {hoverData.link && (
-              <button className=" w-full rounded bg-neutral-800 p-2">
-                <Link href={hoverData.link} target="_blank" rel="noreferrer">
-                  <span className="font-bold">Documentation</span>
-                </Link>
-              </button>
-            )}
-            <div className="bg-brand-development absolute inset-0 -z-0 h-full w-full" />
-          </motion.div>
+              <div className="bg-brand-development absolute inset-0 -z-0 h-full w-full" />
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </Portal.Root>

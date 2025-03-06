@@ -46,3 +46,15 @@ a {
   @apply bg-development-warning;
   mask-image: linear-gradient(transparent 0%, black);
 }
+
+@keyframes devmode-pulse {
+  0% {
+    outline-color: rgba(70, 64, 235, 0.5);
+  }
+  50% {
+    outline-color: rgba(70, 64, 235, 1);
+  }
+  100% {
+    outline-color: rgba(70, 64, 235, 0.5);
+  }
+}
