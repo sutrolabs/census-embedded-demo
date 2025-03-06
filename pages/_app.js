@@ -3,6 +3,7 @@ import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 
+import DevModeHoverCardManager from "@components/HoverCard/DevModeHoverCardManager"
 import Loading from "@components/Loading/Loading"
 import Error_ from "@components/Message/Error_"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"
@@ -209,6 +210,7 @@ function MainApplication({ Component, pageProps, onLogOut }) {
     <main className="relative flex h-screen w-screen flex-row overflow-hidden">
       <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       <MainLayout>{component}</MainLayout>
+      <DevModeHoverCardManager />
     </main>
   )
 }

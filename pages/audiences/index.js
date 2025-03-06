@@ -10,6 +10,7 @@ import SyncManagement from "@components/SyncManagement"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@components/Tabs/Tabs"
 import { useDestinations } from "@hooks/data/useDestinations"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { createDevModeAttr } from "@utils/devMode"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
 export default function Index({
@@ -144,6 +145,16 @@ export default function Index({
                       selectedSegment?.id === segment.id ? "bg-neutral-100" : ""
                     }`}
                     onClick={() => handleSegmentClick(segment)}
+                    {...(devMode
+                      ? createDevModeAttr({
+                          url: API_CREATE_EDIT_SEGMENT_LINK,
+                          method: "POST",
+                          headers: `Authorization: Bearer workspaceAccessToken`,
+                          body: `{ "sourceId": "${segment.source_id}", "segmentId": "${segment.id}" }`,
+                          note: "Opens the segment editor for this audience",
+                          link: "google.com",
+                        })
+                      : {})}
                   >
                     {segment.name}
                   </button>
