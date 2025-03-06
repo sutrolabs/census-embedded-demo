@@ -42,19 +42,6 @@ export default function Index({
     return destinations.find((d) => d.id === sync.destination_attributes.connection_id)
   }
 
-  // const isFacebooksAudienceSync = (sync) => {
-  //   return destinationForSync(sync).type === "facebook" && sync.destination_attributes.object === "customer"
-  // }
-
-  // const isGoogleAudienceSync = (sync) => {
-  //   return (
-  //     destinationForSync(sync).type === "google_ads" && sync.destination_attributes.object === "user_data"
-  //   )
-  // }
-
-  // const googleAudienceSyncs = syncs.filter(isGoogleAudienceSync)
-  // const facebookAudienceSyncs = syncs.filter(isFacebooksAudienceSync)
-
   const initiateEditSegmentWizard = async (segment) => {
     try {
       setLoading(true)
@@ -90,19 +77,18 @@ export default function Index({
       <Head>
         <title>Audience Builder</title>
       </Head>
-      <Header title="Audience Builder"></Header>
+      <Header
+        title="Audience Builder"
+        nestedPage={selectedSegment?.name}
+        backButtonClick={() => setSelectedSegment(null)}
+      />
 
       <div className="flex h-full w-full flex-col">
-        {selectedSegment ? (
+        {selectedSegment && embedMode === true ? (
           <div className="flex h-full w-full flex-col overflow-hidden">
             <Tabs defaultValue="segment" className="h-full w-full">
               <TabsList>
-                <div className=" flex shrink-0 flex-row items-center gap-6">
-                  <Button onClick={() => setSelectedSegment(null)}>
-                    <i className="fa-regular fa-chevron-left" />
-                  </Button>
-                  <Text className="font-medium leading-none">{selectedSegment.name}</Text>
-                </div>
+                <div className=" flex shrink-0 flex-row items-center gap-6"></div>
                 <div className=" mx-auto flex w-2/5 items-center justify-center">
                   <TabsTrigger value="segment">Audience</TabsTrigger>
                   <TabsTrigger value="sync">Sync</TabsTrigger>
@@ -113,7 +99,7 @@ export default function Index({
                   <EmbeddedFrame
                     className="h-full w-full"
                     connectLink={editSegmentWizardLink}
-                    onExit={() => setEditSegmentWizardLink(null)}
+                    onExit={() => setEditSegmentWizardLink(editSegmentWizardLink)}
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center">
@@ -122,11 +108,6 @@ export default function Index({
                       {loading && (
                         <Text size="2" className="mt-2 text-neutral-500">
                           Please wait while we load the segment editor
-                        </Text>
-                      )}
-                      {!loading && (
-                        <Text size="2" className="mt-2 text-neutral-500">
-                          Click the Configure button to edit this segment
                         </Text>
                       )}
                     </Card>
@@ -153,9 +134,6 @@ export default function Index({
           </div>
         ) : (
           <div className="flex h-full w-full flex-col overflow-hidden ">
-            <div className="border-b border-neutral-100 p-3">
-              <Text>Your Audiences</Text>
-            </div>
             <div className="flex h-full flex-col overflow-y-auto p-3">
               {segments
                 .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
@@ -172,7 +150,9 @@ export default function Index({
                 ))}
             </div>
             <div className="flex w-full border-t border-neutral-100 p-4">
-              <Button className="w-full">New Audience</Button>
+              <Button className="w-full" onClick={() => initiateEditSegmentWizard}>
+                New Audience
+              </Button>
             </div>
           </div>
         )}
