@@ -24,8 +24,8 @@ const navItems = [
   },
   {
     id: 3,
-    href: "/audience-builder",
-    name: "Audience Builder",
+    href: "/audiences",
+    name: "Audiences",
     icon: CentralAudienceBuilderIcon,
   },
   {

@@ -75,10 +75,10 @@ export default function Index({
   return (
     <>
       <Head>
-        <title>Audience Builder</title>
+        <title>Audiences</title>
       </Head>
       <Header
-        title="Audience Builder"
+        title="Audiences"
         nestedPage={selectedSegment?.name}
         backButtonClick={() => setSelectedSegment(null)}
       />
