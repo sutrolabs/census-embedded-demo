@@ -2,12 +2,12 @@ export const destination_connection_logos = [
   {
     label: "google_ads",
     category: "ads",
-    logo: "/logos/connections/sources/snowflake-logo.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/google-new.svg",
   },
   {
     label: "amazon_ads",
     category: "ads",
-    logo: "/logos/connections/sources/databricks_logo.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/amazon-simple.svg",
   },
   {
     label: "constant_contact",
@@ -22,17 +22,17 @@ export const destination_connection_logos = [
   {
     label: "facebook_ads",
     category: "ads",
-    logo: "/logos/connections/sources/bigquery_logo.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/meta-3.svg",
   },
   {
     label: "microsoft_ads",
     category: "ads",
-    logo: "https://cdn.worldvectorlogo.com/logos/google-sheets-logo-icon.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/microsoft-5.svg",
   },
   {
     label: "pinterest_ads",
     category: "ads",
-    logo: "https://www.gstatic.com/bricks/image/e5a399cad065b0dfe5f02ca2b23ddaf11065df4754d1d2fb3fa47fda35adc257.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/pinterest-3.svg",
   },
   {
     label: "radar",
@@ -42,7 +42,7 @@ export const destination_connection_logos = [
   {
     label: "reddit_ads",
     category: "ads",
-    logo: "/logos/connections/sources/clickhouse_logo.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/reddit-4.svg",
   },
   {
     label: "snapchat_ads",
@@ -52,16 +52,26 @@ export const destination_connection_logos = [
   {
     label: "tiktok_ads",
     category: "ads",
-    logo: "/logos/connections/sources/elasticsearch_logo.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/tiktok-icon-2.svg",
   },
   {
     label: "twitter_ads",
     category: "ads",
-    logo: "/logos/connections/sources/greenplum_logo.svg",
+    logo: "https://cdn.worldvectorlogo.com/logos/x-2.svg",
   },
   {
     label: "active_campaign",
     category: "marketing",
     logo: "/logos/connections/sources/greenplum_logo.svg",
+  },
+  {
+    label: "salesforce",
+    category: "marketing",
+    logo: "https://cdn.worldvectorlogo.com/logos/salesforce-2.svg",
+  },
+  {
+    label: "hubspot",
+    category: "marketing",
+    logo: "https://cdn.worldvectorlogo.com/logos/hubspot-1.svg",
   },
 ]
