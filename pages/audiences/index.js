@@ -14,20 +14,7 @@ import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { createDevModeAttr } from "@utils/devMode"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
-export default function Index({
-  sources,
-
-  setDestinations,
-  destinationConnectLinks,
-  setDestinationConnectLinks,
-  syncs,
-  runsLoading,
-  refetchSyncs,
-  segments,
-  refetchSegments,
-  setSegments,
-  runs,
-}) {
+export default function Index({ segments }) {
   const { destinations, destinationTypes } = useDestinations()
   const { workspaceAccessToken, embedMode, devMode, loading, setLoading } = useCensusEmbedded()
   const [selectedSegment, setSelectedSegment] = useState(null)
@@ -141,35 +128,31 @@ export default function Index({
         ) : (
           <div className="flex h-full w-full flex-col overflow-hidden ">
             <div className="flex h-full flex-col overflow-y-auto p-3">
-              {segments
-                .sort((a, b) => new Date(a.created_at) - new Date(b.created_at))
-                .map((segment) => (
-                  <div key={segment.id} className="group">
-                    <button
-                      className={`peer flex w-full flex-row justify-between rounded p-4 text-left text-lg transition-all duration-75 hover:bg-neutral-100 ${
-                        selectedSegment?.id === segment.id ? "bg-neutral-100" : ""
-                      }`}
-                      onClick={() => handleSegmentClick(segment)}
-                      {...(devMode
-                        ? createDevModeAttr({
-                            url: "/api/sources/{source_id}/filter_segments/{segment_id}",
-                            method: "GET",
-                            headers: `Authorization: Bearer workspaceAccessToken`,
-                            body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
-                            note: "Lists segments related to a particular source",
-                            link: "google.com",
-                          })
-                        : {})}
-                    >
-                      <span>{segment.name}</span>
-                      <div className="flex flex-row items-center gap-2">
-                        <i className="fa-solid fa-table-rows" />
-                        {segment.record_count}
-                      </div>
-                    </button>
-                    <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
-                  </div>
-                ))}
+              {segments.map((segment) => (
+                <div key={segment.id} className="group">
+                  <button
+                    className={`peer flex w-full flex-row justify-between rounded p-4 text-left text-lg transition-all duration-75 hover:bg-neutral-100`}
+                    onClick={() => handleSegmentClick(segment)}
+                    {...(devMode
+                      ? createDevModeAttr({
+                          url: "/api/sources/{source_id}/filter_segments/{segment_id}",
+                          method: "GET",
+                          headers: `Authorization: Bearer workspaceAccessToken`,
+                          body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                          note: "Lists segments related to a particular source",
+                          link: "google.com",
+                        })
+                      : {})}
+                  >
+                    <span>{segment.name}</span>
+                    <div className="flex flex-row items-center gap-2">
+                      <i className="fa-solid fa-table-rows" />
+                      {segment.record_count}
+                    </div>
+                  </button>
+                  <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
+                </div>
+              ))}
             </div>
             <div className="flex w-full border-t border-neutral-100 p-4">
               <Button className="w-full" onClick={() => initiateEditSegmentWizard}>
