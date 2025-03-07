@@ -68,7 +68,7 @@ const groupedNavItems = navItems.reduce((acc, item) => {
 // }
 
 export default function Sidebar() {
-  const { devMode, embedMode, setEmbedMode, setDevMode, onLogOut } = useCensusEmbedded()
+  const { devMode, embedMode, setEmbedMode, setDevMode, logOut } = useCensusEmbedded()
   return (
     <div className="flex shrink-0 flex-row items-end justify-between gap-4 border-r border-neutral-100 bg-neutral-50 px-2.5 py-4 md:h-screen md:w-[240px] md:flex-col md:items-center md:justify-between">
       <div className="flex w-full flex-col gap-4">
@@ -112,7 +112,7 @@ export default function Sidebar() {
       </div>
 
       <SidebarFooter
-        onLogOut={onLogOut}
+        onLogOut={logOut}
         embedMode={embedMode}
         setEmbedMode={setEmbedMode}
         devMode={devMode}
