@@ -56,7 +56,7 @@ export default function NewSourceDrawer({
 
   const logo = getLogo()
   return (
-    <Drawer direction="right" dismissible={false} open={isDrawerOpen}>
+    <Drawer modal={false} direction="right" dismissible={false} open={isDrawerOpen}>
       <DrawerTrigger asChild>
         <Button onClick={openDrawer}>Add Data</Button>
       </DrawerTrigger>
