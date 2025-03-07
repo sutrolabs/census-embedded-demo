@@ -15,6 +15,7 @@
     "classnames": "^2.5.1",
     "humanize-duration": "^3.31.0",
     "lodash": "^4.17.21",
+    "motion": "^12.4.10",
     "next": "^15.1.4",
     "node-fetch": "^3.3.1",
     "pino": "^8.14.1",
