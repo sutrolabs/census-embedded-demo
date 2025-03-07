@@ -39,6 +39,7 @@ export default function NewSourceDrawer({
     STEPS,
     selectedSourceType,
     currentStep,
+    selectedSource,
   } = useSourceFlow()
 
   const getLogo = () => {
@@ -49,6 +50,10 @@ export default function NewSourceDrawer({
     ) {
       if (selectedSourceType) {
         return getLogoForSourceType(selectedSourceType)
+      } else if (selectedSource) {
+        return getLogoForSourceType({
+          service_name: selectedSource.type,
+        })
       }
     }
     return null
@@ -56,7 +61,7 @@ export default function NewSourceDrawer({
 
   const logo = getLogo()
   return (
-    <Drawer direction="right" dismissible={false} open={isDrawerOpen}>
+    <Drawer modal={false} direction="right" dismissible={false} open={isDrawerOpen}>
       <DrawerTrigger asChild>
         <Button onClick={openDrawer}>Add Data</Button>
       </DrawerTrigger>
