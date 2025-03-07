@@ -76,10 +76,12 @@ export default function SourceTypeSelection() {
             )
           })}
         </div>
-        <DevelopmentMessage
-          message="Toggle 'embedded components' in the sidebar to see how this feature will look as an embedded experience or a redirect."
-          className="fixed bottom-0 z-10 shrink-0"
-        />
+        <div className="fixed inset-x-0 bottom-0 flex w-full shrink-0 bg-gradient-to-t from-white to-transparent px-6 pb-4 pt-9">
+          <DevelopmentMessage
+            message="Toggle 'embedded components' in the sidebar to see how this feature will look as an embedded experience or a redirect."
+            className="w-full"
+          />
+        </div>
       </div>
     </div>
   )
