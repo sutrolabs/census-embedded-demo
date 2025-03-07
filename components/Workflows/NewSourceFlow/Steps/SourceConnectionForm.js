@@ -79,11 +79,12 @@ export default function SourceConnectionForm() {
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
       {showEmbeddedFrame ? (
-        <div className="mb-8 h-full w-full">
+        <div className="h-full w-full">
           <EmbeddedFrame
             connectLink={sourceConnectLink?.uri}
             onExit={onExitedConnectionFlow}
             className="h-full"
+            height="100%"
           />
         </div>
       ) : (
