@@ -10,6 +10,7 @@ export default function SourceTypeSelection() {
     error,
     goToConnectSource: onSelectSourceType,
     goBack: onBack,
+    embedMode,
   } = useSourceFlow()
 
   if (loading) {
@@ -38,33 +39,41 @@ export default function SourceTypeSelection() {
 
   return (
     <div className="flex h-full flex-col overflow-hidden">
-      <div className="h-full overflow-y-auto">
-        <div className="grid grid-cols-2 gap-4">
-          {filteredSourceTypes.map((sourceType) => {
-            const logo = getLogoForSourceType(sourceType)
-
-            return (
-              <div
-                key={sourceType.service_name}
-                className="group flex cursor-pointer items-center rounded-md border p-4 hover:bg-neutral-100"
-                onClick={() => onSelectSourceType(sourceType)}
-              >
-                <div className="flex items-center gap-3">
-                  {logo && (
-                    <Image
-                      src={logo}
-                      alt={`${sourceType.label} logo`}
-                      width={20}
-                      height={20}
-                      className="h-5 object-contain"
-                    />
-                  )}
-                  <div className="font-medium">{sourceType.label}</div>
-                </div>
-              </div>
-            )
-          })}
+      <div className="flex h-full flex-col overflow-y-auto">
+        <div className="rounded bg-neutral-50 p-4">
+          <p className="mb-2">Connect your source account to import your data.</p>
+          <p className="text-sm text-neutral-600">
+            {embedMode
+              ? "You'll be guided through a secure connection process."
+              : "You'll be redirected to Census to securely connect your account."}
+          </p>
         </div>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {filteredSourceTypes.map((sourceType) => {
+          const logo = getLogoForSourceType(sourceType)
+
+          return (
+            <div
+              key={sourceType.service_name}
+              className="group flex cursor-pointer items-center rounded-md border p-4 hover:bg-neutral-100"
+              onClick={() => onSelectSourceType(sourceType)}
+            >
+              <div className="flex items-center gap-3">
+                {logo && (
+                  <Image
+                    src={logo}
+                    alt={`${sourceType.label} logo`}
+                    width={20}
+                    height={20}
+                    className="h-5 object-contain"
+                  />
+                )}
+                <div className="font-medium">{sourceType.label}</div>
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
