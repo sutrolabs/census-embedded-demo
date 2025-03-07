@@ -2,15 +2,16 @@ import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
-import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import Header from "@components/Structural/Header/Header"
 import SyncManagement from "@components/SyncManagement"
 import { TabsContent, Tabs, TabsList, TabsTrigger } from "@components/Tabs/Tabs"
 import Toggle from "@components/Toggle/Toggle"
+import NewDestinationDrawer from "@components/Workflows/NewDestinationFlow/NewDestinationDrawer"
 import { useDestinations } from "@hooks/data/useDestinations"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { DestinationFlowProvider } from "@providers/DestinationFlowProvider"
 import { createDevModeAttr } from "@utils/devMode"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
@@ -19,6 +20,7 @@ export default function Index({ segments }) {
   const { workspaceAccessToken, embedMode, devMode, loading, setLoading } = useCensusEmbedded()
   const [selectedSegment, setSelectedSegment] = useState(null)
   const [editSegmentWizardLink, setEditSegmentWizardLink] = useState(null)
+  const [destinationConnectLinks, setDestinationConnectLinks] = useState([])
   const showEditSegmentWizard = !!editSegmentWizardLink
 
   const API_CREATE_EDIT_SEGMENT_LINK = "/api/create_edit_segment_management_link"
@@ -116,17 +118,27 @@ export default function Index({ segments }) {
                     </div>
                   )
                 })}
+                <NewDestinationDrawer />
               </TabsContent>
             </Tabs>
-            <div className="flex w-full flex-row justify-end border-t border-neutral-100 bg-white p-3">
-              <Button className="text-sm">
-                <i className="fa-solid fa-trash mr-2" />
-                Delete
-              </Button>
-            </div>
           </div>
         ) : (
-          <div className="flex h-full w-full flex-col overflow-hidden ">
+          <div className="flex h-full w-full flex-col overflow-hidden">
+            <div className="flex items-center justify-between border-b border-neutral-100 p-4">
+              <h2 className="text-lg font-medium">Available Audiences</h2>
+              <DestinationFlowProvider
+                workspaceAccessToken={workspaceAccessToken}
+                destinationConnectLinks={destinationConnectLinks}
+                refetchDestinationConnectLinks={() => {
+                  /* implement refresh logic */
+                }}
+                destinations={destinations}
+                setDestinations={setDestinationConnectLinks}
+                availableDestinationTypes={destinationTypes}
+              >
+                <NewDestinationDrawer />
+              </DestinationFlowProvider>
+            </div>
             <div className="flex h-full flex-col overflow-y-auto p-3">
               {segments.map((segment) => (
                 <div key={segment.id} className="group">
@@ -135,9 +147,9 @@ export default function Index({ segments }) {
                     onClick={() => handleSegmentClick(segment)}
                     {...(devMode
                       ? createDevModeAttr({
-                          url: "/api/sources/{source_id}/filter_segments/{segment_id}",
+                          url: `/api/sources/${segment.source_id}/filter_segments/${segment.id}`,
                           method: "GET",
-                          headers: `Authorization: Bearer workspaceAccessToken`,
+                          headers: `Authorization: Bearer ${workspaceAccessToken}`,
                           body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
                           note: "Lists segments related to a particular source",
                           link: "google.com",
@@ -153,11 +165,6 @@ export default function Index({ segments }) {
                   <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
                 </div>
               ))}
-            </div>
-            <div className="flex w-full border-t border-neutral-100 p-4">
-              <Button className="w-full" onClick={() => initiateEditSegmentWizard}>
-                New Audience
-              </Button>
             </div>
           </div>
         )}
