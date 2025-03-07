@@ -39,6 +39,7 @@ export default function NewSourceDrawer({
     STEPS,
     selectedSourceType,
     currentStep,
+    selectedSource,
   } = useSourceFlow()
 
   const getLogo = () => {
@@ -49,6 +50,10 @@ export default function NewSourceDrawer({
     ) {
       if (selectedSourceType) {
         return getLogoForSourceType(selectedSourceType)
+      } else if (selectedSource) {
+        return getLogoForSourceType({
+          service_name: selectedSource.type,
+        })
       }
     }
     return null
