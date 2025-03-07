@@ -1,5 +1,6 @@
 import Image from "next/image"
 
+import DevelopmentMessage from "@components/Message/DevelopmentMessage"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
 
@@ -38,8 +39,8 @@ export default function SourceTypeSelection() {
   })
 
   return (
-    <div className="flex h-full flex-col overflow-hidden">
-      <div className="flex h-full flex-col overflow-y-auto">
+    <div className="h-full overflow-hidden">
+      <div className="relative flex h-full flex-col gap-3 overflow-y-auto">
         <div className="rounded bg-neutral-50 p-4">
           <p className="mb-2">Connect your source account to import your data.</p>
           <p className="text-sm text-neutral-600">
@@ -75,6 +76,10 @@ export default function SourceTypeSelection() {
             )
           })}
         </div>
+        <DevelopmentMessage
+          message="Toggle 'embedded components' in the sidebar to see how this feature will look as an embedded experience or a redirect."
+          className="fixed bottom-0 z-10 shrink-0"
+        />
       </div>
     </div>
   )
