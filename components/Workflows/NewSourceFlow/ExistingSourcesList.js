@@ -29,7 +29,7 @@ export default function ExistingSourcesList({ sources, loading, error, onSelectS
         return (
           <div
             key={source.id}
-            className="flex cursor-pointer flex-row gap-3 p-4 hover:bg-neutral-50"
+            className="flex cursor-pointer flex-row items-center gap-3 p-4 hover:bg-neutral-50"
             onClick={() => onSelectSource(source)}
           >
             <Image src={logo} height={20} width={20} alt="" />
