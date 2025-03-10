@@ -35,7 +35,7 @@ export default function ExistingSourcesList({ sources, loading, error, onSelectS
             headers: `Authorization: Bearer ${workspaceAccessToken}`,
             body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
             note: "Lists sources from a workspace",
-            link: "google.com",
+            link: "https://developers.getcensus.com/api-reference/sources/list-sources",
           })
         : {})}
     >
