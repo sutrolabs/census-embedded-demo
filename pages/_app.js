@@ -27,7 +27,7 @@ function Application({ Component, pageProps }) {
 }
 
 function ApplicationContent({ Component, pageProps }) {
-  const { workspaceAccessToken, logOut } = useCensusEmbedded()
+  const { workspaceAccessToken } = useCensusEmbedded()
 
   if (!workspaceAccessToken) {
     return <Setup />
