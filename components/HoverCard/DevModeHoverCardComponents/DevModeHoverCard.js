@@ -30,25 +30,34 @@ export default function DevModeHoverCard({ top, left, onMouseEnter, onMouseLeave
         {infoItems.map((item) => (
           <div
             key={item.key}
-            className="flex w-full flex-row items-center justify-between gap-3 text-xs leading-tight"
+            className={
+              (`flex w-full gap-3 text-xs`, item.label === "Body" ? "flex-col" : "flex-row items-center")
+            }
           >
-            <span className="shrink-0 items-center font-bold uppercase text-plum-500">{item.label}</span>{" "}
-            <div className="flex w-[300px] flex-row items-center gap-2 rounded border border-neutral-100 bg-neutral-50 pl-1.5 text-neutral-600">
-              <span className="shrink truncate">{item.value}</span>
-              {item.copiable && (
-                <button
-                  onClick={() => copyToClipboard(item.value)}
-                  className="shrink-0 p-1.5 hover:bg-neutral-100"
-                >
-                  <i className="fa-solid fa-clone leading-none text-neutral-500 " />
-                </button>
-              )}
-            </div>
+            <span className="shrink-0 items-center font-bold uppercase text-neutral-500">{item.label}</span>
+            {item.copiable && (
+              <button
+                onClick={() => copyToClipboard(item.value)}
+                className="shrink-0 p-1.5 hover:bg-neutral-100"
+              >
+                <i className="fa-solid fa-clone leading-none text-neutral-500 " />
+              </button>
+            )}
+            <pre
+              className={`flex w-full flex-row items-center gap-2 rounded border border-neutral-100 bg-white pl-1.5 leading-normal text-neutral-600`}
+            >
+              <code>{item.value}</code>
+            </pre>
           </div>
         ))}
 
         {hoverData.link && (
-          <Link href={hoverData.link} target="_blank" rel="noreferrer" className="cursor-pointer">
+          <Link
+            href={hoverData.link}
+            target="_blank"
+            rel="noreferrer"
+            className="cursor-pointer text-plum-500"
+          >
             <button className=" w-full rounded border border-neutral-100 bg-white p-2 shadow">
               <span className="font-bold">Documentation</span>
             </button>
