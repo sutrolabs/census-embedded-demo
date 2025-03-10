@@ -55,7 +55,7 @@ export default function SourceTypeSelection() {
 
         <div
           className="grid grid-cols-2 gap-4"
-          {...(devMode && embedMode
+          {...(devMode && embedMode === true
             ? createDevModeAttr({
                 url: `https://app.getcensus.com/api/v1/source_types`,
                 method: "GET",
@@ -65,7 +65,7 @@ export default function SourceTypeSelection() {
                 link: "https://developers.getcensus.com/api-reference/sources/list-source-types",
               })
             : {})}
-          {...(devMode && !embedMode
+          {...(devMode && embedMode === false
             ? createDevModeAttr({
                 url: `https://app.getcensus.com/api/v1/source_connect_links`,
                 method: "GET",
