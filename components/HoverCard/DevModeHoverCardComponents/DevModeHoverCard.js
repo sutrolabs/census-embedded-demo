@@ -32,7 +32,7 @@ export default function DevModeHoverCard({ top, left, onMouseEnter, onMouseLeave
             key={item.key}
             className="flex w-full flex-row items-center justify-between gap-3 text-xs leading-tight"
           >
-            <span className="text-plum-500 shrink-0 items-center font-bold uppercase">{item.label}</span>{" "}
+            <span className="shrink-0 items-center font-bold uppercase text-plum-500">{item.label}</span>{" "}
             <div className="flex w-[300px] flex-row items-center gap-2 rounded border border-neutral-100 bg-neutral-50 pl-1.5 text-neutral-600">
               <span className="shrink truncate">{item.value}</span>
               {item.copiable && (
