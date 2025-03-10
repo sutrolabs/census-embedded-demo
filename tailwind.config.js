@@ -3,6 +3,11 @@ module.exports = {
   content: ["./pages/**/*.js", "./components/**/*.js"],
   theme: {
     extend: {
+      colors: {
+        plum: {
+          500: "#4640EB",
+        },
+      },
       fontFamily: {
         sans: [
           '"IBM Plex Sans", "sans-serif"',

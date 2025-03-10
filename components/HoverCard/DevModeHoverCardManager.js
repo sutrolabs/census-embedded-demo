@@ -192,17 +192,24 @@ export default function DevModeHoverCardManager() {
   const applyHighlightToTarget = (target) => {
     if (!target) return
 
-    const originalOutline = target.style.outline
-    const originalOutlineOffset = target.style.outlineOffset
+    const rect = target.getBoundingClientRect()
+    const highlightEl = document.createElement("div")
 
-    target.style.outline = "0.025rem dashed #4640EB"
-    target.style.outlineOffset = "0.05rem"
-    target.style.animation = "devmode-pulse 2s infinite"
-    target.style.borderRadius = "0.05rem"
+    highlightEl.style.position = "fixed"
+    highlightEl.style.top = `${rect.top}px`
+    highlightEl.style.left = `${rect.left}px`
+    highlightEl.style.width = `${rect.width}px`
+    highlightEl.style.height = `${rect.height}px`
+    highlightEl.style.border = "0.025rem dashed #4640EB"
+    highlightEl.style.borderRadius = "0.05rem"
+    highlightEl.style.pointerEvents = "none"
+    highlightEl.style.zIndex = "9998"
+    highlightEl.style.animation = "devmode-pulse 2s infinite"
+
+    document.body.appendChild(highlightEl)
 
     return () => {
-      target.style.outline = originalOutline
-      target.style.outlineOffset = originalOutlineOffset
+      highlightEl.remove()
     }
   }
 
@@ -302,12 +309,12 @@ export default function DevModeHoverCardManager() {
                 {infoItems.map((item) => (
                   <div
                     key={item.key}
-                    className="flex w-full flex-row items-center gap-3 text-xs leading-tight"
+                    className="flex w-full flex-row items-center justify-between gap-3 text-xs leading-tight"
                   >
-                    <span className="shrink-0 items-center font-bold uppercase text-[#4640EB]">
+                    <span className="text-plum-500 shrink-0 items-center font-bold uppercase">
                       {item.label}
                     </span>{" "}
-                    <div className="flex flex-row items-center gap-2 rounded border border-neutral-100 bg-neutral-50 pl-1.5 text-neutral-600">
+                    <div className="flex w-[300px] flex-row items-center gap-2 rounded border border-neutral-100 bg-neutral-50 pl-1.5 text-neutral-600">
                       <span className="shrink truncate">{item.value}</span>
                       {item.copiable && (
                         <button

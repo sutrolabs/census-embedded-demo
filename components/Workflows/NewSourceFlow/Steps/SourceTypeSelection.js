@@ -3,6 +3,7 @@ import Image from "next/image"
 import DevelopmentMessage from "@components/Message/DevelopmentMessage"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
+import { createDevModeAttr } from "@utils/devMode"
 
 export default function SourceTypeSelection() {
   const {
@@ -12,6 +13,8 @@ export default function SourceTypeSelection() {
     goToConnectSource: onSelectSourceType,
     goBack: onBack,
     embedMode,
+    devMode,
+    workspaceAccessToken,
   } = useSourceFlow()
 
   if (loading) {
@@ -50,7 +53,29 @@ export default function SourceTypeSelection() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div
+          className="grid grid-cols-2 gap-4"
+          {...(devMode && embedMode
+            ? createDevModeAttr({
+                url: `https://app.getcensus.com/api/v1/source_types`,
+                method: "GET",
+                headers: `Authorization: Bearer ${workspaceAccessToken}`,
+                body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                note: "Lists available source types",
+                link: "https://developers.getcensus.com/api-reference/sources/list-source-types",
+              })
+            : {})}
+          {...(devMode && !embedMode
+            ? createDevModeAttr({
+                url: `https://app.getcensus.com/api/v1/source_connect_links`,
+                method: "GET",
+                headers: `Authorization: Bearer ${workspaceAccessToken}`,
+                body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                note: "Lists available source connect links",
+                link: "https://developers.getcensus.com/api-reference/source-connect-links/list-source-connect-links",
+              })
+            : {})}
+        >
           {filteredSourceTypes.map((sourceType) => {
             const logo = getLogoForSourceType(sourceType)
 

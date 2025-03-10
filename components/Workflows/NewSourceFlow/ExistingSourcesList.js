@@ -1,8 +1,11 @@
 import Image from "next/image"
 
 import { getLogoForSource } from "@hooks/useSourceLogos"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { createDevModeAttr } from "@utils/devMode"
 
 export default function ExistingSourcesList({ sources, loading, error, onSelectSource }) {
+  const { devMode, workspaceAccessToken } = useCensusEmbedded()
   // Filter out sources with the name "embedded-demo"
   const filteredSources = sources.filter((source) => source.name !== "embedded_demo")
 
@@ -23,7 +26,19 @@ export default function ExistingSourcesList({ sources, loading, error, onSelectS
   }
 
   return (
-    <div className="divide-y rounded border">
+    <div
+      className="divide-y rounded border"
+      {...(devMode
+        ? createDevModeAttr({
+            url: `https://app.getcensus.com/api/v1/sources`,
+            method: "GET",
+            headers: `Authorization: Bearer ${workspaceAccessToken}`,
+            body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+            note: "Lists sources from a workspace",
+            link: "google.com",
+          })
+        : {})}
+    >
       {filteredSources.map((source) => {
         const logo = getLogoForSource(source)
         return (
