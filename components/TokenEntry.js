@@ -2,9 +2,11 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 
 import Button from "@components/Button/Button/Button"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { useBasicFetch } from "@utils/fetch"
 
-export default function TokenEntry({ workspaceAccessToken, setWorkspaceAccessToken }) {
+export default function TokenEntry() {
+  const { workspaceAccessToken, setWorkspaceAccessToken } = useCensusEmbedded()
   const [localCensusWorkspaceToken, setLocalCensusWorkspaceToken] = useState(
     process.env["NEXT_PUBLIC_LOCAL_DEVELOPMENT_WORKSPACE_ACCESS_TOKEN"] ?? "",
   )
