@@ -64,7 +64,7 @@ export default function DevModeHoverCard({ top, left, onMouseEnter, onMouseLeave
           </Link>
         )}
       </div>
-      <div className="bg-brand-development absolute inset-0 -z-0 h-full w-full" />
+      <div className="bg-brand-development absolute inset-x-0 bottom-0 -z-0 h-1/2 w-full" />
     </motion.div>
   )
 }
