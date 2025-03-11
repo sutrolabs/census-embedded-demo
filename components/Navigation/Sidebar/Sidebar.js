@@ -20,6 +20,7 @@ const navItems = [
     href: "/data-management",
     name: "Data Management",
     icon: CentralTableIcon,
+    preview: "Demo data import functionality.",
   },
   {
     id: 3,
@@ -32,12 +33,14 @@ const navItems = [
     href: "/integrations/export-crm",
     name: "CRM",
     group: "integrations",
+    preview: "Demo data export to common CRM destinations.",
   },
   {
     id: 5,
     href: "/integrations/export-ads",
     name: "Ad Platforms",
     group: "integrations",
+    preview: "Demo data export to common ads destinations.",
   },
 ]
 
@@ -96,14 +99,20 @@ export default function Sidebar() {
         {/* Desktop Navbar */}
         <nav className="hidden w-full flex-col gap-0.5 self-start md:flex">
           {groupedNavItems.root?.map((item) => (
-            <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
+            <Item key={item.id} name={item.name} href={item.href} icon={item.icon} preview={item.preview} />
           ))}
           {Object.entries(groupedNavItems).map(
             ([group, items]) =>
               group !== "root" && (
-                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-100 pl-3">
+                <div key={group} className="ml-4 mt-1 flex flex-col gap-0.5 border-l border-neutral-200 pl-3">
                   {items.map((item) => (
-                    <Item key={item.id} name={item.name} href={item.href} icon={item.icon} />
+                    <Item
+                      key={item.id}
+                      name={item.name}
+                      href={item.href}
+                      icon={item.icon}
+                      preview={item.preview}
+                    />
                   ))}
                 </div>
               ),

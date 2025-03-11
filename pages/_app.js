@@ -4,7 +4,7 @@ import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 
 import Error_ from "@components/Error_"
-import DevModeHoverCardManager from "@components/HoverCard/DevModeHoverCardManager"
+import DevModeHoverCardManager from "@components/HoverCard/DevModeHoverCard/DevModeHoverCardManager"
 import Loading from "@components/Loading"
 import MainLayout from "@components/MainLayout"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"

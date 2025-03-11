@@ -3,8 +3,8 @@ import { AnimatePresence } from "motion/react"
 import { useRouter } from "next/router"
 import { useEffect, useState, useRef } from "react"
 
-import DevModeHoverCard from "@components/HoverCard/DevModeHoverCardComponents/DevModeHoverCard"
-import DevModeHoverCardLabel from "@components/HoverCard/DevModeHoverCardComponents/DevModeHoverCardLabel"
+import DevModeHoverCard from "@components/HoverCard/DevModeHoverCard/DevModeHoverCardComponents/DevModeHoverCard"
+import DevModeHoverCardLabel from "@components/HoverCard/DevModeHoverCard/DevModeHoverCardComponents/DevModeHoverCardLabel"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 export default function DevModeHoverCardManager() {

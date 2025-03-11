@@ -2,11 +2,17 @@ import { Text } from "@radix-ui/themes"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
-export function Item({ name, href, icon: Icon }) {
+import {
+  HoverCard,
+  HoverCardTrigger,
+  HoverCardContent,
+} from "@components/HoverCard/BrandedHoverCard/BrandedHoverCard"
+
+export function Item({ name, href, icon: Icon, preview }) {
   const pathname = usePathname()
   const isActive = pathname === href
 
-  return (
+  const navItem = (
     <Link
       href={href}
       className={`group flex cursor-pointer flex-row items-center gap-2 rounded p-2  text-sm font-medium leading-none no-underline transition-all duration-75  ${
@@ -25,4 +31,18 @@ export function Item({ name, href, icon: Icon }) {
       <Text>{name}</Text>
     </Link>
   )
+
+  if (preview) {
+    return (
+      <HoverCard>
+        <HoverCardTrigger asChild>{navItem}</HoverCardTrigger>
+        <HoverCardContent side="right">
+          <span className="text-sm">{preview}</span>
+          <div className="bg-brand-development absolute inset-x-0 bottom-0 -z-0 h-3/4 w-full" />
+        </HoverCardContent>
+      </HoverCard>
+    )
+  }
+
+  return navItem
 }
