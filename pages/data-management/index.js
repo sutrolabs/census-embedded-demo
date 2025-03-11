@@ -310,7 +310,7 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                       url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
                       method: "GET",
                       headers: `Authorization: Bearer <workspaceAccessToken}`,
-                      note: "Current source configuration page",
+                      note: "Fetch a sync",
                       link: "https://developers.getcensus.com/api-reference/syncs/fetch-sync",
                     })
                   : {})}
