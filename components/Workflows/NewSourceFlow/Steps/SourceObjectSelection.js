@@ -83,7 +83,7 @@ export default function SourceObjectSelection() {
   // Handle completion of object selection
   const handleContinue = () => {
     // Pass the selected syncs to the parent component
-    onObjectsSelected(sourceSpecificSyncs)
+    goToReview(sourceSpecificSyncs)
   }
 
   return (
@@ -114,6 +114,10 @@ export default function SourceObjectSelection() {
             resetSyncManagementLink={resetSyncManagementLink}
             setShowCreateSyncWizard={setShowCreateSyncWizard}
             linkWithSourcePrepopulated={createLinkWithQueryParams}
+            onComplete={() => {
+              setShowCreateSyncWizard(false)
+              refetchSyncs()
+            }}
           />
         ) : (
           <Button

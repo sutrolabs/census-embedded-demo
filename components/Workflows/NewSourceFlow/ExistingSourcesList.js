@@ -32,8 +32,7 @@ export default function ExistingSourcesList({ sources, loading, error, onSelectS
         ? createDevModeAttr({
             url: `https://app.getcensus.com/api/v1/sources`,
             method: "GET",
-            headers: `Authorization: Bearer ${workspaceAccessToken}`,
-            body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+            headers: `Authorization: Bearer <workspaceAccessToken>`,
             note: "Lists sources from a workspace",
             link: "https://developers.getcensus.com/api-reference/sources/list-sources",
           })

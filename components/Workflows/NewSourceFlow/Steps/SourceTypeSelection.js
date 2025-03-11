@@ -59,8 +59,7 @@ export default function SourceTypeSelection() {
             ? createDevModeAttr({
                 url: `https://app.getcensus.com/api/v1/source_types`,
                 method: "GET",
-                headers: `Authorization: Bearer ${workspaceAccessToken}`,
-                body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                headers: `Authorization: Bearer <workspaceAccessToken>`,
                 note: "Lists available source types",
                 link: "https://developers.getcensus.com/api-reference/sources/list-source-types",
               })
@@ -69,8 +68,7 @@ export default function SourceTypeSelection() {
             ? createDevModeAttr({
                 url: `https://app.getcensus.com/api/v1/source_connect_links`,
                 method: "GET",
-                headers: `Authorization: Bearer ${workspaceAccessToken}`,
-                body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                headers: `Authorization: Bearer <workspaceAccessToken>`,
                 note: "Lists available source connect links",
                 link: "https://developers.getcensus.com/api-reference/source-connect-links/list-source-connect-links",
               })

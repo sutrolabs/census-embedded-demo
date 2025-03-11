@@ -32,6 +32,7 @@ export default function SourceConnectionFlow() {
     setSyncs,
     refetchSyncs,
     runsLoading,
+    destinations,
     runs,
     devMode,
     embedMode,
@@ -95,6 +96,7 @@ export default function SourceConnectionFlow() {
             workspaceAccessToken={workspaceAccessToken}
             onObjectsSelected={goToReview}
             onBack={goBack}
+            destinations={destinations}
             syncs={syncs}
             setSyncs={setSyncs}
             refetchSyncs={refetchSyncs}
