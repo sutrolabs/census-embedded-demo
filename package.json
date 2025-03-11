@@ -7,6 +7,7 @@
     "lint:fix": "next lint --fix"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.27.5",
     "@headlessui/react": "^1.7.17",
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-hover-card": "^1.1.6",

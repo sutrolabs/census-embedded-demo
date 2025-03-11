@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
@@ -6,6 +6,10 @@ import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
+import {
+  marketingMagnetDestinationName,
+  marketingMagnetDestinationObject,
+} from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SourceObjectSelection() {
@@ -19,6 +23,7 @@ export default function SourceObjectSelection() {
     refetchSyncManagementLinks,
     runsLoading,
     runs,
+    destinations,
     devMode,
     embedMode,
     goToReview,
@@ -27,6 +32,27 @@ export default function SourceObjectSelection() {
 
   const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [presetDestination, setPresetDestination] = useState(null)
+
+  useEffect(() => {
+    // The custom Marketing Magnet connector is required to have a unique type upon creation
+    // Therefore, we check by the name as it is more consistent across different connectors
+    setPresetDestination(destinations.find((d) => d.name == marketingMagnetDestinationName))
+  }, [destinations])
+
+  // The Source component is only called from ImportDataset
+  // When importing datasets, the destination will always be our application, aka Marketing Magnet
+  const prefillDestination = (edit = false) => {
+    if (!presetDestination?.id) return ""
+
+    let queryParams = "&destination_hidden=true"
+
+    if (!edit) {
+      queryParams += `&destination_connection_id=${presetDestination.id}&destination_object_name=${marketingMagnetDestinationObject}`
+    }
+
+    return queryParams
+  }
 
   // Filter syncs for this source
   const sourceSpecificSyncs = syncs.filter((sync) => sync.source_attributes.connection_id === source.id)
@@ -39,8 +65,8 @@ export default function SourceObjectSelection() {
   )
 
   // Default query parameters for destination
-  const createSyncLinkQueryParams = "&destination_hidden=true"
-  const editSyncLinkQueryParams = "&destination_hidden=true"
+  const createSyncLinkQueryParams = prefillDestination(false)
+  const editSyncLinkQueryParams = prefillDestination(true)
 
   // Full link with query parameters
   const createLinkWithQueryParams = syncManagementLink?.uri + createSyncLinkQueryParams
@@ -57,12 +83,12 @@ export default function SourceObjectSelection() {
   // Handle completion of object selection
   const handleContinue = () => {
     // Pass the selected syncs to the parent component
-    onObjectsSelected(sourceSpecificSyncs)
+    goToReview(sourceSpecificSyncs)
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="mt-4 flex flex-col gap-5">
+    <div className="flex h-full flex-col gap-4 overflow-y-auto">
+      <div className="mt-4 flex h-full flex-col gap-5">
         {/* Display existing syncs */}
         {sourceSpecificSyncs.map((sync) => (
           <SyncObject

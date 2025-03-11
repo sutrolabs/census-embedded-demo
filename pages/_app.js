@@ -3,12 +3,12 @@ import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 
-import DevModeHoverCardManager from "@components/HoverCard/DevModeHoverCardManager"
-import Loading from "@components/Loading/Loading"
-import Error_ from "@components/Message/Error_"
+import Error_ from "@components/Error_"
+import DevModeHoverCardManager from "@components/HoverCard/DevModeHoverCard/DevModeHoverCardManager"
+import Loading from "@components/Loading"
+import MainLayout from "@components/MainLayout"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
-import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
@@ -20,6 +20,20 @@ registry.add(Tooltip)
 
 function Application({ Component, pageProps }) {
   return (
+    <CensusEmbeddedProvider>
+      <ApplicationContent Component={Component} pageProps={pageProps} />
+    </CensusEmbeddedProvider>
+  )
+}
+
+function ApplicationContent({ Component, pageProps }) {
+  const { workspaceAccessToken } = useCensusEmbedded()
+
+  if (!workspaceAccessToken) {
+    return <Setup />
+  }
+
+  return <MainApplication Component={Component} pageProps={pageProps} />
     <CensusEmbeddedProvider>
       <ApplicationContent Component={Component} pageProps={pageProps} />
     </CensusEmbeddedProvider>
@@ -40,6 +54,8 @@ export default dynamic(() => Promise.resolve(Application), {
   ssr: false,
 })
 
+function MainApplication({ Component, pageProps, onLogOut }) {
+  const { embedMode, setEmbedMode, devMode, setDevMode, workspaceAccessToken } = useCensusEmbedded()
 function MainApplication({ Component, pageProps, onLogOut }) {
   const { embedMode, setEmbedMode, devMode, setDevMode, workspaceAccessToken } = useCensusEmbedded()
 
@@ -209,7 +225,9 @@ function MainApplication({ Component, pageProps, onLogOut }) {
   return (
     <main className="relative flex h-screen w-screen flex-row overflow-hidden">
       <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
+      <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       <MainLayout>{component}</MainLayout>
+      <DevModeHoverCardManager />
       <DevModeHoverCardManager />
     </main>
   )

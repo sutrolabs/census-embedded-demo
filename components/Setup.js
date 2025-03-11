@@ -6,6 +6,7 @@ import Button from "@components/Button/Button/Button"
 import { FlickeringGrid } from "@components/Magic/FlickeringGridBackground"
 import TokenEntry from "@components/TokenEntry"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { censusFrontendBaseUrl } from "@utils/url"
 
 export function Setup() {

@@ -1,9 +1,7 @@
-import { useState } from "react"
-
-import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
-import DevelopmentMessage from "@components/Message/DevelopmentMessage"
+import EmbeddedFrame from "@components/EmbeddedFrame"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
+import { useState, useEffect } from "react"
 
 export default function SourceConnectionForm() {
   const {
@@ -18,7 +16,7 @@ export default function SourceConnectionForm() {
 
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(false)
+  const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(true)
 
   // Use the same hook that Source.js uses to manage connect links
   const [sourceConnectLink, getNewSourceConnectLink, isLinkLoading] = useSourceConnectLink(
@@ -26,6 +24,30 @@ export default function SourceConnectionForm() {
     sourceType?.service_name,
     workspaceAccessToken,
   )
+
+  // Add useEffect to automatically initiate the flow when component mounts
+  useEffect(() => {
+    const initiateFlow = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        if (sourceConnectLink) {
+          // We already have a source connect link
+          initiateSourceConnectFlow(sourceConnectLink)
+        } else {
+          // We need to create a source connect link
+          const newLink = await getNewSourceConnectLink()
+          initiateSourceConnectFlow(newLink)
+        }
+      } catch (err) {
+        setError(err.message || "Failed to create connection link")
+        setLoading(false)
+      }
+    }
+
+    initiateFlow()
+  })
 
   const initiateSourceConnectFlow = (sourceConnectLinkData) => {
     if (embedMode) {
@@ -55,66 +77,29 @@ export default function SourceConnectionForm() {
     }
   }
 
-  const handleConnect = async () => {
-    try {
-      setLoading(true)
-      setError(null)
-
-      if (sourceConnectLink) {
-        // We already have a source connect link
-        initiateSourceConnectFlow(sourceConnectLink)
-      } else {
-        // We need to create a source connect link
-        const newLink = await getNewSourceConnectLink()
-        initiateSourceConnectFlow(newLink)
-      }
-    } catch (err) {
-      setError(err.message || "Failed to create connection link")
-      setLoading(false)
-    }
-  }
-
   return (
     <div className="flex h-full flex-col gap-4">
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
       {showEmbeddedFrame ? (
-        <div className="mb-8 h-full w-full">
+        <div className="h-full w-full">
           <EmbeddedFrame
             connectLink={sourceConnectLink?.uri}
             onExit={onExitedConnectionFlow}
             className="h-full"
+            height="100%"
           />
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <DevelopmentMessage message="Toggle 'embedded components' in the sidebar to see how this feature will look as an embedded experience or a redirect." />
-          <div className="rounded bg-neutral-50 p-4">
-            <p className="mb-2">Connect your {sourceType.label} account to import your data.</p>
-            <p className="text-sm text-neutral-600">
-              {embedMode
-                ? "You'll be guided through a secure connection process."
-                : "You'll be redirected to Census to securely connect your account."}
-            </p>
-          </div>
-
-          <div className="mt-4 flex justify-between">
-            <button
-              type="button"
-              className="rounded bg-emerald-500 px-4 py-2 text-white"
-              onClick={handleConnect}
-              disabled={loading}
-            >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></span>
-                  Preparing connection...
-                </span>
-              ) : (
-                "Connect with Census"
-              )}
-            </button>
-          </div>
+          {loading && (
+            <div className="flex items-center justify-center">
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent"></span>
+                Preparing connection...
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>
