@@ -209,7 +209,6 @@ function MainApplication({ Component, pageProps, onLogOut }) {
   return (
     <main className="relative flex h-screen w-screen flex-row overflow-hidden">
       <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
-      <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       <MainLayout>{component}</MainLayout>
       <DevModeHoverCardManager />
       <DevModeHoverCardManager />
