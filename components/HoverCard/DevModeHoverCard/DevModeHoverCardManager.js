@@ -33,6 +33,7 @@ export default function DevModeHoverCardManager() {
       if (!open) {
         setHoverTarget(null)
         setHoverData(null)
+        setLabelPosition(null)
       }
     },
     middleware: [
@@ -50,7 +51,7 @@ export default function DevModeHoverCardManager() {
 
   // Setup hover interactions
   const hover = useHover(context, {
-    delay: { open: 300, close: 100 },
+    delay: { open: 500, close: 100 },
     restMs: 40,
   })
 
@@ -72,6 +73,68 @@ export default function DevModeHoverCardManager() {
     }
   }, [router])
 
+  // Add element observer effect
+  useEffect(() => {
+    if (!hoverTarget) return
+
+    // Create a mutation observer to watch for DOM changes
+    const observer = new MutationObserver((mutations) => {
+      // Check if our target element is still in the document
+      if (!document.contains(hoverTarget)) {
+        setHoverTarget(null)
+        setHoverData(null)
+        setLabelPosition(null)
+      }
+    })
+
+    // Start observing the document for changes
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    })
+
+    // Also check if the element is still visible (not display: none or visibility: hidden)
+    const visibilityCheck = setInterval(() => {
+      if (hoverTarget) {
+        const style = window.getComputedStyle(hoverTarget)
+        if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") {
+          setHoverTarget(null)
+          setHoverData(null)
+          setLabelPosition(null)
+        }
+      }
+    }, 100)
+
+    return () => {
+      observer.disconnect()
+      clearInterval(visibilityCheck)
+    }
+  }, [hoverTarget])
+
+  // Add intersection observer to handle elements moving out of viewport
+  useEffect(() => {
+    if (!hoverTarget) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) {
+            setHoverTarget(null)
+            setHoverData(null)
+            setLabelPosition(null)
+          }
+        })
+      },
+      { threshold: 0.1 }, // Element is considered "visible" if at least 10% is showing
+    )
+
+    observer.observe(hoverTarget)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [hoverTarget])
+
   useEffect(() => {
     if (!devMode) return
 
@@ -81,9 +144,15 @@ export default function DevModeHoverCardManager() {
         target = target.parentElement
       }
 
-      if (target && target.dataset.devMode) {
+      if (target && target.dataset.devMode && document.contains(target)) {
         try {
           const data = JSON.parse(target.dataset.devMode)
+
+          // Check if element is visible before showing tooltip
+          const style = window.getComputedStyle(target)
+          if (style.display === "none" || style.visibility === "hidden" || style.opacity === "0") {
+            return
+          }
 
           // Set the reference element for Floating UI
           refs.setReference(target)
@@ -143,35 +212,6 @@ export default function DevModeHoverCardManager() {
   }, [hoverTarget])
 
   if (!devMode || !hoverData || !hoverTarget) return null
-
-  const getElementType = () => {
-    if (!hoverTarget) return "Element"
-
-    if (hoverData.elementType) return hoverData.elementType
-
-    if (hoverTarget.classList.contains("btn") || hoverTarget.classList.contains("button")) {
-      return "Button"
-    }
-
-    if (hoverTarget.tagName === "BUTTON") return "Button"
-    if (hoverTarget.tagName === "A") return "Link"
-    if (hoverTarget.tagName === "INPUT")
-      return hoverTarget.type.charAt(0).toUpperCase() + hoverTarget.type.slice(1)
-    if (hoverTarget.tagName === "SELECT") return "Select"
-
-    return hoverTarget.tagName.toLowerCase()
-  }
-
-  const copyToClipboard = (text) => {
-    if (!text) return
-
-    try {
-      navigator.clipboard.writeText(text).then(
-        () => {},
-        (err) => {},
-      )
-    } catch (err) {}
-  }
 
   return (
     <Portal.Root>

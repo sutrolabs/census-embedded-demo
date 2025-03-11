@@ -2,7 +2,7 @@ import { motion } from "motion/react"
 import Link from "next/link"
 import { forwardRef } from "react"
 
-const DevModeHoverCard = forwardRef(({ style, onMouseEnter, onMouseLeave, hoverData }, ref) => {
+const DevModeHoverCard = forwardRef(({ style, onMouseEnter, onMouseLeave, hoverData, ...props }, ref) => {
   const infoItems = [
     { key: "headers", label: "Headers", value: hoverData.headers },
     { key: "body", label: "Body", value: hoverData.body },
@@ -19,9 +19,10 @@ const DevModeHoverCard = forwardRef(({ style, onMouseEnter, onMouseLeave, hoverD
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 5 }}
-      transition={{ duration: 0.07 }}
+      transition={{ duration: 0.1 }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      {...props}
     >
       <div className="relative z-10 flex flex-col gap-2">
         <div className="flex flex-col gap-2 leading-none">{hoverData.note && <p>{hoverData.note}</p>}</div>

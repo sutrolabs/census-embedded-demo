@@ -1,7 +1,7 @@
 import { motion } from "motion/react"
 import { forwardRef } from "react"
 
-const DevModeHoverCardLabel = forwardRef(({ style, method, url }, ref) => {
+const DevModeHoverCardLabel = forwardRef(({ style, method, url, ...props }, ref) => {
   return (
     <motion.div
       className="fixed z-[9999] flex flex-row gap-2 rounded-sm bg-[#4640EB] px-1.5 py-0.5 font-mono text-xs font-medium text-white shadow-sm"
@@ -13,7 +13,8 @@ const DevModeHoverCardLabel = forwardRef(({ style, method, url }, ref) => {
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 5 }}
-      transition={{ duration: 0.07 }}
+      transition={{ duration: 0.1 }}
+      {...props}
     >
       <span className="font-bold">{method}</span>
       <span>{url}</span>
