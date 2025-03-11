@@ -316,8 +316,12 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                   : {})}
               >
                 <ConnectionLogo src={sourceMetadata?.logo} />
-                {sync.source_attribute?.object?.name ? (
-                  <span className="w-full truncate font-medium">{sync.source_attributes.object.name}</span>
+                {sync.source_attributes?.object ? (
+                  <span className="w-full truncate font-medium">
+                    {sync.source_attributes.object.type === "table"
+                      ? sync.source_attributes.object.table_name
+                      : sync.source_attributes.object.name || sync.label}
+                  </span>
                 ) : (
                   <span className="w-full truncate font-medium">{sync.label}</span>
                 )}
