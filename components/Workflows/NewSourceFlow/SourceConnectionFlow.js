@@ -44,7 +44,7 @@ export default function SourceConnectionFlow() {
       case STEPS.INITIAL:
         return (
           <div className="flex h-full flex-col gap-12 overflow-y-auto">
-            {existingSources.length > 1 && (
+            {existingSources.length > 0 && (
               <div className="flex flex-col gap-3">
                 <span className="text-lg font-medium">Use an existing source</span>
                 <ExistingSourcesList
