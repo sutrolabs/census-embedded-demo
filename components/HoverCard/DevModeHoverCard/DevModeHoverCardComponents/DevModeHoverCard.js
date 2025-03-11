@@ -3,8 +3,6 @@ import Link from "next/link"
 
 export default function DevModeHoverCard({ top, left, onMouseEnter, onMouseLeave, hoverData, ref }) {
   const infoItems = [
-    { key: "url", label: "URL", value: hoverData.url, copiable: true },
-    { key: "method", label: "Method", value: hoverData.method },
     { key: "headers", label: "Headers", value: hoverData.headers },
     { key: "body", label: "Body", value: hoverData.body, copiable: true },
   ].filter((item) => item.value)
