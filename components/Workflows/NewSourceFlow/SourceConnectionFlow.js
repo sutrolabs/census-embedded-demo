@@ -86,6 +86,7 @@ export default function SourceConnectionFlow() {
             sourceConnectLinks={sourceConnectLinks}
             refetchSourceConnectLinks={refetchSourceConnectLinks}
             embedMode={embedMode}
+            devMode={devMode}
           />
         )
 
