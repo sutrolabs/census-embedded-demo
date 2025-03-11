@@ -7,7 +7,6 @@ import {
   flip,
   shift,
   autoUpdate,
-  computePosition,
 } from "@floating-ui/react"
 import * as Portal from "@radix-ui/react-portal"
 import { AnimatePresence } from "motion/react"
@@ -46,6 +45,20 @@ export default function DevModeHoverCardManager() {
       shift({ padding: 10 }),
     ],
     placement: "bottom-start",
+    whileElementsMounted: autoUpdate,
+  })
+
+  // Add another floating instance for the label
+  const {
+    x: labelX,
+    y: labelY,
+    strategy: labelStrategy,
+    refs: labelRefs,
+    isPositioned: isLabelPositioned,
+  } = useFloating({
+    open: !!hoverTarget,
+    placement: "top-start",
+    middleware: [offset(5), shift({ padding: 10 })],
     whileElementsMounted: autoUpdate,
   })
 
@@ -154,20 +167,11 @@ export default function DevModeHoverCardManager() {
             return
           }
 
-          // Set the reference element for Floating UI
+          // Set the reference element for both floating elements
           refs.setReference(target)
+          labelRefs.setReference(target)
           setHoverTarget(target)
           setHoverData(data)
-
-          // Position the label separately
-          if (labelRef.current) {
-            computePosition(target, labelRef.current, {
-              placement: "top-start",
-              middleware: [offset(5), shift({ padding: 10 })],
-            }).then(({ x, y }) => {
-              setLabelPosition({ x, y })
-            })
-          }
         } catch (error) {}
       }
     }
@@ -176,7 +180,7 @@ export default function DevModeHoverCardManager() {
     return () => {
       document.removeEventListener("mouseover", handleMouseOver)
     }
-  }, [devMode, refs])
+  }, [devMode, refs, labelRefs])
 
   const applyHighlightToTarget = (target) => {
     if (!target) return
@@ -219,12 +223,12 @@ export default function DevModeHoverCardManager() {
         {hoverTarget && hoverData && (
           <>
             <DevModeHoverCardLabel
-              ref={labelRef}
+              ref={labelRefs.setFloating}
               style={{
-                position: "absolute",
-                top: labelPosition ? `${labelPosition.y}px` : "0",
-                left: labelPosition ? `${labelPosition.x}px` : "0",
-                opacity: labelPosition ? 1 : 0,
+                position: labelStrategy,
+                top: labelY ?? 0,
+                left: labelX ?? 0,
+                opacity: isLabelPositioned ? 1 : 0,
               }}
               method={hoverData.method}
               url={hoverData.url}

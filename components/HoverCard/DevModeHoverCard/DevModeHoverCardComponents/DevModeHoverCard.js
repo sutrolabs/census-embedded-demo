@@ -19,7 +19,7 @@ const DevModeHoverCard = forwardRef(({ style, onMouseEnter, onMouseLeave, hoverD
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 5 }}
-      transition={{ duration: 0.1 }}
+      transition={{ duration: 0.15 }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       {...props}

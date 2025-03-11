@@ -13,7 +13,7 @@ const DevModeHoverCardLabel = forwardRef(({ style, method, url, ...props }, ref)
       initial={{ opacity: 0, y: 5 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 5 }}
-      transition={{ duration: 0.1 }}
+      transition={{ duration: 0.15 }}
       {...props}
     >
       <span className="font-bold">{method}</span>
