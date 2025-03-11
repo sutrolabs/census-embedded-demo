@@ -1,6 +1,9 @@
 import { forwardRef } from "react"
 
-function Button({ solid, brand, autoFocus, emphasize, disabled, className, onClick, children, size }, ref) {
+function Button(
+  { solid, brand, autoFocus, emphasize, disabled, className, onClick, children, size, ...props },
+  ref,
+) {
   return (
     <button
       className={`
@@ -22,6 +25,7 @@ function Button({ solid, brand, autoFocus, emphasize, disabled, className, onCli
       disabled={disabled}
       onClick={onClick}
       ref={ref}
+      {...props}
     >
       <div className="relative z-10 flex w-full flex-row items-center justify-center gap-2">{children}</div>
       {emphasize && (

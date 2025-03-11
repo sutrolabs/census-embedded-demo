@@ -35,7 +35,7 @@ const DrawerContent = React.forwardRef(({ className, direction, children, ...pro
     <DrawerPrimitive.Content
       ref={ref}
       className={classNames(
-        "fixed z-50 flex h-auto flex-col border border-neutral-100 bg-white shadow-xl",
+        "pointer-events-auto fixed z-50 flex h-auto flex-col border border-neutral-100 bg-white shadow-xl",
         direction === "right"
           ? "bottom-0 right-0 top-0 w-2/3 max-w-[1200px] rounded-l-[10px]"
           : "inset-x-0 bottom-0 mt-24 rounded-t-[10px]",

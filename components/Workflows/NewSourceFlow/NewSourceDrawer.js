@@ -12,6 +12,7 @@ import {
 import SourceConnectionFlow from "@components/Workflows/NewSourceFlow/SourceConnectionFlow"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
+import { createDevModeAttr } from "@utils/devMode"
 
 export default function NewSourceDrawer({
   workspaceAccessToken,
@@ -67,9 +68,20 @@ export default function NewSourceDrawer({
       </DrawerTrigger>
       <DrawerContent direction="right">
         <DrawerHeader>
-          <div className="flex flex-row items-center gap-6">
+          <div className="pointer-events-auto flex flex-row items-center gap-6">
             {pageActions}
-            <div className="flex items-center gap-3">
+            <div
+              className="flex items-center gap-3"
+              {...(devMode
+                ? createDevModeAttr({
+                    url: `https://app.getcensus.com/api/v1/sources/${selectedSource?.id || ""}`,
+                    method: "GET",
+                    headers: `Authorization: Bearer <workspaceAccessToken}`,
+                    note: "Current source configuration page",
+                    link: "https://developers.getcensus.com/api-reference/sources/get-a-source",
+                  })
+                : {})}
+            >
               {logo && (
                 <Image
                   src={logo}
