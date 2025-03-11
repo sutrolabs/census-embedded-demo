@@ -1,12 +1,13 @@
 import { motion } from "motion/react"
+import { forwardRef } from "react"
 
-export default function DevModeHoverCardLabel({ top, left, method, url }) {
+const DevModeHoverCardLabel = forwardRef(({ style, method, url }, ref) => {
   return (
     <motion.div
       className="fixed z-[9999] flex flex-row gap-2 rounded-sm bg-[#4640EB] px-1.5 py-0.5 font-mono text-xs font-medium text-white shadow-sm"
+      ref={ref}
       style={{
-        top: `${top}px`,
-        left: `${left}px`,
+        ...style,
         pointerEvents: "none",
       }}
       initial={{ opacity: 0, y: 5 }}
@@ -18,4 +19,8 @@ export default function DevModeHoverCardLabel({ top, left, method, url }) {
       <span>{url}</span>
     </motion.div>
   )
-}
+})
+
+DevModeHoverCardLabel.displayName = "DevModeHoverCardLabel"
+
+export default DevModeHoverCardLabel

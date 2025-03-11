@@ -307,11 +307,11 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                 className="flex w-full flex-row items-center gap-2 truncate"
                 {...(devMode
                   ? createDevModeAttr({
-                      url: `https://app.getcensus.com/api/v1/sources/`,
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
                       method: "GET",
                       headers: `Authorization: Bearer <workspaceAccessToken}`,
                       note: "Current source configuration page",
-                      link: "https://developers.getcensus.com/api-reference/sources/get-a-source",
+                      link: "https://developers.getcensus.com/api-reference/syncs/fetch-sync",
                     })
                   : {})}
               >
@@ -327,11 +327,11 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                 showAge
                 {...(devMode
                   ? createDevModeAttr({
-                      url: `https://app.getcensus.com/api/v1/sources/`,
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
                       method: "GET",
                       headers: `Authorization: Bearer <workspaceAccessToken}`,
-                      note: "Current source configuration page",
-                      link: "https://developers.getcensus.com/api-reference/sources/get-a-source",
+                      note: "Fetch a sync's status",
+                      link: "https://developers.getcensus.com/api-reference/syncs/fetch-sync",
                     })
                   : {})}
               />
@@ -341,16 +341,16 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                 onClick={() => toggleSync(sync)}
                 {...(devMode
                   ? createDevModeAttr({
-                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}/trigger`,
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
                       method: "PATCH",
                       headers: `{
-                      "authorization": "Bearer: <workspaceAccessToken>",
-                      "content-type": "application/json"
-                      }`,
+  "authorization": "Bearer: <workspaceAccessToken>",
+  "content-type": "application/json"
+}`,
                       body: `{
-                      "paused: ${sync.paused ? "true" : "false"}
-                      }`,
-                      note: "Current source configuration page",
+  "paused": "${sync.paused ? "true" : "false"}"
+}`,
+                      note: "Update a sync's status",
                       link: "https://developers.getcensus.com/api-reference/syncs/update-a-sync",
                     })
                   : {})}
@@ -374,18 +374,7 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                 <i className="fa-solid fa-play" />
                 Run Now
               </Button>
-              <Button
-                onClick={() => openToSync(sync)}
-                {...(devMode
-                  ? createDevModeAttr({
-                      url: `https://app.getcensus.com/api/v1/sources/`,
-                      method: "GET",
-                      headers: `Authorization: Bearer <workspaceAccessToken}`,
-                      note: "Current source configuration page",
-                      link: "https://developers.getcensus.com/api-reference/sources/get-a-source",
-                    })
-                  : {})}
-              >
+              <Button onClick={() => openToSync(sync)}>
                 <i className="fa-solid fa-pen" />
                 Details
               </Button>

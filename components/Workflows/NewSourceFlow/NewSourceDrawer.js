@@ -74,7 +74,7 @@ export default function NewSourceDrawer({
               className="flex items-center gap-3"
               {...(devMode
                 ? createDevModeAttr({
-                    url: `https://app.getcensus.com/api/v1/sources/${selectedSource?.id || ""}`,
+                    url: `https://app.getcensus.com/api/v1/sources/`,
                     method: "GET",
                     headers: `Authorization: Bearer <workspaceAccessToken}`,
                     note: "Current source configuration page",

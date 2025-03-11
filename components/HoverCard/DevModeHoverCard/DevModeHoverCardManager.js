@@ -1,3 +1,14 @@
+import {
+  useFloating,
+  useInteractions,
+  useHover,
+  useDismiss,
+  offset,
+  flip,
+  shift,
+  autoUpdate,
+  computePosition,
+} from "@floating-ui/react"
 import * as Portal from "@radix-ui/react-portal"
 import { AnimatePresence } from "motion/react"
 import { useRouter } from "next/router"
@@ -11,32 +22,51 @@ export default function DevModeHoverCardManager() {
   const { devMode } = useCensusEmbedded()
   const [hoverTarget, setHoverTarget] = useState(null)
   const [hoverData, setHoverData] = useState(null)
-  const [isVisible, setIsVisible] = useState(false)
-  const [position, setPosition] = useState({ top: 0, left: 0, width: 0, height: 0 })
-  const cardRef = useRef(null)
-  const hideTimeoutRef = useRef(null)
-  const showTimeoutRef = useRef(null)
-  const isMouseOverCardRef = useRef(false)
-  const isMouseOverTargetRef = useRef(false)
+  const [labelPosition, setLabelPosition] = useState(null)
+  const labelRef = useRef(null)
   const router = useRouter()
+
+  // Use Floating UI's hooks for card positioning and interactions
+  const { x, y, strategy, refs, context, middlewareData, isPositioned, placement } = useFloating({
+    open: !!hoverTarget,
+    onOpenChange: (open) => {
+      if (!open) {
+        setHoverTarget(null)
+        setHoverData(null)
+      }
+    },
+    middleware: [
+      offset(10),
+      flip({
+        padding: 10,
+        fallbackPlacements: ["top-start"],
+        fallbackStrategy: "bestFit",
+      }),
+      shift({ padding: 10 }),
+    ],
+    placement: "bottom-start",
+    whileElementsMounted: autoUpdate,
+  })
+
+  // Setup hover interactions
+  const hover = useHover(context, {
+    delay: { open: 300, close: 100 },
+    restMs: 40,
+  })
+
+  // Setup dismiss interactions (clicking outside)
+  const dismiss = useDismiss(context)
+
+  // Combine all interactions
+  const { getReferenceProps, getFloatingProps } = useInteractions([hover, dismiss])
 
   useEffect(() => {
     const handleRouteChange = () => {
-      setIsVisible(false)
-
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current)
-        hideTimeoutRef.current = null
-      }
-
-      if (showTimeoutRef.current) {
-        clearTimeout(showTimeoutRef.current)
-        showTimeoutRef.current = null
-      }
+      setHoverTarget(null)
+      setHoverData(null)
     }
 
     router.events.on("routeChangeStart", handleRouteChange)
-
     return () => {
       router.events.off("routeChangeStart", handleRouteChange)
     }
@@ -53,142 +83,31 @@ export default function DevModeHoverCardManager() {
 
       if (target && target.dataset.devMode) {
         try {
-          if (hideTimeoutRef.current) {
-            clearTimeout(hideTimeoutRef.current)
-            hideTimeoutRef.current = null
-          }
-
-          if (showTimeoutRef.current) {
-            clearTimeout(showTimeoutRef.current)
-          }
-
-          isMouseOverTargetRef.current = true
-
           const data = JSON.parse(target.dataset.devMode)
+
+          // Set the reference element for Floating UI
+          refs.setReference(target)
           setHoverTarget(target)
           setHoverData(data)
 
-          const rect = target.getBoundingClientRect()
-          setPosition({
-            top: rect.top + window.scrollY,
-            left: rect.left + window.scrollX,
-            width: rect.width,
-            height: rect.height,
-          })
-
-          showTimeoutRef.current = setTimeout(() => {
-            setIsVisible(true)
-            showTimeoutRef.current = null
-          }, 300)
+          // Position the label separately
+          if (labelRef.current) {
+            computePosition(target, labelRef.current, {
+              placement: "top-start",
+              middleware: [offset(5), shift({ padding: 10 })],
+            }).then(({ x, y }) => {
+              setLabelPosition({ x, y })
+            })
+          }
         } catch (error) {}
       }
     }
 
-    const handleMouseOut = (e) => {
-      let target = e.target
-      while (target && !target.dataset.devMode) {
-        target = target.parentElement
-      }
-
-      if (target && target.dataset.devMode) {
-        isMouseOverTargetRef.current = false
-
-        if (showTimeoutRef.current) {
-          clearTimeout(showTimeoutRef.current)
-          showTimeoutRef.current = null
-        }
-
-        hideTimeoutRef.current = setTimeout(() => {
-          if (!isMouseOverCardRef.current && !isMouseOverTargetRef.current) {
-            setIsVisible(false)
-          }
-          hideTimeoutRef.current = null
-        }, 100)
-      }
-    }
-
-    const handleDocumentClick = (e) => {
-      if (cardRef.current && cardRef.current.contains(e.target)) {
-        return
-      }
-
-      if (hoverTarget && hoverTarget.contains(e.target)) {
-        setIsVisible(false)
-      }
-    }
-
     document.addEventListener("mouseover", handleMouseOver)
-    document.addEventListener("mouseout", handleMouseOut)
-    document.addEventListener("click", handleDocumentClick)
-
     return () => {
       document.removeEventListener("mouseover", handleMouseOver)
-      document.removeEventListener("mouseout", handleMouseOut)
-      document.removeEventListener("click", handleDocumentClick)
-
-      if (hideTimeoutRef.current) {
-        clearTimeout(hideTimeoutRef.current)
-      }
-
-      if (showTimeoutRef.current) {
-        clearTimeout(showTimeoutRef.current)
-      }
     }
-  }, [devMode, hoverTarget])
-
-  const handleCardMouseEnter = () => {
-    if (hideTimeoutRef.current) {
-      clearTimeout(hideTimeoutRef.current)
-      hideTimeoutRef.current = null
-    }
-    isMouseOverCardRef.current = true
-  }
-
-  const handleCardMouseLeave = () => {
-    isMouseOverCardRef.current = false
-
-    hideTimeoutRef.current = setTimeout(() => {
-      if (!isMouseOverTargetRef.current && !isMouseOverCardRef.current) {
-        setIsVisible(false)
-      }
-      hideTimeoutRef.current = null
-    }, 100)
-  }
-
-  const calculateCardPosition = () => {
-    if (!hoverTarget) return { top: 0, left: 0 }
-
-    const viewportWidth = window.innerWidth
-    const viewportHeight = window.innerHeight
-
-    let top = position.top + position.height + 5
-    let left = position.left - 2
-
-    if (cardRef.current) {
-      const cardRect = cardRef.current.getBoundingClientRect()
-
-      if (left + cardRect.width > viewportWidth) {
-        left = Math.max(0, viewportWidth - cardRect.width)
-      }
-
-      if (top + cardRect.height > viewportHeight + window.scrollY) {
-        top = position.top - cardRect.height - 5
-      }
-    }
-
-    return { top, left }
-  }
-
-  const calculateLabelPosition = () => {
-    if (!hoverTarget) return { top: 0, left: 0 }
-
-    const rect = hoverTarget.getBoundingClientRect()
-
-    const top = rect.top + window.scrollY - 25
-    const left = rect.left + window.scrollX - 1
-
-    return { top, left }
-  }
+  }, [devMode, refs])
 
   const applyHighlightToTarget = (target) => {
     if (!target) return
@@ -215,19 +134,15 @@ export default function DevModeHoverCardManager() {
   }
 
   useEffect(() => {
-    if (isVisible && hoverTarget) {
+    if (hoverTarget) {
       const removeHighlight = applyHighlightToTarget(hoverTarget)
-
       return () => {
         removeHighlight()
       }
     }
-  }, [isVisible, hoverTarget])
+  }, [hoverTarget])
 
-  if (!devMode || !isVisible || !hoverData || !hoverTarget) return null
-
-  const cardPosition = calculateCardPosition()
-  const labelPosition = calculateLabelPosition()
+  if (!devMode || !hoverData || !hoverTarget) return null
 
   const getElementType = () => {
     if (!hoverTarget) return "Element"
@@ -261,21 +176,29 @@ export default function DevModeHoverCardManager() {
   return (
     <Portal.Root>
       <AnimatePresence>
-        {isVisible && (
+        {hoverTarget && hoverData && (
           <>
             <DevModeHoverCardLabel
-              top={labelPosition.top}
-              left={labelPosition.left}
+              ref={labelRef}
+              style={{
+                position: "absolute",
+                top: labelPosition ? `${labelPosition.y}px` : "0",
+                left: labelPosition ? `${labelPosition.x}px` : "0",
+                opacity: labelPosition ? 1 : 0,
+              }}
               method={hoverData.method}
               url={hoverData.url}
             />
             <DevModeHoverCard
-              top={cardPosition.top}
-              left={cardPosition.left}
-              onMouseEnter={handleCardMouseEnter}
-              onMouseLeave={handleCardMouseLeave}
+              ref={refs.setFloating}
+              style={{
+                position: strategy,
+                top: y ?? 0,
+                left: x ?? 0,
+                opacity: isPositioned ? 1 : 0,
+              }}
+              {...getFloatingProps()}
               hoverData={hoverData}
-              ref={cardRef}
             />
           </>
         )}
