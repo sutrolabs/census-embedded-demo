@@ -19,8 +19,11 @@ import {
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
 import { b2bCustomerData } from "@data/b2b-customer-data"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
 import { SourceFlowProvider } from "@providers/SourceFlowProvider"
+import { createDevModeAttr } from "@utils/devMode"
+createDevModeAttr
 
 export default function ImportDataset({
   workspaceAccessToken,
@@ -39,9 +42,8 @@ export default function ImportDataset({
   setSyncs,
   runsLoading,
   runs,
-  embedMode,
-  devMode,
 }) {
+  const { devMode, embedMode } = useCensusEmbedded()
   const [showSidebar, setShowSidebar] = useState(false)
   const [selectedSourceId, setSelectedSourceId] = useState(null)
   const [availableSourceTypes, setAvailableSourceTypes] = useState([])
@@ -124,6 +126,17 @@ export default function ImportDataset({
       setSelectedSync(sync)
     } catch (error) {}
   }
+
+  // const getFilteredSyncs = () => {
+  //   if (!syncs || syncs.length === 0) return []
+
+  //   return syncs.filter((sync) => {
+  //     // Check if the sync has a source and the source has a name property
+  //     return sync.source && sync.source.name === "embedded_demo"
+  //   })
+  // }
+
+  // const filteredSyncs = getFilteredSyncs()
 
   return (
     <>
@@ -224,6 +237,7 @@ export default function ImportDataset({
 function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, refetchSyncs, setSyncs }) {
   // Now we can safely use the useSourceFlow hook here because this component is rendered inside the SourceFlowProvider
   const { openToSync } = useSourceFlow()
+  const { devMode } = useCensusEmbedded()
 
   // Function to run a sync
   const runSync = async (sync) => {
@@ -289,9 +303,28 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
         return (
           <div key={sync.id} className="flex flex-col gap-4 rounded border border-neutral-100 p-3">
             <div className="flex w-full flex-row items-center justify-between gap-3">
-              <div className="flex w-full flex-row items-center gap-2 truncate">
+              <div
+                className="flex w-full flex-row items-center gap-2 truncate"
+                {...(devMode
+                  ? createDevModeAttr({
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
+                      method: "GET",
+                      headers: `Authorization: Bearer <workspaceAccessToken}`,
+                      note: "Fetch a sync",
+                      link: "https://developers.getcensus.com/api-reference/syncs/fetch-sync",
+                    })
+                  : {})}
+              >
                 <ConnectionLogo src={sourceMetadata?.logo} />
-                <span className="w-full truncate font-medium">{sync.source_attributes.object.name}</span>
+                {sync.source_attributes?.object ? (
+                  <span className="w-full truncate font-medium">
+                    {sync.source_attributes.object.type === "table"
+                      ? sync.source_attributes.object.table_name
+                      : sync.source_attributes.object.name || sync.label}
+                  </span>
+                ) : (
+                  <span className="w-full truncate font-medium">{sync.label}</span>
+                )}
               </div>
               <SyncStatus
                 className="shrink-0"
@@ -300,14 +333,52 @@ function SyncsList({ syncs, sources, runsLoading, runs, workspaceAccessToken, re
                 runsLoading={runsLoading}
                 runs={runs}
                 showAge
+                {...(devMode
+                  ? createDevModeAttr({
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
+                      method: "GET",
+                      headers: `Authorization: Bearer <workspaceAccessToken}`,
+                      note: "Fetch a sync's status",
+                      link: "https://developers.getcensus.com/api-reference/syncs/fetch-sync",
+                    })
+                  : {})}
               />
             </div>
             <div className=" flex flex-row items-center gap-2">
-              <Button onClick={() => toggleSync(sync)}>
+              <Button
+                onClick={() => toggleSync(sync)}
+                {...(devMode
+                  ? createDevModeAttr({
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
+                      method: "PATCH",
+                      headers: `{
+  "authorization": "Bearer: <workspaceAccessToken>",
+  "content-type": "application/json"
+}`,
+                      body: `{
+  "paused": "${sync.paused ? "true" : "false"}"
+}`,
+                      note: "Update a sync's status",
+                      link: "https://developers.getcensus.com/api-reference/syncs/update-a-sync",
+                    })
+                  : {})}
+              >
                 <i className={sync.paused ? "fa-solid fa-play" : "fa-solid fa-pause"} />
                 {sync.paused ? "Resume" : "Pause"}
               </Button>
-              <Button onClick={() => runSync(sync)} disabled={sync.paused || running}>
+              <Button
+                onClick={() => runSync(sync)}
+                disabled={sync.paused || running}
+                {...(devMode
+                  ? createDevModeAttr({
+                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}/trigger`,
+                      method: "POST",
+                      headers: `Authorization: Bearer <workspaceAccessToken}`,
+                      note: "Trigger a sync run",
+                      link: "https://developers.getcensus.com/api-reference/syncs/trigger-a-sync-run",
+                    })
+                  : {})}
+              >
                 <i className="fa-solid fa-play" />
                 Run Now
               </Button>

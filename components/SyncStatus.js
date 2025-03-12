@@ -42,7 +42,7 @@ const modes = [
   },
 ]
 
-export function SyncStatus({ className, syncsLoading, syncs, runsLoading, runs, showAge }) {
+export function SyncStatus({ className, syncsLoading, syncs, runsLoading, runs, showAge, ...props }) {
   const [mode, age] = useMemo(() => {
     if (syncsLoading || runsLoading) {
       return [loadingMode, undefined]
@@ -81,6 +81,7 @@ export function SyncStatus({ className, syncsLoading, syncs, runsLoading, runs, 
       text={`${mode.text}${
         showAge && age ? ` (${humanizeDuration(age, { units: ["h", "m"], round: true })} ago)` : ""
       }`}
+      {...props}
     />
   )
 }

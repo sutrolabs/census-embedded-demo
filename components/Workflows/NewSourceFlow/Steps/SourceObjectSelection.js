@@ -83,12 +83,12 @@ export default function SourceObjectSelection() {
   // Handle completion of object selection
   const handleContinue = () => {
     // Pass the selected syncs to the parent component
-    onObjectsSelected(sourceSpecificSyncs)
+    goToReview(sourceSpecificSyncs)
   }
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto">
-      <div className="mt-4 flex flex-col gap-5">
+      <div className="mt-4 flex h-full flex-col gap-5">
         {/* Display existing syncs */}
         {sourceSpecificSyncs.map((sync) => (
           <SyncObject

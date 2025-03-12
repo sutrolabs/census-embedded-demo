@@ -2,7 +2,7 @@ import { useState, useEffect } from "react"
 
 import { censusFrontendBaseUrl } from "@utils/url"
 
-export default function EmbeddedFrame({ connectLink, onExit }) {
+export default function EmbeddedFrame({ connectLink, onExit, height = "800px" }) {
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function EmbeddedFrame({ connectLink, onExit }) {
       <iframe
         className={iframeClass}
         width="100%"
-        height="800px"
+        height={height}
         src={connectLink}
         allow="clipboard-read; clipboard-write"
       />
