@@ -13,6 +13,7 @@ export default function SourceConnectionForm() {
     sourceConnectLinks = [],
     refetchSourceConnectLinks,
     embedMode = true,
+    goBack,
   } = useSourceFlow()
 
   const [loading, setLoading] = useState(false)
@@ -75,6 +76,7 @@ export default function SourceConnectionForm() {
     } else {
       // Connection failed or was cancelled
       setShowEmbeddedFrame(false)
+      goBack()
     }
   }
 
