@@ -1,27 +1,27 @@
-import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useEffect, useState, useCallback } from "react"
 
+import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
-import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import Header from "@components/Structural/Header/Header"
+import SegmentDetailLayout from "@components/Structural/Layouts/SegmentLayout"
 import SyncManagement from "@components/SyncManagement"
-import { TabsContent, Tabs, TabsList, TabsTrigger } from "@components/Tabs/Tabs"
-import Toggle from "@components/Toggle/Toggle"
-import NewDestinationDrawer from "@components/Workflows/NewDestinationFlow/NewDestinationDrawer"
 import { useDestinations } from "@hooks/data/useDestinations"
+import { useSegments } from "@hooks/data/useSegments"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
-import { DestinationFlowProvider } from "@providers/DestinationFlowProvider"
 import { createDevModeAttr } from "@utils/devMode"
 import { embeddedDemoSourceLabel, usersInHighGrowthCitiesModelName } from "@utils/preset_source_destination"
 
-export default function Index({ segments }) {
+export default function Index() {
   const { destinations, destinationTypes } = useDestinations()
   const { workspaceAccessToken, embedMode, devMode, loading, setLoading } = useCensusEmbedded()
+  const { segments, fetchSegments } = useSegments()
   const [selectedSegment, setSelectedSegment] = useState(null)
   const [editSegmentWizardLink, setEditSegmentWizardLink] = useState(null)
+  const [createSegmentWizardLink, setCreateSegmentWizardLink] = useState(null)
   const [destinationConnectLinks, setDestinationConnectLinks] = useState([])
   const showEditSegmentWizard = !!editSegmentWizardLink
+  const showCreateSegmentWizard = !!createSegmentWizardLink
 
   const API_CREATE_EDIT_SEGMENT_LINK = "/api/create_edit_segment_management_link"
   const headers = {
@@ -57,10 +57,38 @@ export default function Index({ segments }) {
       setLoading(false)
     }
   }
+
+  const initiateCreateSegmentWizard = async () => {
+    try {
+      setLoading(true)
+      const response = await fetch("/api/create_segment_management_link", {
+        method: "POST",
+        headers: headers,
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      const data = await response.json()
+      if (embedMode) {
+        setCreateSegmentWizardLink(data.uri)
+      } else {
+        window.location.href = data.uri
+      }
+    } finally {
+      setLoading(false)
+    }
+  }
+
   // Handle segment selection
   const handleSegmentClick = (segment) => {
     setSelectedSegment(segment)
     initiateEditSegmentWizard(segment)
+  }
+
+  // Handle create segment button click
+  const handleCreateSegmentClick = () => {
+    setSelectedSegment(null) // Clear any selected segment
+    initiateCreateSegmentWizard()
   }
 
   return (
@@ -70,101 +98,76 @@ export default function Index({ segments }) {
       </Head>
       <Header
         title="Audiences"
-        nestedPage={selectedSegment?.name}
-        backButtonClick={() => setSelectedSegment(null)}
+        nestedPage={showCreateSegmentWizard ? "New Audience" : selectedSegment?.name}
+        backButtonClick={() => {
+          setSelectedSegment(null)
+          setCreateSegmentWizardLink(null)
+        }}
+        action={
+          !selectedSegment &&
+          !showCreateSegmentWizard && (
+            <Button onClick={handleCreateSegmentClick}>
+              <i className="fa-solid fa-plus mr-2" />
+              Create New Segment
+            </Button>
+          )
+        }
       />
 
       <div className="flex h-full w-full flex-col">
-        {selectedSegment && embedMode === true ? (
-          <div className="flex h-full w-full flex-col overflow-hidden">
-            <Tabs defaultValue="segment" className="h-full w-full">
-              <TabsList>
-                <div className=" flex shrink-0 flex-row items-center gap-6"></div>
-                <div className=" mx-auto flex w-2/5 items-center justify-center">
-                  <TabsTrigger value="segment">Audience</TabsTrigger>
-                  <TabsTrigger value="sync">Sync</TabsTrigger>
-                </div>
-              </TabsList>
-              <TabsContent value="segment" className="h-full w-full">
-                {editSegmentWizardLink ? (
-                  <EmbeddedFrame
-                    className="h-full w-full"
-                    connectLink={editSegmentWizardLink}
-                    onExit={() => setEditSegmentWizardLink(editSegmentWizardLink)}
-                  />
-                ) : (
-                  <div className="flex h-full items-center justify-center">
-                    <Card className="p-6 text-center">
-                      <Text size="5">Loading segment details...</Text>
-                      {loading && (
-                        <Text size="2" className="mt-2 text-neutral-500">
-                          Please wait while we load the segment editor
-                        </Text>
-                      )}
-                    </Card>
-                  </div>
-                )}
-              </TabsContent>
-              <TabsContent value="sync" className="flex flex-col p-4">
-                {destinations.map((destination) => {
-                  return (
-                    <div
-                      className="flex flex-row items-center justify-between border-b border-neutral-100 p-4"
-                      key={destination.id}
-                    >
-                      <span>{destination.name}</span>
-
-                      <Toggle />
-                    </div>
-                  )
-                })}
-                <NewDestinationDrawer />
-              </TabsContent>
-            </Tabs>
-          </div>
+        {(selectedSegment || showCreateSegmentWizard) && embedMode === true ? (
+          <SegmentDetailLayout
+            segment={selectedSegment}
+            createSegmentWizardLink={createSegmentWizardLink}
+            editSegmentWizardLink={editSegmentWizardLink}
+            setEditSegmentWizardLink={setEditSegmentWizardLink}
+            destinations={destinations}
+            destinationConnectLinks={destinationConnectLinks}
+            setDestinationConnectLinks={setDestinationConnectLinks}
+            setCreateSegmentWizardLink={setCreateSegmentWizardLink}
+            destinationTypes={destinationTypes}
+            onSegmentCreated={async (newSegment) => {
+              await fetchSegments()
+              setCreateSegmentWizardLink(null)
+            }}
+          />
         ) : (
           <div className="flex h-full w-full flex-col overflow-hidden">
-            <div className="flex items-center justify-between border-b border-neutral-100 p-4">
-              <h2 className="text-lg font-medium">Available Audiences</h2>
-              <DestinationFlowProvider
-                workspaceAccessToken={workspaceAccessToken}
-                destinationConnectLinks={destinationConnectLinks}
-                refetchDestinationConnectLinks={() => {
-                  /* implement refresh logic */
-                }}
-                destinations={destinations}
-                setDestinations={setDestinationConnectLinks}
-                availableDestinationTypes={destinationTypes}
-              >
-                <NewDestinationDrawer />
-              </DestinationFlowProvider>
-            </div>
             <div className="flex h-full flex-col overflow-y-auto p-3">
-              {segments.map((segment) => (
-                <div key={segment.id} className="group">
-                  <button
-                    className={`peer flex w-full flex-row justify-between rounded p-4 text-left text-lg transition-all duration-75 hover:bg-neutral-100`}
-                    onClick={() => handleSegmentClick(segment)}
-                    {...(devMode
-                      ? createDevModeAttr({
-                          url: `/api/sources/${segment.source_id}/filter_segments/${segment.id}`,
-                          method: "GET",
-                          headers: `Authorization: Bearer ${workspaceAccessToken}`,
-                          body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
-                          note: "Lists segments related to a particular source",
-                          link: "google.com",
-                        })
-                      : {})}
-                  >
-                    <span>{segment.name}</span>
-                    <div className="flex flex-row items-center gap-2">
-                      <i className="fa-solid fa-table-rows" />
-                      {segment.record_count}
-                    </div>
-                  </button>
-                  <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
+              {segments.length < 1 ? (
+                <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-8">
+                  <span className="text-lg font-medium">No Segments Created, add a new segment</span>
+                  <Button onClick={handleCreateSegmentClick}>Add a new segment</Button>
                 </div>
-              ))}
+              ) : (
+                <>
+                  {segments.map((segment) => (
+                    <div key={segment.id} className="group">
+                      <button
+                        className={`peer flex w-full flex-row justify-between rounded p-4 text-left text-lg transition-all duration-75 hover:bg-neutral-100`}
+                        onClick={() => handleSegmentClick(segment)}
+                        {...(devMode
+                          ? createDevModeAttr({
+                              url: `/api/sources/${segment.source_id}/filter_segments/${segment.id}`,
+                              method: "GET",
+                              headers: `Authorization: Bearer ${workspaceAccessToken}`,
+                              body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                              note: "Lists segments related to a particular source",
+                              link: "google.com",
+                            })
+                          : {})}
+                      >
+                        <span>{segment.name}</span>
+                        <div className="flex flex-row items-center gap-2">
+                          <i className="fa-solid fa-table-rows" />
+                          {segment.record_count}
+                        </div>
+                      </button>
+                      <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
           </div>
         )}
