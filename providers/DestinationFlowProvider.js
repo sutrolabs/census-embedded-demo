@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
+import { censusFrontendBaseUrl } from "@utils/url"
 
 // Steps in the connection flow
 export const STEPS = {
@@ -21,6 +22,8 @@ export function DestinationFlowProvider({
   destinations,
   setDestinations,
   availableDestinationTypes,
+  selectedSegment,
+  setSyncs,
 }) {
   // Flow state
   const [isDrawerOpen, setIsDrawerOpen] = useState(false)
@@ -146,6 +149,23 @@ export function DestinationFlowProvider({
     setExistingDestinations(destinations || [])
   }, [destinations])
 
+  const assembleSyncManagementLink = useCallback(() => {
+    if (!workspaceAccessToken || !selectedSegment || !selectedDestination) {
+      return null
+    }
+
+    const params = new URLSearchParams({
+      auth: workspaceAccessToken,
+      source_hidden: "true",
+      destination_hidden: "true",
+      model_id: selectedSegment.id, // Using segment as the source/model
+      destination_connection_id: selectedDestination.id,
+      destination_object_name: selectedDestination.object_name || "",
+    })
+
+    return `${censusFrontendBaseUrl}?${params.toString()}`
+  }, [workspaceAccessToken, selectedSegment, selectedDestination])
+
   const value = {
     // State
     STEPS,
@@ -157,6 +177,7 @@ export function DestinationFlowProvider({
     existingDestinations,
     loadingDestinationTypes,
     loadingDestinations,
+    selectedSegment,
     error,
     pageTitle,
     pageActions,
@@ -177,6 +198,10 @@ export function DestinationFlowProvider({
     destinationConnectLinks,
     refetchDestinationConnectLinks,
     availableDestinationTypes,
+    setSyncs,
+
+    // Add the new function to the context
+    assembleSyncManagementLink,
   }
 
   return <DestinationFlowContext.Provider value={value}>{children}</DestinationFlowContext.Provider>

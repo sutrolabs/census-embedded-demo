@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react"
+import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
+import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import { useDestinationFlow } from "@providers/DestinationFlowProvider"
 
 export default function DestinationConfiguration() {
@@ -10,74 +11,15 @@ export default function DestinationConfiguration() {
     workspaceAccessToken,
     goToReview: onConfigurationComplete,
     goBack: onBack,
+    selectedSegment,
+    setSyncs,
+    assembleSyncManagementLink,
   } = useDestinationFlow()
 
-  const [loading, setLoading] = useState(false)
+  const [showSyncWizard, setShowSyncWizard] = useState(true)
   const [error, setError] = useState(null)
-  const [destinationSettings, setDestinationSettings] = useState(null)
 
-  useEffect(() => {
-    const fetchDestinationSettings = async () => {
-      try {
-        setLoading(true)
-        const response = await fetch(`/api/get_destination_settings?id=${destination.id}`, {
-          headers: {
-            ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          },
-        })
-
-        if (!response.ok) {
-          throw new Error("Failed to fetch destination settings")
-        }
-
-        const data = await response.json()
-        setDestinationSettings(data)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    if (destination?.id) {
-      fetchDestinationSettings()
-    }
-  }, [destination?.id, workspaceAccessToken])
-
-  const handleSaveSettings = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch("/api/update_destination_settings", {
-        method: "POST",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          ["content-type"]: "application/json",
-        },
-        body: JSON.stringify({
-          id: destination.id,
-          settings: destinationSettings,
-        }),
-      })
-
-      if (!response.ok) {
-        throw new Error("Failed to update destination settings")
-      }
-
-      onConfigurationComplete()
-    } catch (err) {
-      setError(err.message)
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center py-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-b-2 border-emerald-500" />
-      </div>
-    )
-  }
+  const syncLink = assembleSyncManagementLink()
 
   if (error) {
     return (
@@ -90,21 +32,46 @@ export default function DestinationConfiguration() {
     )
   }
 
+  if (syncLink) {
+    return (
+      <EmbeddedFrame
+        connectLink={syncLink}
+        height="100%"
+        // onExit={async (connectionDetails) => {
+        //   if (connectionDetails.status === "created") {
+        //     setSyncs((syncs) => [
+        //       ...syncs,
+        //       {
+        //         id: connectionDetails.details.id,
+        //         paused: true,
+        //         label: "Loading Sync",
+        //         source_attributes: { connection_id: sourceId },
+        //         mappings: [],
+        //       },
+        //     ])
+        //     await refetchSyncs()
+        //     // prepares a new link for the next sync creation
+        //     await resetSyncManagementLink()
+        //   }
+        // }}
+      />
+    )
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <Card>
-        <h3 className="mb-4 text-lg font-medium">Destination Settings</h3>
-        {/* Add destination-specific configuration fields here */}
-        <p className="text-neutral-600">
-          Your destination is connected and ready to use. You can configure additional settings here.
+        <h3 className="mb-4 text-lg font-medium">Configure Sync</h3>
+        <p className="mb-4 text-neutral-600">
+          Configure how your segment data will sync to {destination.name}.
         </p>
+        <Button variant="primary" onClick={() => setShowSyncWizard(true)}>
+          Configure Sync
+        </Button>
       </Card>
 
       <div className="mt-4 flex justify-between">
         <Button onClick={onBack}>Back</Button>
-        <Button onClick={handleSaveSettings} variant="primary" loading={loading}>
-          Save and Continue
-        </Button>
       </div>
     </div>
   )

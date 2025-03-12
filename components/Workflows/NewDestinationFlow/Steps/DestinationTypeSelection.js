@@ -1,8 +1,7 @@
 import Image from "next/image"
 
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card/Card"
-import { getLogoForDestinationType } from "@hooks/useDestinationLogos"
+import { getLogoForDestinationType, getCategoryForDestinationType } from "@hooks/useDestinationLogos"
 import { useDestinationFlow } from "@providers/DestinationFlowProvider"
 
 export default function DestinationTypeSelection() {
@@ -39,12 +38,13 @@ export default function DestinationTypeSelection() {
   const filteredDestinationTypes = destinationTypes.filter(
     (destinationType) =>
       !excludedDestinations.includes(destinationType.service_name) &&
-      destinationType.creatable_via_connect_link === true,
+      destinationType.creatable_via_connect_link === true &&
+      getLogoForDestinationType(destinationType) !== null,
   )
 
   // Group destinations by category
   const groupedDestinations = filteredDestinationTypes.reduce((acc, destination) => {
-    const category = destination.category || "Other"
+    const category = getCategoryForDestinationType(destination)
     if (!acc[category]) {
       acc[category] = []
     }
@@ -63,14 +63,14 @@ export default function DestinationTypeSelection() {
     <div className="flex flex-col gap-6 overflow-y-auto">
       {sortedCategories.map((category) => (
         <div key={category} className="flex flex-col gap-3">
-          <h3 className="text-lg font-medium text-neutral-700">{category}</h3>
+          <h3 className="text-lg font-medium capitalize text-neutral-700">{category}</h3>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
             {groupedDestinations[category].map((destinationType) => {
               const logo = getLogoForDestinationType(destinationType)
               return (
-                <Card
+                <div
                   key={destinationType.service_name}
-                  className="group cursor-pointer transition-all duration-150 hover:border-emerald-500 hover:shadow-md"
+                  className="group cursor-pointer rounded border border-neutral-100 transition-all duration-150 hover:border-emerald-500 hover:shadow-md"
                   onClick={() => onSelectDestinationType(destinationType)}
                 >
                   <div className="flex items-center gap-3 p-3">
@@ -96,7 +96,7 @@ export default function DestinationTypeSelection() {
                       )}
                     </div>
                   </div>
-                </Card>
+                </div>
               )
             })}
           </div>

@@ -3,7 +3,6 @@ import { Text } from "@radix-ui/themes"
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@components/Tabs/Tabs"
-import Toggle from "@components/Toggle/Toggle"
 import NewDestinationDrawer from "@components/Workflows/NewDestinationFlow/NewDestinationDrawer"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { DestinationFlowProvider } from "@providers/DestinationFlowProvider"
@@ -27,9 +26,6 @@ export default function SegmentDetailLayout({
         // Populated state - when a segment exists
         <Tabs defaultValue="segment" className="h-full w-full">
           <TabsList>
-            <div className="flex shrink-0 flex-row items-center gap-6">
-              <div className="text-lg font-medium">{segment.name}</div>
-            </div>
             <div className="mx-auto flex w-2/5 items-center justify-center">
               <TabsTrigger value="segment">Audience</TabsTrigger>
               <TabsTrigger value="sync">Sync</TabsTrigger>
@@ -40,7 +36,9 @@ export default function SegmentDetailLayout({
               <EmbeddedFrame
                 className="h-full w-full"
                 connectLink={editSegmentWizardLink}
-                onExit={() => setEditSegmentWizardLink(editSegmentWizardLink)}
+                onExit={() => {
+                  setEditSegmentWizardLink(null)
+                }}
               />
             ) : (
               <div className="flex h-full items-center justify-center">
@@ -55,33 +53,26 @@ export default function SegmentDetailLayout({
               </div>
             )}
           </TabsContent>
-          <TabsContent value="sync" className="flex flex-col p-4">
+          <TabsContent value="sync" className="flex flex-col">
+            <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-6 py-4">
+              <Text>Sync {segment.name}</Text>
+              <DestinationFlowProvider
+                workspaceAccessToken={workspaceAccessToken}
+                destinationConnectLinks={destinationConnectLinks}
+                refetchDestinationConnectLinks={() => {
+                  /* implement refresh logic */
+                }}
+                destinations={destinations}
+                setDestinations={setDestinationConnectLinks}
+                availableDestinationTypes={destinationTypes}
+                selectedSegment={segment}
+              >
+                <NewDestinationDrawer />
+              </DestinationFlowProvider>
+            </div>
+
             {destinations.length > 0 ? (
-              <>
-                {destinations.map((destination) => {
-                  return (
-                    <div
-                      className="flex flex-row items-center justify-between border-b border-neutral-100 p-4"
-                      key={destination.id}
-                    >
-                      <span>{destination.name}</span>
-                      <Toggle />
-                    </div>
-                  )
-                })}
-                <DestinationFlowProvider
-                  workspaceAccessToken={workspaceAccessToken}
-                  destinationConnectLinks={destinationConnectLinks}
-                  refetchDestinationConnectLinks={() => {
-                    /* implement refresh logic */
-                  }}
-                  destinations={destinations}
-                  setDestinations={setDestinationConnectLinks}
-                  availableDestinationTypes={destinationTypes}
-                >
-                  <NewDestinationDrawer />
-                </DestinationFlowProvider>
-              </>
+              <></>
             ) : (
               <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6">
                 <Text size="5">No destinations connected</Text>
@@ -97,6 +88,7 @@ export default function SegmentDetailLayout({
                   destinations={destinations}
                   setDestinations={setDestinationConnectLinks}
                   availableDestinationTypes={destinationTypes}
+                  selectedSegment={segment}
                 >
                   <NewDestinationDrawer />
                 </DestinationFlowProvider>
@@ -115,8 +107,10 @@ export default function SegmentDetailLayout({
                 if (response?.status === "created") {
                   // Handle successful creation
                   onSegmentCreated?.(response.data)
+                } else {
+                  // Only clear create wizard if not successful
+                  setCreateSegmentWizardLink(null)
                 }
-                setCreateSegmentWizardLink(null)
               }}
             />
           ) : (

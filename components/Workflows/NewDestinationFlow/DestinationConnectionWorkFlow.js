@@ -4,7 +4,7 @@ import DestinationConnectionForm from "@components/Workflows/NewDestinationFlow/
 import DestinationTypeSelection from "@components/Workflows/NewDestinationFlow/Steps/DestinationTypeSelection"
 import { useDestinationFlow } from "@providers/DestinationFlowProvider"
 
-export default function DestinationConnectionFlow() {
+export default function DestinationConnectionWorkFlow() {
   const {
     STEPS,
     currentStep,

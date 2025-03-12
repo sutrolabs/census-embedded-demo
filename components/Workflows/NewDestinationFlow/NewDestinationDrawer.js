@@ -9,7 +9,7 @@ import {
   DrawerTrigger,
   DrawerClose,
 } from "@components/Drawer/Drawer"
-import DestinationConnectionFlow from "@components/Workflows/NewDestinationFlow/DestinationConnectionFlow"
+import DestinationConnectionWorkFlow from "@components/Workflows/NewDestinationFlow/DestinationConnectionWorkFlow"
 import { getLogoForDestinationType } from "@hooks/useDestinationLogos"
 import { useDestinationFlow } from "@providers/DestinationFlowProvider"
 
@@ -68,7 +68,7 @@ export default function NewDestinationDrawer() {
             </Button>
           </DrawerClose>
         </DrawerHeader>
-        <DestinationConnectionFlow />
+        <DestinationConnectionWorkFlow />
       </DrawerContent>
     </Drawer>
   )

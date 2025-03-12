@@ -10,6 +10,11 @@ export const destination_connection_logos = [
     logo: "https://cdn.worldvectorlogo.com/logos/amazon-simple.svg",
   },
   {
+    label: "braze",
+    category: "marketing",
+    logo: "https://cdn.worldvectorlogo.com/logos/amazon-simple.svg",
+  },
+  {
     label: "constant_contact",
     category: "ads",
     logo: "/logos/connections/sources/redshift_logo.svg",

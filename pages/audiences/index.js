@@ -102,35 +102,106 @@ export default function Index() {
         backButtonClick={() => {
           setSelectedSegment(null)
           setCreateSegmentWizardLink(null)
+          setEditSegmentWizardLink(null)
         }}
         action={
           !selectedSegment &&
           !showCreateSegmentWizard && (
             <Button onClick={handleCreateSegmentClick}>
-              <i className="fa-solid fa-plus mr-2" />
-              Create New Segment
+              <i className="fa-solid fa-plus" />
+              Create New Audience
             </Button>
           )
         }
       />
 
       <div className="flex h-full w-full flex-col">
-        {(selectedSegment || showCreateSegmentWizard) && embedMode === true ? (
-          <SegmentDetailLayout
-            segment={selectedSegment}
-            createSegmentWizardLink={createSegmentWizardLink}
-            editSegmentWizardLink={editSegmentWizardLink}
-            setEditSegmentWizardLink={setEditSegmentWizardLink}
-            destinations={destinations}
-            destinationConnectLinks={destinationConnectLinks}
-            setDestinationConnectLinks={setDestinationConnectLinks}
-            setCreateSegmentWizardLink={setCreateSegmentWizardLink}
-            destinationTypes={destinationTypes}
-            onSegmentCreated={async (newSegment) => {
-              await fetchSegments()
-              setCreateSegmentWizardLink(null)
-            }}
-          />
+        {embedMode === true ? (
+          <>
+            {showCreateSegmentWizard && (
+              <SegmentDetailLayout
+                segment={null}
+                createSegmentWizardLink={createSegmentWizardLink}
+                editSegmentWizardLink={null}
+                setEditSegmentWizardLink={setEditSegmentWizardLink}
+                destinations={destinations}
+                destinationConnectLinks={destinationConnectLinks}
+                setDestinationConnectLinks={setDestinationConnectLinks}
+                setCreateSegmentWizardLink={setCreateSegmentWizardLink}
+                destinationTypes={destinationTypes}
+                onSegmentCreated={async (response) => {
+                  // First fetch the updated segments
+                  const updatedSegments = await fetchSegments()
+
+                  // Clear create wizard state
+                  setCreateSegmentWizardLink(null)
+
+                  // Find and set up the new segment view
+                  const createdSegmentId = response?.data?.id
+                  if (createdSegmentId) {
+                    const createdSegment = updatedSegments.find((s) => s.id === createdSegmentId)
+                    if (createdSegment) {
+                      setSelectedSegment(createdSegment)
+                      await initiateEditSegmentWizard(createdSegment)
+                    }
+                  }
+                }}
+              />
+            )}
+            {selectedSegment && !showCreateSegmentWizard && (
+              <SegmentDetailLayout
+                segment={selectedSegment}
+                createSegmentWizardLink={null}
+                editSegmentWizardLink={editSegmentWizardLink}
+                setEditSegmentWizardLink={setEditSegmentWizardLink}
+                destinations={destinations}
+                destinationConnectLinks={destinationConnectLinks}
+                setDestinationConnectLinks={setDestinationConnectLinks}
+                setCreateSegmentWizardLink={setCreateSegmentWizardLink}
+                destinationTypes={destinationTypes}
+              />
+            )}
+            {!selectedSegment && !showCreateSegmentWizard && (
+              <div className="flex h-full w-full flex-col overflow-hidden">
+                <div className="flex h-full flex-col overflow-y-auto p-3">
+                  {segments.length < 1 ? (
+                    <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-8">
+                      <span className="text-lg font-medium">No Segments Created, add a new segment</span>
+                      <Button onClick={handleCreateSegmentClick}>Add a new segment</Button>
+                    </div>
+                  ) : (
+                    <>
+                      {segments.map((segment) => (
+                        <div key={segment.id} className="group">
+                          <button
+                            className={`peer flex w-full flex-row justify-between rounded p-4 text-left text-lg transition-all duration-75 hover:bg-neutral-100`}
+                            onClick={() => handleSegmentClick(segment)}
+                            {...(devMode
+                              ? createDevModeAttr({
+                                  url: `/api/sources/${segment.source_id}/filter_segments/${segment.id}`,
+                                  method: "GET",
+                                  headers: `Authorization: Bearer ${workspaceAccessToken}`,
+                                  body: `{ "sourceId": "sourceID", "segmentId": "segmentID" }`,
+                                  note: "Lists segments related to a particular source",
+                                  link: "google.com",
+                                })
+                              : {})}
+                          >
+                            <span>{segment.name}</span>
+                            <div className="flex flex-row items-center gap-2">
+                              <i className="fa-solid fa-table-rows" />
+                              {segment.record_count}
+                            </div>
+                          </button>
+                          <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
+          </>
         ) : (
           <div className="flex h-full w-full flex-col overflow-hidden">
             <div className="flex h-full flex-col overflow-y-auto p-3">

@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 const API_DESTINATIONS_ENDPOINT = "/api/list_destinations"
 const API_DELETE_DESTINATION_ENDPOINT = "/api/delete_destination"
 const API_DESTINATION_CONNECT_LINK_ENDPOINT = "/api/create_destination_connect_link"
-const API_DESTINATION_TYPES_ENDPOINT = "/api/list_destination_types"
+const API_DESTINATION_TYPES_ENDPOINT = "/api/list_connectors"
 
 export function useDestinations() {
   const [destinations, setDestinations] = useState([])
@@ -14,7 +14,7 @@ export function useDestinations() {
   const [error, setError] = useState(null)
   const { workspaceAccessToken } = useCensusEmbedded()
 
-  const fetchDestinations = async () => {
+  const fetchDestinations = useCallback(async () => {
     try {
       setLoading(true)
       const headers = {
@@ -40,9 +40,9 @@ export function useDestinations() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [workspaceAccessToken])
 
-  const fetchDestinationTypes = async () => {
+  const fetchDestinationTypes = useCallback(async () => {
     try {
       setLoading(true)
       const headers = {
@@ -68,7 +68,7 @@ export function useDestinations() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [workspaceAccessToken])
 
   const deleteDestination = async (destinationId) => {
     try {
@@ -136,7 +136,7 @@ export function useDestinations() {
       fetchDestinations()
       fetchDestinationTypes()
     }
-  }, [workspaceAccessToken])
+  }, [workspaceAccessToken, fetchDestinations, fetchDestinationTypes])
 
   return {
     destinations,
