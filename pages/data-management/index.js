@@ -127,16 +127,16 @@ export default function ImportDataset({
     } catch (error) {}
   }
 
-  // const getFilteredSyncs = () => {
-  //   if (!syncs || syncs.length === 0) return []
+  const getFilteredSyncs = () => {
+    if (!syncs || syncs.length === 0) return []
 
-  //   return syncs.filter((sync) => {
-  //     // Check if the sync has a source and the source has a name property
-  //     return sync.source && sync.source.name === "embedded_demo"
-  //   })
-  // }
+    return syncs.filter((sync) => {
+      // Check if the sync has a source and the source has a name property
+      return sync.source && sync.source.name === "embedded_demo"
+    })
+  }
 
-  // const filteredSyncs = getFilteredSyncs()
+  const filteredSyncs = getFilteredSyncs()
 
   return (
     <>
@@ -207,7 +207,7 @@ export default function ImportDataset({
               sources={sources}
               availableSourceTypes={availableSourceTypes}
             >
-              {syncs.length > 0 ? (
+              {filteredSyncs.length > 0 ? (
                 <SyncsList
                   syncs={syncs}
                   sources={sources}
