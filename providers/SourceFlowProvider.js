@@ -122,7 +122,7 @@ export function SourceFlowProvider({
         setCurrentStep(STEPS.SOURCE_TYPES)
         break
       case STEPS.SELECT_OBJECTS:
-        setCurrentStep(STEPS.SOURCE_TYPES)
+        setCurrentStep(STEPS.INITIAL)
         break
       case STEPS.REVIEW:
         setCurrentStep(STEPS.SELECT_OBJECTS)
