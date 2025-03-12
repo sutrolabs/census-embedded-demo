@@ -3,12 +3,12 @@ import { LinearScale, CategoryScale, LineElement } from "chart.js"
 import { PointElement, Tooltip, registry } from "chart.js"
 import dynamic from "next/dynamic"
 
+import Error_ from "@components/Error_"
 import DevModeHoverCardManager from "@components/HoverCard/DevModeHoverCard/DevModeHoverCardManager"
-import Loading from "@components/Loading/Loading"
-import Error_ from "@components/Message/Error_"
+import Loading from "@components/Loading"
+import MainLayout from "@components/MainLayout"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
-import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
 
@@ -27,7 +27,7 @@ function Application({ Component, pageProps }) {
 }
 
 function ApplicationContent({ Component, pageProps }) {
-  const { workspaceAccessToken, logOut } = useCensusEmbedded()
+  const { workspaceAccessToken } = useCensusEmbedded()
 
   if (!workspaceAccessToken) {
     return <Setup />
@@ -210,7 +210,6 @@ function MainApplication({ Component, pageProps, onLogOut }) {
     <main className="relative flex h-screen w-screen flex-row overflow-hidden">
       <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       <MainLayout>{component}</MainLayout>
-      <DevModeHoverCardManager />
       <DevModeHoverCardManager />
     </main>
   )

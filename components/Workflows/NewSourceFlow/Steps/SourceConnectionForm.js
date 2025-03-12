@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
+import EmbeddedFrame from "@components/EmbeddedFrame"
 import { useSourceConnectLink } from "@hooks/use-source-connect-link"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
 
@@ -13,6 +13,7 @@ export default function SourceConnectionForm() {
     sourceConnectLinks = [],
     refetchSourceConnectLinks,
     embedMode = true,
+    goBack,
   } = useSourceFlow()
 
   const [loading, setLoading] = useState(false)
@@ -75,6 +76,7 @@ export default function SourceConnectionForm() {
     } else {
       // Connection failed or was cancelled
       setShowEmbeddedFrame(false)
+      goBack()
     }
   }
 

@@ -10,7 +10,6 @@ import { censusFrontendBaseUrl } from "@utils/url"
 
 export function Setup() {
   const { workspaceAccessToken, setWorkspaceAccessToken } = useCensusEmbedded()
-
   return (
     <>
       <Head>

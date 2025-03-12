@@ -1,5 +1,6 @@
-import { censusFrontendBaseUrl } from "@utils/url"
 import { useState, useEffect } from "react"
+
+import { censusFrontendBaseUrl } from "@utils/url"
 
 export default function EmbeddedFrame({ connectLink, onExit, height = "800px" }) {
   const [loaded, setLoaded] = useState(false)
@@ -28,7 +29,7 @@ export default function EmbeddedFrame({ connectLink, onExit, height = "800px" })
     }
   }, [onExit])
 
-  const iframeClass = loaded ? className : "hidden"
+  const iframeClass = loaded ? "" : "hidden"
 
   return (
     <>
