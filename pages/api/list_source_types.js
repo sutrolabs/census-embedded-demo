@@ -2,6 +2,7 @@ import fetch from "node-fetch"
 import pino from "pino"
 
 import { getWorkspaceAccessToken } from "@utils/auth"
+import { setCacheControlHeaders } from "@utils/cacheControlHeaders"
 import { checkStatus } from "@utils/status"
 import { censusBaseUrl } from "@utils/url"
 
@@ -12,6 +13,8 @@ export default async function handler(req, res) {
     res.status(405).json({})
     return
   }
+
+  setCacheControlHeaders(res)
 
   const workspaceApiKey = getWorkspaceAccessToken(req)
 
