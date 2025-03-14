@@ -6,10 +6,7 @@ import SyncCreationWizard from "@components/SyncCreationWizard"
 import { SyncObject } from "@components/SyncObject"
 import { useSyncManagementLink } from "@hooks/use-sync-management-link"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
-import {
-  marketingMagnetDestinationName,
-  marketingMagnetDestinationObject,
-} from "@utils/preset_source_destination"
+import { acmeDestinationServiceName, acmeDestinationObjectName } from "@utils/preset_source_destination"
 import { censusBaseUrl } from "@utils/url"
 
 export default function SourceObjectSelection() {
@@ -35,20 +32,20 @@ export default function SourceObjectSelection() {
   const [presetDestination, setPresetDestination] = useState(null)
 
   useEffect(() => {
-    // The custom Marketing Magnet connector is required to have a unique type upon creation
+    // The custom ACME connector is required to have a unique type upon creation
     // Therefore, we check by the name as it is more consistent across different connectors
-    setPresetDestination(destinations.find((d) => d.name == marketingMagnetDestinationName))
+    setPresetDestination(destinations.find((d) => d.name == acmeDestinationServiceName))
   }, [destinations])
 
   // The Source component is only called from ImportDataset
-  // When importing datasets, the destination will always be our application, aka Marketing Magnet
+  // When importing datasets, the destination will always be our application, aka ACME
   const prefillDestination = (edit = false) => {
     if (!presetDestination?.id) return ""
 
     let queryParams = "&destination_hidden=true"
 
     if (!edit) {
-      queryParams += `&destination_connection_id=${presetDestination.id}&destination_object_name=${marketingMagnetDestinationObject}`
+      queryParams += `&destination_connection_id=${presetDestination.id}&destination_object_name=${acmeDestinationObjectName}`
     }
 
     return queryParams
