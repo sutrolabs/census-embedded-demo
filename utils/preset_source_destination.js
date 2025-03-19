@@ -1,6 +1,6 @@
-export const marketingMagnetDestinationName = "Marketing Magnet"
+export const acmeDestinationServiceName = "ACME"
 
-export const marketingMagnetDestinationObject = "user"
+export const acmeDestinationObjectName = "user"
 
 export const embeddedDemoSourceLabel = "embedded_demo"
 
