@@ -1,7 +1,7 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
-import Button from "@components/Button/Button/Button"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
+import { useDestinationConnectLink } from "@hooks/useDestinationConnectLink"
 import { useDestinationFlow } from "@providers/DestinationFlowProvider"
 
 export default function DestinationConnectionForm() {
@@ -20,9 +20,37 @@ export default function DestinationConnectionForm() {
   const [showEmbeddedFrame, setShowEmbeddedFrame] = useState(false)
 
   // Find an existing, valid connect link for this destination type
-  const destinationConnectLink = destinationConnectLinks.find(
-    (link) => link.type === destinationType?.service_name && !link.revoked && !link.destination_id,
+  // const destinationConnectLink = destinationConnectLinks.find(
+  //   (link) => link.type === destinationType?.service_name && !link.revoked && !link.destination_id,
+  // )
+
+  const [destinationConnectLink, getNewDestinationConnectLink, isLinkLoading] = useDestinationConnectLink(
+    destinationConnectLinks,
+    destinationType.service_name,
+    workspaceAccessToken,
   )
+
+  useEffect(() => {
+    const initiateFlow = async () => {
+      try {
+        setLoading(true)
+        setError(null)
+
+        if (destinationConnectLink) {
+          initiateDestinationConnectFlow(destinationConnectLink)
+        } else {
+          // We need to create a destination connect link
+          const newLink = await getNewDestinationConnectLink()
+          initiateDestinationConnectFlow(newLink)
+        }
+      } catch (err) {
+        setError(err.message || "Failed to create connection link")
+        setLoading(false)
+      }
+    }
+
+    initiateFlow()
+  })
 
   const initiateDestinationConnectFlow = (connectLinkData) => {
     if (embedMode) {
@@ -85,21 +113,24 @@ export default function DestinationConnectionForm() {
       {error && <div className="rounded bg-red-50 p-4 text-red-500">{error}</div>}
 
       {showEmbeddedFrame ? (
-        <div className="mb-8 h-full w-full">
+        <div className="h-full w-full">
           <EmbeddedFrame
             connectLink={destinationConnectLink?.uri}
             onExit={onExitedConnectionFlow}
             className="h-full"
+            height="100%"
           />
         </div>
       ) : (
         <div className="flex flex-col gap-4">
-          <p className="text-neutral-600">
-            Connect your {destinationType?.label} account to start syncing data.
-          </p>
-          <Button className="w-full" onClick={handleConnect} loading={loading} disabled={loading}>
-            Connect {destinationType?.label}
-          </Button>
+          {loading && (
+            <div className="flex items-center justify-center">
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-emerald-500 border-t-transparent"></span>
+                Preparing connection...
+              </span>
+            </div>
+          )}
         </div>
       )}
     </div>

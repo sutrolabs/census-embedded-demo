@@ -1,5 +1,6 @@
 import { Text } from "@radix-ui/themes"
 
+import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@components/Tabs/Tabs"
@@ -56,6 +57,7 @@ export default function SegmentDetailLayout({
           <TabsContent value="sync" className="flex flex-col">
             <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-6 py-4">
               <Text>Sync {segment.name}</Text>
+              <Button>New Sync</Button>
               <DestinationFlowProvider
                 workspaceAccessToken={workspaceAccessToken}
                 destinationConnectLinks={destinationConnectLinks}
