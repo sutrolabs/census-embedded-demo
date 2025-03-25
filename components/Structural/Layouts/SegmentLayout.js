@@ -2,11 +2,10 @@ import { Text } from "@radix-ui/themes"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
+import { NewDestinationSelectionMenu } from "@components/Command/NewDesitnationSelectionMenu/NewDestinationSelectionMenu"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@components/Tabs/Tabs"
-import NewDestinationDrawer from "@components/Workflows/NewDestinationFlow/NewDestinationDrawer"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
-import { DestinationFlowProvider } from "@providers/DestinationFlowProvider"
 
 export default function SegmentDetailLayout({
   segment,
@@ -57,20 +56,14 @@ export default function SegmentDetailLayout({
           <TabsContent value="sync" className="flex flex-col">
             <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-6 py-4">
               <Text>Sync {segment.name}</Text>
-              <Button>New Sync</Button>
-              <DestinationFlowProvider
-                workspaceAccessToken={workspaceAccessToken}
-                destinationConnectLinks={destinationConnectLinks}
-                refetchDestinationConnectLinks={() => {
-                  /* implement refresh logic */
-                }}
-                destinations={destinations}
-                setDestinations={setDestinationConnectLinks}
-                availableDestinationTypes={destinationTypes}
-                selectedSegment={segment}
-              >
-                <NewDestinationDrawer />
-              </DestinationFlowProvider>
+              <div>
+                <Button>New Sync</Button>
+                <NewDestinationSelectionMenu
+                  workspaceAccessToken={workspaceAccessToken}
+                  destinationTypes={destinationTypes}
+                  trigger="New Destination"
+                />
+              </div>
             </div>
 
             {destinations.length > 0 ? (
@@ -81,19 +74,11 @@ export default function SegmentDetailLayout({
                 <Text size="2" className="text-neutral-500">
                   Connect a destination to sync this audience
                 </Text>
-                <DestinationFlowProvider
+                <NewDestinationSelectionMenu
                   workspaceAccessToken={workspaceAccessToken}
-                  destinationConnectLinks={destinationConnectLinks}
-                  refetchDestinationConnectLinks={() => {
-                    /* implement refresh logic */
-                  }}
-                  destinations={destinations}
-                  setDestinations={setDestinationConnectLinks}
-                  availableDestinationTypes={destinationTypes}
-                  selectedSegment={segment}
-                >
-                  <NewDestinationDrawer />
-                </DestinationFlowProvider>
+                  destinationTypes={destinationTypes}
+                  trigger="New Destination"
+                />
               </div>
             )}
           </TabsContent>
