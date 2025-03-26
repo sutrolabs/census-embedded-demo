@@ -70,6 +70,7 @@ export function NewDestinationSelectionMenu({ trigger, destinationTypes, workspa
       const response = await fetch("/api/create_destination_connect_link", {
         method: "POST",
         headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
           ["content-type"]: "application/json",
         },
         body: JSON.stringify({
@@ -85,10 +86,7 @@ export function NewDestinationSelectionMenu({ trigger, destinationTypes, workspa
 
       // Redirect to the Census connect flow using the returned URI
       window.location.href = data.uri
-    } catch (error) {
-      console.error("Error creating destination connect link:", error)
-      // You might want to add error handling UI here
-    }
+    } catch (error) {}
   }
 
   return (
