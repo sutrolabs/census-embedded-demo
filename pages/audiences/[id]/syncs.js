@@ -1,7 +1,7 @@
 import { Text } from "@radix-ui/themes"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
 import { NewDestinationSelectionMenu } from "@components/Command/NewDesitnationSelectionMenu/NewDestinationSelectionMenu"
@@ -22,6 +22,8 @@ export default function SegmentSyncs() {
   const segment = segments?.find((s) => String(s.id) === String(id))
 
   const [isSyncDrawerOpen, setIsSyncDrawerOpen] = useState(false)
+  const [selectedDestination, setSelectedDestination] = useState(null)
+  const [selectedSync, setSelectedSync] = useState(null)
 
   // Filter out any destination types that shouldn't be shown
   // Similar to source types, we might want to exclude certain destinations
@@ -37,33 +39,41 @@ export default function SegmentSyncs() {
     filteredDestinationTypes.some((type) => type.service_name === destination.type),
   )
 
-  //   const [syncs, setSyncs] = useState([])
+  const [syncs, setSyncs] = useState([])
 
-  //   useEffect(() => {
-  //     const fetchSyncs = async () => {
-  //       if (!id || !workspaceAccessToken) return
+  useEffect(() => {
+    const fetchSyncs = async () => {
+      if (!id || !workspaceAccessToken) return
 
-  //       try {
-  //         const response = await fetch(`/api/segments/${id}/syncs`, {
-  //           headers: {
-  //             ["authorization"]: `Bearer ${workspaceAccessToken}`,
-  //             ["content-type"]: "application/json",
-  //           },
-  //         })
+      try {
+        const response = await fetch(`/api/list_syncs`, {
+          headers: {
+            ["authorization"]: `Bearer ${workspaceAccessToken}`,
+            ["content-type"]: "application/json",
+          },
+        })
 
-  //         if (!response.ok) {
-  //           throw new Error("Failed to fetch syncs")
-  //         }
+        if (!response.ok) {
+          throw new Error("Failed to fetch syncs")
+        }
 
-  //         const data = await response.json()
-  //         setSyncs(data)
-  //       } catch (error) {
-  //         setSyncs([])
-  //       }
-  //     }
+        const data = await response.json()
+        setSyncs(data)
+      } catch (error) {
+        setSyncs([])
+      }
+    }
 
-  //     fetchSyncs()
-  //   }, [id, workspaceAccessToken])
+    fetchSyncs()
+  }, [id, workspaceAccessToken])
+
+  const getSyncsForSegment = syncs.filter(
+    (sync) => sync.source_attributes?.object.filter_segment_id === segment?.id,
+  )
+
+  const filterSyncsToDestination = (destinationId) => {
+    return getSyncsForSegment.filter((sync) => sync.destination_attributes?.connection_id === destinationId)
+  }
 
   return (
     <div className="flex h-full w-full flex-col overflow-hidden">
@@ -72,44 +82,66 @@ export default function SegmentSyncs() {
         nestedPage={segment?.name}
         backButtonClick={() => router.push("/audiences")}
       />
-
-      <div className="flex h-full w-full flex-col overflow-hidden">
-        <SegmentTabs segmentId={id} currentTab="sync" />
-
-        <div className="flex flex-row items-center justify-between border-b border-neutral-100 px-6 py-4">
-          <Text>Sync {segment?.name}</Text>
-          <div>
-            <Button onClick={() => setIsSyncDrawerOpen(true)}>New Sync</Button>
-
-            <NewDestinationSelectionMenu
-              workspaceAccessToken={workspaceAccessToken}
-              destinationTypes={destinationTypes}
-              trigger="New Destination"
-            />
-          </div>
-        </div>
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col px-6">
+      <SegmentTabs segmentId={id} currentTab="sync" />
+      <div className="flex h-full w-full flex-col overflow-y-auto px-6">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col">
           {filteredDestinations.length > 0 ? (
-            <>
+            <div>
               {filteredDestinations.map((destination) => {
                 const logo = getLogoForDestination(destination)
 
                 return (
-                  <div key={destination.id} className="flex flex-col border-b border-neutral-100 px-8 py-6">
-                    <div className="flex flex-row items-center gap-4">
-                      <Image
-                        src={logo}
-                        alt={`${destination.label} logo`}
-                        width={24}
-                        height={24}
-                        className="h-6 w-6 object-contain"
-                      />
-                      <Text className="text-lg">{destination.name}</Text>
+                  <div
+                    key={destination.id}
+                    className="flex flex-col items-start gap-3 border-b border-neutral-100 px-8  py-6"
+                  >
+                    <div className="flex flex-row items-center justify-between">
+                      <div className="flex flex-row items-center gap-4">
+                        <Image
+                          src={logo}
+                          alt={`${destination.label} logo`}
+                          width={24}
+                          height={24}
+                          className="h-6 w-6 object-contain"
+                        />
+                        <Text className="text-lg">{destination.name}</Text>
+                      </div>
                     </div>
+                    {filterSyncsToDestination(destination.id).map((sync) => (
+                      <div
+                        key={sync.id}
+                        className="flex w-full flex-row items-center justify-between border-b border-zinc-100 p-4"
+                      >
+                        <Text className="capitalize">{sync.destination_attributes.object}</Text>
+                        <Button
+                          onClick={() => {
+                            setSelectedSync(sync)
+                            setSelectedDestination(destination)
+                            setIsSyncDrawerOpen(true)
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                    ))}
+                    <Button
+                      onClick={() => {
+                        setSelectedSync(null)
+                        setSelectedDestination(destination)
+                        setIsSyncDrawerOpen(true)
+                      }}
+                    >
+                      New Sync to {destination.name}
+                    </Button>
                   </div>
                 )
               })}
-            </>
+              <NewDestinationSelectionMenu
+                workspaceAccessToken={workspaceAccessToken}
+                destinationTypes={destinationTypes}
+                trigger="New Destination"
+              />
+            </div>
           ) : (
             <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6">
               <Text size="5">No destinations connected</Text>
@@ -128,9 +160,17 @@ export default function SegmentSyncs() {
 
         <SyncManagementDrawer
           isOpen={isSyncDrawerOpen}
-          onClose={() => setIsSyncDrawerOpen(false)}
+          onClose={() => {
+            setIsSyncDrawerOpen(false)
+            setSelectedDestination(null)
+            setSelectedSync(null)
+          }}
           workspaceAccessToken={workspaceAccessToken}
           presetSource={segment ? { id: segment.id, name: segment.name } : undefined}
+          presetDestination={
+            selectedDestination ? { id: selectedDestination.id, name: selectedDestination.name } : undefined
+          }
+          presetSync={selectedSync}
         />
       </div>
     </div>

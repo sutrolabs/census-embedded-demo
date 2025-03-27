@@ -17,7 +17,7 @@ export const destination_connection_logos = [
   {
     label: "constant_contact",
     category: "ads",
-    logo: "/logos/connections/sources/redshift_logo.svg",
+    logo: "/logos/connections/destinations/constantContact_logo.svg",
   },
   {
     label: "criteo",
@@ -40,11 +40,6 @@ export const destination_connection_logos = [
     logo: "https://cdn.worldvectorlogo.com/logos/pinterest-3.svg",
   },
   {
-    label: "radar",
-    category: "ads",
-    logo: "https://cdn.worldvectorlogo.com/logos/azure-2.svg",
-  },
-  {
     label: "reddit",
     category: "ads",
     logo: "https://cdn.worldvectorlogo.com/logos/reddit-4.svg",
@@ -52,7 +47,7 @@ export const destination_connection_logos = [
   {
     label: "snapchat",
     category: "ads",
-    logo: "/logos/connections/sources/confluent_logo.svg",
+    logo: "/logos/connections/destinations/snapchat_logo.svg",
   },
   {
     label: "tiktok",
@@ -67,7 +62,7 @@ export const destination_connection_logos = [
   {
     label: "active_campaign",
     category: "marketing",
-    logo: "/logos/connections/sources/greenplum_logo.svg",
+    logo: "/logos/connections/destinations/activeCampaign_logo.svg",
   },
   {
     label: "salesforce",
