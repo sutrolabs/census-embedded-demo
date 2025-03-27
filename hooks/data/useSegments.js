@@ -126,7 +126,7 @@ export function useSegments() {
     }
   }
 
-  const createEditSegmentManagementLink = async (segmentId, returnUrl) => {
+  const createEditSegmentManagementLink = async (segmentId) => {
     try {
       setLoading(true)
       const headers = {
@@ -138,8 +138,8 @@ export function useSegments() {
         method: "POST",
         headers,
         body: JSON.stringify({
-          segment_id: segmentId,
-          return_url: returnUrl,
+          segmentId: segmentId,
+          sourceId: segments.find((s) => s.id === segmentId)?.source_id,
         }),
       })
 
