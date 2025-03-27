@@ -86,16 +86,16 @@ export default function SegmentSyncs() {
       <div className="flex h-full w-full flex-col overflow-y-auto px-6">
         <div className="mx-auto flex w-full max-w-[1200px] flex-col">
           {filteredDestinations.length > 0 ? (
-            <div>
+            <div className="flex flex-col gap-7 pt-8">
               {filteredDestinations.map((destination) => {
                 const logo = getLogoForDestination(destination)
 
                 return (
                   <div
                     key={destination.id}
-                    className="flex flex-col items-start gap-3 border-b border-neutral-100 px-8  py-6"
+                    className="flex flex-col items-start overflow-hidden rounded-lg  bg-zinc-50"
                   >
-                    <div className="flex flex-row items-center justify-between">
+                    <div className="flex w-full flex-row items-center justify-between gap-4 px-6 py-3">
                       <div className="flex flex-row items-center gap-4">
                         <Image
                           src={logo}
@@ -106,33 +106,39 @@ export default function SegmentSyncs() {
                         />
                         <Text className="text-lg">{destination.name}</Text>
                       </div>
-                    </div>
-                    {filterSyncsToDestination(destination.id).map((sync) => (
-                      <div
-                        key={sync.id}
-                        className="flex w-full flex-row items-center justify-between border-b border-zinc-100 p-4"
+                      <Button
+                        onClick={() => {
+                          setSelectedSync(null)
+                          setSelectedDestination(destination)
+                          setIsSyncDrawerOpen(true)
+                        }}
                       >
-                        <Text className="capitalize">{sync.destination_attributes.object}</Text>
-                        <Button
-                          onClick={() => {
-                            setSelectedSync(sync)
-                            setSelectedDestination(destination)
-                            setIsSyncDrawerOpen(true)
-                          }}
-                        >
-                          Edit
-                        </Button>
+                        New Sync to {destination.name}
+                      </Button>
+                    </div>
+                    {filterSyncsToDestination(destination.id).length > 0 && (
+                      <div className="flex w-full flex-col rounded-lg border border-zinc-100 bg-white">
+                        {filterSyncsToDestination(destination.id).map((sync) => (
+                          <div
+                            key={sync.id}
+                            className="flex w-full flex-row items-center justify-between border-b border-zinc-100 px-6 py-4"
+                          >
+                            <Text className="capitalize">{sync.destination_attributes.object}</Text>
+                            <Text>{sync.destination_attributes.label}</Text>
+                            <Text>{sync.updated_at}</Text>
+                            <Button
+                              onClick={() => {
+                                setSelectedSync(sync)
+                                setSelectedDestination(destination)
+                                setIsSyncDrawerOpen(true)
+                              }}
+                            >
+                              Edit
+                            </Button>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                    <Button
-                      onClick={() => {
-                        setSelectedSync(null)
-                        setSelectedDestination(destination)
-                        setIsSyncDrawerOpen(true)
-                      }}
-                    >
-                      New Sync to {destination.name}
-                    </Button>
+                    )}
                   </div>
                 )
               })}
