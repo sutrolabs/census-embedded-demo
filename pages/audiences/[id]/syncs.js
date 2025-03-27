@@ -167,9 +167,6 @@ export default function SegmentSyncs() {
           }}
           workspaceAccessToken={workspaceAccessToken}
           presetSource={segment ? { id: segment.id, name: segment.name } : undefined}
-          presetDestination={
-            selectedDestination ? { id: selectedDestination.id, name: selectedDestination.name } : undefined
-          }
           presetSync={selectedSync}
         />
       </div>

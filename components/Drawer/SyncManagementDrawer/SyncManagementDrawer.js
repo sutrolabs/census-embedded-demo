@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react"
+import { useCallback } from "react"
 
 import Button from "@components/Button/Button/Button"
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader } from "@components/Drawer/Drawer"
@@ -13,9 +13,6 @@ export function SyncManagementDrawer({
   existingSyncId,
   onSyncComplete,
 }) {
-  const [currentStep, setCurrentStep] = useState("source") // source, destination, configure, review
-  const [isSyncDrawerOpen, setIsSyncDrawerOpen] = useState(false)
-
   const handleClose = useCallback(() => {
     setCurrentStep("source")
     onClose()
@@ -54,15 +51,10 @@ export function SyncManagementDrawer({
   )
 
   return (
-    <Drawer
-      open={isOpen}
-      onClose={onClose}
-      direction="right"
-      title={existingSyncId ? "Edit Sync" : "Create Sync"}
-    >
+    <Drawer open={isOpen} onClose={onClose} direction="right">
       <DrawerContent direction="right">
         <DrawerHeader>
-          Sync{" "}
+          {existingSyncId ? "Edit Sync" : "Create Sync"}
           <DrawerClose>
             <Button>
               <i className="fa-regular fa-times" />
