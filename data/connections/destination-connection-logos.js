@@ -12,7 +12,7 @@ export const destination_connection_logos = [
   {
     label: "braze",
     category: "marketing",
-    logo: "https://cdn.worldvectorlogo.com/logos/amazon-simple.svg",
+    logo: "/logos/connections/destinations/braze_logo.svg",
   },
   {
     label: "constant_contact",

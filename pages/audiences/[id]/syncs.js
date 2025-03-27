@@ -1,4 +1,5 @@
 import { Text } from "@radix-ui/themes"
+import Image from "next/image"
 import { useRouter } from "next/router"
 import { useState } from "react"
 
@@ -9,7 +10,7 @@ import Header from "@components/Structural/Header/Header"
 import SegmentTabs from "@components/Tabs/SegmentTabs"
 import { useDestinations } from "@hooks/data/useDestinations"
 import { useSegments } from "@hooks/data/useSegments"
-import { getLogoForDestinationType } from "@hooks/useDestinationLogos"
+import { getLogoForDestination, getLogoForDestinationType } from "@hooks/useDestinationLogos"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
 export default function SegmentSyncs() {
@@ -33,7 +34,7 @@ export default function SegmentSyncs() {
   )
 
   const filteredDestinations = destinations.filter((destination) =>
-    filteredDestinationTypes.some((type) => type.service_name === destination.name),
+    filteredDestinationTypes.some((type) => type.service_name === destination.type),
   )
 
   //   const [syncs, setSyncs] = useState([])
@@ -87,27 +88,43 @@ export default function SegmentSyncs() {
             />
           </div>
         </div>
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col px-6">
+          {filteredDestinations.length > 0 ? (
+            <>
+              {filteredDestinations.map((destination) => {
+                const logo = getLogoForDestination(destination)
 
-        {filteredDestinations.length > 0 ? (
-          <>
-            {filteredDestinations.map((destination) => {
-              return <div key={destination.id}>{destination.name}</div>
-            })}
-          </>
-        ) : (
-          <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6">
-            <Text size="5">No destinations connected</Text>
-            <Text size="2" className="text-neutral-500">
-              Connect a destination to sync this audience
-            </Text>
-            <NewDestinationSelectionMenu
-              workspaceAccessToken={workspaceAccessToken}
-              destinationTypes={destinationTypes}
-              destinations={destinations}
-              trigger="New Destination"
-            />
-          </div>
-        )}
+                return (
+                  <div key={destination.id} className="flex flex-col border-b border-neutral-100 px-8 py-6">
+                    <div className="flex flex-row items-center gap-4">
+                      <Image
+                        src={logo}
+                        alt={`${destination.label} logo`}
+                        width={24}
+                        height={24}
+                        className="h-6 w-6 object-contain"
+                      />
+                      <Text className="text-lg">{destination.name}</Text>
+                    </div>
+                  </div>
+                )
+              })}
+            </>
+          ) : (
+            <div className="flex h-full w-full flex-col items-center justify-center gap-4 p-6">
+              <Text size="5">No destinations connected</Text>
+              <Text size="2" className="text-neutral-500">
+                Connect a destination to sync this audience
+              </Text>
+              <NewDestinationSelectionMenu
+                workspaceAccessToken={workspaceAccessToken}
+                destinationTypes={destinationTypes}
+                destinations={destinations}
+                trigger="New Destination"
+              />
+            </div>
+          )}
+        </div>
 
         <SyncManagementDrawer
           isOpen={isSyncDrawerOpen}
