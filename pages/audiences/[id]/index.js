@@ -1,14 +1,16 @@
 "use client"
+import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
 
+import Card from "@components/Card/Card"
+import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 import Header from "@components/Structural/Header/Header"
-import SegmentDetailLayout from "@components/Structural/Layouts/SegmentLayout"
+import SegmentTabs from "@components/Tabs/SegmentTabs"
 import { useDestinations } from "@hooks/data/useDestinations"
 import { useSegments } from "@hooks/data/useSegments"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
-
 export default function SegmentDetail() {
   const router = useRouter()
   const { id } = router.query
@@ -71,17 +73,41 @@ export default function SegmentDetail() {
         backButtonClick={() => router.push("/audiences")}
       />
 
-      <SegmentDetailLayout
-        segment={segment}
-        createSegmentWizardLink={null}
-        editSegmentWizardLink={editSegmentWizardLink}
-        setEditSegmentWizardLink={setEditSegmentWizardLink}
-        destinations={destinations}
-        destinationConnectLinks={destinationConnectLinks}
-        setDestinationConnectLinks={setDestinationConnectLinks}
-        setCreateSegmentWizardLink={() => {}}
-        destinationTypes={destinationTypes}
-      />
+      <div className="flex h-full w-full flex-col overflow-hidden">
+        <SegmentTabs segmentId={id} currentTab="segment" />
+        <div className="h-full w-full">
+          {editSegmentWizardLink ? (
+            <EmbeddedFrame
+              className="h-full w-full"
+              connectLink={editSegmentWizardLink}
+              onExit={() => {
+                setEditSegmentWizardLink(null)
+              }}
+            />
+          ) : (
+            <div className="flex h-full items-center justify-center">
+              <Card className="p-6 text-center">
+                <Text size="5">Loading segment details...</Text>
+                {loading && (
+                  <Text size="2" className="mt-2 text-neutral-500">
+                    Please wait while we load the segment editor
+                  </Text>
+                )}
+                {!loading && !segment && (
+                  <Text size="2" className="mt-2 text-neutral-500">
+                    No segment found
+                  </Text>
+                )}
+                {!loading && segment && !editSegmentWizardLink && (
+                  <Text size="2" className="mt-2 text-neutral-500">
+                    Failed to load segment editor
+                  </Text>
+                )}
+              </Card>
+            </div>
+          )}
+        </div>
+      </div>
     </>
   )
 }

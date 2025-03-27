@@ -45,22 +45,22 @@ export const destination_connection_logos = [
     logo: "https://cdn.worldvectorlogo.com/logos/azure-2.svg",
   },
   {
-    label: "reddit_ads",
+    label: "reddit",
     category: "ads",
     logo: "https://cdn.worldvectorlogo.com/logos/reddit-4.svg",
   },
   {
-    label: "snapchat_ads",
+    label: "snapchat",
     category: "ads",
     logo: "/logos/connections/sources/confluent_logo.svg",
   },
   {
-    label: "tiktok_ads",
+    label: "tiktok",
     category: "ads",
     logo: "https://cdn.worldvectorlogo.com/logos/tiktok-icon-2.svg",
   },
   {
-    label: "twitter_ads",
+    label: "twitter",
     category: "ads",
     logo: "https://cdn.worldvectorlogo.com/logos/x-2.svg",
   },

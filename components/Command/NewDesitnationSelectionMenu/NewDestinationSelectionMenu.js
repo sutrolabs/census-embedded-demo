@@ -17,7 +17,12 @@ import {
 } from "@components/Command/command"
 import { getLogoForDestinationType, getCategoryForDestinationType } from "@hooks/useDestinationLogos"
 
-export function NewDestinationSelectionMenu({ trigger, destinationTypes, workspaceAccessToken }) {
+export function NewDestinationSelectionMenu({
+  trigger,
+  destinationTypes,
+  workspaceAccessToken,
+  destinations,
+}) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
@@ -106,10 +111,13 @@ export function NewDestinationSelectionMenu({ trigger, destinationTypes, workspa
             <CommandEmpty>No destinations found.</CommandEmpty>
             {/* Group destinations by category */}
             {sortedCategories.map((category) => (
-              <>
-                <CommandGroup key={category} heading={category}>
+              <div key={category}>
+                <CommandGroup heading={category}>
                   {groupedDestinations[category].map((destinationType) => {
                     const logo = getLogoForDestinationType(destinationType)
+                    const isExistingDestination = destinations?.some(
+                      (dest) => dest.type === destinationType.service_name,
+                    )
                     return (
                       <CommandItem
                         key={destinationType.id}
@@ -130,12 +138,17 @@ export function NewDestinationSelectionMenu({ trigger, destinationTypes, workspa
                           </div>
                         )}
                         {destinationType.label}
+                        {isExistingDestination && (
+                          <div className="absolute -right-1 -top-1 rounded-full bg-emerald-500 p-0.5 text-[10px] text-white">
+                            <i className="fa-solid fa-plug" />
+                          </div>
+                        )}
                       </CommandItem>
                     )
                   })}
                 </CommandGroup>
                 <CommandSeparator />
-              </>
+              </div>
             ))}
           </CommandList>
         </Command>

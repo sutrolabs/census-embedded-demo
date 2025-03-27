@@ -85,6 +85,7 @@ export default function SegmentDetailLayout({
               <NewDestinationSelectionMenu
                 workspaceAccessToken={workspaceAccessToken}
                 destinationTypes={destinationTypes}
+                destinations={destinations}
                 trigger="New Destination"
               />
             </div>
