@@ -2,8 +2,8 @@ import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
-import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import SegmentEditWizard from "@components/SegmentEditWizard"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { censusBaseUrl } from "@utils/url"
 
 export function SegmentObject({

@@ -1,9 +1,9 @@
 import React, { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import SegmentCreationWizard from "@components/SegmentCreationWizard"
 import { SegmentObject } from "@components/SegmentObject"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { useSegmentManagementLink } from "@hooks/use-segment-management-link"
 import { censusBaseUrl } from "@utils/url"
 
