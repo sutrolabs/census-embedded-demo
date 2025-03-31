@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useState, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
 import { Drawer, DrawerClose, DrawerContent, DrawerHeader } from "@components/Drawer/Drawer"
@@ -13,15 +13,32 @@ export function SyncManagementDrawer({
   existingSyncId,
   onSyncComplete,
 }) {
+  const [connectLink, setConnectLink] = useState(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      generateSyncManagementUrl().then((url) => {
+        setConnectLink(url)
+      })
+    } else {
+      setConnectLink(null)
+    }
+  }, [isOpen, workspaceAccessToken, presetSource, presetDestination, existingSyncId])
+
   const handleClose = useCallback(() => {
-    setCurrentStep("source")
     onClose()
   }, [onClose])
 
-  const generateSyncManagementUrl = useCallback(() => {
-    const params = new URLSearchParams({
-      auth: workspaceAccessToken,
+  const generateSyncManagementUrl = async () => {
+    const response = await fetch("/api/create_sync_management_link", {
+      method: "POST",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+        ["content-type"]: "application/json",
+      },
     })
+
+    const params = new URLSearchParams({})
 
     if (presetSource) {
       params.append("source_connection_id", presetSource.id)
@@ -37,8 +54,15 @@ export function SyncManagementDrawer({
       params.append("sync_id", existingSyncId)
     }
 
-    return `${process.env.NEXT_PUBLIC_CENSUS_APP_URL}/sync?${params.toString()}`
-  }, [workspaceAccessToken, presetSource, presetDestination, existingSyncId])
+    const newLink = await response.json()
+
+    console.log(newLink)
+
+    const result = `${newLink.uri}&${params.toString()}`
+
+    console.log(result)
+    return result
+  }
 
   const handleExit = useCallback(
     (data) => {
@@ -61,7 +85,9 @@ export function SyncManagementDrawer({
             </Button>
           </DrawerClose>
         </DrawerHeader>
-        <EmbeddedFrame connectLink={generateSyncManagementUrl()} onExit={handleExit} height="100%" />
+        {connectLink && (
+          <EmbeddedFrame connectLink={connectLink} onExit={handleExit} height="100%" className="w-full" />
+        )}
       </DrawerContent>
     </Drawer>
   )
