@@ -1,4 +1,5 @@
 import { Text } from "@radix-ui/themes"
+import humanizeDuration from "humanize-duration"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useState, useEffect } from "react"
@@ -152,7 +153,9 @@ export default function SegmentSyncs() {
                           >
                             <Text className="capitalize">{sync.destination_attributes.object}</Text>
                             <Text>{sync.destination_attributes.label}</Text>
-                            <Text>{sync.updated_at}</Text>
+                            <Text>
+                              {humanizeDuration(sync.created_at, { units: ["h", "m"], round: true })}
+                            </Text>
                             <Button
                               onClick={() => {
                                 setSelectedSync(sync)
