@@ -10,20 +10,24 @@ export function SyncManagementDrawer({
   workspaceAccessToken,
   presetSource,
   presetDestination,
-  existingSyncId,
+  presetSync,
   onSyncComplete,
 }) {
   const [connectLink, setConnectLink] = useState(null)
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !presetSync) {
       generateSyncManagementUrl().then((url) => {
+        setConnectLink(url)
+      })
+    } else if (isOpen && presetSync) {
+      generateEditSyncManagementUrl().then((url) => {
         setConnectLink(url)
       })
     } else {
       setConnectLink(null)
     }
-  }, [isOpen, workspaceAccessToken, presetSource, presetDestination, existingSyncId])
+  }, [isOpen, workspaceAccessToken, presetSource, presetDestination, presetSync])
 
   const handleClose = useCallback(() => {
     onClose()
@@ -41,27 +45,36 @@ export function SyncManagementDrawer({
     const params = new URLSearchParams({})
 
     if (presetSource) {
-      params.append("source_connection_id", presetSource.id)
+      params.append("source_id", presetSource.source_id)
+      params.append("bookmarkSegmentId", presetSource.segment_id)
       params.append("source_hidden", "true")
     }
 
     if (presetDestination) {
       params.append("destination_connection_id", presetDestination.id)
-      params.append("destination_hidden", "true")
-    }
-
-    if (existingSyncId) {
-      params.append("sync_id", existingSyncId)
     }
 
     const newLink = await response.json()
 
-    console.log(newLink)
-
     const result = `${newLink.uri}&${params.toString()}`
 
-    console.log(result)
     return result
+  }
+
+  const generateEditSyncManagementUrl = async () => {
+    const response = await fetch("/api/create_edit_sync_management_link", {
+      method: "POST",
+      headers: {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+        ["content-type"]: "application/json",
+      },
+      body: JSON.stringify({
+        // Add the body with syncId
+        syncId: presetSync.id,
+      }),
+    })
+    const newLink = await response.json()
+    return newLink.uri
   }
 
   const handleExit = useCallback(
@@ -78,7 +91,7 @@ export function SyncManagementDrawer({
     <Drawer open={isOpen} onClose={onClose} direction="right">
       <DrawerContent direction="right">
         <DrawerHeader>
-          {existingSyncId ? "Edit Sync" : "Create Sync"}
+          {presetSync ? "Edit Sync" : "Create Sync"}
           <DrawerClose>
             <Button>
               <i className="fa-regular fa-times" />

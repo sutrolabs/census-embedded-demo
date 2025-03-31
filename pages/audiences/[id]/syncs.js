@@ -24,6 +24,35 @@ export default function SegmentSyncs() {
   const [isSyncDrawerOpen, setIsSyncDrawerOpen] = useState(false)
   const [selectedDestination, setSelectedDestination] = useState(null)
   const [selectedSync, setSelectedSync] = useState(null)
+  const [segmentSource, setSegmentSource] = useState(null)
+  const [syncs, setSyncs] = useState([])
+
+  useEffect(() => {
+    const fetchSource = async () => {
+      if (!segment?.dataset_id || !workspaceAccessToken) return
+
+      try {
+        const response = await fetch(`/api/list_sources`, {
+          headers: {
+            ["authorization"]: `Bearer ${workspaceAccessToken}`,
+            ["content-type"]: "application/json",
+          },
+        })
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch sources")
+        }
+
+        const sources = await response.json()
+        const source = sources.find((s) => s.id === segment.dataset_id)
+        setSegmentSource(source)
+      } catch (error) {
+        setSegmentSource(null)
+      }
+    }
+
+    fetchSource()
+  }, [segment, workspaceAccessToken])
 
   // Filter out any destination types that shouldn't be shown
   // Similar to source types, we might want to exclude certain destinations
@@ -38,8 +67,6 @@ export default function SegmentSyncs() {
   const filteredDestinations = destinations.filter((destination) =>
     filteredDestinationTypes.some((type) => type.service_name === destination.type),
   )
-
-  const [syncs, setSyncs] = useState([])
 
   useEffect(() => {
     const fetchSyncs = async () => {
@@ -85,7 +112,7 @@ export default function SegmentSyncs() {
       <SegmentTabs segmentId={id} currentTab="sync" />
       <div className="flex h-full w-full flex-col overflow-y-auto px-6">
         <div className="mx-auto flex w-full max-w-[1200px] flex-col">
-          {filteredDestinations.length > 0 ? (
+          {filteredDestinations ? (
             <div className="flex flex-col gap-7 pt-8">
               {filteredDestinations.map((destination) => {
                 const logo = getLogoForDestination(destination)
@@ -172,8 +199,26 @@ export default function SegmentSyncs() {
             setSelectedSync(null)
           }}
           workspaceAccessToken={workspaceAccessToken}
-          presetSource={segment ? { id: segment.id, name: segment.name } : undefined}
+          presetSource={segment ? { segment_id: segment.id, name: segment.name } : undefined}
+          presetDestination={selectedDestination}
           presetSync={selectedSync}
+          onSyncComplete={async () => {
+            try {
+              const response = await fetch(`/api/list_syncs`, {
+                headers: {
+                  ["authorization"]: `Bearer ${workspaceAccessToken}`,
+                  ["content-type"]: "application/json",
+                },
+              })
+
+              if (!response.ok) {
+                throw new Error("Failed to fetch syncs")
+              }
+
+              const data = await response.json()
+              setSyncs(data)
+            } catch (error) {}
+          }}
         />
       </div>
     </div>
