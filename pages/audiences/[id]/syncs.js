@@ -68,29 +68,29 @@ export default function SegmentSyncs() {
     filteredDestinationTypes.some((type) => type.service_name === destination.type),
   )
 
-  useEffect(() => {
-    const fetchSyncs = async () => {
-      if (!id || !workspaceAccessToken) return
+  const fetchSyncs = async () => {
+    if (!id || !workspaceAccessToken) return
 
-      try {
-        const response = await fetch(`/api/list_syncs`, {
-          headers: {
-            ["authorization"]: `Bearer ${workspaceAccessToken}`,
-            ["content-type"]: "application/json",
-          },
-        })
+    try {
+      const response = await fetch(`/api/list_syncs`, {
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
+      })
 
-        if (!response.ok) {
-          throw new Error("Failed to fetch syncs")
-        }
-
-        const data = await response.json()
-        setSyncs(data)
-      } catch (error) {
-        setSyncs([])
+      if (!response.ok) {
+        throw new Error("Failed to fetch syncs")
       }
-    }
 
+      const data = await response.json()
+      setSyncs(data)
+    } catch (error) {
+      setSyncs([])
+    }
+  }
+
+  useEffect(() => {
     fetchSyncs()
   }, [id, workspaceAccessToken])
 
@@ -202,23 +202,7 @@ export default function SegmentSyncs() {
           presetSource={segment ? { segment_id: segment.id, name: segment.name } : undefined}
           presetDestination={selectedDestination}
           presetSync={selectedSync}
-          onSyncComplete={async () => {
-            try {
-              const response = await fetch(`/api/list_syncs`, {
-                headers: {
-                  ["authorization"]: `Bearer ${workspaceAccessToken}`,
-                  ["content-type"]: "application/json",
-                },
-              })
-
-              if (!response.ok) {
-                throw new Error("Failed to fetch syncs")
-              }
-
-              const data = await response.json()
-              setSyncs(data)
-            } catch (error) {}
-          }}
+          onSyncComplete={fetchSyncs}
         />
       </div>
     </div>
