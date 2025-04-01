@@ -15,25 +15,7 @@ export function SyncManagementDrawer({
 }) {
   const [connectLink, setConnectLink] = useState(null)
 
-  useEffect(() => {
-    if (isOpen && !presetSync) {
-      generateSyncManagementUrl().then((url) => {
-        setConnectLink(url)
-      })
-    } else if (isOpen && presetSync) {
-      generateEditSyncManagementUrl().then((url) => {
-        setConnectLink(url)
-      })
-    } else {
-      setConnectLink(null)
-    }
-  }, [isOpen, workspaceAccessToken, presetSource, presetDestination, presetSync])
-
-  const handleClose = useCallback(() => {
-    onClose()
-  }, [onClose])
-
-  const generateSyncManagementUrl = async () => {
+  const generateSyncManagementUrl = useCallback(async () => {
     const response = await fetch("/api/create_sync_management_link", {
       method: "POST",
       headers: {
@@ -55,13 +37,11 @@ export function SyncManagementDrawer({
     }
 
     const newLink = await response.json()
-
     const result = `${newLink.uri}&${params.toString()}`
-
     return result
-  }
+  }, [workspaceAccessToken, presetSource, presetDestination])
 
-  const generateEditSyncManagementUrl = async () => {
+  const generateEditSyncManagementUrl = useCallback(async () => {
     const response = await fetch("/api/create_edit_sync_management_link", {
       method: "POST",
       headers: {
@@ -69,13 +49,30 @@ export function SyncManagementDrawer({
         ["content-type"]: "application/json",
       },
       body: JSON.stringify({
-        // Add the body with syncId
         syncId: presetSync.id,
       }),
     })
     const newLink = await response.json()
     return newLink.uri
-  }
+  }, [workspaceAccessToken, presetSync])
+
+  useEffect(() => {
+    if (isOpen && !presetSync) {
+      generateSyncManagementUrl().then((url) => {
+        setConnectLink(url)
+      })
+    } else if (isOpen && presetSync) {
+      generateEditSyncManagementUrl().then((url) => {
+        setConnectLink(url)
+      })
+    } else {
+      setConnectLink(null)
+    }
+  }, [isOpen, generateSyncManagementUrl, generateEditSyncManagementUrl, presetSync])
+
+  const handleClose = useCallback(() => {
+    onClose()
+  }, [onClose])
 
   const handleExit = useCallback(
     (data) => {

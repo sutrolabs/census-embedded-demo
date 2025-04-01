@@ -1,7 +1,7 @@
 import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
@@ -16,17 +16,15 @@ export default function NewSegment() {
   const [createSegmentWizardLink, setCreateSegmentWizardLink] = useState(null)
   const [destinationConnectLinks, setDestinationConnectLinks] = useState([])
 
-  const headers = {
-    ["authorization"]: `Bearer ${workspaceAccessToken}`,
-    ["content-type"]: "application/json",
-  }
-
-  const initiateCreateSegmentWizard = async () => {
+  const initiateCreateSegmentWizard = useCallback(async () => {
     try {
       setLoading(true)
       const response = await fetch("/api/create_segment_management_link", {
         method: "POST",
-        headers: headers,
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
       })
       if (!response.ok) {
         throw new Error(response.statusText)
@@ -40,12 +38,11 @@ export default function NewSegment() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [workspaceAccessToken, embedMode, setLoading])
 
-  // Initialize the create wizard when the component mounts
   useEffect(() => {
     initiateCreateSegmentWizard()
-  }, [])
+  }, [initiateCreateSegmentWizard])
 
   return (
     <>

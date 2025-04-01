@@ -2,7 +2,7 @@ import { Text } from "@radix-ui/themes"
 import humanizeDuration from "humanize-duration"
 import Image from "next/image"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import Button from "@components/Button/Button/Button"
 import { NewDestinationSelectionMenu } from "@components/Command/NewDesitnationSelectionMenu/NewDestinationSelectionMenu"
@@ -69,7 +69,7 @@ export default function SegmentSyncs() {
     filteredDestinationTypes.some((type) => type.service_name === destination.type),
   )
 
-  const fetchSyncs = async () => {
+  const fetchSyncs = useCallback(async () => {
     if (!id || !workspaceAccessToken) return
 
     try {
@@ -89,11 +89,11 @@ export default function SegmentSyncs() {
     } catch (error) {
       setSyncs([])
     }
-  }
+  }, [id, workspaceAccessToken])
 
   useEffect(() => {
     fetchSyncs()
-  }, [id, workspaceAccessToken])
+  }, [fetchSyncs])
 
   const getSyncsForSegment = syncs.filter(
     (sync) => sync.source_attributes?.object.filter_segment_id === segment?.id,

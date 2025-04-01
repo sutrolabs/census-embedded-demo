@@ -2,7 +2,7 @@
 import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
@@ -21,46 +21,48 @@ export default function SegmentDetail() {
   const [destinationConnectLinks, setDestinationConnectLinks] = useState([])
   const [segment, setSegment] = useState(null)
 
-  const headers = {
-    ["authorization"]: `Bearer ${workspaceAccessToken}`,
-    ["content-type"]: "application/json",
-  }
+  const initiateEditSegmentWizard = useCallback(
+    async (segment) => {
+      const headers = {
+        ["authorization"]: `Bearer ${workspaceAccessToken}`,
+        ["content-type"]: "application/json",
+      }
+
+      try {
+        setLoading(true)
+        const response = await fetch("/api/create_edit_segment_management_link", {
+          method: "POST",
+          headers: headers,
+          body: JSON.stringify({
+            sourceId: segment.source_id,
+            segmentId: segment.id,
+          }),
+        })
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
+        const data = await response.json()
+        if (!data.uri) {
+          throw new Error("No URI returned from API")
+        }
+        setEditSegmentWizardLink(data.uri)
+      } catch (error) {
+      } finally {
+        setLoading(false)
+      }
+    },
+    [workspaceAccessToken, setLoading],
+  )
 
   useEffect(() => {
     if (id && segments) {
       const foundSegment = segments.find((s) => String(s.id) === String(id))
-
       setSegment(foundSegment)
       if (foundSegment) {
         initiateEditSegmentWizard(foundSegment)
       }
     }
-  }, [id, segments])
-
-  const initiateEditSegmentWizard = async (segment) => {
-    try {
-      setLoading(true)
-      const response = await fetch("/api/create_edit_segment_management_link", {
-        method: "POST",
-        headers: headers,
-        body: JSON.stringify({
-          sourceId: segment.source_id,
-          segmentId: segment.id,
-        }),
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      const data = await response.json()
-      if (!data.uri) {
-        throw new Error("No URI returned from API")
-      }
-      setEditSegmentWizardLink(data.uri)
-    } catch (error) {
-    } finally {
-      setLoading(false)
-    }
-  }
+  }, [id, segments, initiateEditSegmentWizard])
 
   return (
     <>
