@@ -91,7 +91,9 @@ export function SyncManagementDrawer({
     <Drawer open={isOpen} onClose={onClose} direction="right">
       <DrawerContent direction="right">
         <DrawerHeader>
-          {presetSync ? "Edit Sync" : "Create Sync"}
+          {presetSync
+            ? `Edit Sync to ${presetDestination.name} ${presetSync.destination_attributes.object}`
+            : `New Sync to ${presetDestination?.name}`}
           <DrawerClose>
             <Button>
               <i className="fa-regular fa-times" />

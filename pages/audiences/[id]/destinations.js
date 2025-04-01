@@ -110,7 +110,7 @@ export default function SegmentSyncs() {
         nestedPage={segment?.name}
         backButtonClick={() => router.push("/audiences")}
       />
-      <SegmentTabs segmentId={id} currentTab="sync" />
+      <SegmentTabs segmentId={id} currentTab="destinations" />
       <div className="flex h-full w-full flex-col overflow-y-auto px-6">
         <div className="mx-auto flex w-full max-w-[1200px] flex-col">
           {filteredDestinations ? (
@@ -132,7 +132,7 @@ export default function SegmentSyncs() {
                           height={24}
                           className="h-6 w-6 object-contain"
                         />
-                        <Text className="text-lg">{destination.name}</Text>
+                        <Text className="text-lg font-medium">{destination.name}</Text>
                       </div>
                       <Button
                         onClick={() => {
@@ -144,7 +144,7 @@ export default function SegmentSyncs() {
                         New Sync to {destination.name}
                       </Button>
                     </div>
-                    {filterSyncsToDestination(destination.id).length > 0 && (
+                    {filterSyncsToDestination(destination.id).length > 0 ? (
                       <div className="flex w-full flex-col rounded-lg border border-zinc-100 bg-white">
                         {filterSyncsToDestination(destination.id).map((sync) => (
                           <div
@@ -154,7 +154,7 @@ export default function SegmentSyncs() {
                             <Text className="capitalize">{sync.destination_attributes.object}</Text>
                             <Text>{sync.destination_attributes.label}</Text>
                             <Text>
-                              {humanizeDuration(sync.created_at, { units: ["h", "m"], round: true })}
+                              {humanizeDuration(sync.created_at, { units: ["h", "m"], round: false })}
                             </Text>
                             <Button
                               onClick={() => {
@@ -167,6 +167,10 @@ export default function SegmentSyncs() {
                             </Button>
                           </div>
                         ))}
+                      </div>
+                    ) : (
+                      <div className="flex w-full flex-col items-center justify-center rounded-lg border border-zinc-100 bg-white px-6 py-8">
+                        No syncs to {destination.name}.
                       </div>
                     )}
                   </div>

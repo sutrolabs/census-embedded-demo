@@ -8,8 +8,8 @@ export default function SegmentTabs({ segmentId, currentTab }) {
   const handleTabChange = (value) => {
     if (value === "segment") {
       router.push(`/audiences/${segmentId}`)
-    } else if (value === "sync") {
-      router.push(`/audiences/${segmentId}/syncs`)
+    } else if (value === "destinations") {
+      router.push(`/audiences/${segmentId}/destinations`)
     }
   }
 
@@ -18,7 +18,7 @@ export default function SegmentTabs({ segmentId, currentTab }) {
       <TabsList>
         <div className="mx-auto flex w-2/5 items-center justify-center">
           <TabsTrigger value="segment">Audience</TabsTrigger>
-          <TabsTrigger value="sync">Sync</TabsTrigger>
+          <TabsTrigger value="destinations">Destinations</TabsTrigger>
         </div>
       </TabsList>
     </Tabs>
