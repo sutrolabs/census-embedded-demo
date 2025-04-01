@@ -1,5 +1,4 @@
 import { Text } from "@radix-ui/themes"
-import humanizeDuration from "humanize-duration"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useState, useEffect, useCallback } from "react"
@@ -27,6 +26,7 @@ export default function SegmentSyncs() {
   const [selectedSync, setSelectedSync] = useState(null)
   const [segmentSource, setSegmentSource] = useState(null)
   const [syncs, setSyncs] = useState([])
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const fetchSource = async () => {
@@ -95,6 +95,31 @@ export default function SegmentSyncs() {
     fetchSyncs()
   }, [fetchSyncs])
 
+  const runSync = useCallback(async (sync) => {
+    try {
+      setLoading(true)
+      const response = await fetch("/api/trigger_sync_run", {
+        method: "POST",
+        headers: {
+          ["authorization"]: `Bearer ${workspaceAccessToken}`,
+          ["content-type"]: "application/json",
+        },
+        body: JSON.stringify({
+          syncId: sync.id,
+        }),
+      })
+      if (!response.ok) {
+        throw new Error(response.statusText)
+      }
+      setSyncs((syncs) =>
+        syncs.map((item) => (item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item)),
+      )
+      await fetchSyncs()
+    } finally {
+      setLoading(false)
+    }
+  }, [workspaceAccessToken, fetchSyncs])
+
   const getSyncsForSegment = syncs.filter(
     (sync) => sync.source_attributes?.object.filter_segment_id === segment?.id,
   )
@@ -154,17 +179,27 @@ export default function SegmentSyncs() {
                             <Text className="capitalize">{sync.destination_attributes.object}</Text>
                             <Text>{sync.destination_attributes.label}</Text>
                             <Text>
-                              {humanizeDuration(sync.created_at, { units: ["h", "m"], round: false })}
+                              {sync.updated_at}
                             </Text>
-                            <Button
-                              onClick={() => {
-                                setSelectedSync(sync)
-                                setSelectedDestination(destination)
-                                setIsSyncDrawerOpen(true)
-                              }}
-                            >
-                              Edit
-                            </Button>
+                            <div className="flex gap-2">
+                              <Button
+                                onClick={() => runSync(sync)}
+                                disabled={loading}
+                              >
+                                <i className="fa-solid fa-play"/>
+                                {loading ? "Running..." : "Run Now"}
+                              </Button>
+                              <Button
+                                onClick={() => {
+                                  setSelectedSync(sync)
+                                  setSelectedDestination(destination)
+                                  setIsSyncDrawerOpen(true)
+                                }}
+                              >
+                                <i className="fa-solid fa-edit"/>
+                                Edit
+                              </Button>
+                            </div>
                           </div>
                         ))}
                       </div>
