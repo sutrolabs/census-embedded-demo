@@ -21,7 +21,6 @@ export default function SegmentSyncs() {
   const { segments } = useSegments()
   const { workspaceAccessToken } = useCensusEmbedded()
   const segment = segments?.find((s) => String(s.id) === String(id))
-
   const [isSyncDrawerOpen, setIsSyncDrawerOpen] = useState(false)
   const [selectedDestination, setSelectedDestination] = useState(null)
   const [selectedSync, setSelectedSync] = useState(null)
@@ -96,30 +95,35 @@ export default function SegmentSyncs() {
     fetchSyncs()
   }, [fetchSyncs])
 
-  const runSync = useCallback(async (sync) => {
-    try {
-      setLoading(true)
-      const response = await fetch("/api/trigger_sync_run", {
-        method: "POST",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          ["content-type"]: "application/json",
-        },
-        body: JSON.stringify({
-          syncId: sync.id,
-        }),
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
+  const runSync = useCallback(
+    async (sync) => {
+      try {
+        setLoading(true)
+        const response = await fetch("/api/trigger_sync_run", {
+          method: "POST",
+          headers: {
+            ["authorization"]: `Bearer ${workspaceAccessToken}`,
+            ["content-type"]: "application/json",
+          },
+          body: JSON.stringify({
+            syncId: sync.id,
+          }),
+        })
+        if (!response.ok) {
+          throw new Error(response.statusText)
+        }
+        setSyncs((syncs) =>
+          syncs.map((item) =>
+            item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item,
+          ),
+        )
+        await fetchSyncs()
+      } finally {
+        setLoading(false)
       }
-      setSyncs((syncs) =>
-        syncs.map((item) => (item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item)),
-      )
-      await fetchSyncs()
-    } finally {
-      setLoading(false)
-    }
-  }, [workspaceAccessToken, fetchSyncs])
+    },
+    [workspaceAccessToken, fetchSyncs],
+  )
 
   const getSyncsForSegment = syncs.filter(
     (sync) => sync.source_attributes?.object.filter_segment_id === segment?.id,
@@ -178,24 +182,19 @@ export default function SegmentSyncs() {
                             className="flex w-full flex-row items-center justify-between border-b border-zinc-100 px-6 py-4"
                           >
                             <div className="flex flex-row items-center gap-5">
-                            <Text className="capitalize">{sync.destination_attributes.object}</Text>
-                            {sync.destination_attributes.label &&
-                            <Text>{sync.destination_attributes.label}</Text>}
-                            <Text className=" text-neutral-500">
-                              Last Run {' '}
-                            {format(new Date(sync.updated_at), "MMM dd yyyy")} {' '}
-                            <span>
-                            {format(new Date(sync.updated_at), "p")}
-                            </span>
-                            </Text>
+                              <Text className="capitalize">{sync.destination_attributes.object}</Text>
+                              {sync.destination_attributes.label && (
+                                <Text>{sync.destination_attributes.label}</Text>
+                              )}
+                              <Text className=" text-neutral-500">
+                                Last Run {format(new Date(sync.updated_at), "MMM dd yyyy")}{" "}
+                                <span>{format(new Date(sync.updated_at), "p")}</span>
+                              </Text>
                             </div>
 
                             <div className="flex gap-2">
-                              <Button
-                                onClick={() => runSync(sync)}
-                                disabled={loading}
-                              >
-                                <i className="fa-solid fa-play"/>
+                              <Button onClick={() => runSync(sync)} disabled={loading}>
+                                <i className="fa-solid fa-play" />
                                 {loading ? "Running..." : "Run Now"}
                               </Button>
                               <Button
@@ -205,7 +204,7 @@ export default function SegmentSyncs() {
                                   setIsSyncDrawerOpen(true)
                                 }}
                               >
-                                <i className="fa-solid fa-edit"/>
+                                <i className="fa-solid fa-edit" />
                                 Edit
                               </Button>
                             </div>
