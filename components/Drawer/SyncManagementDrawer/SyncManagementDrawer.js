@@ -87,7 +87,7 @@ export function SyncManagementDrawer({
   return (
     <Drawer open={isOpen} onClose={onClose} direction="right">
       <DrawerContent direction="right">
-        <DrawerHeader>
+        <DrawerHeader className="capitalize">
           {presetSync
             ? `Edit Sync to ${presetDestination.name} ${presetSync.destination_attributes.object}`
             : `New Sync to ${presetDestination?.name}`}

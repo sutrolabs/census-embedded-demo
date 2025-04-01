@@ -1,4 +1,5 @@
 import { Text } from "@radix-ui/themes"
+import { format } from "date-fns"
 import Image from "next/image"
 import { useRouter } from "next/router"
 import { useState, useEffect, useCallback } from "react"
@@ -176,11 +177,19 @@ export default function SegmentSyncs() {
                             key={sync.id}
                             className="flex w-full flex-row items-center justify-between border-b border-zinc-100 px-6 py-4"
                           >
+                            <div className="flex flex-row items-center gap-5">
                             <Text className="capitalize">{sync.destination_attributes.object}</Text>
-                            <Text>{sync.destination_attributes.label}</Text>
-                            <Text>
-                              {sync.updated_at}
+                            {sync.destination_attributes.label &&
+                            <Text>{sync.destination_attributes.label}</Text>}
+                            <Text className=" text-neutral-500">
+                              Last Run {' '}
+                            {format(new Date(sync.updated_at), "MMM dd yyyy")} {' '}
+                            <span>
+                            {format(new Date(sync.updated_at), "p")}
+                            </span>
                             </Text>
+                            </div>
+
                             <div className="flex gap-2">
                               <Button
                                 onClick={() => runSync(sync)}
