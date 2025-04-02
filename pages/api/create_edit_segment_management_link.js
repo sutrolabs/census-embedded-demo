@@ -14,7 +14,9 @@ export default async function handler(req, res) {
   }
 
   const { sourceId, segmentId } = req.body
+
   const CENSUS_API_EDIT_SEGMENT = `${censusBaseUrl}/api/v1/sources/${sourceId}/filter_segments/${segmentId}/segment_management_links`
+
   const workspaceApiKey = getWorkspaceAccessToken(req)
   const apiResponse = await fetch(CENSUS_API_EDIT_SEGMENT, {
     method: "POST",

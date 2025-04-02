@@ -7,14 +7,14 @@ function Button(
   return (
     <button
       className={`
-        border
-        border-neutral-200 bg-white leading-none
-        text-neutral-700 transition-all duration-75
-        enabled:hover:border-emerald-500 enabled:hover:bg-emerald-500 enabled:hover:text-white
-        disabled:border-neutral-300 disabled:text-neutral-300
-        data-[solid]:border-emerald-600 data-[brand]:bg-[#4640EB] data-[solid]:bg-emerald-600 data-[brand]:text-white data-[solid]:text-neutral-50 data-[brand]:hover:bg-[#2F2BBE]
-        data-[solid]:enabled:hover:border-emerald-600 data-[solid]:enabled:hover:bg-emerald-600 data-[solid]:enabled:hover:text-neutral-50
-        data-[solid]:disabled:border-neutral-400 data-[solid]:disabled:bg-neutral-400
+        group border border-neutral-200
+        bg-white leading-none text-neutral-700
+        transition-all duration-75 enabled:hover:border-emerald-500
+        enabled:hover:bg-emerald-500 enabled:hover:text-white disabled:border-neutral-300
+        disabled:text-neutral-300 data-[solid]:border-emerald-600
+        data-[brand]:bg-[#4640EB] data-[solid]:bg-emerald-600 data-[brand]:text-white data-[solid]:text-neutral-50 data-[brand]:hover:bg-[#2F2BBE] data-[solid]:enabled:hover:border-emerald-600
+        data-[solid]:enabled:hover:bg-emerald-600 data-[solid]:enabled:hover:text-neutral-50 data-[solid]:disabled:border-neutral-400
+        data-[solid]:disabled:bg-neutral-400 [&_i]:text-neutral-400 [&_i]:hover:text-white
         ${className}
         ${size === "small" ? "rounded px-3 py-2" : "rounded-md px-3 py-2"}
         ${emphasize ? "relative inline-flex items-center justify-center overflow-hidden hover:scale-105" : ""}

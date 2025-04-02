@@ -1,7 +1,7 @@
 import humanizeDuration from "humanize-duration"
 import { useMemo } from "react"
 
-import { Tag } from "@components/Tag"
+import { Tag } from "@components/Tag/Tag"
 
 const loadingMode = {
   className: "bg-white border border-neutral-100 text-neutral-700",

@@ -2,8 +2,8 @@ import { Dialog } from "@headlessui/react"
 import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card"
-import Toggle from "@components/Toggle"
+import Card from "@components/Card/Card"
+import Toggle from "@components/Toggle/Toggle"
 
 export default function Destination({
   label,

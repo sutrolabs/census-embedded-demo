@@ -1,4 +1,4 @@
-import EmbeddedFrame from "@components/EmbeddedFrame"
+import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
 
 export default function SegmentEditWizard({ refetchSegments, closeSegmentWizard, connectLink }) {
   return (

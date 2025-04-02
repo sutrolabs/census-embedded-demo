@@ -1,11 +1,11 @@
 import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card"
-import RequestTooltip from "@components/RequestTooltip"
+import Card from "@components/Card/Card"
 import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
-import Toggle from "@components/Toggle"
+import Toggle from "@components/Toggle/Toggle"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { censusBaseUrl } from "@utils/url"
 
 export function SyncObject({

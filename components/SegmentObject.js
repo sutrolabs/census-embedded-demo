@@ -1,9 +1,9 @@
 import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card"
-import RequestTooltip from "@components/RequestTooltip"
+import Card from "@components/Card/Card"
 import SegmentEditWizard from "@components/SegmentEditWizard"
+import RequestTooltip from "@components/Tooltip/RequestTooltip"
 import { censusBaseUrl } from "@utils/url"
 
 export function SegmentObject({
@@ -101,7 +101,7 @@ export function SegmentObject({
         <h4 className="flex flex-row justify-between">
           {!showEditSegmentWizard && (
             <>
-              <span className="font-medium">{`Segment: ${segment.name}`}</span>
+              <span className="font-medium">{`Audience: ${segment.name}`}</span>
               <div className="flex flex-row items-center gap-2">
                 <a id={`delete-${segment.id}`}>
                   <Button onClick={deleteSegment}>

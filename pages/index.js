@@ -1,9 +1,9 @@
 import Head from "next/head"
+import Link from "next/link"
 import { Line } from "react-chartjs-2"
 
-import { Anchor } from "@components/Anchor"
 import Button from "@components/Button/Button/Button"
-import Card from "@components/Card"
+import Card from "@components/Card/Card"
 import Header from "@components/Structural/Header/Header"
 
 export default function Index() {
@@ -23,13 +23,13 @@ export default function Index() {
             <h3 className="font-medium text-neutral-800">Trend Datasets</h3>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-neutral-600">
               <li>
-                <Anchor href="/">Market Trends</Anchor> updated 1 day ago
+                <Link href="/">Market Trends</Link> updated 1 day ago
               </li>
               <li>
-                <Anchor href="/">Seasonal trends</Anchor> updated 2 week ago
+                <Link href="/">Seasonal trends</Link> updated 2 week ago
               </li>
               <li>
-                <Anchor href="/">Competitive Analysis</Anchor> updated 1 month ago
+                <Link href="/">Competitive Analysis</Link> updated 1 month ago
               </li>
             </ul>
             <Button>
@@ -74,13 +74,13 @@ export default function Index() {
             <h3 className="font-medium text-neutral-800">Industry Reports</h3>
             <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm text-neutral-600">
               <li>
-                <Anchor href="/">Global IT Services Market Report</Anchor> updated 1 week ago
+                <Link href="/">Global IT Services Market Report</Link> updated 1 week ago
               </li>
               <li>
-                <Anchor href="/">Canada Market Report</Anchor> updated 3 week ago
+                <Link href="/">Canada Market Report</Link> updated 3 week ago
               </li>
               <li>
-                <Anchor href="/">Renewable Energy Market Report</Anchor> updated 2 months ago
+                <Link href="/">Renewable Energy Market Report</Link> updated 2 months ago
               </li>
             </ul>
             <Button>
