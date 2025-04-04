@@ -8,6 +8,7 @@ import Loading from "@components/Loading/Loading"
 import Error_ from "@components/Message/Error_"
 import Sidebar from "@components/Navigation/Sidebar/Sidebar"
 import { Setup } from "@components/Setup"
+import { Toaster } from "@components/Sonner/Sonner"
 import MainLayout from "@components/Structural/Layouts/MainLayout"
 import { useCensusEmbedded, CensusEmbeddedProvider } from "@providers/CensusEmbeddedProvider"
 import { useBasicFetch, useFetchRuns } from "@utils/fetch"
@@ -211,6 +212,7 @@ function MainApplication({ Component, pageProps, onLogOut }) {
       <Sidebar syncsLoading={syncsLoading} syncs={syncs} runsLoading={runsLoading} runs={runs} />
       <MainLayout>{component}</MainLayout>
       <DevModeHoverCardManager />
+      <Toaster />
     </main>
   )
 }

@@ -49,7 +49,7 @@ module.exports = {
     "tailwindcss/no-custom-classname": [
       "error",
       {
-        whitelist: ["fa", "fa-.*", "svg-inline--fa"],
+        whitelist: ["fa", "fa-.*", "svg-inline--fa", "toster", "group"],
       },
     ],
   },
