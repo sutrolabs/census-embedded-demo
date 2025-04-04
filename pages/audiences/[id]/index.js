@@ -79,13 +79,7 @@ export default function SegmentDetail() {
         <SegmentTabs segmentId={id} currentTab="segment" />
         <div className="h-full w-full">
           {editSegmentWizardLink ? (
-            <EmbeddedFrame
-              className="h-full w-full"
-              connectLink={editSegmentWizardLink}
-              onExit={() => {
-                setEditSegmentWizardLink(null)
-              }}
-            />
+            <EmbeddedFrame className="h-full w-full" connectLink={editSegmentWizardLink} onExit={() => {}} />
           ) : (
             <div className="flex h-full items-center justify-center">
               <Card className="p-6 text-center">
