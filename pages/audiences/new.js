@@ -2,6 +2,7 @@ import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
@@ -58,6 +59,7 @@ export default function NewSegment() {
             onExit={(response) => {
               if (response?.status === "created") {
                 // Handle successful creation
+                toast("Audience created successfully.")
                 router.push(`/audiences/${response.details.id}`)
               } else {
                 // Only clear create wizard if not successful

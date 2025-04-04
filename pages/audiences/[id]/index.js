@@ -3,6 +3,7 @@ import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
@@ -83,7 +84,7 @@ export default function SegmentDetail() {
               className="h-full w-full"
               connectLink={editSegmentWizardLink}
               onExit={() => {
-                setEditSegmentWizardLink(null)
+                toast("Audience saved")
               }}
             />
           ) : (
