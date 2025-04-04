@@ -3,6 +3,7 @@ import { Text } from "@radix-ui/themes"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useState, useEffect, useCallback } from "react"
+import { toast } from "sonner"
 
 import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
@@ -79,7 +80,13 @@ export default function SegmentDetail() {
         <SegmentTabs segmentId={id} currentTab="segment" />
         <div className="h-full w-full">
           {editSegmentWizardLink ? (
-            <EmbeddedFrame className="h-full w-full" connectLink={editSegmentWizardLink} onExit={() => {}} />
+            <EmbeddedFrame
+              className="h-full w-full"
+              connectLink={editSegmentWizardLink}
+              onExit={() => {
+                toast("Audience saved")
+              }}
+            />
           ) : (
             <div className="flex h-full items-center justify-center">
               <Card className="p-6 text-center">
