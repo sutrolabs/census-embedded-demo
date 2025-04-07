@@ -101,8 +101,7 @@ export default function Index() {
         <div className="flex h-full flex-col overflow-y-auto p-3">
           {segments.length < 1 ? (
             <div className="flex h-full w-full flex-col items-center justify-center gap-3 rounded bg-neutral-50 p-8">
-              <span className="text-lg font-medium">No Segments Created, add a new segment</span>
-              <Button onClick={handleCreateSegmentClick}>Add a new segment</Button>
+              <Button onClick={handleCreateSegmentClick}>Create your first audience</Button>
             </div>
           ) : (
             <>
