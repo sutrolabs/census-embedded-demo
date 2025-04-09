@@ -15,6 +15,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@components/Command/command"
+import { EXCLUDED_DESTINATION_CONNECTIONS } from "@hooks/helpers/useExclusions"
 import { getLogoForDestinationType, getCategoryForDestinationType } from "@hooks/useDestinationLogos"
 
 export function NewDestinationSelectionMenu({
@@ -31,7 +32,7 @@ export function NewDestinationSelectionMenu({
   const excludedDestinations = ["internal", "test"]
   const filteredDestinationTypes = destinationTypes.filter(
     (destinationType) =>
-      !excludedDestinations.includes(destinationType.service_name) &&
+      !EXCLUDED_DESTINATION_CONNECTIONS.includes(destinationType.service_name) &&
       destinationType.creatable_via_connect_link === true &&
       getLogoForDestinationType(destinationType) !== null,
   )
