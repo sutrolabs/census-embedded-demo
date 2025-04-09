@@ -18,6 +18,7 @@ import {
 } from "@components/Table/Table"
 import NewSourceDrawer from "@components/Workflows/NewSourceFlow/NewSourceDrawer"
 import { b2bCustomerData } from "@data/b2b-customer-data"
+import { filterSyncsWithExcludedSources } from "@hooks/helpers/useExclusions"
 import { getSourceMetadataFromConnectionId } from "@hooks/useSyncSourceInformation"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
@@ -57,6 +58,8 @@ export default function ImportDataset({
     refetchSources()
     setShowSidebar(false)
   }
+
+  const filteredSyncs = filterSyncsWithExcludedSources(syncs, sources)
 
   // Remove this line - we'll use the hook inside the component where the provider is available
   // const { openToSource } = useSourceFlow()
@@ -145,7 +148,7 @@ export default function ImportDataset({
               }`}
             />
           }
-          syncs={syncs}
+          syncs={filteredSyncs}
         />
       </div>
 
@@ -196,9 +199,9 @@ export default function ImportDataset({
               sources={sources}
               availableSourceTypes={availableSourceTypes}
             >
-              {syncs.length > 0 ? (
+              {filteredSyncs.length > 0 ? (
                 <SyncsList
-                  syncs={syncs}
+                  syncs={filteredSyncs}
                   sources={sources}
                   runsLoading={runsLoading}
                   runs={runs}
