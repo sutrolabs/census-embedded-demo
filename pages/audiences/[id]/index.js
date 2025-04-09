@@ -5,8 +5,8 @@ import { useRouter } from "next/router"
 import { useState, useEffect, useCallback } from "react"
 import { toast } from "sonner"
 
-import Card from "@components/Card/Card"
 import EmbeddedFrame from "@components/EmbeddedFrame/EmbeddedFrame"
+import Loading from "@components/Loading/Loading"
 import Header from "@components/Structural/Header/Header"
 import SegmentTabs from "@components/Tabs/SegmentTabs"
 import { useDestinations } from "@hooks/data/useDestinations"
@@ -89,24 +89,12 @@ export default function SegmentDetail() {
             />
           ) : (
             <div className="flex h-full items-center justify-center">
-              <Card className="p-6 text-center">
-                <Text size="5">Loading segment details...</Text>
-                {loading && (
-                  <Text size="2" className="mt-2 text-neutral-500">
-                    Please wait while we load the segment editor
-                  </Text>
-                )}
-                {!loading && !segment && (
-                  <Text size="2" className="mt-2 text-neutral-500">
-                    No segment found
-                  </Text>
-                )}
-                {!loading && segment && !editSegmentWizardLink && (
-                  <Text size="2" className="mt-2 text-neutral-500">
-                    Failed to load segment editor
-                  </Text>
-                )}
-              </Card>
+              {loading && <Loading />}
+              {!loading && segment && !editSegmentWizardLink && (
+                <Text size="2" className="mt-2 text-neutral-500">
+                  Failed to load segment editor
+                </Text>
+              )}
             </div>
           )}
         </div>

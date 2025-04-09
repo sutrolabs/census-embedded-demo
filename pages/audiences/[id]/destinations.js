@@ -182,7 +182,16 @@ export default function SegmentSyncs() {
                             className="flex w-full flex-row items-center justify-between border-b border-zinc-100 px-6 py-4"
                           >
                             <div className="flex flex-row items-center gap-5">
-                              <Text className="capitalize">{sync.destination_attributes.object}</Text>
+                              <Image
+                                src={logo}
+                                alt={`${destination.label} logo`}
+                                width={24}
+                                height={24}
+                                className="h-6 w-6 object-contain"
+                              />
+                              <Text>
+                                {destination.name} {sync.destination_attributes.object}
+                              </Text>
                               {sync.destination_attributes.label && (
                                 <Text>{sync.destination_attributes.label}</Text>
                               )}
