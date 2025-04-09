@@ -58,7 +58,6 @@ export default function SegmentSyncs() {
 
   // Filter out any destination types that shouldn't be shown
   // Similar to source types, we might want to exclude certain destinations
-  const excludedDestinations = ["internal", "test"]
   const filteredDestinationTypes = destinationTypes.filter(
     (destinationType) =>
       !EXCLUDED_DESTINATION_CONNECTIONS.includes(destinationType.service_name) &&

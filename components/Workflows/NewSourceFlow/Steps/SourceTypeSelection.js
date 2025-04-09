@@ -30,8 +30,6 @@ export default function SourceTypeSelection() {
     return <div className="p-4 text-red-500">Error loading source types: {error}</div>
   }
 
-  const excludedConnections = ["entity_resolution", "http_request"]
-
   // Filter source types based on both excludedConnections and creatable_via_connect_link
   const filteredSourceTypes = sourceTypes.filter((sourceType) => {
     // First check if it's in the excluded list
