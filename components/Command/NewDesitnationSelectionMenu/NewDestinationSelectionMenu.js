@@ -15,6 +15,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "@components/Command/command"
+import { EXCLUDED_DESTINATION_CONNECTIONS } from "@hooks/helpers/useExclusions"
 import { getLogoForDestinationType, getCategoryForDestinationType } from "@hooks/useDestinationLogos"
 
 export function NewDestinationSelectionMenu({
@@ -26,12 +27,9 @@ export function NewDestinationSelectionMenu({
   const [open, setOpen] = useState(false)
   const router = useRouter()
 
-  // Filter out any destination types that shouldn't be shown
-  // Similar to source types, we might want to exclude certain destinations
-  const excludedDestinations = ["internal", "test"]
   const filteredDestinationTypes = destinationTypes.filter(
     (destinationType) =>
-      !excludedDestinations.includes(destinationType.service_name) &&
+      !EXCLUDED_DESTINATION_CONNECTIONS.includes(destinationType.service_name) &&
       destinationType.creatable_via_connect_link === true &&
       getLogoForDestinationType(destinationType) !== null,
   )

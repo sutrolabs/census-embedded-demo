@@ -1,6 +1,7 @@
 import Image from "next/image"
 
 import DevelopmentMessage from "@components/Message/DevelopmentMessage"
+import { EXCLUDED_SOURCE_CONNECTIONS } from "@hooks/helpers/useExclusions"
 import { getLogoForSourceType } from "@hooks/useSourceLogos"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
 import { createDevModeAttr } from "@utils/devMode"
@@ -29,12 +30,10 @@ export default function SourceTypeSelection() {
     return <div className="p-4 text-red-500">Error loading source types: {error}</div>
   }
 
-  const excludedConnections = ["entity_resolution", "http_request"]
-
   // Filter source types based on both excludedConnections and creatable_via_connect_link
   const filteredSourceTypes = sourceTypes.filter((sourceType) => {
     // First check if it's in the excluded list
-    if (excludedConnections.includes(sourceType.service_name)) {
+    if (EXCLUDED_SOURCE_CONNECTIONS.includes(sourceType.service_name)) {
       return false
     }
 

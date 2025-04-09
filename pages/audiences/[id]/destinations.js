@@ -11,6 +11,7 @@ import Header from "@components/Structural/Header/Header"
 import SegmentTabs from "@components/Tabs/SegmentTabs"
 import { useDestinations } from "@hooks/data/useDestinations"
 import { useSegments } from "@hooks/data/useSegments"
+import { EXCLUDED_DESTINATION_CONNECTIONS } from "@hooks/helpers/useExclusions"
 import { getLogoForDestination, getLogoForDestinationType } from "@hooks/useDestinationLogos"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
 
@@ -57,10 +58,9 @@ export default function SegmentSyncs() {
 
   // Filter out any destination types that shouldn't be shown
   // Similar to source types, we might want to exclude certain destinations
-  const excludedDestinations = ["internal", "test"]
   const filteredDestinationTypes = destinationTypes.filter(
     (destinationType) =>
-      !excludedDestinations.includes(destinationType.service_name) &&
+      !EXCLUDED_DESTINATION_CONNECTIONS.includes(destinationType.service_name) &&
       destinationType.creatable_via_connect_link === true &&
       getLogoForDestinationType(destinationType) !== null,
   )

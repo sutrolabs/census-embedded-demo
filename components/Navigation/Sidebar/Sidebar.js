@@ -43,13 +43,6 @@ const navItems = [
     group: "integrations",
     preview: "Demo data export to common CRM destinations.",
   },
-  {
-    id: 6,
-    href: "/integrations/export-ads",
-    name: "Ad Platforms",
-    group: "integrations",
-    preview: "Demo data export to common ads destinations.",
-  },
 ]
 
 const groupedNavItems = navItems.reduce((acc, item) => {
