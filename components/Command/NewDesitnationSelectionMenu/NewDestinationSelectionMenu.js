@@ -17,6 +17,8 @@ import {
 } from "@components/Command/command"
 import { EXCLUDED_DESTINATION_CONNECTIONS } from "@hooks/helpers/useExclusions"
 import { getLogoForDestinationType, getCategoryForDestinationType } from "@hooks/useDestinationLogos"
+import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { createDevModeAttr } from "@utils/devMode"
 
 export function NewDestinationSelectionMenu({
   trigger,
@@ -26,6 +28,7 @@ export function NewDestinationSelectionMenu({
 }) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const { devMode } = useCensusEmbedded()
 
   const filteredDestinationTypes = destinationTypes.filter(
     (destinationType) =>
@@ -103,7 +106,18 @@ export function NewDestinationSelectionMenu({
       </Button>
 
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <Command className="rounded-lg border shadow-md">
+        <Command
+          className="rounded-lg border shadow-md"
+          {...(devMode
+            ? createDevModeAttr({
+                url: `https://app.getcensus.com/api/v1/connectors`,
+                method: "GET",
+                headers: `Authorization: Bearer <workspaceAccessToken>`,
+                note: "Lists types of destination connections that can be created in the current workspace",
+                link: "https://developers.getcensus.com/api-reference/connectors/list-destination-types",
+              })
+            : {})}
+        >
           <CommandInput placeholder="Search destinations..." />
           <CommandList>
             <CommandEmpty>No destinations found.</CommandEmpty>
