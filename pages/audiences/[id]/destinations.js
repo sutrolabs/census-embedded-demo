@@ -175,6 +175,18 @@ export default function SegmentSyncs() {
                         <Text className="text-lg font-medium">{destination.name}</Text>
                       </div>
                       <Button
+                        {...(devMode
+                          ? createDevModeAttr({
+                              url: `https://app.getcensus.com/api/v1/sync_management_links`,
+                              method: "POST",
+                              headers: `{
+"authorization": "Bearer: <workspaceAccessToken>",
+"content-type": "application/json"
+}`,
+                              note: "Create a sync management link",
+                              link: "https://developers.getcensus.com/api-reference/syncs/update-a-sync",
+                            })
+                          : {})}
                         onClick={() => {
                           setSelectedSync(null)
                           setSelectedDestination(destination)
