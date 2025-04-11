@@ -11,7 +11,7 @@ const DevModeHoverCard = forwardRef(({ style, onMouseEnter, onMouseLeave, hoverD
   return (
     <motion.div
       ref={ref}
-      className="fixed z-[9999] flex w-[450px] flex-col gap-2 overflow-hidden rounded-md border border-[#4640EB]/10 bg-white p-4 font-mono text-sm shadow-md shadow-[#4640EB]/10"
+      className="fixed z-[9999] flex w-[450px] shrink-0 flex-col gap-2 overflow-hidden rounded-md border border-[#4640EB]/10 bg-white p-4 font-mono text-sm shadow-md shadow-[#4640EB]/10"
       style={{
         ...style,
         pointerEvents: "auto",
