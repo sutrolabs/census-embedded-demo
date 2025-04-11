@@ -54,7 +54,7 @@ export default function Index() {
               <Button onClick={handleCreateSegmentClick}>Create your first audience</Button>
             </div>
           ) : (
-            <>
+            <div>
               {segments.map((segment) => (
                 <div
                   key={segment.id}
@@ -84,7 +84,7 @@ export default function Index() {
                   <div className="h-px w-full bg-neutral-100 transition-all duration-75 peer-hover:opacity-0" />
                 </div>
               ))}
-            </>
+            </div>
           )}
         </div>
       </div>
