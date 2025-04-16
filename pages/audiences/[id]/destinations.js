@@ -238,17 +238,15 @@ export default function SegmentSyncs() {
                                 disabled={loading}
                                 {...(devMode
                                   ? createDevModeAttr({
-                                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}`,
-                                      method: "PATCH",
-                                      headers: `{
-                  "authorization": "Bearer: <workspaceAccessToken>",
-                  "content-type": "application/json"
-                }`,
-                                      body: `{
-                  "paused": "${sync.paused ? "true" : "false"}"
-                }`,
-                                      note: "Update a sync's status",
-                                      link: "https://developers.getcensus.com/api-reference/syncs/update-a-sync",
+                                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}/trigger`,
+                                      method: "POST",
+                                      headers: `
+{
+"authorization": "Bearer: <workspaceAccessToken>",
+"content-type": "application/json"
+}`,
+                                      note: "Trigger a sync run",
+                                      link: "https://developers.getcensus.com/api-reference/syncs/trigger-a-sync-run",
                                     })
                                   : {})}
                               >
