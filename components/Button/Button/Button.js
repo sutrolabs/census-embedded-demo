@@ -17,7 +17,11 @@ function Button(
         data-[solid]:disabled:bg-neutral-400 [&_i]:text-neutral-400 [&_i]:hover:text-white
         ${className}
         ${size === "small" ? "rounded px-3 py-2" : "rounded-md px-3 py-2"}
-        ${emphasize ? "relative inline-flex items-center justify-center overflow-hidden hover:scale-105" : ""}
+        ${
+          emphasize
+            ? "relative inline-flex items-center justify-center overflow-hidden hover:scale-105 [&_i]:text-white"
+            : ""
+        }
       `}
       data-solid={solid ? "" : null}
       data-brand={brand ? "" : null}

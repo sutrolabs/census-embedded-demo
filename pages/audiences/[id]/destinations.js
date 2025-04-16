@@ -14,13 +14,14 @@ import { useSegments } from "@hooks/data/useSegments"
 import { EXCLUDED_DESTINATION_CONNECTIONS } from "@hooks/helpers/useExclusions"
 import { getLogoForDestination, getLogoForDestinationType } from "@hooks/useDestinationLogos"
 import { useCensusEmbedded } from "@providers/CensusEmbeddedProvider"
+import { createDevModeAttr } from "@utils/devMode"
 
 export default function SegmentSyncs() {
   const router = useRouter()
   const { id } = router.query
   const { destinations, destinationTypes } = useDestinations()
   const { segments } = useSegments()
-  const { workspaceAccessToken } = useCensusEmbedded()
+  const { workspaceAccessToken, devMode } = useCensusEmbedded()
   const segment = segments?.find((s) => String(s.id) === String(id))
   const [isSyncDrawerOpen, setIsSyncDrawerOpen] = useState(false)
   const [selectedDestination, setSelectedDestination] = useState(null)
@@ -152,6 +153,15 @@ export default function SegmentSyncs() {
                   <div
                     key={destination.id}
                     className="flex flex-col items-start overflow-hidden rounded-lg  bg-zinc-50"
+                    {...(devMode
+                      ? createDevModeAttr({
+                          url: `https://app.getcensus.com/api/v1/destinations`,
+                          method: "GET",
+                          headers: `Authorization: Bearer <workspaceAccessToken>`,
+                          note: "Lists destinations from a workspace",
+                          link: "https://developers.getcensus.com/api-reference/destinations/list-destinations",
+                        })
+                      : {})}
                   >
                     <div className="flex w-full flex-row items-center justify-between gap-4 px-6 py-3">
                       <div className="flex flex-row items-center gap-4">
@@ -165,6 +175,18 @@ export default function SegmentSyncs() {
                         <Text className="text-lg font-medium">{destination.name}</Text>
                       </div>
                       <Button
+                        {...(devMode
+                          ? createDevModeAttr({
+                              url: `https://app.getcensus.com/api/v1/sync_management_links`,
+                              method: "POST",
+                              headers: `{
+"authorization": "Bearer: <workspaceAccessToken>",
+"content-type": "application/json"
+}`,
+                              note: "Create a sync management link",
+                              link: "https://developers.getcensus.com/api-reference/syncs/update-a-sync",
+                            })
+                          : {})}
                         onClick={() => {
                           setSelectedSync(null)
                           setSelectedDestination(destination)
@@ -180,9 +202,27 @@ export default function SegmentSyncs() {
                           <div
                             key={sync.id}
                             className="flex w-full flex-row items-center justify-between border-b border-zinc-100 px-6 py-4"
+                            {...(devMode
+                              ? createDevModeAttr({
+                                  url: `https://app.getcensus.com/api/v1/syncs`,
+                                  method: "GET",
+                                  headers: `Authorization: Bearer <workspaceAccessToken>`,
+                                  note: "Lists syncs from a workspace",
+                                  link: "https://developers.getcensus.com/api-reference/syncs/list-syncs",
+                                })
+                              : {})}
                           >
                             <div className="flex flex-row items-center gap-5">
-                              <Text className="capitalize">{sync.destination_attributes.object}</Text>
+                              <Image
+                                src={logo}
+                                alt={`${destination.label} logo`}
+                                width={24}
+                                height={24}
+                                className="h-6 w-6 object-contain"
+                              />
+                              <Text className="font-medium capitalize">
+                                {destination.name} {sync.destination_attributes.object}
+                              </Text>
                               {sync.destination_attributes.label && (
                                 <Text>{sync.destination_attributes.label}</Text>
                               )}
@@ -193,7 +233,23 @@ export default function SegmentSyncs() {
                             </div>
 
                             <div className="flex gap-2">
-                              <Button onClick={() => runSync(sync)} disabled={loading}>
+                              <Button
+                                onClick={() => runSync(sync)}
+                                disabled={loading}
+                                {...(devMode
+                                  ? createDevModeAttr({
+                                      url: `https://app.getcensus.com/api/v1/syncs/${sync.id}/trigger`,
+                                      method: "POST",
+                                      headers: `
+{
+"authorization": "Bearer: <workspaceAccessToken>",
+"content-type": "application/json"
+}`,
+                                      note: "Trigger a sync run",
+                                      link: "https://developers.getcensus.com/api-reference/syncs/trigger-a-sync-run",
+                                    })
+                                  : {})}
+                              >
                                 <i className="fa-solid fa-play" />
                                 {loading ? "Running..." : "Run Now"}
                               </Button>
