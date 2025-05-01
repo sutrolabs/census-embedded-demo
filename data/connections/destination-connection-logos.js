@@ -74,4 +74,9 @@ export const destination_connection_logos = [
     category: "marketing",
     logo: "https://cdn.worldvectorlogo.com/logos/hubspot-1.svg",
   },
+  {
+    label: "linkedin",
+    category: "advertising",
+    logo: "https://cdn.worldvectorlogo.com/logos/linkedin-icon-3.svg",
+  },
 ]
