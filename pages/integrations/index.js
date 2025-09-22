@@ -34,13 +34,6 @@ export default function Index() {
               <i className="fa-solid fa-chevron-right ml-2 text-xs" />
             </Button>
 
-            <Button
-              onClick={() => router.push("integrations/export-ads")}
-              className="min-w-[300px] self-center"
-            >
-              Connect your ad platforms
-              <i className="fa-solid fa-chevron-right ml-2 text-xs" />
-            </Button>
           </div>
         </div>
       </div>

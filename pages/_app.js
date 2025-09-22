@@ -103,21 +103,6 @@ function MainApplication({ Component, pageProps, onLogOut }) {
       }),
   )
   const {
-    loading: syncManagementLinksLoading,
-    error: syncManagementLinksError,
-    data: syncManagementLinks,
-    setData: setSyncManagementLinks,
-    refetchInBackground: refetchSyncManagementLinks,
-  } = useBasicFetch(
-    () =>
-      new Request(`/api/list_sync_management_links`, {
-        method: "GET",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-        },
-      }),
-  )
-  const {
     loading: syncsLoading,
     error: syncsError,
     data: syncs,
@@ -155,7 +140,6 @@ function MainApplication({ Component, pageProps, onLogOut }) {
     destinationConnectLinksError ??
     sourcesError ??
     sourceConnectLinksError ??
-    syncManagementLinksError ??
     syncsError ??
     segmentsError ??
     runsError
@@ -164,7 +148,6 @@ function MainApplication({ Component, pageProps, onLogOut }) {
     destinationConnectLinksLoading ||
     sourcesLoading ||
     sourceConnectLinksLoading ||
-    syncManagementLinksLoading ||
     syncsLoading ||
     segmentsLoading
   let component
@@ -187,9 +170,6 @@ function MainApplication({ Component, pageProps, onLogOut }) {
         sourceConnectLinks={sourceConnectLinks}
         refetchSourceConnectLinks={refetchSourceConnectLinks}
         setSourceConnectLinks={setSourceConnectLinks}
-        syncManagementLinks={syncManagementLinks}
-        refetchSyncManagementLinks={refetchSyncManagementLinks}
-        setSyncManagementLinks={setSyncManagementLinks}
         syncs={syncs}
         setSyncs={setSyncs}
         refetchSyncs={refetchSyncs}
