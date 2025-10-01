@@ -36,9 +36,6 @@ export default function ImportDataset({
   refetchSources,
   sourceConnectLinks,
   refetchSourceConnectLinks,
-  sourceEmbedLinks,
-  syncManagementLinks,
-  refetchSyncManagementLinks,
   syncs,
   setSyncs,
   runsLoading,
@@ -186,8 +183,6 @@ export default function ImportDataset({
               workspaceAccessToken={workspaceAccessToken}
               sourceConnectLinks={sourceConnectLinks}
               refetchSourceConnectLinks={refetchSourceConnectLinks}
-              syncManagementLinks={syncManagementLinks}
-              refetchSyncManagementLinks={refetchSyncManagementLinks}
               syncs={syncs}
               setSyncs={setSyncs}
               refetchSyncs={refetchSyncs}

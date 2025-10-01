@@ -2,7 +2,6 @@ import { useState } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Card from "@components/Card/Card"
-import SyncEditWizard from "@components/SyncEditWizard"
 import { SyncStatus } from "@components/SyncStatus"
 import Toggle from "@components/Toggle/Toggle"
 import RequestTooltip from "@components/Tooltip/RequestTooltip"
@@ -21,11 +20,10 @@ export function SyncObject({
 }) {
   const [loading, setLoading] = useState(false)
   const [disabledOverride, setDisabledOverride] = useState()
-  const [editSyncWizardLink, setEditSyncWizardLink] = useState(null)
   const run = runs.find((item) => item.sync_id === sync?.id)
   const running = run ? !run.completed_at : false
   const disabled = disabledOverride ?? sync?.paused ?? true
-  const showEditSyncWizard = !!editSyncWizardLink
+  const showEditSyncWizard = false
 
   const runSync = async () => {
     try {
@@ -47,33 +45,6 @@ export function SyncObject({
         syncs.map((item) => (item.id === sync.id ? { ...sync, updated_at: new Date().toISOString() } : item)),
       )
       await refetchSyncs()
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const initiateEditSyncWizard = async () => {
-    try {
-      setLoading(true)
-      const response = await fetch("/api/create_edit_sync_management_link", {
-        method: "POST",
-        headers: {
-          ["authorization"]: `Bearer ${workspaceAccessToken}`,
-          ["content-type"]: "application/json",
-        },
-        body: JSON.stringify({
-          syncId: sync.id,
-        }),
-      })
-      if (!response.ok) {
-        throw new Error(response.statusText)
-      }
-      const data = await response.json()
-      if (embedMode) {
-        setEditSyncWizardLink(data.uri + queryParams)
-      } else {
-        window.location.href = data.uri + queryParams
-      }
     } finally {
       setLoading(false)
     }
@@ -148,51 +119,33 @@ export function SyncObject({
             </div>
           )}
         </h4>
-        {showEditSyncWizard ? (
-          <SyncEditWizard
-            connectLink={editSyncWizardLink}
-            closeSyncWizard={() => setEditSyncWizardLink(null)}
-            refetchSyncs={refetchSyncs}
-          />
-        ) : (
-          <div>
-            <p className="mb-2 text-sm">These attributes will get synced...</p>
-            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-              {sync.mappings.map((mapping) => (
-                <li key={mapping.to}>
-                  <a id={`mappings-${sync.id}-${mapping.to}`}>{mapping.to}</a>
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-row items-center justify-between gap-2">
-              <SyncStatus
-                syncsLoading={false}
-                syncs={[sync].filter(Boolean)}
-                runsLoading={runsLoading}
-                runs={runs}
-                showAge
-              />
-              <div className="flex flex-row gap-3">
-                <a id={`run-${sync.id}`}>
-                  <Button className="text-sm" disabled={disabled || loading || running} onClick={runSync}>
-                    <i className="fa-solid fa-play mr-2" />
-                    Run now
-                  </Button>
-                </a>
-                <a id={`configure-${sync.id}`}>
-                  <Button
-                    className="text-sm"
-                    disabled={disabled || loading || running}
-                    onClick={initiateEditSyncWizard}
-                  >
-                    <i className="fa-solid fa-gear mr-2" />
-                    Configure
-                  </Button>
-                </a>
-              </div>
+        <div>
+          <p className="mb-2 text-sm">These attributes will get synced...</p>
+          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
+            {sync.mappings.map((mapping) => (
+              <li key={mapping.to}>
+                <a id={`mappings-${sync.id}-${mapping.to}`}>{mapping.to}</a>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-row items-center justify-between gap-2">
+            <SyncStatus
+              syncsLoading={false}
+              syncs={[sync].filter(Boolean)}
+              runsLoading={runsLoading}
+              runs={runs}
+              showAge
+            />
+            <div className="flex flex-row gap-3">
+              <a id={`run-${sync.id}`}>
+                <Button className="text-sm" disabled={disabled || loading || running} onClick={runSync}>
+                  <i className="fa-solid fa-play mr-2" />
+                  Run now
+                </Button>
+              </a>
             </div>
           </div>
-        )}
+        </div>
       </Card>
 
       <RequestTooltip
@@ -230,37 +183,6 @@ export function SyncObject({
           </pre>
         }
         link="https://developers.getcensus.com/api-reference/syncs/delete-a-sync"
-      />
-      <RequestTooltip
-        devMode={devMode}
-        anchorSelect={`#configure-${sync.id}`}
-        url={`${censusBaseUrl}/api/v1/syncs/${sync.id}/connect_links`}
-        method="POST"
-        headers={
-          <pre>
-            {JSON.stringify(
-              {
-                ["authorization"]: "Bearer <workspaceAccessToken>",
-              },
-              null,
-              2,
-            )}
-          </pre>
-        }
-        link="https://developers.getcensus.com/api-reference/sync-management-links/create-sync-management-link-to-edit-sync"
-        body={
-          embedMode ? null : (
-            <pre>
-              {JSON.stringify(
-                {
-                  redirect_uri: window.location.href,
-                },
-                null,
-                2,
-              )}
-            </pre>
-          )
-        }
       />
       <RequestTooltip
         devMode={devMode}
