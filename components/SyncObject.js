@@ -50,7 +50,6 @@ export function SyncObject({
     }
   }
 
-
   const deleteSync = async () => {
     try {
       setLoading(true)
@@ -121,31 +120,31 @@ export function SyncObject({
           )}
         </h4>
         <div>
-            <p className="mb-2 text-sm">These attributes will get synced...</p>
-            <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
-              {sync.mappings.map((mapping) => (
-                <li key={mapping.to}>
-                  <a id={`mappings-${sync.id}-${mapping.to}`}>{mapping.to}</a>
-                </li>
-              ))}
-            </ul>
-            <div className="flex flex-row items-center justify-between gap-2">
-              <SyncStatus
-                syncsLoading={false}
-                syncs={[sync].filter(Boolean)}
-                runsLoading={runsLoading}
-                runs={runs}
-                showAge
-              />
-              <div className="flex flex-row gap-3">
-                <a id={`run-${sync.id}`}>
-                  <Button className="text-sm" disabled={disabled || loading || running} onClick={runSync}>
-                    <i className="fa-solid fa-play mr-2" />
-                    Run now
-                  </Button>
-                </a>
-              </div>
+          <p className="mb-2 text-sm">These attributes will get synced...</p>
+          <ul className="ml-6 flex grow list-disc flex-col gap-1 text-sm">
+            {sync.mappings.map((mapping) => (
+              <li key={mapping.to}>
+                <a id={`mappings-${sync.id}-${mapping.to}`}>{mapping.to}</a>
+              </li>
+            ))}
+          </ul>
+          <div className="flex flex-row items-center justify-between gap-2">
+            <SyncStatus
+              syncsLoading={false}
+              syncs={[sync].filter(Boolean)}
+              runsLoading={runsLoading}
+              runs={runs}
+              showAge
+            />
+            <div className="flex flex-row gap-3">
+              <a id={`run-${sync.id}`}>
+                <Button className="text-sm" disabled={disabled || loading || running} onClick={runSync}>
+                  <i className="fa-solid fa-play mr-2" />
+                  Run now
+                </Button>
+              </a>
             </div>
+          </div>
         </div>
       </Card>
 

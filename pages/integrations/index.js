@@ -33,7 +33,6 @@ export default function Index() {
               Connect your CRM
               <i className="fa-solid fa-chevron-right ml-2 text-xs" />
             </Button>
-
           </div>
         </div>
       </div>
