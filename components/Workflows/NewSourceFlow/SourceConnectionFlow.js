@@ -26,8 +26,6 @@ export default function SourceConnectionFlow() {
     workspaceAccessToken,
     sourceConnectLinks,
     refetchSourceConnectLinks,
-    syncManagementLinks,
-    refetchSyncManagementLinks,
     syncs,
     setSyncs,
     refetchSyncs,
@@ -101,8 +99,6 @@ export default function SourceConnectionFlow() {
             syncs={syncs}
             setSyncs={setSyncs}
             refetchSyncs={refetchSyncs}
-            syncManagementLinks={syncManagementLinks}
-            refetchSyncManagementLinks={refetchSyncManagementLinks}
             runsLoading={runsLoading}
             runs={runs}
             devMode={devMode}

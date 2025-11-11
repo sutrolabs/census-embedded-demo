@@ -21,8 +21,6 @@ export default function NewSourceDrawer({
   existingSourceId,
   sourceConnectLinks = [],
   refetchSourceConnectLinks,
-  syncManagementLinks = [],
-  refetchSyncManagementLinks,
   syncs = [],
   setSyncs,
   refetchSyncs,
@@ -107,8 +105,6 @@ export default function NewSourceDrawer({
           existingSourceId={existingSourceId}
           sourceConnectLinks={sourceConnectLinks}
           refetchSourceConnectLinks={refetchSourceConnectLinks}
-          syncManagementLinks={syncManagementLinks}
-          refetchSyncManagementLinks={refetchSyncManagementLinks}
           syncs={syncs}
           setSyncs={setSyncs}
           refetchSyncs={refetchSyncs}
