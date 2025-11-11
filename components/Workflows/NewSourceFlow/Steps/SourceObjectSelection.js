@@ -1,7 +1,14 @@
+import { useState } from "react"
+
+import Button from "@components/Button/Button/Button"
 import { SyncObject } from "@components/SyncObject"
+import SyncWizard from "@components/SyncWizard/SyncWizard"
 import { useSourceFlow } from "@providers/SourceFlowProvider"
+import { acmeDestinationServiceName } from "@utils/preset_source_destination"
 
 export default function SourceObjectSelection() {
+  const [showCreateSyncWizard, setShowCreateSyncWizard] = useState(false)
+
   const {
     selectedSource: source,
     workspaceAccessToken,
@@ -13,11 +20,31 @@ export default function SourceObjectSelection() {
     destinations,
     devMode,
     embedMode,
-    goToReview,
   } = useSourceFlow()
 
   // Filter syncs for this source
   const sourceSpecificSyncs = syncs.filter((sync) => sync.source_attributes.connection_id === source.id)
+
+  const acmeDestinationId = () => {
+    const destination = destinations.find((d) => d.name == acmeDestinationServiceName)
+
+    if (!destination) {
+      throw new Error("ACME destination not found")
+    }
+    return destination.id
+  }
+
+  const initiateSyncWizardFlow = () => {
+    setShowCreateSyncWizard(true)
+  }
+
+  const handleSyncComplete = (newSync) => {
+    // Refetch syncs to include the newly created one
+    refetchSyncs()
+    setShowCreateSyncWizard(false)
+  }
+
+  const editSyncLinkQueryParams = {}
 
   return (
     <div className="flex h-full flex-col gap-4 overflow-y-auto">
@@ -37,6 +64,26 @@ export default function SourceObjectSelection() {
             queryParams={editSyncLinkQueryParams}
           />
         ))}
+
+        {/* Show sync creation wizard or button */}
+        {showCreateSyncWizard ? (
+          <SyncWizard
+            sourceId={source.id}
+            destinationId={acmeDestinationId()}
+            workspaceAccessToken={workspaceAccessToken}
+            onComplete={handleSyncComplete}
+          />
+        ) : (
+          <Button
+            className="flex items-center justify-center rounded-md border border-emerald-500/40 bg-neutral-50 px-5 py-8 text-xl shadow-sm"
+            onClick={initiateSyncWizardFlow}
+          >
+            <span id={`create-sync-${source?.id}`}>
+              <i className="fa-solid fa-plus mr-4" />
+              Add data to sync
+            </span>
+          </Button>
+        )}
       </div>
     </div>
   )
