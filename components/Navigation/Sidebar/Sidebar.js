@@ -1,7 +1,6 @@
 import { Text } from "@radix-ui/themes"
 import Image from "next/image"
 
-import { CentralAudienceBuilderIcon } from "@components/Icons/AudienceBuilder"
 import { CentralHomeIcon } from "@components/Icons/Home"
 import { CentralSquareGridCircleIcon } from "@components/Icons/SquareGridCircle"
 import { CentralTableIcon } from "@components/Icons/Table"
@@ -25,19 +24,12 @@ const navItems = [
   },
   {
     id: 3,
-    href: "/audiences",
-    name: "Audiences",
-    icon: CentralAudienceBuilderIcon,
-    preview: "Demo data segmenting and export functionality.",
-  },
-  {
-    id: 4,
     href: "/integrations",
     name: "Integrations",
     icon: CentralSquareGridCircleIcon,
   },
   {
-    id: 5,
+    id: 4,
     href: "/integrations/export-crm",
     name: "CRM",
     group: "integrations",
