@@ -136,6 +136,7 @@ export default function SyncWizard({ sourceId, destinationId, workspaceAccessTok
           destinationId={destinationId}
           destinationObjectFullName={selectedDestinationObject.full_name}
           destinationObjectFields={destinationObjectDetails?.fields || []}
+          selectedOperation={selectedOperation}
           workspaceAccessToken={workspaceAccessToken}
           onComplete={handleFieldMappingComplete}
           onBack={() => setCurrentStep(STEPS.SELECT_SYNC_BEHAVIOR)}

@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 import Button from "@components/Button/Button/Button"
 import Loading from "@components/Loading/Loading"
@@ -13,6 +13,7 @@ export default function FieldMapper({
   destinationId,
   destinationObjectFullName,
   destinationObjectFields,
+  selectedOperation,
   workspaceAccessToken,
   onComplete,
   onBack,
@@ -20,6 +21,27 @@ export default function FieldMapper({
 }) {
   const [primaryMapping, setPrimaryMapping] = useState({ from: "", to: "" })
   const [additionalMappings, setAdditionalMappings] = useState([])
+
+  // Pre-populate required field mappings on mount
+  useEffect(() => {
+    if (!destinationObjectFields?.length) return
+
+    // Find all required fields
+    const requiredFields = destinationObjectFields.filter((field) => field.required_for_mapping === true)
+
+    if (requiredFields.length === 0) return
+
+    // Only initialize if additionalMappings is empty (first load)
+    if (additionalMappings.length === 0) {
+      const requiredMappings = requiredFields.map((field) => ({
+        from: "", // User must select source column
+        to: field.full_name,
+        isRequired: true, // Flag to prevent removal
+      }))
+
+      setAdditionalMappings(requiredMappings)
+    }
+  }, [destinationObjectFields])
 
   const {
     loading,
@@ -146,22 +168,50 @@ export default function FieldMapper({
     autoRefresh: false, // Don't auto-refresh fields since they're passed as props
   })
 
-  // Get columns that can be upsert keys
-  const upsertKeyColumns = columns?.filter((col) => col.can_be_upsert_key) || []
+  // Get columns that can be primary identifiers based on operation
+   const upsertKeyColumns = columns?.filter((col) => col.can_be_upsert_key) || []
 
-  // Get fields that can be upsert keys
-  const upsertKeyFields = destinationObjectFields?.filter((field) => field.can_be_upsert_key) || []
+  // Get fields that can be primary identifiers based on operation
+  const getPrimaryIdentifierFields = () => {
+    if (!destinationObjectFields) return []
+
+    return destinationObjectFields.filter((field) => {
+      switch (selectedOperation) {
+        case "update":
+        case "delete":
+          return field.can_be_update_key
+        case "insert":
+          return field.can_be_insert_key
+        default:
+          // upsert, mirror, append
+          return field.can_be_upsert_key
+      }
+    })
+  }
+
+  const upsertKeyFields = getPrimaryIdentifierFields()
 
   // Get fields that are already used in mappings (excluding primary)
   const getUsedFields = () => {
     return additionalMappings.map((m) => m.to).filter(Boolean)
   }
 
-  // Get available fields for additional mappings (excluding used ones)
+  // Get available fields for primary identifier (excluding fields used in additional mappings)
+  const getAvailableFieldsForPrimaryIdentifier = () => {
+    const usedFields = additionalMappings.map((m) => m.to).filter(Boolean)
+    return upsertKeyFields.filter((field) => !usedFields.includes(field.full_name))
+  }
+
+  // Get available fields for additional mappings (excluding used ones and primary identifier)
   const getAvailableFieldsForMapping = (currentMappingIndex) => {
     const usedFields = additionalMappings
       .map((m, idx) => (idx !== currentMappingIndex ? m.to : null))
       .filter(Boolean)
+
+    // Also exclude the primary identifier field
+    if (primaryMapping.to) {
+      usedFields.push(primaryMapping.to)
+    }
 
     return destinationObjectFields?.filter((field) => !usedFields.includes(field.full_name)) || []
   }
@@ -171,6 +221,14 @@ export default function FieldMapper({
   }
 
   const removeMapping = (index) => {
+    const mapping = additionalMappings[index]
+
+    // Prevent removal of required field mappings
+    if (mapping?.isRequired === true) {
+      console.warn("Cannot remove required field mapping")
+      return
+    }
+
     setAdditionalMappings(additionalMappings.filter((_, i) => i !== index))
   }
 
@@ -213,8 +271,16 @@ export default function FieldMapper({
     if (!primaryMapping.from || !primaryMapping.to) {
       return false
     }
-    // All additional mappings must be complete or empty
-    return additionalMappings.every((m) => (m.from && m.to) || (!m.from && !m.to))
+
+    // All required field mappings must have source column selected
+    const hasIncompleteRequiredMappings = additionalMappings.some((m) => m.isRequired === true && !m.from)
+    if (hasIncompleteRequiredMappings) {
+      return false
+    }
+
+    // All optional mappings must be complete or empty
+    const optionalMappings = additionalMappings.filter((m) => !m.isRequired)
+    return optionalMappings.every((m) => (m.from && m.to) || (!m.from && !m.to))
   }
 
   if (loading) {
@@ -308,7 +374,7 @@ export default function FieldMapper({
                 onChange={(e) => setPrimaryMapping({ ...primaryMapping, to: e.target.value })}
               >
                 <option value="">Select a field</option>
-                {upsertKeyFields.map((field) => (
+                {getAvailableFieldsForPrimaryIdentifier().map((field) => (
                   <option key={field.full_name} value={field.full_name}>
                     {field.label}
                   </option>
@@ -323,32 +389,68 @@ export default function FieldMapper({
       {/* Additional Mappings */}
       {!isRefreshing && (
         <div className="space-y-2">
-        <h4 className="text-sm font-semibold text-neutral-700">Additional Field Mappings</h4>
+          <h4 className="text-sm font-semibold text-neutral-700">
+            Additional Field Mappings
+            {additionalMappings.some((m) => m.isRequired) && (
+              <span className="ml-2 text-xs font-normal text-orange-600">
+                (* Some fields are required by the destination)
+              </span>
+            )}
+          </h4>
         <div className="space-y-3">
-          {additionalMappings.map((mapping, index) => (
-            <div key={index} className="rounded-md border border-neutral-200 bg-white p-4">
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-neutral-700">Source Column</label>
-                  <select
-                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-neutral-700 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                    value={mapping.from}
-                    onChange={(e) => updateAdditionalMapping(index, "from", e.target.value)}
-                  >
-                    <option value="">Select a column</option>
-                    {columns?.map((column) => (
-                      <option key={column.name} value={column.name}>
-                        {column.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label className="mb-2 block text-sm font-medium text-neutral-700">Destination Field</label>
-                  <select
-                    className="w-full rounded-md border border-neutral-300 px-3 py-2 text-neutral-700 focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500"
-                    value={mapping.to}
-                    onChange={(e) => updateAdditionalMapping(index, "to", e.target.value)}
+          {additionalMappings.map((mapping, index) => {
+            const isRequired = mapping.isRequired === true
+
+            return (
+              <div
+                key={index}
+                className={`rounded-md border p-4 ${
+                  isRequired ? "border-orange-300 bg-orange-50/30" : "border-neutral-200 bg-white"
+                }`}
+              >
+                {/* Show required badge */}
+                {isRequired && (
+                  <div className="mb-2 flex items-center gap-1 text-xs font-semibold text-orange-700">
+                    <i className="fa-solid fa-asterisk text-[8px]" />
+                    <span>REQUIRED FIELD</span>
+                  </div>
+                )}
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-neutral-700">
+                      Source Column{isRequired && <span className="text-red-500"> *</span>}
+                    </label>
+                    <select
+                      className={`w-full rounded-md border px-3 py-2 text-neutral-700 focus:outline-none focus:ring-1 ${
+                        isRequired
+                          ? "border-orange-300 bg-orange-50/20 focus:border-orange-500 focus:ring-orange-500"
+                          : "border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500"
+                      }`}
+                      value={mapping.from}
+                      onChange={(e) => updateAdditionalMapping(index, "from", e.target.value)}
+                    >
+                      <option value="">Select a column</option>
+                      {columns?.map((column) => (
+                        <option key={column.name} value={column.name}>
+                          {column.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <label className="mb-2 block text-sm font-medium text-neutral-700">
+                      Destination Field{isRequired && <span className="text-red-500"> *</span>}
+                    </label>
+                    <select
+                      className={`w-full rounded-md border px-3 py-2 text-neutral-700 focus:outline-none focus:ring-1 ${
+                        isRequired
+                          ? "border-orange-300 bg-orange-50/20 focus:border-orange-500 focus:ring-orange-500"
+                          : "border-neutral-300 focus:border-emerald-500 focus:ring-emerald-500"
+                      }`}
+                      value={mapping.to}
+                      onChange={(e) => updateAdditionalMapping(index, "to", e.target.value)}
+                      disabled={isRequired}
                   >
                     <option value="">Select a field</option>
                     {getAvailableFieldsForMapping(index).map((field) => (
@@ -359,13 +461,17 @@ export default function FieldMapper({
                   </select>
                 </div>
               </div>
+              {/* Remove button - only show for non-required mappings */}
               <div className="mt-3 flex justify-end">
-                <Button onClick={() => removeMapping(index)} className="text-red-600" size="small">
-                  <i className="fa-solid fa-trash" />
-                </Button>
+                {!isRequired && (
+                  <Button onClick={() => removeMapping(index)} className="text-red-600" size="small">
+                    <i className="fa-solid fa-trash" />
+                  </Button>
+                )}
               </div>
             </div>
-          ))}
+          )
+        })}
         </div>
         </div>
       )}

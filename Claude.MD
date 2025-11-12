@@ -525,16 +525,62 @@ export default function MyComponent() {
 
 ### Primary Identifier Rules
 
-**Source Column Requirements:**
-- Must have `can_be_upsert_key: true`
-- Only these columns appear in primary identifier dropdown
+**Operation-Based Filtering:**
 
-**Destination Field Requirements:**
-- Must have `can_be_upsert_key: true`
-- Only these fields appear in primary identifier dropdown
+The available fields for the primary identifier are filtered based on the sync operation selected in the previous step. Different operations have different requirements for which fields can be used as identifiers:
+
+**Source Column Requirements:**
+Must have `can_be_upsert_key: true`
+
+**Destination Field Requirements (based on operation):**
+- **Update or Delete operations**: Must have `can_be_update_key: true`
+- **Insert operation**: Must have `can_be_insert_key: true`
+- **Upsert, Mirror, or Append operations**: Must have `can_be_upsert_key: true`
 
 **Why This Matters:**
-The primary identifier is used to match records between source and destination. Census validates that both the source column and destination field are suitable for this purpose (typically unique, indexed, or key fields).
+
+The primary identifier is used to match records between source and destination. Different sync operations have different matching requirements:
+
+- **Update/Delete**: Require existing records to be found and modified/removed, so only fields that can identify existing records are allowed
+- **Insert**: Creates new records, so only fields suitable for new record insertion are allowed
+- **Upsert**: Combination of insert and update, so fields must support both operations
+- **Mirror/Append**: Similar to upsert, require fields that can handle record matching and creation
+
+Census validates that both the source column and destination field are suitable for the selected operation (typically unique, indexed, or key fields).
+
+**Implementation:**
+
+```javascript
+// Filter columns based on operation
+const getPrimaryIdentifierColumns = () => {
+  return columns.filter((col) => {
+    switch (selectedOperation) {
+      case "update":
+      case "delete":
+        return col.can_be_update_key
+      case "insert":
+        return col.can_be_insert_key
+      default:
+        return col.can_be_upsert_key
+    }
+  })
+}
+
+// Filter fields based on operation
+const getPrimaryIdentifierFields = () => {
+  return destinationObjectFields.filter((field) => {
+    switch (selectedOperation) {
+      case "update":
+      case "delete":
+        return field.can_be_update_key
+      case "insert":
+        return field.can_be_insert_key
+      default:
+        return field.can_be_upsert_key
+    }
+  })
+}
+```
 
 ### Additional Mapping Rules
 
@@ -550,6 +596,178 @@ The primary identifier is used to match records between source and destination. 
 
 **Why This Matters:**
 Census doesn't allow multiple source columns to map to the same destination field in a single sync. Each destination field can only receive data from one source column.
+
+### Field Uniqueness Across All Mappings
+
+**Critical Rule: Each destination field can only be used ONCE across ALL mappings**
+
+This uniqueness constraint applies to:
+- The primary identifier mapping
+- All additional field mappings
+
+**Implementation Details:**
+
+1. **Primary Identifier Dropdown (Destination Field):**
+   - Shows only upsert key fields as determined by the operation
+   - **Excludes any fields already used in additional mappings**
+   - If a field is selected in an additional mapping, it disappears from the primary identifier dropdown
+   - Implemented via `getAvailableFieldsForPrimaryIdentifier()` helper
+
+2. **Additional Mapping Dropdowns (Destination Field):**
+   - Shows all destination fields initially
+   - **Excludes the field used in the primary identifier**
+   - Excludes fields used in other additional mappings
+   - Each dropdown shows its own currently selected field plus unused fields
+   - Implemented via `getAvailableFieldsForMapping(index)` helper
+
+**User Experience:**
+- As users select fields, those fields immediately become unavailable in other dropdowns
+- If a user changes a selection, the previously selected field becomes available again
+- This prevents validation errors when creating the sync
+- Ensures compliance with Census API requirements
+
+**Example:**
+```
+Primary Identifier: email_id → Email
+Additional Mapping 1: first_name → FirstName
+Additional Mapping 2: last_name → LastName
+
+✅ Valid: All destination fields are unique
+❌ Invalid: Additional Mapping 1 also tries to use "Email" field
+❌ Invalid: Primary identifier tries to use "FirstName" field
+```
+
+### Required Field Support
+
+**What Are Required Fields?**
+
+Some destinations (like Salesforce, HubSpot, etc.) have fields marked as required by the destination's API. These fields must be included in every sync to that object, as the destination will reject records that don't include values for required fields.
+
+**How Required Fields Work:**
+
+1. **Detection**: Fields with `required_for_mapping: true` property in the API response are automatically detected
+2. **Pre-population**: Required field mappings are automatically added to the Additional Mappings section when the FieldMapper loads
+3. **User Action**: Users must select a source column for each required field (destination is pre-selected and locked)
+4. **Protection**: Required field mappings cannot be removed by users
+
+**Field Object Structure:**
+
+```javascript
+{
+  full_name: "field_api_name",      // Unique identifier
+  label: "Field Display Name",       // Human-readable name
+  can_be_upsert_key: false,          // Cannot be used as primary identifier
+  required_for_mapping: true        // Field is required by destination
+}
+```
+
+**Implementation Details:**
+
+1. **State Structure**:
+   - Required mappings include `isRequired: true` flag
+   - Pre-populated with destination field, empty source column
+   - Example: `{ from: "", to: "LastName", isRequired: true }`
+
+2. **Visual Indicators**:
+   - Orange/amber border and background color (`border-orange-300 bg-orange-50/30`)
+   - "REQUIRED FIELD" badge at top of mapping card
+   - Red asterisk (*) next to Source Column and Destination Field labels
+   - Orange-tinted input fields
+   - No remove button for required mappings
+   - Info banner explaining required fields cannot be removed
+
+3. **Validation**:
+   - All required field mappings must have source column selected
+   - Optional mappings can be empty or partial (as before)
+   - Sync creation is blocked until all required fields are mapped
+   - Validation in `isValid()` function specifically checks required mappings
+
+4. **User Experience**:
+   - Required mappings appear in Additional Mappings section
+   - Required fields are listed first (if multiple)
+   - Destination field dropdown is disabled (locked to required field)
+   - Only source column selection is enabled
+   - Section header shows "* Some fields are required by the destination" when required fields present
+
+**Example Workflow:**
+
+```
+1. User selects Salesforce "Contact" object
+2. Salesforce returns fields including:
+   - Email (required_for_mapping: false, can_be_upsert_key: true)
+   - LastName (required_for_mapping: true, can_be_upsert_key: false)
+   - FirstName (required_for_mapping: false, can_be_upsert_key: false)
+
+3. FieldMapper auto-creates mapping:
+   - Additional Mapping 1: ??? → LastName (required, cannot remove)
+
+4. User must:
+   - Select primary identifier: user_email → Email
+   - Select source for required field: last_name → LastName
+   - Optionally add: first_name → FirstName
+
+5. Create Sync button enables only when required field is mapped
+```
+
+**Code Implementation:**
+
+```javascript
+// Pre-populate required fields on mount
+useEffect(() => {
+  if (!destinationObjectFields?.length) return
+
+  const requiredFields = destinationObjectFields.filter(field => field.required_for_mapping === true)
+  if (requiredFields.length === 0) return
+
+  if (additionalMappings.length === 0) {
+    const requiredMappings = requiredFields.map(field => ({
+      from: "",
+      to: field.full_name,
+      isRequired: true
+    }))
+    setAdditionalMappings(requiredMappings)
+  }
+}, [destinationObjectFields])
+
+// Prevent removal of required mappings
+const removeMapping = (index) => {
+  const mapping = additionalMappings[index]
+  if (mapping?.isRequired === true) {
+    console.warn("Cannot remove required field mapping")
+    return
+  }
+  setAdditionalMappings(additionalMappings.filter((_, i) => i !== index))
+}
+
+// Validate required fields are mapped
+const isValid = () => {
+  if (!primaryMapping.from || !primaryMapping.to) return false
+
+  const hasIncompleteRequiredMappings = additionalMappings.some(
+    m => m.isRequired === true && !m.from
+  )
+  if (hasIncompleteRequiredMappings) return false
+
+  const optionalMappings = additionalMappings.filter(m => !m.isRequired)
+  return optionalMappings.every(m => (m.from && m.to) || (!m.from && !m.to))
+}
+```
+
+**Why This Matters:**
+
+Destinations like CRM systems often have mandatory fields (e.g., Salesforce Account requires "Name", Contact requires "LastName"). Without mapping these fields, the sync would fail at runtime with API errors from the destination. Pre-populating and protecting these mappings:
+- Prevents user errors and confusion
+- Avoids failed sync creation attempts
+- Makes requirements clear upfront
+- Ensures data quality at the destination
+
+**Edge Cases:**
+
+1. **Required field is also upsert key**: User can use it as primary identifier OR additional mapping, but not both (field uniqueness rules still apply)
+2. **Multiple required fields**: All are pre-populated in the order returned by API
+3. **Required field refresh**: If fields are refreshed and new required fields appear, they're added to existing mappings
+4. **Required field is unmapped**: Validation prevents sync creation until source column is selected
+5. **No required fields**: Component behaves exactly as before, no changes to UX
 
 ### Mapping Format
 
