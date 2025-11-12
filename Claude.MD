@@ -8,7 +8,7 @@ This document explains the SyncWizard implementation in this project, which prov
 
 🔗 **https://developers.getcensus.com/openapi/compiled/workspace_management.yaml**
 
-Do NOT use the developer documentation website as the primary reference. The OpenAPI spec is the source of truth for:
+The OpenAPI spec is the source of truth for:
 - Endpoint paths and methods
 - Request/response schemas
 - Required and optional parameters
@@ -20,12 +20,15 @@ This is critical for ensuring API calls are correctly formatted and all availabl
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Components](#components)
-4. [API Routes](#api-routes)
+4. [Census API Integration](#census-api-integration)
 5. [Reusable Utilities](#reusable-utilities)
 6. [Key Features](#key-features)
 7. [Usage Example](#usage-example)
 8. [Field Mapping Rules](#field-mapping-rules)
 9. [Refresh Pattern](#refresh-pattern)
+10. [Common Patterns](#common-patterns)
+11. [Future Enhancements](#future-enhancements)
+12. [Conclusion](#conclusion)
 
 ## Overview
 
@@ -160,179 +163,139 @@ Each sub-component is rendered conditionally based on the current step and recei
 - Auto-refresh if no columns available
 - Validation before allowing sync creation
 
-## API Routes
+## Census API Integration
 
-All API routes are in `pages/api/` and follow this pattern:
-1. Validate request method and parameters
-2. Get workspace access token from request
-3. Call Census API (refer to OpenAPI spec for exact endpoints/schemas)
-4. Return formatted response
+This section documents all Census API endpoints used in the SyncWizard flow. Each app API route (in `pages/api/`) is a lightweight proxy that calls the corresponding Census API endpoint.
 
-**Important:** All Census API endpoints and schemas referenced here are documented in the OpenAPI specification at https://developers.getcensus.com/openapi/compiled/workspace_management.yaml
+**⚠️ Critical:** Always refer to the OpenAPI specification at https://developers.getcensus.com/openapi/compiled/workspace_management.yaml for complete request/response schemas, available parameters, and field definitions.
 
-### Data Fetching Routes
+### Data Fetching Endpoints
 
-#### `GET /api/list_source_tables`
-Lists all tables for a source.
+#### 1. List Source Tables
+- **App Route:** `GET /api/list_source_tables`
+- **Census API:** `GET /api/v1/sources/{source_id}/tables`
+- **Purpose:** Fetch all available tables from the selected source connection
+- **Used By:** `SourceTableSelector` component
 
-**Query Params:**
-- `sourceId` - Census source ID
+#### 2. List Destination Objects
+- **App Route:** `GET /api/list_destination_objects`
+- **Census API:** `GET /api/v1/destinations/{destination_id}/objects`
+- **Purpose:** Fetch all available objects from the selected destination connection
+- **Used By:** `DestinationObjectSelector` component
 
-**Response:** Array of table objects with `table_name`, `table_schema`, `table_catalog`
+#### 3. Fetch Destination Object Details
+- **App Route:** `GET /api/fetch_destination_object`
+- **Census API:** `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}`
+- **Purpose:** Fetch detailed information about a specific destination object including supported operations and fields
+- **Used By:** `SyncBehaviorSelector` component
 
-#### `GET /api/list_destination_objects`
-Lists all objects for a destination.
+#### 4. List Table Columns
+- **App Route:** `GET /api/list_table_columns`
+- **Census API:** `GET /api/v1/sources/{source_id}/tables/columns`
+- **Purpose:** Fetch all columns for a specific source table
+- **Used By:** `FieldMapper` component
 
-**Query Params:**
-- `destinationId` - Census destination ID
+---
 
-**Response:** Array of object objects with `full_name`, `label`
+### Refresh Operations
 
-#### `GET /api/fetch_destination_object`
-Fetches detailed information about a destination object.
+These endpoints trigger asynchronous refresh jobs that update Census's metadata cache. Each returns a `refresh_key` that must be used when polling the corresponding status endpoint.
 
-**Query Params:**
-- `destinationId` - Census destination ID
-- `objectFullName` - Full name of the object
+#### 5. Refresh Source Tables
+- **App Route:** `POST /api/refresh_source_tables`
+- **Census API:** `POST /api/v1/sources/{source_id}/refresh_tables`
+- **Purpose:** Trigger a refresh of the table list for a source connection
+- **Used By:** `SourceTableSelector` component
 
-**Response:** Object with `supported_operations`, `fields`, etc.
+#### 6. Refresh Table Columns
+- **App Route:** `POST /api/refresh_table_columns`
+- **Census API:** `POST /api/v1/sources/{source_id}/tables/refresh_columns`
+- **Purpose:** Trigger a refresh of the column list for a specific table
+- **Used By:** `FieldMapper` component
 
-#### `GET /api/list_table_columns`
-Lists columns for a specific table.
+#### 7. Refresh Destination Objects
+- **App Route:** `POST /api/refresh_destination_objects`
+- **Census API:** `POST /api/v1/destinations/{destination_id}/refresh_objects`
+- **Purpose:** Trigger a refresh of the object list for a destination connection
+- **Used By:** `DestinationObjectSelector` component
 
-**Query Params:**
-- `sourceId` - Census source ID
-- `schemaName` - Table schema name
-- `tableName` - Table name
-- `catalogName` - Table catalog name
+#### 8. Refresh Destination Fields
+- **App Route:** `POST /api/refresh_destination_fields`
+- **Census API:** `POST /api/v1/destinations/{destination_id}/objects/{object_full_name}/refresh_fields`
+- **Purpose:** Trigger a refresh of the field list for a specific destination object
+- **Used By:** `FieldMapper` component
 
-**Response:** Array of column objects with `name`, `can_be_upsert_key`, etc.
+---
 
-### Refresh Routes
+### Refresh Status Polling
 
-#### `POST /api/refresh_source_tables`
-Triggers a refresh of tables for a source.
+After triggering a refresh operation, these endpoints are polled to check completion status. The `refresh_key` from the refresh response must be passed as a query parameter.
 
-**Body:**
-```json
-{
-  "sourceId": "src_123"
-}
-```
+**⚠️ Important:** Refresh operations can take several minutes for large warehouses (1000+ tables). Always poll until Census reports completion rather than using fixed timeouts.
 
-**Census API Endpoint:** `POST /api/v1/sources/{source_id}/refresh_tables`
+**Status Values:**
+- `"processing"` - Refresh still running, continue polling
+- `"completed"` - Refresh finished successfully, safe to refetch data
+- `"error"` - Refresh failed, handle error
 
-#### `POST /api/refresh_table_columns`
-Triggers a refresh of columns for a specific table.
+#### 9. Check Table Refresh Status
+- **App Route:** `GET /api/get_refresh_tables_status`
+- **Census API:** `GET /api/v1/sources/{source_id}/refresh_tables_status?refresh_key={refresh_key}`
+- **Purpose:** Check if a table refresh operation has completed
+- **Used By:** `SourceTableSelector` component via `useEntityRefresh` hook
 
-**Body:**
-```json
-{
-  "sourceId": "src_123",
-  "tableCatalog": "catalog_name",
-  "tableSchema": "schema_name",
-  "tableName": "table_name"
-}
-```
+#### 10. Check Column Refresh Status
+- **App Route:** `GET /api/get_refresh_columns_status`
+- **Census API:** `GET /api/v1/sources/{source_id}/tables/refresh_columns_status` (with query params: `refresh_key`, `table_catalog`, `table_schema`, `table_name`)
+- **Purpose:** Check if a column refresh operation has completed
+- **Used By:** `FieldMapper` component via `useEntityRefresh` hook
 
-**Census API Endpoint:** `POST /api/v1/sources/{source_id}/tables/{table_catalog}.{table_schema}.{table_name}/columns/refresh`
+#### 11. Check Object Refresh Status
+- **App Route:** `GET /api/get_refresh_objects_status`
+- **Census API:** `GET /api/v1/destinations/{destination_id}/refresh_objects_status?refresh_key={refresh_key}`
+- **Purpose:** Check if an object refresh operation has completed
+- **Used By:** `DestinationObjectSelector` component via `useEntityRefresh` hook
 
-#### `POST /api/refresh_destination_objects`
-Triggers a refresh of objects for a destination.
+#### 12. Check Field Refresh Status
+- **App Route:** `GET /api/get_refresh_fields_status`
+- **Census API:** `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}/refresh_fields_status?refresh_key={refresh_key}`
+- **Purpose:** Check if a field refresh operation has completed
+- **Used By:** `FieldMapper` component via `useEntityRefresh` hook
 
-**Body:**
-```json
-{
-  "destinationId": "dest_123"
-}
-```
+---
 
-**Census API Endpoint:** `POST /api/v1/destinations/{destination_id}/objects/refresh`
+### Sync Creation
 
-#### `POST /api/refresh_destination_fields`
-Triggers a refresh of fields for a specific destination object.
+#### 13. Create Sync
+- **App Route:** `POST /api/create_sync`
+- **Census API:** `POST /api/v1/syncs`
+- **Purpose:** Create a new sync with the configured source, destination, operation, and field mappings
+- **Used By:** `SyncWizard` component after user completes field mapping
 
-**Body:**
-```json
-{
-  "destinationId": "dest_123",
-  "objectFullName": "Object.FullName"
-}
-```
+---
 
-**Census API Endpoint:** `POST /api/v1/destinations/{destination_id}/objects/{object_full_name}/fields/refresh`
+### Census API Summary
 
-### Refresh Status Routes
+**Total Census Endpoints Used:** 13
 
-These routes poll Census API to check if a refresh operation has completed.
+1. `GET /api/v1/sources/{source_id}/tables` - List tables
+2. `GET /api/v1/destinations/{destination_id}/objects` - List objects
+3. `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}` - Get object details
+4. `GET /api/v1/sources/{source_id}/tables/columns` - List columns (uses query params for table info)
+5. `POST /api/v1/sources/{source_id}/refresh_tables` - Refresh tables
+6. `POST /api/v1/sources/{source_id}/tables/refresh_columns` - Refresh columns (uses query params for table info)
+7. `POST /api/v1/destinations/{destination_id}/refresh_objects` - Refresh objects
+8. `POST /api/v1/destinations/{destination_id}/objects/{object_full_name}/refresh_fields` - Refresh fields
+9. `GET /api/v1/sources/{source_id}/refresh_tables_status` - Check table refresh status
+10. `GET /api/v1/sources/{source_id}/tables/refresh_columns_status` - Check column refresh status (uses query params for table info)
+11. `GET /api/v1/destinations/{destination_id}/refresh_objects_status` - Check object refresh status
+12. `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}/refresh_fields_status` - Check field refresh status
+13. `POST /api/v1/syncs` - Create sync
 
-#### `GET /api/get_refresh_tables_status`
-Checks the status of a table refresh operation.
-
-**Query Params:**
-- `sourceId` - Census source ID
-
-**Response:** Status object with `status` field (e.g., "complete", "in_progress", "failed")
-
-**Census API Endpoint:** `GET /api/v1/sources/{source_id}/refresh_tables_status`
-
-#### `GET /api/get_refresh_columns_status`
-Checks the status of a column refresh operation.
-
-**Query Params:**
-- `sourceId` - Census source ID
-
-**Response:** Status object with `status` field
-
-**Census API Endpoint:** `GET /api/v1/sources/{source_id}/tables/refresh_columns_status`
-
-#### `GET /api/get_refresh_objects_status`
-Checks the status of an object refresh operation.
-
-**Query Params:**
-- `destinationId` - Census destination ID
-
-**Response:** Status object with `status` field
-
-**Census API Endpoint:** `GET /api/v1/destinations/{destination_id}/refresh_objects_status`
-
-#### `GET /api/get_refresh_fields_status`
-Checks the status of a field refresh operation.
-
-**Query Params:**
-- `destinationId` - Census destination ID
-- `objectFullName` - Full name of the object
-
-**Response:** Status object with `status` field
-
-**Census API Endpoint:** `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}/refresh_fields_status`
-
-### Sync Creation Route
-
-#### `POST /api/create_sync`
-Creates a new sync with the configured mappings.
-
-**Body:**
-```json
-{
-  "sourceId": "src_123",
-  "sourceTableName": "table_name",
-  "sourceTableCatalog": "catalog_name",
-  "sourceTableSchema": "schema_name",
-  "destinationId": "dest_123",
-  "destinationObject": "Object.FullName",
-  "operation": "upsert",
-  "mappings": [
-    {
-      "from": { "data": "column_name", "type": "column" },
-      "to": "field_name",
-      "is_primary_identifier": true
-    }
-  ]
-}
-```
-
-**Response:** Created sync object
+**All endpoints require:**
+- `Authorization: Bearer {workspace_api_key}` header
+- Proper URL encoding for path parameters with special characters
+- Reference the OpenAPI spec for complete schemas and additional parameters
 
 ## Reusable Utilities
 
@@ -674,7 +637,6 @@ Some destinations (like Salesforce, HubSpot, etc.) have fields marked as require
    - Red asterisk (*) next to Source Column and Destination Field labels
    - Orange-tinted input fields
    - No remove button for required mappings
-   - Info banner explaining required fields cannot be removed
 
 3. **Validation**:
    - All required field mappings must have source column selected
@@ -820,8 +782,8 @@ Our implementation uses **intelligent status polling** to ensure data is fully r
    - Begin polling the status endpoint (e.g., `/api/v1/sources/{id}/refresh_tables_status`)
    - Check status every 1 second (configurable via `pollInterval`)
    - Continue until status is:
-     - `"complete"` or `"succeeded"` → Proceed to refetch
-     - `"failed"` or `"error"` → Throw error and stop
+     - `"completed"` → Proceed to refetch
+     - `"error"` → Throw error and stop
    - Maximum of 30 polls (configurable via `maxPolls`)
    - If max polls reached, log warning and proceed anyway
 
@@ -838,7 +800,7 @@ Our implementation uses **intelligent status polling** to ensure data is fully r
 Census status endpoints return responses like:
 ```json
 {
-  "status": "complete",  // or "in_progress", "failed", "error", "succeeded"
+  "status": "completes",  // or "processing", "error"
   "message": "Optional error message if failed"
 }
 ```
@@ -1100,105 +1062,166 @@ export default async function handler(req, res) {
 }
 ```
 
-## Troubleshooting
-
-### Refresh Not Working
-
-**Problem:** Refresh button clicks but data doesn't update
-
-**Solutions:**
-1. Check status polling - verify status endpoint is returning expected response format
-2. Increase `maxPolls` if refresh takes longer than 30 seconds
-3. Check browser console for status polling errors
-4. Verify Census API is actually refreshing (check network tab)
-5. Ensure refetch function is being called
-6. Check that status response has `status` field with expected values
-
-**Problem:** Refresh times out after 30 seconds
-
-**Solutions:**
-1. **This is expected for large warehouses** - increase `maxPolls` significantly
-2. For production use, set `maxPolls: 180` or higher (3-6 minutes)
-3. Consider dynamic timeout based on source type: warehouses need longer than SaaS apps
-4. Show user-friendly message: "Large warehouses can take several minutes to refresh"
-5. Check Census logs only if timeout exceeds 10 minutes (may indicate actual failure)
-6. **Remember:** It's better to wait for Census to confirm completion than to time out early and show stale data
-
-**Problem:** Refresh seems to hang indefinitely
-
-**Solutions:**
-1. Check browser network tab to ensure status polling requests are being made
-2. Verify status endpoint is returning proper response format with `status` field
-3. Check if Census is actually processing the refresh (may be queued)
-4. For extremely large warehouses (10,000+ tables), refresh can legitimately take 10+ minutes
-5. Consider implementing a "Cancel" button that stops polling but warns user data may be stale
-
-### Empty Dropdowns
-
-**Problem:** No options appear in field/column dropdowns
-
-**Solutions:**
-1. Check if auto-refresh is triggering
-2. Manually click refresh button
-3. Verify API is returning data in expected format
-4. Check `can_be_upsert_key` filtering isn't too restrictive
-
-### Validation Errors
-
-**Problem:** "Create Sync" button stays disabled
-
-**Solutions:**
-1. Ensure primary identifier is set
-2. Check all additional mappings are complete or remove empty ones
-3. Verify at least one mapping exists
-4. Check console for validation logic errors
-
 ## Future Enhancements
 
 Potential improvements to consider (always check OpenAPI spec for available API capabilities):
+
+### Implemented Features ✅
 
 1. **~~Polling for Refresh Status~~** ✅ **IMPLEMENTED**
    - ✅ Poll Census API for refresh job status
    - ✅ Show progress indicator during refresh
    - ✅ Automatically refetch when complete
-   - Uses status endpoints from OpenAPI spec
+   - ✅ Uses status endpoints from OpenAPI spec
 
-2. **Smart Mapping Suggestions**
+2. **~~Operation-Based Primary Identifier Filtering~~** ✅ **IMPLEMENTED**
+   - ✅ Filter available fields based on selected sync operation
+   - ✅ Different operations (update/insert/upsert) show appropriate fields
+   - ✅ Uses `can_be_update_key`, `can_be_insert_key`, `can_be_upsert_key` properties
+
+3. **~~Required Field Support~~** ✅ **IMPLEMENTED**
+   - ✅ Automatically detect and pre-populate required fields
+   - ✅ Prevent removal of required field mappings
+   - ✅ Visual indicators for required fields
+   - ✅ Uses `required_for_mapping` property from API
+
+### Source & Destination Selection
+
+4. **Support for Multiple Source Types**
+   - Currently only supports syncing from tables
+   - Add support for:
+     - Datasets
+     - Segments
+     - Cohorts
+
+5. **Dynamic Destination Connection Selection**
+   - Currently destination is hardcoded to specific connection
+   - Add UI to let users select from available destination connections
+   - Fetch list of destinations via Census API
+
+6. **Advanced Destination Type Support**
+   - **File System Destinations**: UI for users to type in file path
+   - **HTTP Request Destinations**: Configure endpoint URL, headers, request format
+   - **Custom Object Destinations**: Support for Salesforce, Marketing Cloud, Google Sheets, Snowflake
+     - Check `supports_custom_objects` field on destination
+     - Dynamic UI based on destination capabilities
+
+### Field Mapping Enhancements
+
+7. **Smart Mapping Suggestions**
    - Auto-suggest mappings based on field name similarity
    - Remember common mappings from previous syncs
+   - "Map All" button for matching field names
 
-3. **Bulk Mapping**
-   - Allow users to map all matching field names at once
-   - Provide "Map All" button
+8. **Custom Field Mapping**
+   - Support mapping to custom fields when `allow_custom_fields: true`
+   - Let users specify custom field name and type
+   - Show custom field creation UI for supported destinations
 
-4. **Validation Preview**
-   - Show validation errors before attempting sync creation
-   - Preview what data will sync
-   - Use Census validation endpoints if available
+9. **Sync All Properties**
+   - Add "Sync All Properties" option for destinations with `allow_custom_fields: true`
+   - Automatically map all available source columns to destination
+   - Skip manual field mapping step
 
-5. **Schedule Configuration**
-   - Allow users to configure sync schedule
-   - Currently hardcoded to "continuous"
-   - Check OpenAPI spec for available schedule options
+10. **Field Mapping Order**
+    - Support mapping order selection when `supports_field_ordering: true`
+    - Options: Alphabetical or Mapping Order
+    - Check destination capabilities from API
 
-6. **Advanced Options**
-   - Filter conditions
-   - Data transformations
-   - Field-level sync controls
-   - Refer to sync creation schema in OpenAPI spec for all available options
+11. **Skip Primary Identifier for Certain Destinations**
+    - Some destinations (Google Sheets) don't require primary identifier
+    - Conditionally show/hide primary identifier step based on destination requirements
+    - Check destination metadata for upsert key requirements
+
+12. **Alternative Mapping Sources**
+    - Currently only supports mapping from columns (`type: "column"`)
+    - Add support for:
+      - **Constant values**: Map a hardcoded value to a destination field (`type: "constant_value"`)
+      - **Sync metadata**: Map Census sync metadata (sync time, sync ID, etc.) (`type: "sync_metadata"`)
+      - **Liquid templates**: Use Liquid templating language for dynamic values (`type: "liquid_template"`)
+    - Reference: https://docs.getcensus.com/syncs/overview#field-mappings
+
+13. **Preserve Values Configuration**
+    - Add UI to set `preserve_values` on individual field mappings
+    - Only show when field has `preserve_values_supported: true`
+    - Checkbox or toggle to enable preserving existing values in destination
+    - When enabled, Census won't overwrite existing destination values with null/empty
+    - Common for fields like "Do Not Contact" that should never be blanked out
+    - Reference: https://docs.getcensus.com/syncs/overview#conditional-field-mappings
+
+14. **Sync Null Values Configuration**
+    - Add UI to set `sync_null_values` on individual field mappings
+    - Only show when destination supports this configuration
+    - Checkbox or toggle to control whether null values are synced
+    - When disabled, null values in source won't update destination
+    - Useful for avoiding overwriting existing data with nulls
+    - Check destination capabilities and field-level support
+    - Reference: https://docs.getcensus.com/syncs/overview#conditional-field-mappings
+
+### Sync Configuration Options
+
+12. **Advanced Configuration UI**
+    - Surface advanced configuration for selected destination object
+    - Let users set advanced config settings specific to destination
+
+13. **Audience Sync Support**
+    - Add UI to set the audience mapping for audience syncs
+    - Reference: https://docs.getcensus.com/syncs/audience-syncs
+
+14. **High Water Mark Tracking**
+    - For Append operation, let users optionally select high water mark column
+    - Show column selector for timestamp columns
+
+15. **First Sync Behavior**
+    - For Append syncs, let users choose:
+      - Backfill all records (sync everything on first run)
+      - Skip current records (only sync future records)
+    - Add radio button selection during sync creation
+
+16. **Sync Triggers**
+    - Currently hardcoded to "continuous" schedule
+    - Add support for:
+      - Custom schedule (cron expressions, intervals)
+      - Fivetran webhook trigger
+      - dbt webhook trigger
+      - After completion of another sync (dependency chain)
+    - Check OpenAPI spec for available trigger types
+
+17. **Sync Naming**
+    - Let users name their syncs
+    - Add name input field during sync creation
+    - Default to auto-generated name if not provided
+
+### Sync Management
+
+18. **Edit Existing Sync**
+    - UI to modify existing sync configuration
+    - Load sync details into wizard
+    - Update sync via Census API
+    - Check OpenAPI spec for sync update endpoints
+
+19. **Validation Preview**
+    - Show validation errors before attempting sync creation
+    - Use Census validation endpoints if available
+
+### Destination-Specific Features
+
+20. **Slack Sync Customization**
+    - WYSIWYG editor for customizing Slack messages
+    - Template variables for dynamic content
+    - Message preview before sync creation
+    - Check Slack destination configuration in OpenAPI spec
+
+### Implementation Notes
+
+When implementing any of these enhancements:
+- Always refer to the OpenAPI spec first for API capabilities
+- Check destination-specific fields like `supports_field_ordering`, `allow_custom_fields`, `supports_custom_objects`
+- Use feature flags to conditionally show/hide UI based on destination capabilities
+- Maintain backward compatibility with existing sync configurations
 
 ## Conclusion
 
-The SyncWizard provides a complete, production-ready solution for creating Census syncs through a guided UI. The architecture is modular, the refresh pattern is reusable, and the validation ensures data integrity. Use this guide as a reference for understanding, maintaining, or extending the SyncWizard functionality.
-
-**Key Takeaways:**
-
-1. **Always use status polling for refresh operations** - Never assume fixed wait times. Let Census be authoritative about when refreshes are complete.
-
-2. **Warehouse size matters** - What works for a 10-table database will fail for a 10,000-table warehouse. Refresh operations can take several minutes for large sources.
-
-3. **Trust Census** - The status endpoints exist for a reason. Poll them until Census says the refresh is complete, rather than guessing at appropriate timeouts.
-
-4. **Configure for your use case** - Default `maxPolls: 30` is a starting point. Production applications should use higher values (180+) to handle enterprise warehouses.
+The SyncWizard provides a minimal solution for creating Census syncs through a guided UI. The architecture is modular, the refresh pattern is reusable, and the validation ensures data integrity. Use this guide as a reference for understanding, maintaining, or extending the SyncWizard functionality.
 
 **Remember:** When making any changes or additions involving the Census API, always consult the OpenAPI specification at https://developers.getcensus.com/openapi/compiled/workspace_management.yaml first. This ensures you're using the correct endpoints, schemas, and parameters.
