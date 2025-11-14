@@ -874,15 +874,15 @@ Potential improvements and additional functionality to consider (always check Op
 1. **Support for Multiple Source Types**
    - Currently only supports syncing from tables
    - Add support for:
-     - Datasets ([API Docs reference](https://developers.getcensus.com/api-reference/datasets/list-datasets))
-     - Segments ([API Docs reference](https://developers.getcensus.com/api-reference/segments/list-segments))
-     - Cohorts ([API Docs reference](https://developers.getcensus.com/api-reference/segments/list-segments))
+     - Datasets (**OpenAPI**: `GET /api/v1/datasets` | [Web reference](https://developers.getcensus.com/api-reference/datasets/list-datasets))
+     - Segments (**OpenAPI**: `GET /api/v1/segments` | [Web reference](https://developers.getcensus.com/api-reference/segments/list-segments))
+     - Cohorts (**OpenAPI**: `GET /api/v1/segments` | [Web reference](https://developers.getcensus.com/api-reference/segments/list-segments))
 
 2. **Dynamic Destination Connection Selection**
    - Currently destination is hardcoded to specific connection
    - Add UI to let users select from available destination connections
    - Fetch list of destinations via Census API
-   - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/list-destinations)
+   - **OpenAPI**: `GET /api/v1/destinations` | [Web reference](https://developers.getcensus.com/api-reference/destinations/list-destinations)
 
 ### Field Mapping Enhancements
 
@@ -894,20 +894,20 @@ Potential improvements and additional functionality to consider (always check Op
 2. **Custom Field Mapping**
    - Support mapping to custom fields when the destination supports it, specified by the `allow_custom_fields: true` flag
    - Let users specify custom field name and type
-   - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-allow-custom-fields)
+   - **OpenAPI**: Response field `allow_custom_fields` in `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}` | [Web reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-allow-custom-fields)
    - [Product Docs reference](https://docs.getcensus.com/syncs/overview#creating-new-fields-on-your-destination-object)
 
 3. **Sync All Properties**
    - Add "Sync All Properties" option for destinations with `allow_custom_fields: true`
    - Automatically map all available source columns to destination
    - Skip manual field mapping step
-   - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-allow-custom-fields)
+   - **OpenAPI**: Response field `allow_custom_fields` in `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}` | [Web reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-allow-custom-fields)
    - [Product Docs reference](https://docs.getcensus.com/syncs/overview#creating-new-fields-on-your-destination-object)
 
 4. **Field Mapping Order**
     - Support mapping order selection when the destinatin support it, specified by the `supports_field_ordering: true` flag
     - Options: Alphabetical or Mapping Order
-    - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-supports-field-ordering)
+    - **OpenAPI**: Response field `supports_field_ordering` in `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}` | [Web reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-supports-field-ordering)
 
 5. **Skip Primary Identifier for Certain Destinations**
     - Some destinations (Google Sheets) don't require primary identifier
@@ -919,7 +919,7 @@ Potential improvements and additional functionality to consider (always check Op
       - **Constant values**: Map a hardcoded value to a destination field (`type: "constant_value"`)
       - **Sync metadata**: Map Census sync metadata (sync time, sync ID, etc.) (`type: "sync_metadata"`)
       - **Liquid templates**: Use Liquid templating language for dynamic values (`type: "liquid_template"`)
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-mappings-from)
+    - **OpenAPI**: Request field `mappings.from` in `POST /api/v1/syncs` | [Web reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-mappings-from)
     - [Product Docs reference](https://docs.getcensus.com/syncs/overview#field-mappings)
 
 7. **Preserve Values Configuration**
@@ -928,7 +928,7 @@ Potential improvements and additional functionality to consider (always check Op
     - Checkbox or toggle to enable preserving existing values in destination
     - When enabled, Census won't overwrite existing destination values with null/empty
     - Common for fields like "Do Not Contact" that should never be blanked out
-    - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-fields-preserve-values-supported)
+    - **OpenAPI**: Response field `fields[].preserve_values_supported` in `GET /api/v1/destinations/{destination_id}/objects/{object_full_name}` | [Web reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-fields-preserve-values-supported)
     - [Product Docs reference](https://docs.getcensus.com/syncs/overview#conditional-field-mappings)
 
 8. **Sync Null Values Configuration**
@@ -946,7 +946,7 @@ Potential improvements and additional functionality to consider (always check Op
     - Surface advanced configuration for selected destination object
     - Let users set advanced config settings specific to destination
     - Useful for settings like file format in S3 syncs, enabling bulk lookup in the Salesforce API, etc
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-advanced-configuration)
+    - **OpenAPI**: Request field `advanced_configuration` in `POST /api/v1/syncs` | [Web reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-advanced-configuration)
 
 2. **Audience Sync Support**
     - Add UI to set the audience mapping for audience syncs
@@ -966,12 +966,12 @@ Potential improvements and additional functionality to consider (always check Op
 6. **Custom Object Support**
     - UI to support creating custom objects on the fly for Salesforce, Marketing Cloud, Google Sheets, Snowflake
     - If a destination has `supports_custom_objects: true`, it supports custom object creation via the custom object API
-    - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/create-a-new-destination-object)
+    - **OpenAPI**: `POST /api/v1/destinations/{destination_id}/objects` | [Web reference](https://developers.getcensus.com/api-reference/destinations/create-a-new-destination-object)
 
 7. **High Water Mark Tracking**
     - For Append operation, let users optionally select high water mark column
     - Show column selector for timestamp columns
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-high-water-mark-attribute)
+    - **OpenAPI**: Request field `high_water_mark_attribute` in `POST /api/v1/syncs` | [Web reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-high-water-mark-attribute)
     - [Product Docs reference](https://docs.getcensus.com/syncs/structuring-data/events#using-timestamp-to-identify-new-records)
 
 8. **First Sync Behavior**
@@ -979,7 +979,7 @@ Potential improvements and additional functionality to consider (always check Op
       - Backfill all records (sync everything on first run)
       - Skip current records (only sync future records)
     - Add radio button selection during sync creation
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-historical-sync-operation)
+    - **OpenAPI**: Request field `historical_sync_operation` in `POST /api/v1/syncs` | [Web reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-historical-sync-operation)
     - [Product Docs reference](https://docs.getcensus.com/syncs/structuring-data/events#backfill-or-just-look-forward)
 
 9. **Sync Triggers**
@@ -989,7 +989,7 @@ Potential improvements and additional functionality to consider (always check Op
       - Fivetran webhook trigger
       - dbt webhook trigger
       - After completion of another sync (dependency chain)
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-mode-triggers)
+    - **OpenAPI**: Request field `mode.triggers` in `POST /api/v1/syncs` | [Web reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-mode-triggers)
     - [Product Docs reference](https://docs.getcensus.com/syncs/triggering-syncs)
 
 10. **Sync Naming**
@@ -1003,11 +1003,11 @@ Potential improvements and additional functionality to consider (always check Op
     - UI to modify existing sync configuration
     - Load sync details into wizard
     - Update sync via Census API
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/update-a-sync)
+    - **OpenAPI**: `PATCH /api/v1/syncs/{sync_id}` | [Web reference](https://developers.getcensus.com/api-reference/syncs/update-a-sync)
 
 2. **Validation Preview**
     - Show validation errors before attempting sync creation
-    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-validate-only)
+    - **OpenAPI**: Request field `validate_only` in `POST /api/v1/syncs` | [Web reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-validate-only)
 
 ### Implementation Notes
 
