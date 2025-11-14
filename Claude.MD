@@ -26,9 +26,8 @@ This is critical for ensuring API calls are correctly formatted and all availabl
 7. [Usage Example](#usage-example)
 8. [Field Mapping Rules](#field-mapping-rules)
 9. [Refresh Pattern](#refresh-pattern)
-10. [Common Patterns](#common-patterns)
-11. [Future Enhancements](#future-enhancements)
-12. [Conclusion](#conclusion)
+10. [Future Enhancements](#future-enhancements)
+11. [Conclusion](#conclusion)
 
 ## Overview
 
@@ -422,7 +421,7 @@ Both "Refresh Columns" and "Refresh Fields" buttons are on the FieldMapper compo
 The FieldMapper enforces several important rules:
 - Primary identifier is required
 - Only columns with `can_be_upsert_key: true` can be used as primary identifier
-- Only fields with `can_be_upsert_key: true` can be used as primary identifier
+- Only fields with one of `can_be_upsert_key: true`, `can_be_insert_key: true`, `can_be_update_key: true` can be used as primary identifier
 - Columns can be reused across mappings
 - Fields cannot be reused (each field can only be mapped once)
 - All mappings must be complete (both source and destination selected)
@@ -481,7 +480,7 @@ export default function MyComponent() {
    - Primary: `user_id` → `contact_id`
    - Additional: `email` → `email`, `name` → `full_name`
 10. User clicks "Create Sync"
-11. API call creates sync with continuous schedule
+11. API call creates sync with no schedule, must be triggered manually
 12. Wizard resets and calls `onComplete` callback
 
 ## Field Mapping Rules
@@ -493,7 +492,7 @@ export default function MyComponent() {
 The available fields for the primary identifier are filtered based on the sync operation selected in the previous step. Different operations have different requirements for which fields can be used as identifiers:
 
 **Source Column Requirements:**
-Must have `can_be_upsert_key: true`
+Must have `can_be_upsert_key: true`, regardless of the sync operation chosen.
 
 **Destination Field Requirements (based on operation):**
 - **Update or Delete operations**: Must have `can_be_update_key: true`
@@ -514,20 +513,8 @@ Census validates that both the source column and destination field are suitable 
 **Implementation:**
 
 ```javascript
-// Filter columns based on operation
-const getPrimaryIdentifierColumns = () => {
-  return columns.filter((col) => {
-    switch (selectedOperation) {
-      case "update":
-      case "delete":
-        return col.can_be_update_key
-      case "insert":
-        return col.can_be_insert_key
-      default:
-        return col.can_be_upsert_key
-    }
-  })
-}
+// Filter columns based on can_be_upsert_key
+const upsertKeyColumns = columns?.filter((col) => col.can_be_upsert_key) || []
 
 // Filter fields based on operation
 const getPrimaryIdentifierFields = () => {
@@ -756,12 +743,9 @@ Census caches metadata about sources and destinations for performance. This cach
 - Schema changes are made
 - The connection is newly created
 
-### Why Status Polling is Critical
+### Status Polling
 
-**Refresh operations can be extremely slow, especially for sources with large schemas:**
-- Small warehouses (< 50 tables): 2-10 seconds
-- Medium warehouses (50-500 tables): 10-60 seconds
-- **Large warehouses (500+ tables): Several minutes or more**
+Refresh operations can be slow, especially for sources with large schemas
 
 **You cannot assume a fixed wait time will work.** What works for a small database will fail for an enterprise warehouse. This is why we poll Census's status endpoints - we let Census be authoritative about when the refresh is complete, rather than guessing at timing.
 
@@ -800,29 +784,10 @@ Our implementation uses **intelligent status polling** to ensure data is fully r
 Census status endpoints return responses like:
 ```json
 {
-  "status": "completes",  // or "processing", "error"
+  "status": "completed",  // or "processing", "error"
   "message": "Optional error message if failed"
 }
 ```
-
-### Why Polling is Better Than Fixed Wait
-
-**Old Approach (Fixed Wait Time):**
-- ❌ Wastes time if refresh completes quickly (< 2s)
-- ❌ **Fails catastrophically on large warehouses** - assumes 2s or even 20s is enough
-- ❌ No feedback on refresh progress
-- ❌ Can't detect failures
-- ❌ Forces you to guess at appropriate wait times
-
-**New Approach (Status Polling - Let Census Be Authoritative):**
-- ✅ Completes as soon as refresh is done (no wasted time)
-- ✅ **Waits as long as Census needs** - whether 5 seconds or 5 minutes
-- ✅ Provides real-time status
-- ✅ Detects and reports failures immediately
-- ✅ **Essential for production use with real-world data warehouses**
-- ✅ Trust Census to tell us when it's done, rather than guessing
-
-**Critical Point:** For sources with thousands of tables, refreshing can take several minutes. There's no "safe" fixed wait time that works for all cases. Status polling is not optional - it's the only reliable approach.
 
 ### Configuration Options
 
@@ -846,14 +811,6 @@ useEntityRefresh({
   maxPolls: 180,       // 6 minutes total (180 * 2s = 360s)
 })
 ```
-
-**Real-World Timing Examples:**
-- Small warehouse (< 50 tables): 5-15 seconds
-- Medium warehouse (50-500 tables): 30-90 seconds
-- **Large warehouse (500-5000 tables): 2-5 minutes**
-- **Enterprise warehouse (5000+ tables): 5+ minutes**
-
-**Important:** Don't set `maxPolls` too low. It's better to let users wait while showing a progress indicator than to time out prematurely and show stale data. Census will tell you when it's done - trust the status endpoint.
 
 ### Best Practices
 
@@ -889,182 +846,9 @@ RefreshButton Component
 └── Spinning icon during refresh
 ```
 
-### Fallback Behavior
-
-If `statusFn` is not provided (for backward compatibility or non-Census APIs), the hook falls back to the old behavior:
-- Waits 2 seconds
-- Assumes refresh is complete
-- Refetches data
-
-**Warning:** This fallback is only suitable for testing or non-Census APIs. For production Census integrations, always provide `statusFn` to poll for completion. The 2-second fallback is **not reliable** for real-world data warehouses and will often result in showing stale data because the refresh hasn't actually completed yet.
-
-## Common Patterns
-
-### 1. Adding a New Step
-
-To add a new step to the wizard:
-
-1. Add new step constant:
-```javascript
-const STEPS = {
-  // ... existing steps
-  MY_NEW_STEP: "MY_NEW_STEP",
-}
-```
-
-2. Add state for new step data:
-```javascript
-const [myStepData, setMyStepData] = useState(null)
-```
-
-3. Add handler:
-```javascript
-const handleMyStepComplete = (data) => {
-  setMyStepData(data)
-  setCurrentStep(STEPS.NEXT_STEP)
-}
-```
-
-4. Add conditional render:
-```javascript
-{currentStep === STEPS.MY_NEW_STEP && (
-  <MyStepComponent
-    onComplete={handleMyStepComplete}
-    onBack={() => setCurrentStep(STEPS.PREVIOUS_STEP)}
-  />
-)}
-```
-
-### 2. Adding Entity Refresh to New Component
-
-```javascript
-import { useBasicFetch } from "@utils/fetch"
-import { useEntityRefresh } from "@hooks/useEntityRefresh"
-import RefreshButton from "@components/SyncWizard/RefreshButton"
-
-// In your component:
-const { loading, error, data, refetch } = useBasicFetch(fetchFn)
-
-const { isRefreshing, handleRefresh } = useEntityRefresh({
-  refreshFn: async () => {
-    // Initiate the refresh job
-    const response = await fetch("/api/refresh_endpoint", {
-      method: "POST",
-      headers: { ["authorization"]: `Bearer ${token}` },
-      body: JSON.stringify({ id }),
-    })
-    if (!response.ok) throw new Error("Refresh failed")
-  },
-  statusFn: async () => {
-    // Poll for completion
-    const response = await fetch(`/api/get_refresh_status?id=${id}`, {
-      method: "GET",
-      headers: { ["authorization"]: `Bearer ${token}` },
-    })
-    if (!response.ok) throw new Error("Status check failed")
-    return await response.json() // Must return { status: "complete" | "in_progress" | ... }
-  },
-  refetchFn: refetch,
-  data,
-  loading,
-  error,
-})
-
-// In your JSX:
-<RefreshButton onRefresh={handleRefresh} isRefreshing={isRefreshing} />
-```
-
-### 3. Creating New Refresh API Routes
-
-**Always check the OpenAPI spec first** to verify the exact endpoint paths, methods, and required parameters.
-
-**Refresh Endpoint (Initiate):**
-```javascript
-import fetch from "node-fetch"
-import pino from "pino"
-import { getWorkspaceAccessToken } from "@utils/auth"
-import { checkStatus } from "@utils/status"
-import { censusBaseUrl } from "@utils/url"
-
-const logger = pino({ name: __filename })
-
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    res.status(405).json({})
-    return
-  }
-
-  const { entityId } = req.body
-  if (!entityId) {
-    res.status(400).json({ error: "entityId is required" })
-    return
-  }
-
-  const workspaceApiKey = getWorkspaceAccessToken(req)
-
-  // Verify this endpoint path in the OpenAPI spec before using
-  const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/entities/${entityId}/refresh`,
-    {
-      method: "POST",
-      headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
-    }
-  )
-  await checkStatus(apiResponse, 200)
-  const result = await apiResponse.json()
-  logger.info([result])
-
-  res.status(200).json(result)
-}
-```
-
-**Status Endpoint (Poll):**
-```javascript
-import fetch from "node-fetch"
-import pino from "pino"
-import { getWorkspaceAccessToken } from "@utils/auth"
-import { setCacheControlHeaders } from "@utils/cacheControlHeaders"
-import { getSearchParams } from "@utils/request"
-import { checkStatus } from "@utils/status"
-import { censusBaseUrl } from "@utils/url"
-
-const logger = pino({ name: __filename })
-
-export default async function handler(req, res) {
-  if (req.method !== "GET") {
-    res.status(405).json({})
-    return
-  }
-
-  setCacheControlHeaders(res)
-
-  const { entityId } = getSearchParams(req)
-  if (!entityId) {
-    res.status(400).json({ error: "entityId is required" })
-    return
-  }
-
-  const workspaceApiKey = getWorkspaceAccessToken(req)
-
-  // Verify this endpoint path in the OpenAPI spec before using
-  const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/entities/${entityId}/refresh_status`,
-    {
-      method: "GET",
-      headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
-    }
-  )
-  await checkStatus(apiResponse, 200)
-  const result = await apiResponse.json()
-  logger.info([result])
-
-  res.status(200).json(result)
-}
-```
-
 ## Future Enhancements
 
-Potential improvements to consider (always check OpenAPI spec for available API capabilities):
+Potential improvements and additional functionality to consider (always check OpenAPI spec for available API capabilities):
 
 ### Implemented Features ✅
 
@@ -1087,138 +871,149 @@ Potential improvements to consider (always check OpenAPI spec for available API 
 
 ### Source & Destination Selection
 
-4. **Support for Multiple Source Types**
+1. **Support for Multiple Source Types**
    - Currently only supports syncing from tables
    - Add support for:
-     - Datasets
-     - Segments
-     - Cohorts
+     - Datasets ([API Docs reference](https://developers.getcensus.com/api-reference/datasets/list-datasets))
+     - Segments ([API Docs reference](https://developers.getcensus.com/api-reference/segments/list-segments))
+     - Cohorts ([API Docs reference](https://developers.getcensus.com/api-reference/segments/list-segments))
 
-5. **Dynamic Destination Connection Selection**
+2. **Dynamic Destination Connection Selection**
    - Currently destination is hardcoded to specific connection
    - Add UI to let users select from available destination connections
    - Fetch list of destinations via Census API
-
-6. **Advanced Destination Type Support**
-   - **File System Destinations**: UI for users to type in file path
-   - **HTTP Request Destinations**: Configure endpoint URL, headers, request format
-   - **Custom Object Destinations**: Support for Salesforce, Marketing Cloud, Google Sheets, Snowflake
-     - Check `supports_custom_objects` field on destination
-     - Dynamic UI based on destination capabilities
+   - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/list-destinations)
 
 ### Field Mapping Enhancements
 
-7. **Smart Mapping Suggestions**
+1. **Smart Mapping Suggestions**
    - Auto-suggest mappings based on field name similarity
    - Remember common mappings from previous syncs
    - "Map All" button for matching field names
 
-8. **Custom Field Mapping**
-   - Support mapping to custom fields when `allow_custom_fields: true`
+2. **Custom Field Mapping**
+   - Support mapping to custom fields when the destination supports it, specified by the `allow_custom_fields: true` flag
    - Let users specify custom field name and type
-   - Show custom field creation UI for supported destinations
+   - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-allow-custom-fields)
+   - [Product Docs reference](https://docs.getcensus.com/syncs/overview#creating-new-fields-on-your-destination-object)
 
-9. **Sync All Properties**
+3. **Sync All Properties**
    - Add "Sync All Properties" option for destinations with `allow_custom_fields: true`
    - Automatically map all available source columns to destination
    - Skip manual field mapping step
+   - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-allow-custom-fields)
+   - [Product Docs reference](https://docs.getcensus.com/syncs/overview#creating-new-fields-on-your-destination-object)
 
-10. **Field Mapping Order**
-    - Support mapping order selection when `supports_field_ordering: true`
+4. **Field Mapping Order**
+    - Support mapping order selection when the destinatin support it, specified by the `supports_field_ordering: true` flag
     - Options: Alphabetical or Mapping Order
-    - Check destination capabilities from API
+    - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-supports-field-ordering)
 
-11. **Skip Primary Identifier for Certain Destinations**
+5. **Skip Primary Identifier for Certain Destinations**
     - Some destinations (Google Sheets) don't require primary identifier
     - Conditionally show/hide primary identifier step based on destination requirements
-    - Check destination metadata for upsert key requirements
 
-12. **Alternative Mapping Sources**
+6. **Alternative Mapping Sources**
     - Currently only supports mapping from columns (`type: "column"`)
-    - Add support for:
+    - Add support for all other types supported in the API:
       - **Constant values**: Map a hardcoded value to a destination field (`type: "constant_value"`)
       - **Sync metadata**: Map Census sync metadata (sync time, sync ID, etc.) (`type: "sync_metadata"`)
       - **Liquid templates**: Use Liquid templating language for dynamic values (`type: "liquid_template"`)
-    - Reference: https://docs.getcensus.com/syncs/overview#field-mappings
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-mappings-from)
+    - [Product Docs reference](https://docs.getcensus.com/syncs/overview#field-mappings)
 
-13. **Preserve Values Configuration**
+7. **Preserve Values Configuration**
     - Add UI to set `preserve_values` on individual field mappings
-    - Only show when field has `preserve_values_supported: true`
+    - Only show when field has `preserve_values_supported: true` as specified in the API response
     - Checkbox or toggle to enable preserving existing values in destination
     - When enabled, Census won't overwrite existing destination values with null/empty
     - Common for fields like "Do Not Contact" that should never be blanked out
-    - Reference: https://docs.getcensus.com/syncs/overview#conditional-field-mappings
+    - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/fetch-destination-object#response-data-fields-preserve-values-supported)
+    - [Product Docs reference](https://docs.getcensus.com/syncs/overview#conditional-field-mappings)
 
-14. **Sync Null Values Configuration**
-    - Add UI to set `sync_null_values` on individual field mappings
+8. **Sync Null Values Configuration**
+    - Add UI to set `sync_null_values` on individual field mappings (defaults to true)
     - Only show when destination supports this configuration
     - Checkbox or toggle to control whether null values are synced
-    - When disabled, null values in source won't update destination
+    - When disabled, null values in source won't be sent to the destination
     - Useful for avoiding overwriting existing data with nulls
     - Check destination capabilities and field-level support
-    - Reference: https://docs.getcensus.com/syncs/overview#conditional-field-mappings
+    - [Product Docs reference](https://docs.getcensus.com/syncs/overview#conditional-field-mappings)
 
 ### Sync Configuration Options
 
-12. **Advanced Configuration UI**
+1. **Advanced Configuration UI**
     - Surface advanced configuration for selected destination object
     - Let users set advanced config settings specific to destination
+    - Useful for settings like file format in S3 syncs, enabling bulk lookup in the Salesforce API, etc
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-advanced-configuration)
 
-13. **Audience Sync Support**
+2. **Audience Sync Support**
     - Add UI to set the audience mapping for audience syncs
-    - Reference: https://docs.getcensus.com/syncs/audience-syncs
+    - [Product Docs reference](https://docs.getcensus.com/syncs/audience-syncs)
 
-14. **High Water Mark Tracking**
+3. **File System Destination Syncs**
+    - UI for users to type in file path for destinations like [SFTP](https://docs.getcensus.com/destinations/available-destinations/sftp) or [S3](https://docs.getcensus.com/sources/sources/s3)
+
+4. **HTTP Request Destinations Syncs**
+    - UI to configure endpoint URL, headers, request format for [HTTP Request destination](https://docs.getcensus.com/destinations/available-destinations/http-request)
+
+5. **Slack Sync Customization**
+    - WYSIWYG editor for customizing Slack messages
+    - Template variables for dynamic content
+    - [Product Docs reference](https://docs.getcensus.com/destinations/available-destinations/slack#setup-your-message)
+
+6. **Custom Object Support**
+    - UI to support creating custom objects on the fly for Salesforce, Marketing Cloud, Google Sheets, Snowflake
+    - If a destination has `supports_custom_objects: true`, it supports custom object creation via the custom object API
+    - [API Docs reference](https://developers.getcensus.com/api-reference/destinations/create-a-new-destination-object)
+
+7. **High Water Mark Tracking**
     - For Append operation, let users optionally select high water mark column
     - Show column selector for timestamp columns
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-high-water-mark-attribute)
+    - [Product Docs reference](https://docs.getcensus.com/syncs/structuring-data/events#using-timestamp-to-identify-new-records)
 
-15. **First Sync Behavior**
+8. **First Sync Behavior**
     - For Append syncs, let users choose:
       - Backfill all records (sync everything on first run)
       - Skip current records (only sync future records)
     - Add radio button selection during sync creation
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-historical-sync-operation)
+    - [Product Docs reference](https://docs.getcensus.com/syncs/structuring-data/events#backfill-or-just-look-forward)
 
-16. **Sync Triggers**
-    - Currently hardcoded to "continuous" schedule
+9. **Sync Triggers**
+    - Currently hardcoded to be manually triggered
     - Add support for:
       - Custom schedule (cron expressions, intervals)
       - Fivetran webhook trigger
       - dbt webhook trigger
       - After completion of another sync (dependency chain)
-    - Check OpenAPI spec for available trigger types
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-mode-triggers)
+    - [Product Docs reference](https://docs.getcensus.com/syncs/triggering-syncs)
 
-17. **Sync Naming**
+10. **Sync Naming**
     - Let users name their syncs
     - Add name input field during sync creation
     - Default to auto-generated name if not provided
 
 ### Sync Management
 
-18. **Edit Existing Sync**
+1. **Edit Existing Sync**
     - UI to modify existing sync configuration
     - Load sync details into wizard
     - Update sync via Census API
-    - Check OpenAPI spec for sync update endpoints
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/update-a-sync)
 
-19. **Validation Preview**
+2. **Validation Preview**
     - Show validation errors before attempting sync creation
-    - Use Census validation endpoints if available
-
-### Destination-Specific Features
-
-20. **Slack Sync Customization**
-    - WYSIWYG editor for customizing Slack messages
-    - Template variables for dynamic content
-    - Message preview before sync creation
-    - Check Slack destination configuration in OpenAPI spec
+    - [API Docs reference](https://developers.getcensus.com/api-reference/syncs/create-a-new-sync#body-validate-only)
 
 ### Implementation Notes
 
 When implementing any of these enhancements:
 - Always refer to the OpenAPI spec first for API capabilities
-- Check destination-specific fields like `supports_field_ordering`, `allow_custom_fields`, `supports_custom_objects`
-- Use feature flags to conditionally show/hide UI based on destination capabilities
-- Maintain backward compatibility with existing sync configurations
+- Check destination-specific fields like `supports_field_ordering`, `allow_custom_fields`, `supports_custom_objects` to understand destination capabilities
 
 ## Conclusion
 
