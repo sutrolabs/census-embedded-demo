@@ -41,7 +41,7 @@ export default function FieldMapper({
 
       setAdditionalMappings(requiredMappings)
     }
-  }, [destinationObjectFields])
+  }, [destinationObjectFields, additionalMappings.length])
 
   const {
     loading,
@@ -233,7 +233,6 @@ export default function FieldMapper({
 
     // Prevent removal of required field mappings
     if (mapping?.isRequired === true) {
-      console.warn("Cannot remove required field mapping")
       return
     }
 
