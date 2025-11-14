@@ -30,7 +30,7 @@ export default async function handler(req, res) {
     },
     body: JSON.stringify({
       operation,
-      schedule_frequency: "continuous",
+      schedule_frequency: "never",
       source_attributes: {
         connection_id: sourceId,
         object: {
