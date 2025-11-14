@@ -29,7 +29,9 @@ export function useSourceConnectLink(sourceConnectLinks, type, workspaceAccessTo
 
   // Automatically upset sourceConnectLink when the sourceConnectLinks change (possibly from a refetch)
   useEffect(() => {
-    setSourceConnectLink(sourceConnectLinks.find((item) => item.type === type && !item.expired && !item.source_id))
+    setSourceConnectLink(
+      sourceConnectLinks.find((item) => item.type === type && !item.expired && !item.source_id),
+    )
   }, [sourceConnectLinks, type])
 
   return [sourceConnectLink, getNewSourceConnectLink, isLoading]
