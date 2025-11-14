@@ -25,8 +25,6 @@ export default function Source({
   embedMode,
   devMode,
   refetchSyncs,
-  syncManagementLinks,
-  refetchSyncManagementLinks,
   syncs,
   setSyncs,
   runsLoading,
@@ -221,8 +219,6 @@ export default function Source({
               sourceId={source.id}
               type={type}
               refetchSyncs={refetchSyncs}
-              syncManagementLinks={syncManagementLinks}
-              refetchSyncManagementLinks={refetchSyncManagementLinks}
               workspaceAccessToken={workspaceAccessToken}
               syncs={syncs.filter((sync) => sync.source_attributes.connection_id === source.id)}
               setSyncs={setSyncs}
