@@ -30,7 +30,9 @@ export default async function handler(req, res) {
   const workspaceApiKey = getWorkspaceAccessToken(req)
 
   const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/destinations/${destinationId}/objects/${encodeURIComponent(objectFullName)}/refresh_fields_status?refresh_key=${encodeURIComponent(refresh_key)}`,
+    `${censusBaseUrl}/api/v1/destinations/${destinationId}/objects/${encodeURIComponent(
+      objectFullName,
+    )}/refresh_fields_status?refresh_key=${encodeURIComponent(refresh_key)}`,
     {
       method: "GET",
       headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },

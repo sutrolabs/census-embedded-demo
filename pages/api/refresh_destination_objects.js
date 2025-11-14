@@ -22,13 +22,10 @@ export default async function handler(req, res) {
   const workspaceApiKey = getWorkspaceAccessToken(req)
 
   // Start the refresh
-  const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/destinations/${destinationId}/refresh_objects`,
-    {
-      method: "POST",
-      headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
-    },
-  )
+  const apiResponse = await fetch(`${censusBaseUrl}/api/v1/destinations/${destinationId}/refresh_objects`, {
+    method: "POST",
+    headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
+  })
   await checkStatus(apiResponse, 200, 202)
   const result = await apiResponse.json()
   logger.info([result])

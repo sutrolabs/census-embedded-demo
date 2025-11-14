@@ -13,9 +13,27 @@ export default async function handler(req, res) {
     return
   }
 
-  const { sourceId, sourceTableName, sourceTableCatalog, sourceTableSchema, destinationId, destinationObject, operation, mappings } = req.body
+  const {
+    sourceId,
+    sourceTableName,
+    sourceTableCatalog,
+    sourceTableSchema,
+    destinationId,
+    destinationObject,
+    operation,
+    mappings,
+  } = req.body
 
-  if (!sourceId || !sourceTableName || !sourceTableCatalog || !sourceTableSchema || !destinationId || !destinationObject || !operation || !mappings) {
+  if (
+    !sourceId ||
+    !sourceTableName ||
+    !sourceTableCatalog ||
+    !sourceTableSchema ||
+    !destinationId ||
+    !destinationObject ||
+    !operation ||
+    !mappings
+  ) {
     res.status(400).json({ error: "Missing required fields" })
     return
   }

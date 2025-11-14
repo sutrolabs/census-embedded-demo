@@ -33,7 +33,9 @@ export default async function handler(req, res) {
     })
     await checkStatus(apiResponse, 200, 202)
     if (apiResponse.status === 202) {
-      logger.info(`Data not ready yet for sourceId ${sourceId}, returning empty to indicate we should kick off a refresh job`)
+      logger.info(
+        `Data not ready yet for sourceId ${sourceId}, returning empty to indicate we should kick off a refresh job`,
+      )
       res.status(200).json([])
       return
     }

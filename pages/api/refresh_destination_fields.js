@@ -23,7 +23,9 @@ export default async function handler(req, res) {
 
   // Start the refresh
   const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/destinations/${destinationId}/objects/${encodeURIComponent(objectFullName)}/refresh_fields`,
+    `${censusBaseUrl}/api/v1/destinations/${destinationId}/objects/${encodeURIComponent(
+      objectFullName,
+    )}/refresh_fields`,
     {
       method: "POST",
       headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },

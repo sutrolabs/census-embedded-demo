@@ -5,12 +5,7 @@ import RefreshButton from "@components/SyncWizard/RefreshButton"
 import { useEntityRefresh } from "@hooks/useEntityRefresh"
 import { useBasicFetch } from "@utils/fetch"
 
-export default function DestinationObjectSelector({
-  destinationId,
-  workspaceAccessToken,
-  onSelect,
-  onBack,
-}) {
+export default function DestinationObjectSelector({ destinationId, workspaceAccessToken, onSelect, onBack }) {
   const {
     loading,
     error,
@@ -44,7 +39,9 @@ export default function DestinationObjectSelector({
     },
     statusFn: async (refreshKey) => {
       const response = await fetch(
-        `/api/get_refresh_objects_status?destinationId=${destinationId}&refresh_key=${encodeURIComponent(refreshKey)}`,
+        `/api/get_refresh_objects_status?destinationId=${destinationId}&refresh_key=${encodeURIComponent(
+          refreshKey,
+        )}`,
         {
           method: "GET",
           headers: {

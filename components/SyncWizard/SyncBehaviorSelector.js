@@ -34,7 +34,9 @@ export default function SyncBehaviorSelector({
     data: objectDetails,
   } = useBasicFetch(() => {
     return new Request(
-      `/api/fetch_destination_object?destinationId=${destinationId}&objectFullName=${encodeURIComponent(destinationObjectFullName)}`,
+      `/api/fetch_destination_object?destinationId=${destinationId}&objectFullName=${encodeURIComponent(
+        destinationObjectFullName,
+      )}`,
       {
         method: "GET",
         headers: {

@@ -34,7 +34,11 @@ export default async function handler(req, res) {
   const workspaceApiKey = getWorkspaceAccessToken(req)
 
   const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/sources/${sourceId}/tables/refresh_columns_status?refresh_key=${encodeURIComponent(refresh_key)}&table_name=${encodeURIComponent(tableName)}&table_schema=${encodeURIComponent(tableSchema)}&table_catalog=${encodeURIComponent(tableCatalog)}`,
+    `${censusBaseUrl}/api/v1/sources/${sourceId}/tables/refresh_columns_status?refresh_key=${encodeURIComponent(
+      refresh_key,
+    )}&table_name=${encodeURIComponent(tableName)}&table_schema=${encodeURIComponent(
+      tableSchema,
+    )}&table_catalog=${encodeURIComponent(tableCatalog)}`,
     {
       method: "GET",
       headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },

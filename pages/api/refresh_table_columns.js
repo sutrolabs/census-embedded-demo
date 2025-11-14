@@ -23,9 +23,9 @@ export default async function handler(req, res) {
 
   // Start the refresh
   const apiResponse = await fetch(
-    `${censusBaseUrl}/api/v1/sources/${sourceId}/tables/refresh_columns?table_catalog=${encodeURIComponent(tableCatalog)}&table_schema=${encodeURIComponent(
-      tableSchema,
-    )}&table_name=${encodeURIComponent(tableName)}`,
+    `${censusBaseUrl}/api/v1/sources/${sourceId}/tables/refresh_columns?table_catalog=${encodeURIComponent(
+      tableCatalog,
+    )}&table_schema=${encodeURIComponent(tableSchema)}&table_name=${encodeURIComponent(tableName)}`,
     {
       method: "POST",
       headers: { ["authorization"]: `Bearer ${workspaceApiKey}` },
